@@ -66,7 +66,7 @@ Assume the role of a **senior, experienced [project specific] developer** with e
 ## Root Directory Standards
 - **Clean Root:** Only essential files in root (README.md, CHANGELOG.md, package.json, LICENSE)
 - **Configuration Files:** Keep configuration files organized and well-documented
-- **Git Ignore:** Properly configured to exclude build artifacts, node_modules, temporary files, and IDE-specific files
+- **Git Ignore:** Properly configured to exclude IDE files, OS-generated files, temporary files, and working directories
 
 ## Directory Organization
 ```
