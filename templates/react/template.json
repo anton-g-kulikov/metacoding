@@ -1,0 +1,14 @@
+{
+  "name": "react",
+  "description": "React frontend development template with modern patterns and best practices",
+  "prompts": [],
+  "vscodeSettings": {
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+    "chat.promptFiles": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll.eslint": true
+    }
+  }
+}
