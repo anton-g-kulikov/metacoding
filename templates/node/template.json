@@ -1,0 +1,23 @@
+{
+  "name": "node",
+  "description": "Node.js backend development template with API patterns, testing frameworks, and security best practices",
+  "prompts": [],
+  "vscodeSettings": {
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+    "chat.promptFiles": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll.eslint": true
+    },
+    "typescript.preferences.inlayHints.parameterNames.enabled": "all",
+    "typescript.preferences.inlayHints.variableTypes.enabled": true,
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.nyc_output": true,
+      "**/coverage": true
+    }
+  }
+}
