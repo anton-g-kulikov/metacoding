@@ -1,6 +1,6 @@
 ---
-description: "Python testing guidelines with pytest, Django testing, and cleanup procedures"
-applyTo: "test/**/*.py"
+description: 'Python testing guidelines with pytest, Django testing, and cleanup procedures'
+applyTo: 'test/**/*.py'
 ---
 
 # Python Testing Guidelines
@@ -18,7 +18,7 @@ DJANGO_SETTINGS_MODULE = myproject.settings.test
 python_files = tests.py test_*.py *_tests.py
 python_classes = Test*
 python_functions = test_*
-addopts = 
+addopts =
     --verbose
     --tb=short
     --cov=src
@@ -121,7 +121,7 @@ from accounts.models import User
 
 class TestUserModel:
     """Test cases for User model."""
-    
+
     def test_user_creation_with_valid_data(self):
         """Test user creation with valid data."""
         user = User.objects.create_user(
@@ -132,7 +132,7 @@ class TestUserModel:
         assert user.username == 'testuser'
         assert user.email == 'test@example.com'
         assert user.check_password('testpass123')
-    
+
     def test_user_email_must_be_unique(self):
         """Test that user email must be unique."""
         User.objects.create_user(
@@ -140,7 +140,7 @@ class TestUserModel:
             email='test@example.com',
             password='testpass123'
         )
-        
+
         with pytest.raises(IntegrityError):
             User.objects.create_user(
                 username='user2',
@@ -161,23 +161,23 @@ from accounts.factories import UserFactory
 
 class TestUserService:
     """Test cases for UserService."""
-    
+
     @pytest.fixture
     def user_service(self):
         """Create UserService instance for testing."""
         return UserService()
-    
+
     def test_get_user_by_id_returns_user(self, user_service):
         """Test getting user by ID returns correct user."""
         user = UserFactory()
         result = user_service.get_user_by_id(user.id)
         assert result == user
-    
+
     def test_get_user_by_id_returns_none_for_invalid_id(self, user_service):
         """Test getting user by invalid ID returns None."""
         result = user_service.get_user_by_id(99999)
         assert result is None
-    
+
     @patch('accounts.services.send_email')
     def test_send_welcome_email_calls_email_service(self, mock_send_email, user_service):
         """Test that welcome email is sent when user is created."""
@@ -206,34 +206,34 @@ from accounts.factories import UserFactory
 @pytest.mark.django_db
 class TestUserAPI:
     """Test cases for User API endpoints."""
-    
+
     @pytest.fixture
     def api_client(self):
         """Create API client for testing."""
         return APIClient()
-    
+
     @pytest.fixture
     def authenticated_user(self, api_client):
         """Create and authenticate a user."""
         user = UserFactory()
         api_client.force_authenticate(user=user)
         return user
-    
+
     def test_get_user_list_requires_authentication(self, api_client):
         """Test that user list endpoint requires authentication."""
         url = reverse('user-list')
         response = api_client.get(url)
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
+
     def test_get_user_list_returns_users(self, api_client, authenticated_user):
         """Test that authenticated user can retrieve user list."""
         UserFactory.create_batch(3)
         url = reverse('user-list')
         response = api_client.get(url)
-        
+
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data['results']) == 4  # 3 created + 1 authenticated
-    
+
     def test_create_user_with_valid_data(self, api_client):
         """Test user creation with valid data."""
         url = reverse('user-list')
@@ -243,7 +243,7 @@ class TestUserAPI:
             'password': 'newpass123'
         }
         response = api_client.post(url, data)
-        
+
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['username'] == 'newuser'
         assert response.data['email'] == 'new@example.com'
@@ -263,7 +263,7 @@ from accounts.models import User
 @pytest.mark.django_db
 class TestDatabaseOperations:
     """Test database operations and constraints."""
-    
+
     def test_database_transaction_rollback(self):
         """Test that database transactions roll back on error."""
         with pytest.raises(IntegrityError):
@@ -279,21 +279,21 @@ class TestDatabaseOperations:
                     email='test@example.com',
                     password='pass123'
                 )
-        
+
         # Verify no users were created due to rollback
         assert User.objects.count() == 0
-    
+
     def test_migration_forward_and_backward(self):
         """Test that migrations can be applied and reversed."""
         # Apply migration
         call_command('migrate', 'accounts', '0001', verbosity=0)
-        
+
         # Verify expected state
         # Add specific checks for your migration
-        
+
         # Reverse migration
         call_command('migrate', 'accounts', 'zero', verbosity=0)
-        
+
         # Verify reverted state
         # Add specific checks for reversed state
 ```
@@ -314,10 +314,10 @@ User = get_user_model()
 
 class UserFactory(factory.django.DjangoModelFactory):
     """Factory for creating User instances."""
-    
+
     class Meta:
         model = User
-    
+
     username = factory.Sequence(lambda n: f'user{n}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
     first_name = factory.Faker('first_name')
@@ -326,10 +326,10 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 class ProfileFactory(factory.django.DjangoModelFactory):
     """Factory for creating Profile instances."""
-    
+
     class Meta:
         model = Profile
-    
+
     user = factory.SubFactory(UserFactory)
     bio = factory.Faker('text', max_nb_chars=200)
     birth_date = factory.Faker('date_of_birth', minimum_age=18, maximum_age=80)
@@ -397,7 +397,7 @@ from services.payment import PaymentService
 
 class TestPaymentService:
     """Test payment service with mocked external API."""
-    
+
     @patch('services.payment.stripe.Charge.create')
     def test_process_payment_success(self, mock_stripe_charge):
         """Test successful payment processing."""
@@ -406,13 +406,13 @@ class TestPaymentService:
             status='succeeded',
             amount=1000
         )
-        
+
         payment_service = PaymentService()
         result = payment_service.process_payment(
             amount=1000,
             token='tok_123'
         )
-        
+
         assert result['status'] == 'succeeded'
         assert result['charge_id'] == 'ch_123'
         mock_stripe_charge.assert_called_once_with(
@@ -434,16 +434,16 @@ from accounts.services import UserService
 
 class TestUserServicePerformance:
     """Performance tests for UserService."""
-    
+
     @pytest.mark.benchmark
     def test_get_users_performance(self, benchmark):
         """Test performance of get_users method."""
         # Create test data
         UserFactory.create_batch(1000)
-        
+
         service = UserService()
         result = benchmark(service.get_active_users)
-        
+
         assert len(result) == 1000
         # Add performance assertions if needed
 ```
@@ -473,9 +473,9 @@ def test_file_upload_with_cleanup(temp_media_dir):
     # Test file operations
     test_file = temp_media_dir / 'test.txt'
     test_file.write_text('test content')
-    
+
     # Test your file handling logic here
-    
+
     # File will be automatically cleaned up by fixture
 ```
 
@@ -578,30 +578,30 @@ jobs:
       matrix:
         python-version: [3.9, 3.10, 3.11]
         django-version: [3.2, 4.1, 4.2]
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install Django==${{ matrix.django-version }}
-        pip install -r requirements.txt
-        pip install -r requirements-test.txt
-    
-    - name: Run tests
-      run: |
-        pytest --cov=src --cov-report=xml
-    
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install Django==${{ matrix.django-version }}
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+
+      - name: Run tests
+        run: |
+          pytest --cov=src --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
 ```
 
 ## cleanup and Maintenance
@@ -642,15 +642,15 @@ User = get_user_model()
 
 class Command(BaseCommand):
     """Clean up test data from database."""
-    
+
     help = 'Remove test data from database'
-    
+
     def handle(self, *args, **options):
         # Remove test users
         test_users = User.objects.filter(email__contains='test')
         count = test_users.count()
         test_users.delete()
-        
+
         self.stdout.write(
             self.style.SUCCESS(f'Removed {count} test users')
         )

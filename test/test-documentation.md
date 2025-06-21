@@ -161,11 +161,13 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
 #### Python Instruction Files Tests
 
 - **Test Case**: Python-specific Copilot instructions generation
+
   - **Input**: Python template with Django/Flask/FastAPI-specific variables
   - **Expected Output**: Generated Python-focused instruction files with web framework patterns
   - **Status**: ✅ Implemented and passing
 
 - **Test Case**: Python-specific code review instructions
+
   - **Input**: Python code review template
   - **Expected Output**: Instructions include Django security, ORM optimization, and Python performance checks
   - **Status**: ✅ Implemented and passing

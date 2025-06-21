@@ -120,7 +120,6 @@ The project follows its own metacoding methodology:
 
 ### 📋 Future Development
 
-- **Template Marketplace**: Web-based template generation
 - **Usage Analytics**: Optional usage metrics collection
 - **IDE Integrations**: Support for other editors beyond VS Code
 - **Team Templates**: Organization-specific template systems
