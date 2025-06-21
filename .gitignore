@@ -23,3 +23,6 @@ temp/
 
 # Copilot instruction files
 .github
+
+# Build and distribution files
+node_modules

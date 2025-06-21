@@ -13,6 +13,25 @@ MetaCoding is a **complete development methodology** that uses GitHub Copilot's 
 
 ## 🛠 Installation Guide
 
+### Quick Setup (NPM Package) - Recommended
+
+The easiest way to get started with MetaCoding is using our npm package:
+
+```bash
+# Install globally
+npm install -g metacoding
+
+# Initialize MetaCoding in your project
+cd your-project
+metacoding init
+
+# Follow the interactive prompts and you're done!
+```
+
+### Manual Setup (Alternative Method)
+
+If you prefer manual setup or can't use npm, follow these steps:
+
 ### Step 1: Install Visual Studio Code
 
 If you don't have VS Code installed:
@@ -118,6 +137,39 @@ If you don't have VS Code installed:
    - Copilot should reference your custom instructions and provide project-specific guidance!
 
 ## ✅ You're Ready to Go!
+
+## 📦 Using the MetaCoding CLI
+
+Once installed, you can use these commands:
+
+### `metacoding init`
+Initialize MetaCoding in your current project with interactive setup:
+```bash
+metacoding init                    # Interactive setup with default template
+metacoding init --template react   # Use React template
+metacoding init --force            # Overwrite existing files
+```
+
+### `metacoding validate`
+Check your current MetaCoding setup:
+```bash
+metacoding validate                 # Basic validation
+metacoding validate --strict        # Strict validation rules
+metacoding validate --fix          # Auto-fix issues where possible
+```
+
+### `metacoding update`
+Update your MetaCoding setup to the latest version:
+```bash
+metacoding update                   # Update to latest version
+metacoding update --backup         # Create backup before updating
+```
+
+### Help and Version
+```bash
+metacoding --help                   # Show all commands
+metacoding --version               # Show version number
+```
 
 # 💬 How to Use MetaCoding with GitHub Copilot
 
