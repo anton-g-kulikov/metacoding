@@ -30,7 +30,7 @@ describe('React Template', () => {
     test('should have valid template.json with React metadata', async () => {
       const templateJsonPath = path.join(reactTemplateDir, 'template.json');
       const templateConfig = await fs.readJson(templateJsonPath);
-      
+
       expect(templateConfig).toHaveProperty('name', 'react');
       expect(templateConfig).toHaveProperty('description');
       expect(templateConfig.description).toContain('React');
@@ -40,21 +40,33 @@ describe('React Template', () => {
 
   describe('React Instruction Files', () => {
     test('should have React-specific copilot instructions template', async () => {
-      const instructionsPath = path.join(reactTemplateDir, 'files', 'copilot-instructions.md.template');
+      const instructionsPath = path.join(
+        reactTemplateDir,
+        'files',
+        'copilot-instructions.md.template'
+      );
       const exists = await fs.pathExists(instructionsPath);
       expect(exists).toBe(true);
     });
 
     test('should have React-specific test runner instructions', async () => {
-      const testRunnerPath = path.join(reactTemplateDir, 'files', 'test-runner.instructions.md');
+      const testRunnerPath = path.join(
+        reactTemplateDir,
+        'files',
+        'test-runner.instructions.md'
+      );
       const exists = await fs.pathExists(testRunnerPath);
       expect(exists).toBe(true);
     });
 
     test('copilot instructions should contain React-specific content', async () => {
-      const instructionsPath = path.join(reactTemplateDir, 'files', 'copilot-instructions.md.template');
+      const instructionsPath = path.join(
+        reactTemplateDir,
+        'files',
+        'copilot-instructions.md.template'
+      );
       const content = await fs.readFile(instructionsPath, 'utf-8');
-      
+
       expect(content).toContain('React');
       expect(content).toContain('component');
       expect(content).toContain('JSX');
@@ -65,13 +77,13 @@ describe('React Template', () => {
   describe('Template Manager Integration', () => {
     test('should list React template as available', async () => {
       const templates = await templateManager.getAvailableTemplates();
-      
+
       expect(templates).toContain('react');
     });
 
     test('should load React template successfully', async () => {
       const reactTemplate = await templateManager.getTemplate('react');
-      
+
       expect(reactTemplate.name).toBe('react');
       expect(reactTemplate.description).toContain('React');
       expect(reactTemplate.files).toBeDefined();

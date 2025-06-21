@@ -1,11 +1,12 @@
 ---
-description: "Automated code review checklist"
-applyTo: "**"
+description: 'Automated code review checklist'
+applyTo: '**'
 ---
 
 # Code Review Focus Areas
 
 ## React-Specific Functionality Assessment
+
 - **Component Props:** Are prop interfaces well-defined and type-safe?
 - **State Management:** Is state handled appropriately (local vs global)?
 - **Effect Dependencies:** Are useEffect dependencies complete and accurate?
@@ -13,6 +14,7 @@ applyTo: "**"
 - **Conditional Rendering:** Are all rendering paths tested and accessible?
 
 ## React Component Quality
+
 - **Single Responsibility:** Does each component have a single, clear purpose?
 - **Component Size:** Are components reasonably sized and focused?
 - **Props Design:** Are props minimal, well-typed, and follow interface patterns?
@@ -20,6 +22,7 @@ applyTo: "**"
 - **JSX Quality:** Is JSX readable, semantic, and properly structured?
 
 ## React Performance Considerations
+
 - **Re-render Optimization:** Are unnecessary re-renders prevented with memo/callback?
 - **Bundle Size:** Do imports follow tree-shaking best practices?
 - **Lazy Loading:** Are code splitting opportunities identified and implemented?
@@ -27,6 +30,7 @@ applyTo: "**"
 - **Key Props:** Are list items using stable, unique keys?
 
 ## React Security and Accessibility
+
 - **XSS Prevention:** Is user input properly sanitized in JSX?
 - **ARIA Compliance:** Are interactive elements properly labeled?
 - **Semantic HTML:** Are semantic HTML elements used instead of generic divs?
@@ -34,6 +38,7 @@ applyTo: "**"
 - **Focus Management:** Is focus handled correctly for dynamic content?
 
 ## React Testing Quality
+
 - **Component Testing:** Are components tested using React Testing Library?
 - **User-Focused Tests:** Do tests verify user behavior rather than implementation?
 - **Hook Testing:** Are custom hooks tested independently?
@@ -41,6 +46,7 @@ applyTo: "**"
 - **Accessibility Testing:** Are accessibility features included in tests?
 
 ## React-Specific Anti-Patterns to Flag
+
 - **Direct State Mutation:** Mutating state objects directly instead of using setState
 - **Missing Keys:** Using array indices or missing keys in lists
 - **Inline Object Creation:** Creating objects/functions in render without memoization
@@ -49,6 +55,7 @@ applyTo: "**"
 - **God Components:** Components handling too many concerns
 
 ## Functionality Assessment
+
 - **Requirements Compliance:** Does the code meet the specified requirements?
 - **Edge Cases:** Are edge cases properly handled?
 - **Error Scenarios:** How does the code behave with invalid inputs?
@@ -56,6 +63,7 @@ applyTo: "**"
 - **Integration Points:** Do integrations with other components work correctly?
 
 ## Code Quality and Readability
+
 - **Naming Conventions:** Are variables, functions, and classes named clearly?
 - **Code Structure:** Is the code well-organized and logically structured?
 - **Function Size:** Are functions focused and reasonably sized (< 50 lines)?
@@ -64,6 +72,7 @@ applyTo: "**"
 - **Consistency:** Does the code follow established project patterns?
 
 ## Performance Considerations
+
 - **Algorithm Efficiency:** Are appropriate algorithms and data structures used?
 - **Memory Usage:** Are there potential memory leaks or excessive memory usage?
 - **Database Queries:** Are database queries optimized and avoid N+1 problems?
@@ -72,6 +81,7 @@ applyTo: "**"
 - **Resource Management:** Are resources properly acquired and released?
 
 ## Security Review
+
 - **Input Validation:** Are all inputs properly validated and sanitized?
 - **Authentication:** Are authentication checks in place where needed?
 - **Authorization:** Are authorization checks appropriate for the functionality?
@@ -80,6 +90,7 @@ applyTo: "**"
 - **Encryption:** Is sensitive data encrypted appropriately?
 
 ## Testing and Testability
+
 - **Test Coverage:** Are there sufficient tests for the new functionality?
 - **Test Quality:** Are tests meaningful and test the right things?
 - **Testability:** Is the code structured to be easily testable?
@@ -88,6 +99,7 @@ applyTo: "**"
 - **Regression Protection:** Do tests protect against known regression issues?
 
 ## Error Handling and Logging
+
 - **Exception Handling:** Are exceptions handled appropriately?
 - **Error Messages:** Are error messages helpful for debugging?
 - **Logging:** Is appropriate logging in place for debugging and monitoring?
@@ -95,6 +107,7 @@ applyTo: "**"
 - **Recovery:** Are there appropriate recovery mechanisms?
 
 ## Documentation and Maintenance
+
 - **Code Documentation:** Is the code self-documenting or properly commented?
 - **API Documentation:** Are public APIs documented with JSDoc?
 - **Breaking Changes:** Are breaking changes clearly identified and documented?
@@ -102,6 +115,7 @@ applyTo: "**"
 - **Changelog Updates:** Are user-facing changes documented in changelog?
 
 ## Standards Compliance
+
 - **Coding Standards:** Does the code follow project coding standards?
 - **Architectural Patterns:** Are established architectural patterns followed?
 - **Dependency Management:** Are new dependencies justified and properly managed?
@@ -109,6 +123,7 @@ applyTo: "**"
 - **Version Compatibility:** Is backwards compatibility maintained where required?
 
 ## Common Anti-Patterns to Flag
+
 - **Deep Nesting:** Excessive if/else or try/catch nesting
 - **God Objects:** Classes or functions with too many responsibilities
 - **Magic Numbers:** Hardcoded values without explanation
@@ -118,6 +133,7 @@ applyTo: "**"
 - **Blocking Operations:** Synchronous operations that could block the main thread
 
 ## Review Process Guidelines
+
 - **Constructive Feedback:** Provide specific, actionable feedback
 - **Explain Reasoning:** Explain why changes are needed
 - **Suggest Alternatives:** Offer alternative approaches when applicable
@@ -126,6 +142,7 @@ applyTo: "**"
 - **Prioritize Issues:** Distinguish between critical issues and suggestions
 
 ## Automated Checks to Verify
+
 - **Linting:** Code passes linting rules
 - **Formatting:** Code follows formatting standards
 - **Type Checking:** TypeScript compilation succeeds without errors

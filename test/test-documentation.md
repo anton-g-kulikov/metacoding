@@ -37,30 +37,35 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
 ### Test Cases for React Template Implementation
 
 #### Template Structure Tests
+
 - **Test Case**: React template directory creation
   - **Input**: `templates/react/` directory structure
   - **Expected Output**: Directory contains template.json and files/ subdirectory
   - **Status**: ✅ Implemented and passing
 
 #### Template Configuration Tests
+
 - **Test Case**: React template.json validation
   - **Input**: React template configuration file
   - **Expected Output**: Valid JSON with React-specific metadata
   - **Status**: ✅ Implemented and passing
 
 #### React Instruction Files Tests
+
 - **Test Case**: React-specific Copilot instructions generation
   - **Input**: React template with variables
   - **Expected Output**: Generated React-focused instruction files
   - **Status**: ✅ Implemented and passing
 
 #### Template Manager Integration Tests
+
 - **Test Case**: React template detection and selection
   - **Input**: Project with package.json containing React dependencies
   - **Expected Output**: React template automatically suggested/selected
   - **Status**: ✅ Implemented and passing
 
 #### CLI Integration Tests
+
 - **Test Case**: Init command with React template selection
   - **Input**: `metacoding init` with React project type selection
   - **Expected Output**: React-specific instruction files generated in .github/

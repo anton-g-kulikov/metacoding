@@ -1,4 +1,4 @@
-# metacoding Project Documentatio│   ├── React Template ✅
+# metacoding Project Documentatio│ ├── React Template ✅
 
 ## Project Overview
 
