@@ -9,9 +9,11 @@ export class VSCodeService {
   private readonly settingsFile = path.join(this.vscodeDir, 'settings.json');
 
   /**
-   * Update VS Code settings with MetaCoding requirements
+   * Update VS Code settings with metacoding requirements
    */
-  async updateSettings(additionalSettings: Record<string, any> = {}): Promise<void> {
+  async updateSettings(
+    additionalSettings: Record<string, any> = {}
+  ): Promise<void> {
     const requiredSettings = {
       'github.copilot.chat.codeGeneration.useInstructionFiles': true,
       'chat.promptFiles': true,
@@ -50,7 +52,7 @@ export class VSCodeService {
   }
 
   /**
-   * Check if VS Code is configured for MetaCoding
+   * Check if VS Code is configured for metacoding
    */
   async isConfigured(): Promise<boolean> {
     if (!(await fs.pathExists(this.settingsFile))) {
@@ -62,8 +64,8 @@ export class VSCodeService {
       const settings = JSON.parse(content);
 
       return (
-        settings['github.copilot.chat.codeGeneration.useInstructionFiles'] === true &&
-        settings['chat.promptFiles'] === true
+        settings['github.copilot.chat.codeGeneration.useInstructionFiles'] ===
+          true && settings['chat.promptFiles'] === true
       );
     } catch {
       return false;

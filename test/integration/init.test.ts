@@ -16,7 +16,7 @@ describe('InitCommand Integration', () => {
     testDir = path.join(__dirname, '../../tmp-test-' + Date.now());
     await fs.ensureDir(testDir);
     process.chdir(testDir);
-    
+
     // Set test environment
     process.env.NODE_ENV = 'test';
   });
@@ -27,7 +27,7 @@ describe('InitCommand Integration', () => {
     await fs.remove(testDir);
   });
 
-  test('should create basic MetaCoding structure with force flag', async () => {
+  test('should create basic metacoding structure with force flag', async () => {
     const initCommand = new InitCommand();
     const fileSystem = new FileSystemService();
 
@@ -45,10 +45,12 @@ describe('InitCommand Integration', () => {
     // Check that basic structure was created
     expect(await fileSystem.fileExists('.github')).toBe(true);
     expect(await fileSystem.fileExists('.github/instructions')).toBe(true);
-    expect(await fileSystem.fileExists('.github/copilot-instructions.md')).toBe(true);
+    expect(await fileSystem.fileExists('.github/copilot-instructions.md')).toBe(
+      true
+    );
   });
 
-  test('should detect existing MetaCoding setup', async () => {
+  test('should detect existing metacoding setup', async () => {
     const fileSystem = new FileSystemService();
 
     // Initially should not be set up

@@ -2,12 +2,12 @@ import chalk from 'chalk';
 import { ValidateOptions } from '../types';
 
 /**
- * Handles the 'validate' command for checking MetaCoding setup
+ * Handles the 'validate' command for checking metacoding setup
  */
 export class ValidateCommand {
   async execute(options: ValidateOptions): Promise<void> {
-    console.log(chalk.cyan('🔍 Validating MetaCoding setup...\n'));
-    
+    console.log(chalk.cyan('🔍 Validating metacoding setup...\n'));
+
     // TODO: Implement validation logic
     console.log(chalk.yellow('⚠️  Validation command is not yet implemented.'));
     console.log(chalk.dim('This feature will check:'));

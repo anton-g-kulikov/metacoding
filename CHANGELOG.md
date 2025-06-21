@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-06-21
 
 ### Added
+
 - **NPM Package Distribution**: Complete transformation from manual file copying to professional npm package
 - **Interactive CLI Tool**: `metacoding` command with init, validate, and update subcommands
 - **Template System**: Configurable templates for different project types (general, react, node, python)
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Professional CLI Experience**: Color output, progress indicators, and helpful error messages
 
 ### Changed
+
 - **Installation Method**: From manual file download to simple `npm install -g metacoding`
 - **Setup Process**: From 6-step manual process to single `metacoding init` command
 - **User Experience**: From error-prone manual setup to guided, validated automation
@@ -26,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **File Management**: Automatic directory creation, file validation, and conflict resolution
 
 ### Technical Details
+
 - **Dependencies**: Commander.js for CLI, Inquirer for prompts, Chalk for colors, fs-extra for file operations
 - **Build System**: TypeScript compilation with source maps and declarations
 - **Testing**: Jest test framework with coverage reporting
@@ -33,11 +36,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Distribution**: Professional npm package with proper semver and release management
 
 ### Breaking Changes
+
 - **Installation**: Manual setup method is deprecated in favor of npm package
 - **File Structure**: Templates now use `{{VARIABLE}}` syntax instead of `[placeholder]` format
 
 ### Migration Guide
+
 Existing manual installations can be migrated by:
+
 1. Installing the npm package: `npm install -g metacoding`
 2. Running `metacoding validate` to check current setup
 3. Running `metacoding update` to migrate to latest format
@@ -67,7 +73,7 @@ Existing manual installations can be migrated by:
 - **Main Template**: Updated `copilot-instructions.md` with comprehensive workflow section
 - **Documentation Instructions**: Enhanced `docs-update.instructions.md` with status guidelines
 - **README**: Expanded to include workflow details and status transparency standards
-- **File Structure**: Added `/meta` and `/test` directories for task and test documentation
+- **File Structure**: Added `/_meta` and `/test` directories for task and test documentation
 
 ### Enhanced
 

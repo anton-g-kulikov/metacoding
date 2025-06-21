@@ -49,12 +49,15 @@ export class ProjectDetector {
    */
   private async hasReactIndicators(): Promise<boolean> {
     const packageJsonPath = 'package.json';
-    
+
     if (await fs.pathExists(packageJsonPath)) {
       try {
         const packageJson = await fs.readJson(packageJsonPath);
-        const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
-        
+        const deps = {
+          ...packageJson.dependencies,
+          ...packageJson.devDependencies,
+        };
+
         return !!(deps.react || deps['@types/react'] || deps['react-dom']);
       } catch {
         // Ignore JSON parse errors
@@ -84,15 +87,24 @@ export class ProjectDetector {
    */
   private async hasNodeIndicators(): Promise<boolean> {
     const packageJsonPath = 'package.json';
-    
+
     if (await fs.pathExists(packageJsonPath)) {
       try {
         const packageJson = await fs.readJson(packageJsonPath);
-        const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
-        
+        const deps = {
+          ...packageJson.dependencies,
+          ...packageJson.devDependencies,
+        };
+
         // Look for Node.js specific dependencies
-        const nodeIndicators = ['express', 'fastify', 'koa', '@types/node', 'nodemon'];
-        return nodeIndicators.some(indicator => deps[indicator]);
+        const nodeIndicators = [
+          'express',
+          'fastify',
+          'koa',
+          '@types/node',
+          'nodemon',
+        ];
+        return nodeIndicators.some((indicator) => deps[indicator]);
       } catch {
         // Ignore JSON parse errors
       }
@@ -171,10 +183,14 @@ export class ProjectDetector {
     if (await fs.pathExists('package.json')) {
       try {
         const packageJson = await fs.readJson('package.json');
-        const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
+        const deps = {
+          ...packageJson.dependencies,
+          ...packageJson.devDependencies,
+        };
 
         if (deps.react) techStack.push('React');
-        if (deps.typescript || deps['@types/node']) techStack.push('TypeScript');
+        if (deps.typescript || deps['@types/node'])
+          techStack.push('TypeScript');
         if (deps.express) techStack.push('Express');
         if (deps.jest) techStack.push('Jest');
         if (deps.vite) techStack.push('Vite');

@@ -1,5 +1,5 @@
 /**
- * TypeScript type definitions for MetaCoding CLI
+ * TypeScript type definitions for metacoding CLI
  */
 
 export interface InitOptions {

@@ -2,12 +2,12 @@ import chalk from 'chalk';
 import { UpdateOptions } from '../types';
 
 /**
- * Handles the 'update' command for updating MetaCoding setup
+ * Handles the 'update' command for updating metacoding setup
  */
 export class UpdateCommand {
   async execute(options: UpdateOptions): Promise<void> {
-    console.log(chalk.cyan('🔄 Updating MetaCoding setup...\n'));
-    
+    console.log(chalk.cyan('🔄 Updating metacoding setup...\n'));
+
     // TODO: Implement update logic
     console.log(chalk.yellow('⚠️  Update command is not yet implemented.'));
     console.log(chalk.dim('This feature will:'));

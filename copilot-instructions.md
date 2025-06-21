@@ -93,14 +93,14 @@ Assume the role of a **senior, experienced [project specific] developer** with e
   /fixtures           # Test fixtures and sample data
   /unit               # Unit tests (*.test.ts)
   /integration        # Integration tests
-/meta                  # Development documentation
+/_meta                  # Development documentation
 /.github              # GitHub-specific files (workflows, templates)
 /.vscode              # VS Code workspace settings
 ```
 
 ## Documentation Structure
 
-- **Meta Documentation:** All development docs in `/meta` folder
+- **Meta Documentation:** All development docs in `/_meta` folder
   - `project-task-list.md` - Current tasks and roadmap
   - `project-documentation.md` - General project documentation
   - `architecture.md` - System architecture decisions
@@ -144,7 +144,7 @@ Assume the role of a **senior, experienced [project specific] developer** with e
 - **README Updates:** Keep main README.md current with project state and features
 - **Changelog:** Maintain detailed CHANGELOG.md with all notable changes
 - **API Documentation:** Document all public APIs with examples and usage patterns
-- **Architecture Decisions:** Record significant architectural decisions in `/meta` folder
+- **Architecture Decisions:** Record significant architectural decisions in `/_meta` folder
 
 ## Version Control and Workflow
 
@@ -262,7 +262,7 @@ applyTo: "**/*.md"
 
 - Keep README.md current with latest features and installation steps
 - Update JSDoc comments when changing public APIs
-- Record architectural decisions in /meta folder
+- Record architectural decisions in /_meta folder
 - Ensure code examples in documentation are tested and working
 - Update CHANGELOG.md for all user-facing changes
 - Maintain consistent formatting and tone across all documentation
@@ -302,7 +302,7 @@ applyTo: "**"
 
 ### Step 2: Task Management
 
-- **Update task list:** Add corresponding task(s) to `/meta/project-task-list.md`
+- **Update task list:** Add corresponding task(s) to `/_meta/project-task-list.md`
 - **Set task status:** Mark tasks as "In Progress" with clear descriptions
 - **Break down complex tasks:** Split large tasks into smaller, manageable subtasks
 - **Estimate effort:** Provide realistic time/complexity estimates
@@ -326,7 +326,7 @@ applyTo: "**"
 ### Step 5: Documentation and Status Updates
 
 - **Update all documentation:** Follow documentation maintenance guidelines
-- **Update task status:** Mark completed tasks in `/meta/project-task-list.md`
+- **Update task status:** Mark completed tasks in `/_meta/project-task-list.md`
 - **Update test documentation:** Record test status in `/test/test-documentation.md`
 - **Update CHANGELOG.md:** Document user-facing changes
 - **Review code documentation:** Ensure JSDoc comments are current

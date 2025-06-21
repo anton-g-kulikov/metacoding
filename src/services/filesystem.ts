@@ -7,7 +7,7 @@ import { FileSystemResult } from '../types';
  */
 export class FileSystemService {
   /**
-   * Check if MetaCoding is already set up in the current directory
+   * Check if metacoding is already set up in the current directory
    */
   async isMetaCodingSetup(): Promise<boolean> {
     const githubDir = '.github';
@@ -15,8 +15,8 @@ export class FileSystemService {
     const instructionsDir = path.join(githubDir, 'instructions');
 
     return (
-      await fs.pathExists(copilotInstructions) &&
-      await fs.pathExists(instructionsDir)
+      (await fs.pathExists(copilotInstructions)) &&
+      (await fs.pathExists(instructionsDir))
     );
   }
 

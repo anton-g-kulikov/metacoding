@@ -33,7 +33,7 @@ applyTo: "**/*.md"
 
 ## Architectural Documentation
 
-- **Decision Records:** Record significant architectural decisions in `/meta` folder
+- **Decision Records:** Record significant architectural decisions in `/_meta` folder
 - **System Overview:** Maintain high-level system architecture documentation
 - **Data Flow:** Document data flow and process workflows
 - **Integration Points:** Document external system integrations

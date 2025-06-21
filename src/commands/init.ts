@@ -8,7 +8,7 @@ import { VSCodeService } from '../services/vscode';
 import { ProjectDetector } from '../services/project-detector';
 
 /**
- * Handles the 'init' command for setting up MetaCoding in a project
+ * Handles the 'init' command for setting up metacoding in a project
  */
 export class InitCommand {
   private templateManager: TemplateManager;
@@ -27,18 +27,19 @@ export class InitCommand {
    * Execute the init command
    */
   async execute(options: InitOptions): Promise<void> {
-    console.log(chalk.cyan.bold('🚀 Welcome to MetaCoding Setup!\n'));
+    console.log(chalk.cyan.bold('🚀 Welcome to metacoding Setup!\n'));
 
     // Detect current project context
     const projectInfo = await this.projectDetector.detectProject();
-    
-    // Check if MetaCoding is already set up
-    if (await this.fileSystem.isMetaCodingSetup() && !options.force) {
+
+    // Check if metacoding is already set up
+    if ((await this.fileSystem.isMetaCodingSetup()) && !options.force) {
       const { proceed } = await inquirer.prompt([
         {
           type: 'confirm',
           name: 'proceed',
-          message: 'MetaCoding is already set up in this directory. Do you want to reconfigure it?',
+          message:
+            'metacoding is already set up in this directory. Do you want to reconfigure it?',
           default: false,
         },
       ]);
@@ -55,7 +56,7 @@ export class InitCommand {
     // Set up the project
     await this.setupProject(config, options);
 
-    console.log(chalk.green.bold('\n✅ MetaCoding setup complete!\n'));
+    console.log(chalk.green.bold('\n✅ metacoding setup complete!\n'));
     this.displayNextSteps();
   }
 
@@ -70,7 +71,7 @@ export class InitCommand {
     if (options.force && process.env.NODE_ENV === 'test') {
       return {
         name: projectInfo.name || 'test-project',
-        description: 'A test project using MetaCoding workflow',
+        description: 'A test project using metacoding workflow',
         techStack: ['TypeScript', 'Jest'],
         projectType: options.template,
         testFramework: 'Jest',
@@ -95,7 +96,7 @@ export class InitCommand {
         type: 'input',
         name: 'description',
         message: 'Project description:',
-        default: 'A professional development project using MetaCoding workflow',
+        default: 'A professional development project using metacoding workflow',
       },
       {
         type: 'list',
@@ -148,7 +149,9 @@ export class InitCommand {
       description: answers.description,
       techStack: answers.techStack,
       projectType: answers.projectType,
-      testFramework: answers.enableTesting ? this.getDefaultTestFramework(answers.projectType) : undefined,
+      testFramework: answers.enableTesting
+        ? this.getDefaultTestFramework(answers.projectType)
+        : undefined,
       buildTool: this.getDefaultBuildTool(answers.projectType),
     } as ProjectConfig;
   }
@@ -156,8 +159,11 @@ export class InitCommand {
   /**
    * Set up the project with the given configuration
    */
-  private async setupProject(config: ProjectConfig, options: InitOptions): Promise<void> {
-    const spinner = ora('Setting up MetaCoding files...').start();
+  private async setupProject(
+    config: ProjectConfig,
+    options: InitOptions
+  ): Promise<void> {
+    const spinner = ora('Setting up metacoding files...').start();
 
     try {
       // Create .github directory structure
@@ -165,8 +171,13 @@ export class InitCommand {
       await this.fileSystem.ensureDirectoryExists('.github/instructions');
 
       // Generate and write template files
-      const template = await this.templateManager.getTemplate(config.projectType);
-      const processedFiles = await this.templateManager.processTemplate(template, config);
+      const template = await this.templateManager.getTemplate(
+        config.projectType
+      );
+      const processedFiles = await this.templateManager.processTemplate(
+        template,
+        config
+      );
 
       for (const file of processedFiles) {
         await this.fileSystem.writeFile(file.path, file.content);
@@ -179,9 +190,9 @@ export class InitCommand {
         await this.vscodeService.updateSettings(template.vscodeSettings || {});
       }
 
-      spinner.succeed('MetaCoding files created successfully');
+      spinner.succeed('metacoding files created successfully');
     } catch (error) {
-      spinner.fail('Failed to set up MetaCoding');
+      spinner.fail('Failed to set up metacoding');
       throw error;
     }
   }
@@ -225,9 +236,18 @@ export class InitCommand {
     console.log(chalk.cyan('Next steps:'));
     console.log(chalk.dim('1.'), 'Restart VS Code to apply settings');
     console.log(chalk.dim('2.'), 'Open GitHub Copilot Chat');
-    console.log(chalk.dim('3.'), 'Ask: "What are the coding standards for this project?"');
-    console.log(chalk.dim('4.'), 'Start coding with professional workflow guidance!');
+    console.log(
+      chalk.dim('3.'),
+      'Ask: "What are the coding standards for this project?"'
+    );
+    console.log(
+      chalk.dim('4.'),
+      'Start coding with professional workflow guidance!'
+    );
     console.log('');
-    console.log(chalk.cyan('Need help?'), 'Visit https://github.com/your-username/metacoding');
+    console.log(
+      chalk.cyan('Need help?'),
+      'Visit https://github.com/your-username/metacoding'
+    );
   }
 }

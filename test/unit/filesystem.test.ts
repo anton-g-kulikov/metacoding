@@ -21,7 +21,7 @@ describe('FileSystemService', () => {
   });
 
   describe('isMetaCodingSetup', () => {
-    test('should return false when no MetaCoding files exist', async () => {
+    test('should return false when no metacoding files exist', async () => {
       const result = await service.isMetaCodingSetup();
       expect(result).toBe(false);
     });
@@ -46,19 +46,21 @@ describe('FileSystemService', () => {
   describe('ensureDirectoryExists', () => {
     test('should create directory if it does not exist', async () => {
       const dirPath = 'test/nested/directory';
-      
+
       expect(await fs.pathExists(dirPath)).toBe(false);
-      
+
       await service.ensureDirectoryExists(dirPath);
-      
+
       expect(await fs.pathExists(dirPath)).toBe(true);
     });
 
     test('should not fail if directory already exists', async () => {
       const dirPath = 'existing-dir';
       await fs.ensureDir(dirPath);
-      
-      await expect(service.ensureDirectoryExists(dirPath)).resolves.not.toThrow();
+
+      await expect(
+        service.ensureDirectoryExists(dirPath)
+      ).resolves.not.toThrow();
     });
   });
 
@@ -78,7 +80,7 @@ describe('FileSystemService', () => {
       const content = 'Test content';
 
       await service.writeFile(filePath, content);
-      
+
       expect(await fs.pathExists('nested/directory')).toBe(true);
       expect(await service.readFile(filePath)).toBe(content);
     });
@@ -87,7 +89,7 @@ describe('FileSystemService', () => {
   describe('fileExists', () => {
     test('should return true for existing file', async () => {
       await fs.writeFile('existing-file.txt', 'content');
-      
+
       const result = await service.fileExists('existing-file.txt');
       expect(result).toBe(true);
     });

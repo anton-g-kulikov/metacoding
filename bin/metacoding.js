@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * MetaCoding CLI Entry Point
- * 
- * This file serves as the main entry point for the MetaCoding CLI tool.
+ * metacoding CLI Entry Point
+ *
+ * This file serves as the main entry point for the metacoding CLI tool.
  * It delegates to the compiled TypeScript code in the lib directory.
  */
 

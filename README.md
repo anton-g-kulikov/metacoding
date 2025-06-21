@@ -1,10 +1,10 @@
-# MetaCoding: Professional Development Workflow for GitHub Copilot
+# metacoding: Professional Development Workflow for GitHub Copilot
 
 Transform your development experience with AI-powered coding standards, automated workflows, and quality assurance that enforces best practices from day one.
 
-## 🎯 What is MetaCoding?
+## 🎯 What is metacoding?
 
-MetaCoding is a **complete development methodology** that uses GitHub Copilot's custom instruction capabilities to create a **senior developer experience** for developers at any level. Instead of just getting code suggestions, you get:
+metacoding is a **complete development methodology** that uses GitHub Copilot's custom instruction capabilities to create a **senior developer experience** for developers at any level. Instead of just getting code suggestions, you get:
 
 - **Robust workflows** that guide you through professional development practices
 - **Enforced quality standards** that prevent common mistakes
@@ -15,13 +15,13 @@ MetaCoding is a **complete development methodology** that uses GitHub Copilot's 
 
 ### Quick Setup (NPM Package) - Recommended
 
-The easiest way to get started with MetaCoding is using our npm package:
+The easiest way to get started with metacoding is using our npm package:
 
 ```bash
 # Install globally
 npm install -g metacoding
 
-# Initialize MetaCoding in your project
+# Initialize metacoding in your project
 cd your-project
 metacoding init
 
@@ -74,7 +74,7 @@ If you don't have VS Code installed:
    ```
    - Save the file with `Ctrl+S` (Windows/Linux) or `Cmd+S` (Mac)
 
-### Step 4: Set Up MetaCoding in Your Project
+### Step 4: Set Up metacoding in Your Project
 
 1. **Create your project folder:**
 
@@ -94,7 +94,7 @@ If you don't have VS Code installed:
    - In VS Code, create a new folder called `.github` in your project root
    - Inside `.github`, create another folder called `instructions`
 
-4. **Download MetaCoding files:**
+4. **Download metacoding files:**
 
    - Download the `copilot-instructions.md` file from this repository
    - Download all files from the `instructions/` folder
@@ -138,12 +138,14 @@ If you don't have VS Code installed:
 
 ## ✅ You're Ready to Go!
 
-## 📦 Using the MetaCoding CLI
+## 📦 Using the metacoding CLI
 
 Once installed, you can use these commands:
 
 ### `metacoding init`
-Initialize MetaCoding in your current project with interactive setup:
+
+Initialize metacoding in your current project with interactive setup:
+
 ```bash
 metacoding init                    # Interactive setup with default template
 metacoding init --template react   # Use React template
@@ -151,7 +153,9 @@ metacoding init --force            # Overwrite existing files
 ```
 
 ### `metacoding validate`
-Check your current MetaCoding setup:
+
+Check your current metacoding setup:
+
 ```bash
 metacoding validate                 # Basic validation
 metacoding validate --strict        # Strict validation rules
@@ -159,21 +163,24 @@ metacoding validate --fix          # Auto-fix issues where possible
 ```
 
 ### `metacoding update`
-Update your MetaCoding setup to the latest version:
+
+Update your metacoding setup to the latest version:
+
 ```bash
 metacoding update                   # Update to latest version
 metacoding update --backup         # Create backup before updating
 ```
 
 ### Help and Version
+
 ```bash
 metacoding --help                   # Show all commands
 metacoding --version               # Show version number
 ```
 
-# 💬 How to Use MetaCoding with GitHub Copilot
+# 💬 How to Use metacoding with GitHub Copilot
 
-Once you have MetaCoding set up, you can leverage its power in several ways:
+Once you have metacoding set up, you can leverage its power in several ways:
 
 ## Automatic Context Application
 
@@ -230,10 +237,10 @@ You can explicitly reference specific instruction files in GitHub Copilot:
 ### Common Questions
 
 **Q: Do I need to be an experienced developer?**
-A: No! MetaCoding is designed to help developers at any level follow professional practices.
+A: No! metacoding is designed to help developers at any level follow professional practices.
 
 **Q: Will this work with my preferred programming language?**
-A: Yes! MetaCoding works with any language supported by GitHub Copilot.
+A: Yes! metacoding works with any language supported by GitHub Copilot.
 
 **Q: Can I customize the workflow for my team's needs?**
 A: Absolutely! All instruction files can be modified to match your team's specific requirements.
@@ -265,7 +272,7 @@ Learn more about GitHub Copilot custom instructions:
 
 ## 🤝 Contributing
 
-We welcome contributions to make MetaCoding even better! Whether you have:
+We welcome contributions to make metacoding even better! Whether you have:
 
 - Improvements to existing workflows
 - New instruction patterns for specific technologies
