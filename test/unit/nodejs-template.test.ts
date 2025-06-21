@@ -44,7 +44,7 @@ describe('Node.js Template', () => {
       const templateContent = fs.readFileSync(templateJsonPath, 'utf8');
       const template = JSON.parse(templateContent);
 
-      expect(template.name).toBe('nodejs');
+      expect(template.name).toBe('node');
       expect(template.description).toContain('Node.js');
       expect(template.description).toContain('backend');
       expect(template.vscodeSettings).toBeDefined();
