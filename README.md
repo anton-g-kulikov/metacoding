@@ -173,8 +173,7 @@ You can explicitly reference specific instruction files in GitHub Copilot:
 - **Edit Mode**: Use for focused code modifications when you want direct file editing
   - Examples: "Refactor this function to use async/await" or "Add error handling to this method"
 
-
-## � Getting Help
+## 🆘 Getting Help
 
 ### Common Questions
 
@@ -223,6 +222,6 @@ We welcome contributions to make MetaCoding even better! Whether you have:
 
 Feel free to open an issue or submit a pull request.
 
-## � License
+## 📄 License
 
-This project is open source and available under the MIT License. Use it freely in personal or commercial projects.
+This project is open source and available under the [MIT License](https://opensource.org/licenses/MIT). Use it freely in personal or commercial projects.
