@@ -29,6 +29,7 @@
 
 - [x] **Create general template (current instruction files)**
 - [x] **Create React/Frontend template** - Complete with React-specific Copilot instructions
+- [x] **Enhance temporary file management in instruction files** - Added comprehensive cleanup guidance to all templates
 - [ ] **Create Node.js/Backend template**
 - [ ] **Create Python template**
 - [x] **Implement template selection logic**
