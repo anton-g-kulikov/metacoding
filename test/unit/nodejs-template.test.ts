@@ -28,10 +28,10 @@ describe('Node.js Template', () => {
         'code-review.instructions.md',
         'docs-update.instructions.md',
         'release.instructions.md',
-        'test-runner.instructions.md'
+        'test-runner.instructions.md',
       ];
 
-      requiredFiles.forEach(file => {
+      requiredFiles.forEach((file) => {
         const filePath = path.join(filesDir, file);
         expect(fs.existsSync(filePath)).toBe(true);
         expect(fs.statSync(filePath).isFile()).toBe(true);
@@ -48,14 +48,21 @@ describe('Node.js Template', () => {
       expect(template.description).toContain('Node.js');
       expect(template.description).toContain('backend');
       expect(template.vscodeSettings).toBeDefined();
-      expect(template.vscodeSettings['github.copilot.chat.codeGeneration.useInstructionFiles']).toBe(true);
+      expect(
+        template.vscodeSettings[
+          'github.copilot.chat.codeGeneration.useInstructionFiles'
+        ]
+      ).toBe(true);
       expect(template.vscodeSettings['chat.promptFiles']).toBe(true);
     });
   });
 
   describe('Node.js Instruction Files', () => {
     test('copilot instructions should contain Node.js-specific content', () => {
-      const instructionsPath = path.join(filesDir, 'copilot-instructions.md.template');
+      const instructionsPath = path.join(
+        filesDir,
+        'copilot-instructions.md.template'
+      );
       const content = fs.readFileSync(instructionsPath, 'utf8');
 
       // Check for Node.js-specific content
@@ -64,11 +71,11 @@ describe('Node.js Template', () => {
       expect(content).toContain('API');
       expect(content).toContain('server');
       expect(content).toContain('Express');
-      
+
       // Check for mandatory workflow enforcement
       expect(content).toContain('7-step mandatory development workflow');
       expect(content).toContain('mandatory development workflow');
-      
+
       // Check for template variables
       expect(content).toContain('{{PROJECT_DESCRIPTION}}');
       expect(content).toContain('{{TECH_STACK}}');
@@ -85,7 +92,7 @@ describe('Node.js Template', () => {
       expect(content).toContain('performance');
       expect(content).toContain('authentication');
       expect(content).toContain('authorization');
-      
+
       // Check for temporary file management
       expect(content).toContain('temporary');
       expect(content).toContain('cleanup');
@@ -100,7 +107,7 @@ describe('Node.js Template', () => {
       expect(content).toContain('API testing');
       expect(content).toContain('integration test');
       expect(content).toContain('Node.js');
-      
+
       // Check for temporary file cleanup instructions
       expect(content).toContain('temporary');
       expect(content).toContain('cleanup');
@@ -111,13 +118,13 @@ describe('Node.js Template', () => {
       const instructionFiles = [
         'copilot-instructions.md.template',
         'code-review.instructions.md',
-        'test-runner.instructions.md'
+        'test-runner.instructions.md',
       ];
 
-      instructionFiles.forEach(fileName => {
+      instructionFiles.forEach((fileName) => {
         const filePath = path.join(filesDir, fileName);
         const content = fs.readFileSync(filePath, 'utf8');
-        
+
         // Each file should reference or enforce the workflow
         expect(content).toMatch(/(workflow|mandatory|step)/i);
       });
@@ -129,13 +136,13 @@ describe('Node.js Template', () => {
       const instructionFiles = [
         'copilot-instructions.md.template',
         'code-review.instructions.md',
-        'test-runner.instructions.md'
+        'test-runner.instructions.md',
       ];
 
-      instructionFiles.forEach(fileName => {
+      instructionFiles.forEach((fileName) => {
         const filePath = path.join(filesDir, fileName);
         const content = fs.readFileSync(filePath, 'utf8');
-        
+
         // Check for cleanup-related content
         expect(content).toMatch(/(cleanup|temporary|artifact|clean)/i);
       });
