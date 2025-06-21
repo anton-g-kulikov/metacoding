@@ -1,6 +1,12 @@
 # metacoding: Professional Development Workflow for GitHub Copilot
 
-Transform your development experience with AI-powered coding standards, automated workflows, and quality assurance that enforces best practices from day one.
+Transform your development experience with AI-powered coding standards, automate```bash
+metacoding init                    # Interactive setup with default template
+metacoding init --template react   # Use React template
+metacoding init --template node    # Use Node.js template
+metacoding init --template python  # Use Python template
+metacoding init --force            # Overwrite existing files
+```flows, and quality assurance that enforces best practices from day one.
 
 ## 🎯 What is metacoding?
 

@@ -12,6 +12,7 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
 ✅ **Folder structure updated** - Renamed meta/ to \_meta/ for better organization  
 ✅ **Documentation standards implemented** - Following our own guidelines for clarity and completeness  
 ✅ **Node.js template implementation completed** - All Node.js backend template tests passing, CLI integration verified
+✅ **Python template implementation completed** - All Python template tests passing, CLI integration verified with Django/Flask/FastAPI support
 
 ## Testing Strategy
 
@@ -135,6 +136,71 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
 - **Test Case**: Temporary file cleanup instructions for Node.js
   - **Input**: Node.js template instruction files
   - **Expected Output**: Comprehensive guidance for cleaning Node.js build artifacts, logs, and temporary files
+  - **Status**: ✅ Implemented and passing
+
+---
+
+## Python Template Test Cases
+
+### Test Cases for Python/Backend Template Implementation
+
+#### Template Structure Tests
+
+- **Test Case**: Python template directory creation
+  - **Input**: `templates/python/` directory structure
+  - **Expected Output**: Directory contains template.json and files/ subdirectory with all instruction files
+  - **Status**: ✅ Implemented and passing
+
+#### Template Configuration Tests
+
+- **Test Case**: Python template.json validation
+  - **Input**: Python template configuration file
+  - **Expected Output**: Valid JSON with Python-specific VS Code settings and metadata
+  - **Status**: ✅ Implemented and passing
+
+#### Python Instruction Files Tests
+
+- **Test Case**: Python-specific Copilot instructions generation
+  - **Input**: Python template with Django/Flask/FastAPI-specific variables
+  - **Expected Output**: Generated Python-focused instruction files with web framework patterns
+  - **Status**: ✅ Implemented and passing
+
+- **Test Case**: Python-specific code review instructions
+  - **Input**: Python code review template
+  - **Expected Output**: Instructions include Django security, ORM optimization, and Python performance checks
+  - **Status**: ✅ Implemented and passing
+
+- **Test Case**: Python test runner instructions
+  - **Input**: Python test runner template
+  - **Expected Output**: Instructions include pytest patterns, Django testing, and temporary file cleanup
+  - **Status**: ✅ Implemented and passing
+
+#### Template Manager Integration Tests
+
+- **Test Case**: Python template detection and selection
+  - **Input**: Project with requirements.txt or pyproject.toml containing Python/Django dependencies
+  - **Expected Output**: Python template automatically suggested/selected
+  - **Status**: ✅ Implemented and passing
+
+#### CLI Integration Tests
+
+- **Test Case**: Init command with Python template selection
+  - **Input**: `metacoding init` with Python/Backend project type selection
+  - **Expected Output**: Python-specific instruction files generated in .github/instructions/
+  - **Status**: ✅ Implemented and passing
+
+#### Workflow Enforcement Tests
+
+- **Test Case**: 7-step mandatory workflow in Python template
+  - **Input**: Python template Copilot instructions
+  - **Expected Output**: All instruction files enforce the mandatory development workflow
+  - **Status**: ✅ Implemented and passing
+
+#### File Management Tests
+
+- **Test Case**: Temporary file cleanup instructions for Python
+  - **Input**: Python template instruction files
+  - **Expected Output**: Comprehensive guidance for cleaning Python artifacts, virtual environments, and cache files
   - **Status**: ✅ Implemented and passing
 
 ---
