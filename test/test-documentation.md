@@ -207,5 +207,21 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
 
 ---
 
+## Documentation Test Cases
+
+### README.md Quality Tests
+
+- **Test Case**: README.md formatting and structure validation
+  - **Input**: Current README.md file
+  - **Expected Output**:
+    - Proper markdown formatting without broken code blocks
+    - Version badges present and accurate
+    - Table of contents with working links
+    - Consistent heading hierarchy
+    - No typos or grammar errors
+    - All CLI examples accurate and up-to-date
+  - **Status**: ✅ Completed - Fixed broken markdown, added version badges, corrected typos, improved structure
+  - **Verification**: Manual review and structure validation performed
+
 _Last Updated: June 22, 2025_  
 _Next Review: After implementing Python template or additional CLI features_

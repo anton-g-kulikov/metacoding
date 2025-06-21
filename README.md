@@ -1,13 +1,22 @@
 # metacoding: Professional Development Workflow for GitHub Copilot
 
-Transform your development experience with AI-powered coding standards, automate```bash
-metacoding init # Interactive setup with default template
-metacoding init --template react # Use React template
-metacoding init --template node # Use Node.js template
-metacoding init --template python # Use Python template
-metacoding init --force # Overwrite existing files
+[![Version](https://img.shields.io/npm/v/metacoding.svg)](https://www.npmjs.com/package/metacoding)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-Compatible-brightgreen.svg)](https://github.com/features/copilot)
 
-````flows, and quality assurance that enforces best practices from day one.
+Transform your development experience with AI-powered coding standards, automated workflows, and quality assurance that enforces best practices from day one.
+
+## Table of Contents
+
+- [🎯 What is metacoding?](#-what-is-metacoding)
+- [🛠 Installation Guide](#-installation-guide)
+  - [Quick Setup (NPM Package)](#quick-setup-npm-package---recommended)
+  - [Manual Setup](#manual-setup-alternative-method)
+- [📦 Using the metacoding CLI](#-using-the-metacoding-cli)
+- [💬 How to Use metacoding with GitHub Copilot](#-how-to-use-metacoding-with-github-copilot)
+- [🆘 Getting Help](#-getting-help)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
 ## 🎯 What is metacoding?
 
@@ -33,7 +42,7 @@ cd your-project
 metacoding init
 
 # Follow the interactive prompts and you're done!
-````
+```
 
 ### Manual Setup (Alternative Method)
 
@@ -154,10 +163,11 @@ Once installed, you can use these commands:
 Initialize metacoding in your current project with interactive setup:
 
 ```bash
-metacoding init                    # Interactive setup with default template
-metacoding init --template react   # Use React template
-metacoding init --template node    # Use Node.js/Backend template
-metacoding init --force            # Overwrite existing files
+metacoding init                     # Interactive setup with default template
+metacoding init --template react    # Use React template
+metacoding init --template node     # Use Node.js/Backend template
+metacoding init --template python   # Use Python template
+metacoding init --force             # Overwrite existing files
 ```
 
 ### `metacoding validate`
@@ -165,9 +175,9 @@ metacoding init --force            # Overwrite existing files
 Check your current metacoding setup:
 
 ```bash
-metacoding validate                 # Basic validation
-metacoding validate --strict        # Strict validation rules
-metacoding validate --fix          # Auto-fix issues where possible
+metacoding validate                  # Basic validation
+metacoding validate --strict         # Strict validation rules
+metacoding validate --fix           # Auto-fix issues where possible
 ```
 
 ### `metacoding update`
@@ -175,22 +185,22 @@ metacoding validate --fix          # Auto-fix issues where possible
 Update your metacoding setup to the latest version:
 
 ```bash
-metacoding update                   # Update to latest version
-metacoding update --backup         # Create backup before updating
+metacoding update                    # Update to latest version
+metacoding update --backup          # Create backup before updating
 ```
 
 ### Help and Version
 
 ```bash
-metacoding --help                   # Show all commands
-metacoding --version               # Show version number
+metacoding --help                    # Show all commands
+metacoding --version                 # Show version number
 ```
 
-# 💬 How to Use metacoding with GitHub Copilot
+## 💬 How to Use metacoding with GitHub Copilot
 
 Once you have metacoding set up, you can leverage its power in several ways:
 
-## Automatic Context Application
+### Automatic Context Application
 
 GitHub Copilot automatically applies relevant instruction files based on the files you're editing:
 
@@ -199,7 +209,7 @@ GitHub Copilot automatically applies relevant instruction files based on the fil
 - **Editing any code file** → `code-review.instructions.md` is available for manual use
 - **Editing package.json** → `release.instructions.md` automatically applies
 
-## Attaching Instruction Files
+### Attaching Instruction Files
 
 1. **Open GitHub Copilot Chat** (`Ctrl+Shift+P` → "GitHub Copilot: Open Chat")
 2. **Click the paperclip icon** (attach button) in the Copilot input
@@ -213,7 +223,7 @@ Examples of effective prompts:
 - "Bump version and commit following release workflow"
 - "Review this code for security vulnerabilities"
 
-## Manual Instruction Reference
+### Manual Instruction Reference
 
 You can explicitly reference specific instruction files in GitHub Copilot:
 
@@ -223,15 +233,15 @@ You can explicitly reference specific instruction files in GitHub Copilot:
 
 - "Following test-runner.instructions.md, help me write tests for this component"
 
-# Best Practices for Using GitHub Copilot
+## Best Practices for Using GitHub Copilot
 
 - **Use Agent Mode by default** - Agent mode provides the most comprehensive assistance with workflow automation
 - **Start with simple prompts** like "Let's plan feature X" to test your setup
 - **Be specific about context** when manually referencing instructions
 - **Reference multiple instructions** when needed for complex tasks
-- **Provide necessary context**: include documentation, taks list, test cases and related files and folders in your prompt (use the "Attach" menu)
+- **Provide necessary context**: include documentation, task list, test cases and related files and folders in your prompt (use the "Attach" menu)
 
-## When to Switch Copilot Modes
+### When to Switch Copilot Modes
 
 - **Agent Mode (Default)**: Use for complex workflows, multi-step tasks, and when you want Copilot to handle the entire process
   - Examples: "Implement user authentication with tests and documentation" or "Prepare release with version bump and changelog"
