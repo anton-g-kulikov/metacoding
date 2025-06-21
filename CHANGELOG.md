@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial release of GitHub Copilot Instructions Template
 - Main template file (`copilot-instructions.md`) with comprehensive coding standards
 - Specialized instruction files for common development tasks:
@@ -20,12 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MIT License for open-source usage
 
 ### Changed
+
 - Renamed main template from `copilot-instructions-template.md` to `copilot-instructions.md`
 - Expanded Quick Start section with detailed 5-step process for first-time users
 
 ## [1.0.0] - 2025-06-21
 
 ### Added
+
 - Initial project structure
 - Core documentation files
 - Basic instruction templates
