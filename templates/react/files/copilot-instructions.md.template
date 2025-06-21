@@ -124,6 +124,15 @@ src/
 
 # React Development Guidelines
 
+## Development Workflow and File Management
+
+### Temporary File Management
+- **React Development Cleanup:** Remove all temporary JSX/TSX files, component experiments, and debug components after development sessions
+- **Build Artifact Cleanup:** Clean up development build outputs, bundle analyzer reports, and performance profiling files
+- **Component Playground:** Move useful component experiments to Storybook stories or proper example components
+- **Mock Data Management:** Organize temporary API mock data into `/src/mocks/` or `/test/fixtures/` directories
+- **Debug Component Removal:** Remove debug wrappers, console.log statements, and temporary styling before commits
+
 ## Component Design Principles
 
 ### Single Responsibility
@@ -344,6 +353,26 @@ export const useUser = () => {
 - Monitor performance metrics
 - Track user interactions and conversions
 - Set up alerts for critical issues
+
+## React Development Workflow
+
+### Test-Driven Development (TDD) for React
+
+- **Document test cases first:** Write test cases in `/test/test-documentation.md` with React-specific scenarios
+- **Define component behavior:** Clearly specify component props, state changes, and user interactions
+- **Implement component tests:** Create React Testing Library tests that verify documented behavior
+- **Verify test failure:** Run tests to confirm they fail appropriately (red phase)
+- **Implement components:** Write the minimum React component code needed to make tests pass (green phase)
+- **Clean up test artifacts:** Remove temporary test components, move useful test data to `/test/fixtures/`
+
+### Implementation and Verification
+
+- **Write React components:** Implement actual component functionality with proper TypeScript typing
+- **Run all tests:** Ensure all React tests pass, including unit and integration tests
+- **Verify component functionality:** Test components in browser and confirm they meet requirements
+- **Get user confirmation:** User must test the React components and confirm they meet expectations
+- **Refactor components:** Clean up React code while maintaining test coverage and component structure
+- **File cleanup:** Remove temporary React files, debug components, experimental JSX, and console.log statements
 
 ---
 

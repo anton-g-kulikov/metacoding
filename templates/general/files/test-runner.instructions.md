@@ -24,6 +24,14 @@ applyTo: "test/**/*.ts"
 - **Realistic Data:** Use realistic data in integration tests to catch real-world issues
 - **Mock Strategy:** Mock external dependencies in unit tests for isolation
 - **Test Database:** Use separate test database/environment for integration tests
+- **Temporary File Cleanup:** Clean up all temporary test files, debug outputs, and mock data after test execution
+- **Fixture Organization:** Move reusable test data to `/test/fixtures/` directory for proper organization
+
+## Test File Hygiene
+- **No Orphaned Files:** Remove temporary test files created during debugging or development
+- **Debug Output Cleanup:** Remove console.log statements and debug files before committing
+- **Test Artifact Management:** Ensure test screenshots, logs, and reports are properly managed or cleaned up
+- **Resource Management:** Properly dispose of file handles, database connections, and other test resources
 
 ## Test Types and Patterns
 - **Unit Tests:** Test individual functions, methods, and components in isolation

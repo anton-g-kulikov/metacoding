@@ -45,6 +45,15 @@ applyTo: '**'
 - **Integration Testing:** Are component interactions tested realistically?
 - **Accessibility Testing:** Are accessibility features included in tests?
 
+## React File and Component Hygiene
+
+- **Component Cleanup:** Are temporary/experimental React components removed from the codebase?
+- **JSX Debug Elements:** Are debug divs, temporary styling, and console.log statements removed?
+- **Unused Imports:** Are unused React imports, hooks, and component imports cleaned up?
+- **Mock Component Removal:** Are temporary mock components moved to proper mock directories or removed?
+- **Storybook Integration:** Are useful component experiments moved to Storybook stories?
+- **Style Experiments:** Are temporary CSS/styled-component experiments cleaned up or properly organized?
+
 ## React-Specific Anti-Patterns to Flag
 
 - **Direct State Mutation:** Mutating state objects directly instead of using setState

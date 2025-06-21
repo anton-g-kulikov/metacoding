@@ -20,6 +20,22 @@ applyTo: '**/*.test.{ts,tsx,js,jsx}'
 - **Event Testing:** Test user interactions (clicks, form submissions, keyboard events)
 - **Conditional Rendering:** Test all conditional rendering paths
 
+## React Test File Management
+
+### Component Test Cleanup
+
+- **Debug Components:** Remove temporary test components and debug wrappers after testing
+- **Mock Component Organization:** Move reusable mock components to `/test/__mocks__/` directory
+- **Test Fixture Management:** Organize React component test data in `/test/fixtures/components/`
+- **Snapshot Cleanup:** Remove outdated or unnecessary snapshot files regularly
+
+### Testing Environment Hygiene
+
+- **Test Output Cleanup:** Clean up test coverage reports, debug logs, and temporary test files
+- **Mock API Cleanup:** Organize temporary API mocks into proper mock service structure
+- **Test Media Cleanup:** Remove temporary images, videos, or assets used only for testing
+- **Debug Test Removal:** Remove console.log, debug renders, and temporary test utilities
+
 ## React Testing Best Practices
 
 ```javascript

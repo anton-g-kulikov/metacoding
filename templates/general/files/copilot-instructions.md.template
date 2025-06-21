@@ -109,6 +109,16 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
   - `test-documentation.md` - Testing framework, guidelines, and test case status
 - **Root README.md:** Comprehensive project documentation including overview, setup, usage, and API reference
 
+## Temporary File Management
+
+- **Cleanup Policy:** All temporary files created during development or testing must be cleaned up after serving their purpose
+- **No Orphaned Files:** Never leave temporary files, debug outputs, or experimental code in the repository
+- **Appropriate Relocation:** Move useful temporary content to proper locations:
+  - Test data → `/test/fixtures/`
+  - Documentation samples → relevant documentation files
+  - Configuration examples → `/examples/` or documentation
+  - Debug outputs → Remove entirely or convert to proper logging
+
 ## File Naming and Organization
 
 - **Source Files:** Never place source code directly in root folder
@@ -124,6 +134,7 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 - **Modular Design:** Follow separation of concerns and single responsibility principles
 - **Error Handling:** Implement comprehensive error handling with proper logging and user feedback
 - **Resource Management:** Ensure proper cleanup of resources, event listeners, and disposables
+- **Temporary File Hygiene:** Clean up all temporary files, debug outputs, and experimental code after development sessions
 - **Performance:** Consider performance implications, especially for VS Code extensions (startup time, memory usage)
 - **Security:** Follow secure coding practices, validate inputs, and sanitize outputs
 
@@ -314,6 +325,7 @@ applyTo: "**"
 - **Implement tests:** Create actual test files that verify the documented behavior
 - **Verify test failure:** Run tests to confirm they fail appropriately (red phase)
 - **Only then implement:** Write the minimum code needed to make tests pass (green phase)
+- **Clean up test artifacts:** Remove temporary test files, move useful test data to `/test/fixtures/`
 
 ### Step 4: Implementation and Verification
 
@@ -322,6 +334,7 @@ applyTo: "**"
 - **Verify functionality:** Confirm the implementation meets requirements
 - **Get user confirmation:** User must test the result and confirm it meets expectations
 - **Refactor if needed:** Clean up code while maintaining test coverage (refactor phase)
+- **File cleanup:** Remove all temporary files, debug outputs, and experimental code created during development
 
 ### Step 5: Documentation and Status Updates
 

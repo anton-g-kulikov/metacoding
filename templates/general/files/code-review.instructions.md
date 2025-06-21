@@ -72,6 +72,7 @@ applyTo: "**"
 - **Copy-Paste Code:** Duplicated code that should be refactored
 - **Tight Coupling:** Components that are too dependent on each other
 - **Memory Leaks:** Objects not properly cleaned up
+- **Temporary File Pollution:** Leaving debug files, temp outputs, or experimental code in repository
 - **Blocking Operations:** Synchronous operations that could block the main thread
 
 ## Review Process Guidelines
@@ -89,3 +90,10 @@ applyTo: "**"
 - **Tests:** All tests pass including new and existing ones
 - **Build:** Code builds successfully
 - **Security Scans:** Automated security scans pass
+
+## File and Repository Hygiene
+- **Temporary Files:** Are all temporary files, debug outputs, and experimental code removed?
+- **File Organization:** Are files placed in appropriate directories according to project structure?
+- **Cleanup Verification:** Has development session cleanup been performed before commit?
+- **Test Fixtures:** Are temporary test files moved to appropriate `/test/fixtures/` location?
+- **Repository State:** Is the repository in a clean state without orphaned files?
