@@ -1,6 +1,6 @@
 ---
-description: "Guidelines for maintaining project documentation"
-applyTo: "**/*.md"
+description: 'Guidelines for maintaining project documentation'
+applyTo: '**/*.md'
 ---
 
 # Documentation Maintenance Guidelines

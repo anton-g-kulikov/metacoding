@@ -214,8 +214,8 @@ Create specialized `.instructions.md` files in `.github/instructions/` for commo
 
 ```markdown
 ---
-description: "Instructions for running and maintaining tests"
-applyTo: "test/**/*.ts"
+description: 'Instructions for running and maintaining tests'
+applyTo: 'test/**/*.ts'
 ---
 
 # Test Execution Guidelines
@@ -232,8 +232,8 @@ applyTo: "test/**/*.ts"
 
 ```markdown
 ---
-description: "Step-by-step release process automation"
-applyTo: "package.json"
+description: 'Step-by-step release process automation'
+applyTo: 'package.json'
 ---
 
 # Release Process Checklist
@@ -254,15 +254,15 @@ applyTo: "package.json"
 
 ```markdown
 ---
-description: "Guidelines for maintaining project documentation"
-applyTo: "**/*.md"
+description: 'Guidelines for maintaining project documentation'
+applyTo: '**/*.md'
 ---
 
 # Documentation Maintenance
 
 - Keep README.md current with latest features and installation steps
 - Update JSDoc comments when changing public APIs
-- Record architectural decisions in /_meta folder
+- Record architectural decisions in /\_meta folder
 - Ensure code examples in documentation are tested and working
 - Update CHANGELOG.md for all user-facing changes
 - Maintain consistent formatting and tone across all documentation
@@ -272,8 +272,8 @@ applyTo: "**/*.md"
 
 ```markdown
 ---
-description: "Automated code review checklist"
-applyTo: "**"
+description: 'Automated code review checklist'
+applyTo: '**'
 ---
 
 # Code Review Focus Areas

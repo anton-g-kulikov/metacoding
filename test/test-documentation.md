@@ -8,7 +8,7 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
 
 ✅ **All tests passing** (12/12)  
 ✅ **Branding update completed** - All references updated from "MetaCoding" to "metacoding"  
-✅ **Folder structure updated** - Renamed meta/ to _meta/ for better organization  
+✅ **Folder structure updated** - Renamed meta/ to \_meta/ for better organization
 
 ---
 
