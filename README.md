@@ -149,6 +149,7 @@ Initialize metacoding in your current project with interactive setup:
 ```bash
 metacoding init                    # Interactive setup with default template
 metacoding init --template react   # Use React template
+metacoding init --template node    # Use Node.js/Backend template
 metacoding init --force            # Overwrite existing files
 ```
 
