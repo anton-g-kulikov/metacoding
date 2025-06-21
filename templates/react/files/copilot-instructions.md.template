@@ -356,16 +356,34 @@ export const useUser = () => {
 
 ## React Development Workflow
 
-### Test-Driven Development (TDD) for React
+## Mandatory Development Process
 
-- **Document test cases first:** Write test cases in `/test/test-documentation.md` with React-specific scenarios
+**ALL React development tasks must follow this strict workflow to ensure component quality, proper testing, and comprehensive documentation.**
+
+### Step 1: Task Understanding and Planning
+
+- **Always start with clarification:** Ask questions to fully understand the React component/feature requirements
+- **Provide implementation outline:** Present the shortest possible outline of the React implementation plan with component structure
+- **Get explicit confirmation:** Wait for user confirmation before proceeding with React development
+- **Clarify scope:** Ensure both parties understand what React components will be implemented and what won't
+
+### Step 2: Task Management
+
+- **Update task list:** Add corresponding task(s) to `/_meta/project-task-list.md`
+- **Set task status:** Mark React development tasks as "In Progress" with clear descriptions
+- **Break down complex components:** Split large React components into smaller, manageable subtasks
+- **Estimate effort:** Provide realistic time/complexity estimates for React development
+
+### Step 3: Test-Driven Development (TDD) for React
+
+- **Document test cases first:** Write React test cases in `/test/test-documentation.md` with component scenarios
 - **Define component behavior:** Clearly specify component props, state changes, and user interactions
 - **Implement component tests:** Create React Testing Library tests that verify documented behavior
 - **Verify test failure:** Run tests to confirm they fail appropriately (red phase)
 - **Implement components:** Write the minimum React component code needed to make tests pass (green phase)
 - **Clean up test artifacts:** Remove temporary test components, move useful test data to `/test/fixtures/`
 
-### Implementation and Verification
+### Step 4: Implementation and Verification
 
 - **Write React components:** Implement actual component functionality with proper TypeScript typing
 - **Run all tests:** Ensure all React tests pass, including unit and integration tests
@@ -373,6 +391,71 @@ export const useUser = () => {
 - **Get user confirmation:** User must test the React components and confirm they meet expectations
 - **Refactor components:** Clean up React code while maintaining test coverage and component structure
 - **File cleanup:** Remove temporary React files, debug components, experimental JSX, and console.log statements
+
+### Step 5: Documentation and Status Updates
+
+- **Update all documentation:** Follow documentation maintenance guidelines for React projects
+- **Update task status:** Mark completed React tasks in `/_meta/project-task-list.md`
+- **Update test documentation:** Record React test status in `/test/test-documentation.md`
+- **Update CHANGELOG.md:** Document user-facing React component changes
+- **Review component documentation:** Ensure JSDoc comments and component docs are current
+
+### Step 6: Version Control
+
+- **Commit changes:** Use conventional commit messages for React changes (feat: add Button component)
+- **Include all related files:** Ensure React tests, documentation, and components are committed together
+- **Write descriptive commit messages:** Explain what React components were implemented and why
+- **Keep commits atomic:** Each commit should represent a complete, working React feature
+
+### Step 7: Workflow Completion Check
+
+- **Mandatory workflow completion:** User must complete the entire React workflow before moving to next task
+- **Incremental development:** Remind users to finish current React workflow before starting new components
+- **Repository hygiene:** Ensure React codebase, documentation, and repository remain up-to-date
+- **Quality gates:** All React tests must pass, documentation must be current, and code must be committed
+
+## React Workflow Enforcement Rules
+
+### Before Starting Any New React Task
+
+```
+STOP: Complete the current React workflow first!
+
+Before proceeding with a new React component/feature, ensure:
+✅ Current React task is documented and committed
+✅ All React tests are passing
+✅ Component documentation is updated
+✅ User has confirmed the React implementation meets expectations
+✅ React changes are committed with proper messages
+
+Only then proceed with the next React task planning phase.
+```
+
+### React Quality Gates
+
+- **No shortcuts:** Every React development step must be completed in order
+- **No parallel components:** Focus on one React component at a time until fully complete
+- **No skipping React tests:** TDD approach is mandatory for all React components
+- **No incomplete documentation:** All React component documentation must be current
+- **No uncommitted changes:** All React work must be committed before moving on
+
+### React Workflow Violations
+
+If a user requests to skip steps or start new React work before completing the workflow:
+
+1. **Politely decline:** Explain the importance of completing the current React workflow
+2. **Remind of benefits:** Emphasize how this maintains React code quality and component health
+3. **Offer to complete current workflow:** Help finish the current React task properly first
+4. **Suggest component breakdown:** If the current React component is too large, suggest breaking it down
+
+## Benefits of This React Workflow
+
+- **Higher React code quality:** TDD ensures robust, well-tested React components
+- **Better component documentation:** Always current and comprehensive React documentation
+- **Reduced technical debt:** Incremental React approach prevents accumulation of shortcuts
+- **Improved maintainability:** Clear React task tracking and component documentation
+- **Team collaboration:** Consistent React approach enables better teamwork
+- **Risk mitigation:** Small, tested React changes reduce deployment risks
 
 ---
 
