@@ -22,6 +22,7 @@ We chose a Node.js/TypeScript CLI architecture with the following components:
 ### Consequences
 
 **Positive:**
+
 - Cross-platform compatibility (Windows, Mac, Linux)
 - Rich ecosystem of CLI libraries
 - TypeScript provides type safety and better developer experience
@@ -29,6 +30,7 @@ We chose a Node.js/TypeScript CLI architecture with the following components:
 - npm distribution model familiar to developers
 
 **Negative:**
+
 - Requires Node.js runtime
 - Package size larger than native binary
 - Startup time slightly slower than compiled languages
@@ -63,12 +65,14 @@ We implemented a JSON-based template system with:
 ### Consequences
 
 **Positive:**
+
 - Easy to add new templates
 - Non-technical users can create templates
 - Clear separation between template logic and content
 - Supports complex variable substitution
 
 **Negative:**
+
 - JSON limitation for complex logic
 - Template validation needed
 - Version management complexity
@@ -103,12 +107,14 @@ We implemented automatic VS Code settings.json modification with:
 ### Consequences
 
 **Positive:**
+
 - Zero-configuration user experience
 - Preserves existing user settings
 - Works with both workspace and global settings
 - Provides rollback capability
 
 **Negative:**
+
 - VS Code specific implementation
 - Potential conflicts with other extensions
 - Settings file parsing complexity
@@ -143,12 +149,14 @@ We adopted the following structure and naming:
 ### Consequences
 
 **Positive:**
+
 - Consistent with npm naming conventions
 - Modern lowercase branding approach
 - Clear separation of meta-documentation
 - Follows Node.js ecosystem standards
 
 **Negative:**
+
 - Required comprehensive rebranding effort
 - `_meta/` folder less conventional than `docs/`
 - Breaking change from original "MetaCoding" branding
@@ -184,12 +192,14 @@ We implemented a multi-layer testing approach:
 ### Consequences
 
 **Positive:**
+
 - High confidence in CLI functionality
 - Safe refactoring with test coverage
 - Automated regression detection
 - Documentation through test cases
 
 **Negative:**
+
 - Test setup complexity for file system operations
 - Mocking overhead for external dependencies
 - Test maintenance burden

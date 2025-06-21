@@ -27,12 +27,12 @@ metacoding init [options]
 
 #### Options
 
-| Option | Alias | Type | Default | Description |
-|--------|-------|------|---------|-------------|
-| `--template <name>` | `-t` | string | `general` | Template to use for initialization |
-| `--force` | `-f` | boolean | `false` | Overwrite existing files without confirmation |
-| `--interactive` | `-i` | boolean | `true` | Use interactive prompts (default) |
-| `--no-interactive` | | boolean | `false` | Skip interactive prompts, use defaults |
+| Option              | Alias | Type    | Default   | Description                                   |
+| ------------------- | ----- | ------- | --------- | --------------------------------------------- |
+| `--template <name>` | `-t`  | string  | `general` | Template to use for initialization            |
+| `--force`           | `-f`  | boolean | `false`   | Overwrite existing files without confirmation |
+| `--interactive`     | `-i`  | boolean | `true`    | Use interactive prompts (default)             |
+| `--no-interactive`  |       | boolean | `false`   | Skip interactive prompts, use defaults        |
 
 #### Interactive Prompts
 
@@ -74,6 +74,7 @@ metacoding init --template node --force
 #### Output
 
 **Success Output:**
+
 ```
 🚀 Welcome to metacoding Setup!
 
@@ -94,6 +95,7 @@ Need help? Visit https://github.com/your-username/metacoding
 ```
 
 **Error Output:**
+
 ```
 ❌ Error: Template 'nonexistent' not found
 Available templates: general, react, node, python
@@ -115,25 +117,28 @@ metacoding validate [options]
 
 #### Options
 
-| Option | Alias | Type | Default | Description |
-|--------|-------|------|---------|-------------|
-| `--strict` | `-s` | boolean | `false` | Use strict validation rules |
-| `--fix` | | boolean | `false` | Automatically fix issues where possible |
-| `--format <type>` | `-f` | string | `text` | Output format: `text`, `json`, `table` |
+| Option            | Alias | Type    | Default | Description                             |
+| ----------------- | ----- | ------- | ------- | --------------------------------------- |
+| `--strict`        | `-s`  | boolean | `false` | Use strict validation rules             |
+| `--fix`           |       | boolean | `false` | Automatically fix issues where possible |
+| `--format <type>` | `-f`  | string  | `text`  | Output format: `text`, `json`, `table`  |
 
 #### Validation Checks
 
 1. **File Structure**
+
    - `.github/copilot-instructions.md` exists
    - `.github/instructions/` directory exists
    - Required instruction files present
 
 2. **VS Code Configuration**
+
    - Required settings in settings.json
    - GitHub Copilot extension compatibility
    - File associations correct
 
 3. **Git Repository**
+
    - Valid git repository
    - Appropriate .gitignore entries
    - No uncommitted instruction file changes
@@ -169,6 +174,7 @@ metacoding validate --format json
 #### Output
 
 **Success Output:**
+
 ```
 🔍 Validating metacoding setup...
 
@@ -183,6 +189,7 @@ Summary: 4/4 checks passed
 ```
 
 **Error Output:**
+
 ```
 🔍 Validating metacoding setup...
 
@@ -214,12 +221,12 @@ metacoding update [options]
 
 #### Options
 
-| Option | Alias | Type | Default | Description |
-|--------|-------|------|---------|-------------|
-| `--backup` | `-b` | boolean | `true` | Create backup before updating |
-| `--force` | `-f` | boolean | `false` | Force update without confirmation |
-| `--template <name>` | `-t` | string | `auto` | Update to specific template |
-| `--preserve` | `-p` | string[] | | Preserve specific files from update |
+| Option              | Alias | Type     | Default | Description                         |
+| ------------------- | ----- | -------- | ------- | ----------------------------------- |
+| `--backup`          | `-b`  | boolean  | `true`  | Create backup before updating       |
+| `--force`           | `-f`  | boolean  | `false` | Force update without confirmation   |
+| `--template <name>` | `-t`  | string   | `auto`  | Update to specific template         |
+| `--preserve`        | `-p`  | string[] |         | Preserve specific files from update |
 
 #### Update Process
 
@@ -260,6 +267,7 @@ metacoding update --preserve test-runner.instructions.md
 #### Output
 
 **Success Output:**
+
 ```
 🔄 Updating metacoding setup...
 
@@ -329,11 +337,13 @@ metacoding -V
 ### Common Error Patterns
 
 1. **File System Errors**
+
    - Permission denied
    - Disk space full
    - Path not found
 
 2. **Configuration Errors**
+
    - Invalid template
    - Corrupted configuration files
    - VS Code not installed
@@ -387,20 +397,18 @@ Location: `.github/metacoding.json`
     "description": "Project description",
     "primaryTech": "React"
   },
-  "preserveFiles": [
-    "custom-instructions.md"
-  ]
+  "preserveFiles": ["custom-instructions.md"]
 }
 ```
 
 ## Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `METACODING_TEMPLATE_PATH` | Custom template directory | Built-in templates |
-| `METACODING_CONFIG_DIR` | Configuration directory | `~/.config/metacoding` |
-| `METACODING_NO_COLOR` | Disable colored output | `false` |
-| `METACODING_DEBUG` | Enable debug output | `false` |
+| Variable                   | Description               | Default                |
+| -------------------------- | ------------------------- | ---------------------- |
+| `METACODING_TEMPLATE_PATH` | Custom template directory | Built-in templates     |
+| `METACODING_CONFIG_DIR`    | Configuration directory   | `~/.config/metacoding` |
+| `METACODING_NO_COLOR`      | Disable colored output    | `false`                |
+| `METACODING_DEBUG`         | Enable debug output       | `false`                |
 
 ## Integration APIs
 
@@ -424,7 +432,7 @@ Templates can define hooks for custom behavior:
 Future plugin system will support:
 
 - Custom commands
-- Template extensions  
+- Template extensions
 - Validation rules
 - Output formatters
 

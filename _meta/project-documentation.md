@@ -28,19 +28,22 @@ metacoding/
 │   ├── VS Code Integration
 │   └── Project Detection
 ├── Template Library
-│   ├── General Template
+│   ├── templates/general/files/
+│   │   ├── copilot-instructions.md.template
+│   │   └── *.instructions.md (source templates)
 │   ├── React Template (planned)
 │   ├── Node.js Template (planned)
 │   └── Python Template (planned)
-├── Instruction Files
-│   ├── Core Instructions (copilot-instructions.md)
-│   ├── Test Runner Instructions
-│   ├── Release Management Instructions
-│   ├── Documentation Instructions
-│   └── Code Review Instructions
+├── Generated User Structure (.github/)
+│   ├── copilot-instructions.md (generated from template)
+│   └── instructions/
+│       ├── test-runner.instructions.md
+│       ├── release.instructions.md
+│       ├── docs-update.instructions.md
+│       └── code-review.instructions.md
 └── Documentation & Testing
     ├── Comprehensive README
-    ├── API Documentation
+    ├── API Documentation (_meta/)
     ├── Test Suite (Unit + Integration)
     └── Migration Guides
 ```
@@ -185,7 +188,7 @@ The project follows its own metacoding methodology:
 
 - **typescript**: TypeScript compiler and type definitions
 - **jest**: Testing framework for unit and integration tests
-- **@types/***: Type definitions for TypeScript support
+- **@types/\***: Type definitions for TypeScript support
 
 ### Dependency Management
 
