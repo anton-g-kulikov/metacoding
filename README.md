@@ -72,12 +72,12 @@ This repository provides a complete setup for enhancing GitHub Copilot's effecti
 
 ```
 metacoding/
-├── copilot-instructions.md                   # Main template for customization
+├── copilot-instructions.md                   # Main template with mandatory workflow
 ├── instructions/
-│   ├── test-runner.instructions.md       # Testing workflows
-│   ├── release.instructions.md           # Release management
-│   ├── docs-update.instructions.md       # Documentation maintenance
-│   └── code-review.instructions.md       # Code review checklists
+│   ├── test-runner.instructions.md       # Testing workflows and TDD guidelines
+│   ├── release.instructions.md           # Release management process
+│   ├── docs-update.instructions.md       # Documentation with status transparency
+│   └── code-review.instructions.md       # Comprehensive code review checklists
 └── README.md                             # This documentation
 
 # In your actual project:
@@ -89,6 +89,11 @@ your-project/
 │       ├── release.instructions.md
 │       ├── docs-update.instructions.md
 │       └── code-review.instructions.md
+├── /meta                                 # Development documentation
+│   ├── project-task-list.md            # Task tracking with status indicators
+│   └── project-documentation.md        # General project documentation
+└── /test                                # Test documentation
+    └── test-documentation.md            # Test cases and status tracking
 ```
 
 ## 🎯 Main Template Features
@@ -108,10 +113,12 @@ your-project/
 
 ### Development Workflow
 
-- **Testing Strategy**: TDD approach with comprehensive coverage
-- **Documentation Standards**: JSDoc, README, and changelog maintenance
+- **Mandatory 7-Step Process**: Strict workflow from task planning to completion
+- **Test-Driven Development**: TDD approach with comprehensive coverage
+- **Documentation Standards**: JSDoc, README, and changelog maintenance with status transparency
 - **Version Control**: Conventional commits and semantic versioning
 - **Release Management**: Complete release workflow with GitHub integration
+- **Quality Gates**: No shortcuts, incremental development, workflow completion enforcement
 
 ## 🔧 Specialized Instructions
 
@@ -148,11 +155,12 @@ your-project/
 
 **Features**:
 
-- README.md maintenance standards
-- Code documentation with JSDoc
-- API documentation requirements
-- Architectural decision recording
+- README.md maintenance standards with status transparency guidelines
+- Code documentation with JSDoc and clear status indicators
+- API documentation requirements using present-tense headers
+- Architectural decision recording in `/meta` folder
 - Link verification and example testing
+- **Status Guidelines**: Never use "planned" or "to-do" in titles; use checkboxes and status indicators instead
 
 **Usage**: Automatically included when editing any Markdown files
 
@@ -277,21 +285,72 @@ Modify existing instructions
 - **Libraries**: Highlight API design, backward compatibility, documentation
 - **CLI Tools**: Emphasize argument parsing, error messages, help text
 
-## 🔄 Workflow Integration
+## 🔄 Development Workflow
 
-### Daily Development
+### Mandatory 7-Step Process
 
-1. **Coding**: Main instructions guide coding standards
-2. **Testing**: Test instructions auto-apply in test files
-3. **Documentation**: Doc instructions help maintain current docs
-4. **Review**: Code review instructions provide thorough checklists
+This template enforces a strict development workflow to ensure code quality and comprehensive documentation:
 
-### Release Process
+1. **Task Understanding & Planning**
+   - Always start with clarification questions
+   - Provide shortest possible implementation outline
+   - Get explicit user confirmation before proceeding
+   - Clarify scope and expectations
 
-1. **Pre-release**: Test instructions ensure quality
-2. **Version Bump**: Release instructions guide the process
-3. **Documentation**: Doc instructions ensure accuracy
-4. **Post-release**: Monitor and maintain quality
+2. **Task Management**
+   - Update `/meta/project-task-list.md` with new tasks
+   - Set clear task status and descriptions
+   - Break down complex tasks into manageable subtasks
+   - Provide realistic effort estimates
+
+3. **Test-Driven Development (TDD)**
+   - Document test cases in `/test/test-documentation.md` first
+   - Define expected behavior, inputs, outputs, and edge cases
+   - Implement tests that verify documented behavior
+   - Verify tests fail appropriately (red phase)
+   - Write minimum code to make tests pass (green phase)
+
+4. **Implementation & Verification**
+   - Write production code to meet requirements
+   - Run all tests to ensure they pass
+   - Get user confirmation that implementation meets expectations
+   - Refactor while maintaining test coverage
+
+5. **Documentation & Status Updates**
+   - Update all relevant documentation
+   - Mark tasks complete in `/meta/project-task-list.md`
+   - Update test status in `/test/test-documentation.md`
+   - Document user-facing changes in `CHANGELOG.md`
+   - Ensure JSDoc comments are current
+
+6. **Version Control**
+   - Use conventional commit messages
+   - Include tests, documentation, and code in commits
+   - Write descriptive commit messages explaining what and why
+   - Keep commits atomic and complete
+
+7. **Workflow Completion Check**
+   - Ensure all steps are completed before new tasks
+   - Maintain incremental development approach
+   - Keep repository, codebase, and documentation up-to-date
+   - Verify all quality gates are met
+
+### Workflow Enforcement
+
+- **No Shortcuts**: Every step must be completed in order
+- **No Parallel Tasks**: Focus on one task until fully complete
+- **No Skipping Tests**: TDD approach is mandatory
+- **No Incomplete Documentation**: All docs must be current
+- **No Uncommitted Changes**: All work must be committed
+
+### Quality Benefits
+
+- **Higher Code Quality**: TDD ensures robust, well-tested code
+- **Better Documentation**: Always current and comprehensive
+- **Reduced Technical Debt**: Incremental approach prevents shortcuts
+- **Improved Maintainability**: Clear task tracking and documentation
+- **Team Collaboration**: Consistent approach across team members
+- **Risk Mitigation**: Small, tested changes reduce deployment risks
 
 ## 🤝 Team Adoption
 
@@ -347,6 +406,39 @@ Modify existing instructions
 - Use more specific glob patterns
 - Remove redundant instructions
 - Monitor VS Code performance
+
+## 📝 Documentation Status Guidelines
+
+### Status Transparency Standards
+
+This template enforces clear status indication in all documentation:
+
+#### Status Indicators
+- ✅ **Complete/Implemented** - Feature is fully implemented and tested
+- 🚧 **In Progress** - Currently being worked on
+- ❌ **Not Started** - Not yet begun
+- ⚠️ **Needs Review** - Requires review or validation
+- 🔄 **Under Revision** - Being updated or modified
+
+#### Best Practices
+- **Never use "planned" or "to-do" in titles or headers** - Creates outdated documentation
+- **Use checkboxes for task status** - `- [ ]` for incomplete, `- [x]` for complete
+- **Reflect current state in headers** - Use present tense and current status
+- **Keep status current** - Update indicators as work progresses
+- **Use consistent symbols** - Maintain same symbols across all documentation
+
+#### Examples
+❌ **Bad Headers:**
+- "Planned Authentication Features"
+- "TODO: API Documentation"
+- "Future Enhancements"
+
+✅ **Good Headers:**
+- "Authentication Features" (with status checkboxes)
+- "API Documentation Status" (with clear indicators)
+- "Enhancement Status" (with current state)
+
+This approach ensures documentation always reflects reality and reduces maintenance overhead.
 
 ## 🔗 Resources
 
