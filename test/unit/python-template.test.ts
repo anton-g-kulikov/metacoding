@@ -109,7 +109,9 @@ describe('Python Template', () => {
       // Check for specific Python testing area prefixes
       expect(content).toContain('VIEW` - Django views/FastAPI endpoints tests');
       expect(content).toContain('MODEL` - Django models/SQLAlchemy tests');
-      expect(content).toContain('FORM` - Django forms/Pydantic validators tests');
+      expect(content).toContain(
+        'FORM` - Django forms/Pydantic validators tests'
+      );
       expect(content).toContain('CMD` - Django management commands tests');
 
       // Check for temporary file cleanup instructions

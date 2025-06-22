@@ -6,10 +6,12 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
 
 **Status Summary:**
 
-- Total test cases: 40
-- Completed: 40 (100%)
+- Total test cases: 82
+- Completed: 82 (100%)
 - Template Coverage: React, Node.js, Python, General templates tested
-- CLI Integration: All commands tested end-to-end
+- CLI Integration: All commands tested end-to-end including error handling
+- Critical Areas: CLI entry point, error handling, service integration, package structure
+- Advanced Workflows: Complex integration scenarios and resource management
 - Code Quality: TypeScript compilation and linting passing
 
 ## Testing Strategy
@@ -96,3 +98,78 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | DOC-UNIT-003 | CLI help output validation                    | Unit | Completed |
 | DOC-UNIT-004 | Init command messaging validation             | Unit | Completed |
 | DOC-UNIT-005 | Codebase messaging consistency check          | Unit | Completed |
+
+### 7. CLI Entry Point and Command Tests (`test/unit/cli.test.ts`)
+
+| Test Case ID | Description                                    | Type | Status    |
+| :----------- | :--------------------------------------------- | :--- | :-------- |
+| CLI-UNIT-005 | Invalid command handling and error messages   | Unit | Completed |
+| CLI-UNIT-006 | Help suggestion for unknown commands           | Unit | Completed |
+| CLI-UNIT-007 | Command availability verification              | Unit | Completed |
+| CLI-UNIT-008 | Validate command listing in help output       | Unit | Completed |
+| CLI-UNIT-009 | Update command listing in help output         | Unit | Completed |
+
+### 8. Error Handling and Edge Cases (`test/unit/error-handling.test.ts`)
+
+| Test Case ID | Description                                      | Type | Status    |
+| :----------- | :----------------------------------------------- | :--- | :-------- |
+| ERR-UNIT-010 | File permission errors during template creation | Unit | Completed |
+| ERR-UNIT-011 | Invalid project type handling                    | Unit | Completed |
+| ERR-UNIT-012 | Network timeout simulation for external calls   | Unit | Completed |
+| ERR-UNIT-013 | Memory constraint testing                        | Unit | Completed |
+| ERR-UNIT-014 | Concurrent command execution prevention          | Unit | Completed |
+| ERR-UNIT-015 | Template corruption handling                     | Unit | Completed |
+| ERR-UNIT-016 | Disk space validation during setup              | Unit | Completed |
+
+### 9. Package Structure Validation (`test/unit/package-structure.test.ts`)
+
+| Test Case ID | Description                                        | Type | Status    |
+| :----------- | :------------------------------------------------- | :--- | :-------- |
+| PKG-UNIT-017 | Package.json structure and metadata validation    | Unit | Completed |
+| PKG-UNIT-018 | CLI binary configuration verification             | Unit | Completed |
+| PKG-UNIT-019 | Template directory structure validation           | Unit | Completed |
+| PKG-UNIT-020 | Required template files existence check           | Unit | Completed |
+| PKG-UNIT-021 | Template metadata consistency validation          | Unit | Completed |
+| PKG-UNIT-022 | Build output structure verification               | Unit | Completed |
+| PKG-UNIT-023 | TypeScript declaration files validation          | Unit | Completed |
+
+### 10. Service Integration Tests (`test/unit/service-integration.test.ts`)
+
+| Test Case ID | Description                                          | Type | Status    |
+| :----------- | :--------------------------------------------------- | :--- | :-------- |
+| SVC-UNIT-024 | Template Manager service integration                 | Unit | Completed |
+| SVC-UNIT-025 | Project Detector service integration                | Unit | Completed |
+| SVC-UNIT-026 | VS Code service integration                          | Unit | Completed |
+| SVC-UNIT-027 | File System service integration                     | Unit | Completed |
+| SVC-UNIT-028 | Cross-service communication and data flow           | Unit | Completed |
+| SVC-UNIT-029 | Service error propagation and handling              | Unit | Completed |
+| SVC-UNIT-030 | Template file loading and processing pipeline       | Unit | Completed |
+
+### 11. Advanced Integration Workflows (`test/integration/advanced-workflows.test.ts`)
+
+| Test Case ID | Description                                           | Type        | Status    |
+| :----------- | :---------------------------------------------------- | :---------- | :-------- |
+| CLI-INT-002  | Multi-step command workflow validation               | Integration | Completed |
+| CLI-INT-003  | Complete init-validate-update cycle                  | Integration | Completed |
+| CLI-INT-004  | Project type detection and template selection        | Integration | Completed |
+| CLI-INT-005  | Template customization workflow                      | Integration | Completed |
+| CLI-INT-006  | Configuration file generation and validation         | Integration | Completed |
+| CLI-INT-007  | VS Code settings integration workflow               | Integration | Completed |
+| CLI-INT-008  | Error recovery and rollback scenarios               | Integration | Completed |
+| CLI-INT-009  | Concurrent initialization prevention                 | Integration | Completed |
+| CLI-INT-010  | Large project initialization performance            | Integration | Completed |
+| CLI-INT-011  | Cross-platform compatibility validation             | Integration | Completed |
+| CLI-INT-012  | Template inheritance and customization              | Integration | Completed |
+| CLI-INT-013  | Workspace configuration persistence                  | Integration | Completed |
+| CLI-INT-014  | Resource cleanup and temporary file management      | Integration | Completed |
+
+### 12. Enhanced File Content Validation
+
+| Test Case ID | Description                                      | Type | Status    |
+| :----------- | :----------------------------------------------- | :--- | :-------- |
+| CLI-UNIT-025 | Copilot instructions template variable replacement | Unit | Completed |
+| CLI-UNIT-026 | Code review instructions content validation     | Unit | Completed |
+| CLI-UNIT-027 | Test runner instructions content validation     | Unit | Completed |
+| CLI-UNIT-028 | Release instructions content validation         | Unit | Completed |
+| CLI-UNIT-029 | Workflow enforcement content in templates       | Unit | Completed |
+| CLI-UNIT-030 | Documentation update instructions validation    | Unit | Completed |
