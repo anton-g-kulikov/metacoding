@@ -7,18 +7,18 @@ describe('Python Template', () => {
   const filesDir = path.join(pythonTemplateDir, 'files');
 
   describe('Template Structure', () => {
-    test('should have python template directory', () => {
+    test('TMPL-UNIT-010: should have python template directory', () => {
       expect(fs.existsSync(pythonTemplateDir)).toBe(true);
       expect(fs.statSync(pythonTemplateDir).isDirectory()).toBe(true);
     });
 
-    test('should have template.json file', () => {
+    test('TMPL-UNIT-011: should have template.json file', () => {
       const templateJsonPath = path.join(pythonTemplateDir, 'template.json');
       expect(fs.existsSync(templateJsonPath)).toBe(true);
       expect(fs.statSync(templateJsonPath).isFile()).toBe(true);
     });
 
-    test('should have files directory with all required instruction files', () => {
+    test('TMPL-UNIT-012: should have files directory with all required instruction files', () => {
       expect(fs.existsSync(filesDir)).toBe(true);
       expect(fs.statSync(filesDir).isDirectory()).toBe(true);
 
@@ -39,7 +39,7 @@ describe('Python Template', () => {
   });
 
   describe('Template Configuration', () => {
-    test('should have valid template.json with Python-specific settings', () => {
+    test('TMPL-UNIT-013: should have valid template.json with Python-specific settings', () => {
       const templateJsonPath = path.join(pythonTemplateDir, 'template.json');
       const templateContent = fs.readFileSync(templateJsonPath, 'utf8');
       const template = JSON.parse(templateContent);
@@ -58,7 +58,7 @@ describe('Python Template', () => {
   });
 
   describe('Python Instruction Files', () => {
-    test('copilot instructions should contain Python-specific content', () => {
+    test('TMPL-UNIT-014: copilot instructions should contain Python-specific content', () => {
       const instructionsPath = path.join(
         filesDir,
         'copilot-instructions.md.template'
@@ -81,7 +81,7 @@ describe('Python Template', () => {
       expect(content).toContain('{{TECH_STACK}}');
     });
 
-    test('code review instructions should contain Python-specific patterns', () => {
+    test('TMPL-UNIT-015: code review instructions should contain Python-specific patterns', () => {
       const codeReviewPath = path.join(filesDir, 'code-review.instructions.md');
       const content = fs.readFileSync(codeReviewPath, 'utf8');
 
@@ -97,7 +97,7 @@ describe('Python Template', () => {
       expect(content).toContain('cleanup');
     });
 
-    test('test runner instructions should contain Python testing patterns', () => {
+    test('TMPL-UNIT-016: test runner instructions should contain Python testing patterns', () => {
       const testRunnerPath = path.join(filesDir, 'test-runner.instructions.md');
       const content = fs.readFileSync(testRunnerPath, 'utf8');
 
@@ -111,7 +111,7 @@ describe('Python Template', () => {
       expect(content).toContain('cleanup');
     });
 
-    test('all instruction files should enforce 7-step workflow', () => {
+    test('TMPL-UNIT-017: all instruction files should enforce 7-step workflow', () => {
       const instructionFiles = [
         'copilot-instructions.md.template',
         'code-review.instructions.md',
@@ -127,7 +127,7 @@ describe('Python Template', () => {
       });
     });
 
-    test('all instruction files should include cleanup guidance', () => {
+    test('TMPL-UNIT-018: all instruction files should include cleanup guidance', () => {
       const instructionFiles = [
         'copilot-instructions.md.template',
         'code-review.instructions.md',

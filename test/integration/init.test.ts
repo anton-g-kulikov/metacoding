@@ -27,7 +27,7 @@ describe('InitCommand Integration', () => {
     await fs.remove(testDir);
   });
 
-  test('should create basic metacoding structure with force flag', async () => {
+  test('CLI-INT-001: should create basic metacoding structure with force flag', async () => {
     const initCommand = new InitCommand();
     const fileSystem = new FileSystemService();
 
@@ -50,7 +50,7 @@ describe('InitCommand Integration', () => {
     );
   });
 
-  test('should detect existing metacoding setup', async () => {
+  test('CLI-INT-002: should detect existing metacoding setup', async () => {
     const fileSystem = new FileSystemService();
 
     // Initially should not be set up

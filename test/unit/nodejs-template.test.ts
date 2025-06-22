@@ -7,22 +7,22 @@ describe('Node.js Template', () => {
   const filesDir = path.join(templateDir, 'files');
 
   describe('Template Structure', () => {
-    test('should have nodejs template directory', () => {
+    test('TMPL-UNIT-001: should have nodejs template directory', () => {
       expect(fs.existsSync(templateDir)).toBe(true);
       expect(fs.statSync(templateDir).isDirectory()).toBe(true);
     });
 
-    test('should have template.json configuration file', () => {
+    test('TMPL-UNIT-002: should have template.json configuration file', () => {
       expect(fs.existsSync(templateJsonPath)).toBe(true);
       expect(fs.statSync(templateJsonPath).isFile()).toBe(true);
     });
 
-    test('should have files directory', () => {
+    test('TMPL-UNIT-003: should have files directory', () => {
       expect(fs.existsSync(filesDir)).toBe(true);
       expect(fs.statSync(filesDir).isDirectory()).toBe(true);
     });
 
-    test('should have all required instruction files', () => {
+    test('TMPL-UNIT-004: should have all required instruction files', () => {
       const requiredFiles = [
         'copilot-instructions.md.template',
         'code-review.instructions.md',
@@ -58,7 +58,7 @@ describe('Node.js Template', () => {
   });
 
   describe('Node.js Instruction Files', () => {
-    test('copilot instructions should contain Node.js-specific content', () => {
+    test('TMPL-UNIT-005: copilot instructions should contain Node.js-specific content', () => {
       const instructionsPath = path.join(
         filesDir,
         'copilot-instructions.md.template'
@@ -81,7 +81,7 @@ describe('Node.js Template', () => {
       expect(content).toContain('{{TECH_STACK}}');
     });
 
-    test('code review instructions should include backend-specific criteria', () => {
+    test('TMPL-UNIT-006: code review instructions should include backend-specific criteria', () => {
       const codeReviewPath = path.join(filesDir, 'code-review.instructions.md');
       const content = fs.readFileSync(codeReviewPath, 'utf8');
 
@@ -98,7 +98,7 @@ describe('Node.js Template', () => {
       expect(content).toContain('cleanup');
     });
 
-    test('test runner instructions should include Node.js testing patterns', () => {
+    test('TMPL-UNIT-007: test runner instructions should include Node.js testing patterns', () => {
       const testRunnerPath = path.join(filesDir, 'test-runner.instructions.md');
       const content = fs.readFileSync(testRunnerPath, 'utf8');
 
@@ -114,7 +114,7 @@ describe('Node.js Template', () => {
       expect(content).toContain('artifact');
     });
 
-    test('all instruction files should enforce 7-step workflow', () => {
+    test('TMPL-UNIT-008: all instruction files should enforce 7-step workflow', () => {
       const instructionFiles = [
         'copilot-instructions.md.template',
         'code-review.instructions.md',
@@ -132,7 +132,7 @@ describe('Node.js Template', () => {
   });
 
   describe('File Management and Cleanup', () => {
-    test('instruction files should include comprehensive cleanup guidance', () => {
+    test('TMPL-UNIT-009: instruction files should include comprehensive cleanup guidance', () => {
       const instructionFiles = [
         'copilot-instructions.md.template',
         'code-review.instructions.md',

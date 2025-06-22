@@ -8,18 +8,18 @@ describe('React Template', () => {
   const templateManager = new TemplateManager();
 
   describe('Template Structure', () => {
-    test('should have react template directory', async () => {
+    test('TMPL-UNIT-019: should have react template directory', async () => {
       const exists = await fs.pathExists(reactTemplateDir);
       expect(exists).toBe(true);
     });
 
-    test('should have template.json configuration file', async () => {
+    test('TMPL-UNIT-020: should have template.json configuration file', async () => {
       const templateJsonPath = path.join(reactTemplateDir, 'template.json');
       const exists = await fs.pathExists(templateJsonPath);
       expect(exists).toBe(true);
     });
 
-    test('should have files directory for template files', async () => {
+    test('TMPL-UNIT-021: should have files directory for template files', async () => {
       const filesDir = path.join(reactTemplateDir, 'files');
       const exists = await fs.pathExists(filesDir);
       expect(exists).toBe(true);
@@ -27,7 +27,7 @@ describe('React Template', () => {
   });
 
   describe('Template Configuration', () => {
-    test('should have valid template.json with React metadata', async () => {
+    test('TMPL-UNIT-022: should have valid template.json with React metadata', async () => {
       const templateJsonPath = path.join(reactTemplateDir, 'template.json');
       const templateConfig = await fs.readJson(templateJsonPath);
 
@@ -39,7 +39,7 @@ describe('React Template', () => {
   });
 
   describe('React Instruction Files', () => {
-    test('should have React-specific copilot instructions template', async () => {
+    test('TMPL-UNIT-023: should have React-specific copilot instructions template', async () => {
       const instructionsPath = path.join(
         reactTemplateDir,
         'files',
@@ -49,7 +49,7 @@ describe('React Template', () => {
       expect(exists).toBe(true);
     });
 
-    test('should have React-specific test runner instructions', async () => {
+    test('TMPL-UNIT-024: should have React-specific test runner instructions', async () => {
       const testRunnerPath = path.join(
         reactTemplateDir,
         'files',
@@ -59,7 +59,7 @@ describe('React Template', () => {
       expect(exists).toBe(true);
     });
 
-    test('copilot instructions should contain React-specific content', async () => {
+    test('TMPL-UNIT-025: copilot instructions should contain React-specific content', async () => {
       const instructionsPath = path.join(
         reactTemplateDir,
         'files',
@@ -75,13 +75,13 @@ describe('React Template', () => {
   });
 
   describe('Template Manager Integration', () => {
-    test('should list React template as available', async () => {
+    test('TMPL-UNIT-026: should list React template as available', async () => {
       const templates = await templateManager.getAvailableTemplates();
 
       expect(templates).toContain('react');
     });
 
-    test('should load React template successfully', async () => {
+    test('TMPL-UNIT-027: should load React template successfully', async () => {
       const reactTemplate = await templateManager.getTemplate('react');
 
       expect(reactTemplate.name).toBe('react');

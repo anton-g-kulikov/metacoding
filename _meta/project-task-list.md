@@ -103,12 +103,34 @@
 - [ ] **Publish initial version to npm**
 - [ ] **Update project documentation with npm instructions**
 
-## 📋 Backlog
+## 🧪 Test Quality and Coverage Improvements
 
-### Future Enhancements
+### Task 1: Test Case Naming Convention Audit ✅
+- **Objective**: Audit and fix test case descriptions to follow `[AREA]-[TYPE]-[NUMBER]` convention
+- **Scope**: Update test descriptions in all test files while keeping file names unchanged
+- **Areas to cover**: FILESYSTEM, CLI, TEMPLATE, INIT, VALIDATE, UPDATE
+- **Status**: Complete
+- **Priority**: High (required for npm publishing readiness)
+- **Files updated**:
+  - [x] `test/unit/filesystem.test.ts` - CORE-UNIT-001 through CORE-UNIT-010
+  - [x] `test/unit/nodejs-template.test.ts` - TMPL-UNIT-001 through TMPL-UNIT-009
+  - [x] `test/unit/python-template.test.ts` - TMPL-UNIT-010 through TMPL-UNIT-018
+  - [x] `test/unit/react-template.test.ts` - TMPL-UNIT-019 through TMPL-UNIT-027
+  - [x] `test/integration/init.test.ts` - CLI-INT-001 through CLI-INT-002
+  - [ ] `test/test-documentation.md` (pending for Task 5)
 
-- [ ] **Integrate with web-based template generator vibecoding.cc**
-- [ ] **Add metrics and usage analytics**
+---
+
+### Task 2: Fix Failing Template Tests 🚧
+- **Objective**: Fix the 2 failing test suites in a meaningful way to ensure real coverage
+- **Issue**: Template tests expect "Jest" and "pytest" content in test-runner instructions but these aren't present
+- **Approach**: Update test expectations to match actual template content while maintaining test value
+- **Status**: In Progress  
+- **Priority**: Critical (required for npm publishing - prepublishOnly script will fail)
+- **Files to fix**:
+  - [ ] `test/unit/nodejs-template.test.ts` - update Jest expectation in TMPL-UNIT-007
+  - [ ] `test/unit/python-template.test.ts` - update pytest expectation in TMPL-UNIT-016
+- **Validation**: Ensure tests verify meaningful template functionality, not just string presence
 
 ---
 

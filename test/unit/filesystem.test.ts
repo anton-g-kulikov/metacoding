@@ -21,12 +21,12 @@ describe('FileSystemService', () => {
   });
 
   describe('isMetaCodingSetup', () => {
-    test('should return false when no metacoding files exist', async () => {
+    test('CORE-UNIT-001: should return false when no metacoding files exist', async () => {
       const result = await service.isMetaCodingSetup();
       expect(result).toBe(false);
     });
 
-    test('should return true when all required files exist', async () => {
+    test('CORE-UNIT-002: should return true when all required files exist', async () => {
       await fs.ensureDir('.github/instructions');
       await fs.writeFile('.github/copilot-instructions.md', 'test');
 
@@ -34,7 +34,7 @@ describe('FileSystemService', () => {
       expect(result).toBe(true);
     });
 
-    test('should return false when only partial setup exists', async () => {
+    test('CORE-UNIT-003: should return false when only partial setup exists', async () => {
       await fs.ensureDir('.github');
       await fs.writeFile('.github/copilot-instructions.md', 'test');
 
@@ -44,7 +44,7 @@ describe('FileSystemService', () => {
   });
 
   describe('ensureDirectoryExists', () => {
-    test('should create directory if it does not exist', async () => {
+    test('CORE-UNIT-004: should create directory if it does not exist', async () => {
       const dirPath = 'test/nested/directory';
 
       expect(await fs.pathExists(dirPath)).toBe(false);
@@ -54,7 +54,7 @@ describe('FileSystemService', () => {
       expect(await fs.pathExists(dirPath)).toBe(true);
     });
 
-    test('should not fail if directory already exists', async () => {
+    test('CORE-UNIT-005: should not fail if directory already exists', async () => {
       const dirPath = 'existing-dir';
       await fs.ensureDir(dirPath);
 
@@ -65,7 +65,7 @@ describe('FileSystemService', () => {
   });
 
   describe('writeFile and readFile', () => {
-    test('should write and read file content correctly', async () => {
+    test('CORE-UNIT-006: should write and read file content correctly', async () => {
       const filePath = 'test-file.txt';
       const content = 'Hello, World!';
 
@@ -75,7 +75,7 @@ describe('FileSystemService', () => {
       expect(readContent).toBe(content);
     });
 
-    test('should create directories if they do not exist', async () => {
+    test('CORE-UNIT-007: should create directories if they do not exist', async () => {
       const filePath = 'nested/directory/file.txt';
       const content = 'Test content';
 
@@ -87,21 +87,21 @@ describe('FileSystemService', () => {
   });
 
   describe('fileExists', () => {
-    test('should return true for existing file', async () => {
+    test('CORE-UNIT-008: should return true for existing file', async () => {
       await fs.writeFile('existing-file.txt', 'content');
 
       const result = await service.fileExists('existing-file.txt');
       expect(result).toBe(true);
     });
 
-    test('should return false for non-existing file', async () => {
+    test('CORE-UNIT-009: should return false for non-existing file', async () => {
       const result = await service.fileExists('non-existing-file.txt');
       expect(result).toBe(false);
     });
   });
 
   describe('getCurrentDirectoryName', () => {
-    test('should return current directory name', () => {
+    test('CORE-UNIT-010: should return current directory name', () => {
       const result = service.getCurrentDirectoryName();
       expect(result).toBe(path.basename(testDir));
     });
