@@ -5,7 +5,7 @@
 ### Test Suite Status - ALL TESTS PASSING ✅
 
 - **Test Suites**: 14/14 passing ✅ (100% success rate)
-- **Total Tests**: 144/144 passing ✅ (0 failures)
+- **Total Tests**: 146/146 passing ✅ (0 failures)
 - **Template Architecture**: All tests updated to match current structure ✅
 - **Repository Health**: Clean, stable codebase with comprehensive test coverage ✅
 - **Workflow Status**: Ready for npm publishing - all quality gates passed ✅
@@ -237,7 +237,7 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 #### Single-Task Focus Enhancement Tests
 
 | Test Case ID | Description                                              | Type | Status           |
-| :----------- | :------------------------------------------------------- | :--- | :---------------- |
+| :----------- | :------------------------------------------------------- | :--- | :--------------- |
 | WF-UNIT-012  | Single-task focus principle enforcement validation       | Unit | **✅ Completed** |
 | WF-UNIT-013  | Scope creep handling Option A (subtask) validation       | Unit | **✅ Completed** |
 | WF-UNIT-014  | Scope creep handling Option B (separate task) validation | Unit | **✅ Completed** |
@@ -369,14 +369,22 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 
 ## Test Cases Table
 
-| Test Case ID  | Description                                                     | Type | Status    |
-| :------------ | :-------------------------------------------------------------- | :--- | :-------- |
-| GEN-UNIT-001  | General template with TypeScript loads only TypeScript files   | Unit | Completed |
+| Test Case ID | Description                                                   | Type | Status    |
+| :----------- | :------------------------------------------------------------ | :--- | :-------- |
+| GEN-UNIT-001 | General template with TypeScript loads only TypeScript files  | Unit | Completed |
+| GEN-UNIT-002 | General template excludes TypeScript when not in tech stack   | Unit | Completed |
+| GEN-UNIT-003 | General template backwards compatibility without config       | Unit | Completed |
+| GEN-UNIT-004 | Node template TypeScript instructions backwards compatibility | Unit | Completed |
+| GEN-UNIT-005 | Template manager handles invalid template names gracefully    | Unit | Completed |
+| GEN-UNIT-006 | Template manager handles empty tech stack gracefully          | Unit | Completed |
 
 ### Recent Test Additions (June 22, 2025):
 
 ✅ **General Template TypeScript Support Test Suite**: Added comprehensive test suite for the template manager fix
+
 - **Test File**: `test/unit/general-template-typescript.test.ts`
-- **Test Cases**: 4 comprehensive test cases covering the TypeScript template selection fix
+- **Test Cases**: 6 comprehensive test cases covering the TypeScript template selection fix
 - **Coverage**: Verifies proper loading of TypeScript instructions for general template
 - **Validation**: Ensures backwards compatibility and correct filtering of language-specific files
+- **Error Handling**: Added tests for edge cases including invalid templates and empty tech stacks
+- **Code Quality**: Refactored with helper functions to improve maintainability

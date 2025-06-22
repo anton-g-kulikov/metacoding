@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Future enhancements and features will be listed here
 
+## [1.1.1] - 2025-06-22
+
+### Fixed
+
+- **General Template TypeScript Support**: Fixed issue where selecting TypeScript with general template loaded all language-specific instruction files instead of only TypeScript files
+- **Template System**: Updated loadInstructionFiles method to properly filter instruction files based on technology choices
+- **Build Configuration**: Fixed TypeScript configuration to exclude test files from production build
+
+### Changed
+
+- **Package Build**: Improved TypeScript compilation configuration for cleaner npm package output
+
 ## [1.1.0] - 2025-06-22
 
 ### Added
