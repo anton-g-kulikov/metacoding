@@ -48,7 +48,9 @@ describe('Service Integration', () => {
     test('CLI-UNIT-033: should throw error for non-existent template', async () => {
       const templateManager = new TemplateManager();
 
-      await expect(templateManager.getTemplate('non-existent')).rejects.toThrow();
+      await expect(
+        templateManager.getTemplate('non-existent')
+      ).rejects.toThrow();
     });
 
     test('CLI-UNIT-034: should validate template file structure', async () => {
@@ -60,18 +62,25 @@ describe('Service Integration', () => {
 
         // Each template should have required files
         const requiredFiles = [
-          'copilot-instructions.md',  // .template gets removed for destination
+          'copilot-instructions.md', // .template gets removed for destination
           'code-review.instructions.md',
           'docs-update.instructions.md',
           'release.instructions.md',
-          'test-runner.instructions.md'
+          'test-runner.instructions.md',
         ];
 
         for (const requiredFile of requiredFiles) {
-          const hasFile = template.files.some(file => file.destination.includes(requiredFile));
+          const hasFile = template.files.some((file) =>
+            file.destination.includes(requiredFile)
+          );
           if (!hasFile) {
-            console.log(`Missing required file ${requiredFile} in template ${templateName}`);
-            console.log('Available files:', template.files.map(f => f.destination));
+            console.log(
+              `Missing required file ${requiredFile} in template ${templateName}`
+            );
+            console.log(
+              'Available files:',
+              template.files.map((f) => f.destination)
+            );
           }
           expect(hasFile).toBe(true);
         }
@@ -81,12 +90,15 @@ describe('Service Integration', () => {
 
   describe('Project Detector Service', () => {
     test('CLI-UNIT-035: should detect Node.js project from package.json', async () => {
-      await fs.writeFile('package.json', JSON.stringify({
-        name: 'test-project',
-        dependencies: {
-          'express': '^4.0.0'
-        }
-      }));
+      await fs.writeFile(
+        'package.json',
+        JSON.stringify({
+          name: 'test-project',
+          dependencies: {
+            express: '^4.0.0',
+          },
+        })
+      );
 
       const detector = new ProjectDetector();
       const project = await detector.detectProject();
@@ -95,13 +107,16 @@ describe('Service Integration', () => {
     });
 
     test('CLI-UNIT-036: should detect React project from package.json', async () => {
-      await fs.writeFile('package.json', JSON.stringify({
-        name: 'test-project',
-        dependencies: {
-          'react': '^18.0.0',
-          'react-dom': '^18.0.0'
-        }
-      }));
+      await fs.writeFile(
+        'package.json',
+        JSON.stringify({
+          name: 'test-project',
+          dependencies: {
+            react: '^18.0.0',
+            'react-dom': '^18.0.0',
+          },
+        })
+      );
 
       const detector = new ProjectDetector();
       const project = await detector.detectProject();
@@ -144,13 +159,15 @@ describe('Service Integration', () => {
 
       await vscodeService.updateSettings({
         'chat.promptFiles': true,
-        'editor.wordWrap': 'on'
+        'editor.wordWrap': 'on',
       });
 
       expect(await fileSystem.fileExists('.vscode')).toBe(true);
       expect(await fileSystem.fileExists('.vscode/settings.json')).toBe(true);
 
-      const settingsContent = await fileSystem.readFile('.vscode/settings.json');
+      const settingsContent = await fileSystem.readFile(
+        '.vscode/settings.json'
+      );
       const settings = JSON.parse(settingsContent);
 
       expect(settings['chat.promptFiles']).toBe(true);
@@ -163,18 +180,23 @@ describe('Service Integration', () => {
 
       // Create existing settings
       await fileSystem.ensureDirectoryExists('.vscode');
-      await fileSystem.writeFile('.vscode/settings.json', JSON.stringify({
-        'editor.fontSize': 14,
-        'chat.promptFiles': false
-      }));
+      await fileSystem.writeFile(
+        '.vscode/settings.json',
+        JSON.stringify({
+          'editor.fontSize': 14,
+          'chat.promptFiles': false,
+        })
+      );
 
       // Update with new settings
       await vscodeService.updateSettings({
         'chat.promptFiles': true,
-        'editor.wordWrap': 'on'
+        'editor.wordWrap': 'on',
       });
 
-      const settingsContent = await fileSystem.readFile('.vscode/settings.json');
+      const settingsContent = await fileSystem.readFile(
+        '.vscode/settings.json'
+      );
       const settings = JSON.parse(settingsContent);
 
       // Should preserve existing and add new
@@ -192,11 +214,15 @@ describe('Service Integration', () => {
       await fileSystem.writeFile('.vscode/settings.json', '{ invalid json }');
 
       // Should handle gracefully and recreate
-      await expect(vscodeService.updateSettings({
-        'chat.promptFiles': true
-      })).resolves.not.toThrow();
+      await expect(
+        vscodeService.updateSettings({
+          'chat.promptFiles': true,
+        })
+      ).resolves.not.toThrow();
 
-      const settingsContent = await fileSystem.readFile('.vscode/settings.json');
+      const settingsContent = await fileSystem.readFile(
+        '.vscode/settings.json'
+      );
       const settings = JSON.parse(settingsContent);
       expect(settings['chat.promptFiles']).toBe(true);
     });
@@ -208,17 +234,20 @@ describe('Service Integration', () => {
       const fileSystem = new FileSystemService();
 
       const template = await templateManager.getTemplate('general');
-      
+
       // Process template with mock config
       const mockConfig: ProjectConfig = {
         name: 'test-project',
         description: 'A test project',
         techStack: ['TypeScript', 'Jest'],
-        projectType: 'general'
+        projectType: 'general',
       };
 
-      const processedFiles = await templateManager.processTemplate(template, mockConfig);
-      
+      const processedFiles = await templateManager.processTemplate(
+        template,
+        mockConfig
+      );
+
       // Create files from processed template
       for (const file of processedFiles) {
         await fileSystem.ensureDirectoryExists(path.dirname(file.path));
@@ -226,16 +255,25 @@ describe('Service Integration', () => {
       }
 
       // Verify all files were created
-      expect(await fileSystem.fileExists('.github/copilot-instructions.md')).toBe(true);
-      expect(await fileSystem.fileExists('.github/instructions/code-review.instructions.md')).toBe(true);
+      expect(
+        await fileSystem.fileExists('.github/copilot-instructions.md')
+      ).toBe(true);
+      expect(
+        await fileSystem.fileExists(
+          '.github/instructions/code-review.instructions.md'
+        )
+      ).toBe(true);
     });
 
     test('CLI-UNIT-044: should integrate project detector with template manager', async () => {
       // Setup React project
-      await fs.writeFile('package.json', JSON.stringify({
-        name: 'test-react-app',
-        dependencies: { 'react': '^18.0.0' }
-      }));
+      await fs.writeFile(
+        'package.json',
+        JSON.stringify({
+          name: 'test-react-app',
+          dependencies: { react: '^18.0.0' },
+        })
+      );
 
       const detector = new ProjectDetector();
       const templateManager = new TemplateManager();

@@ -34,13 +34,31 @@ describe('Package Structure Validation', () => {
       // Check core structure
       expect(await fileSystem.fileExists('.github')).toBe(true);
       expect(await fileSystem.fileExists('.github/instructions')).toBe(true);
-      expect(await fileSystem.fileExists('.github/copilot-instructions.md')).toBe(true);
+      expect(
+        await fileSystem.fileExists('.github/copilot-instructions.md')
+      ).toBe(true);
 
       // Check instruction files
-      expect(await fileSystem.fileExists('.github/instructions/code-review.instructions.md')).toBe(true);
-      expect(await fileSystem.fileExists('.github/instructions/docs-update.instructions.md')).toBe(true);
-      expect(await fileSystem.fileExists('.github/instructions/release.instructions.md')).toBe(true);
-      expect(await fileSystem.fileExists('.github/instructions/test-runner.instructions.md')).toBe(true);
+      expect(
+        await fileSystem.fileExists(
+          '.github/instructions/code-review.instructions.md'
+        )
+      ).toBe(true);
+      expect(
+        await fileSystem.fileExists(
+          '.github/instructions/docs-update.instructions.md'
+        )
+      ).toBe(true);
+      expect(
+        await fileSystem.fileExists(
+          '.github/instructions/release.instructions.md'
+        )
+      ).toBe(true);
+      expect(
+        await fileSystem.fileExists(
+          '.github/instructions/test-runner.instructions.md'
+        )
+      ).toBe(true);
     });
 
     test('CLI-UNIT-021: should verify copilot instructions content for general template', async () => {
@@ -52,12 +70,14 @@ describe('Package Structure Validation', () => {
         skipGit: true,
       });
 
-      const content = await fileSystem.readFile('.github/copilot-instructions.md');
-      
+      const content = await fileSystem.readFile(
+        '.github/copilot-instructions.md'
+      );
+
       // Check for template variable substitution
       expect(content).not.toContain('{{PROJECT_DESCRIPTION}}');
       expect(content).not.toContain('{{TECH_STACK}}');
-      
+
       // Check for mandatory workflow content
       expect(content).toContain('mandatory development workflow');
       expect(content).toContain('Step 1: Task Understanding and Planning');
@@ -75,8 +95,10 @@ describe('Package Structure Validation', () => {
         skipGit: true,
       });
 
-      const copilotContent = await fileSystem.readFile('.github/copilot-instructions.md');
-      
+      const copilotContent = await fileSystem.readFile(
+        '.github/copilot-instructions.md'
+      );
+
       // Check React-specific content
       expect(copilotContent).toContain('React');
       expect(copilotContent).toContain('React');
@@ -93,8 +115,10 @@ describe('Package Structure Validation', () => {
         skipGit: true,
       });
 
-      const testRunnerContent = await fileSystem.readFile('.github/instructions/test-runner.instructions.md');
-      
+      const testRunnerContent = await fileSystem.readFile(
+        '.github/instructions/test-runner.instructions.md'
+      );
+
       // Check for React/Frontend specific area prefixes
       expect(testRunnerContent).toContain('COMP` - React component tests');
       expect(testRunnerContent).toContain('HOOK` - Custom hooks tests');
@@ -112,8 +136,10 @@ describe('Package Structure Validation', () => {
         skipGit: true,
       });
 
-      const copilotContent = await fileSystem.readFile('.github/copilot-instructions.md');
-      
+      const copilotContent = await fileSystem.readFile(
+        '.github/copilot-instructions.md'
+      );
+
       // Check Node.js-specific content
       expect(copilotContent).toContain('Node.js');
       expect(copilotContent).toContain('backend');
@@ -130,8 +156,10 @@ describe('Package Structure Validation', () => {
         skipGit: true,
       });
 
-      const testRunnerContent = await fileSystem.readFile('.github/instructions/test-runner.instructions.md');
-      
+      const testRunnerContent = await fileSystem.readFile(
+        '.github/instructions/test-runner.instructions.md'
+      );
+
       // Check for Node.js/Backend specific area prefixes
       expect(testRunnerContent).toContain('`API` - REST API endpoint tests');
       expect(testRunnerContent).toContain('`SRV` - Service layer tests');
@@ -149,8 +177,10 @@ describe('Package Structure Validation', () => {
         skipGit: true,
       });
 
-      const copilotContent = await fileSystem.readFile('.github/copilot-instructions.md');
-      
+      const copilotContent = await fileSystem.readFile(
+        '.github/copilot-instructions.md'
+      );
+
       // Check Python-specific content
       expect(copilotContent).toContain('Python');
       expect(copilotContent).toContain('Django');
@@ -167,12 +197,20 @@ describe('Package Structure Validation', () => {
         skipGit: true,
       });
 
-      const testRunnerContent = await fileSystem.readFile('.github/instructions/test-runner.instructions.md');
-      
+      const testRunnerContent = await fileSystem.readFile(
+        '.github/instructions/test-runner.instructions.md'
+      );
+
       // Check for Python/Django specific area prefixes
-      expect(testRunnerContent).toContain('`VIEW` - Django views/FastAPI endpoints tests');
-      expect(testRunnerContent).toContain('`MODEL` - Django models/SQLAlchemy tests');
-      expect(testRunnerContent).toContain('`FORM` - Django forms/Pydantic validators tests');
+      expect(testRunnerContent).toContain(
+        '`VIEW` - Django views/FastAPI endpoints tests'
+      );
+      expect(testRunnerContent).toContain(
+        '`MODEL` - Django models/SQLAlchemy tests'
+      );
+      expect(testRunnerContent).toContain(
+        '`FORM` - Django forms/Pydantic validators tests'
+      );
     });
   });
 
@@ -190,12 +228,12 @@ describe('Package Structure Validation', () => {
         '.github/instructions/code-review.instructions.md',
         '.github/instructions/docs-update.instructions.md',
         '.github/instructions/release.instructions.md',
-        '.github/instructions/test-runner.instructions.md'
+        '.github/instructions/test-runner.instructions.md',
       ];
 
       for (const file of instructionFiles) {
         const content = await fileSystem.readFile(file);
-        
+
         // Check for YAML front matter
         expect(content).toMatch(/^---\n/);
         expect(content).toContain('description:');
@@ -215,13 +253,15 @@ describe('Package Structure Validation', () => {
           skipGit: true,
         });
 
-        const content = await fileSystem.readFile('.github/copilot-instructions.md');
-        
+        const content = await fileSystem.readFile(
+          '.github/copilot-instructions.md'
+        );
+
         // Check for workflow enforcement content (general template)
         expect(content).toContain('Mandatory Development Process');
         expect(content).toContain('Step 1: Task Understanding and Planning');
         expect(content).toContain('workflow completion');
-        
+
         // Clean up for next iteration
         await fs.remove('.github');
       }
