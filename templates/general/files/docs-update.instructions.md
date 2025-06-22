@@ -1,6 +1,6 @@
 ---
-description: "Guidelines for maintaining project documentation"
-applyTo: "**/*.md"
+description: 'Guidelines for maintaining project documentation'
+applyTo: '**/*.md'
 ---
 
 # Documentation Maintenance Guidelines
@@ -29,7 +29,7 @@ applyTo: "**/*.md"
 - **Reflect current state in headers:** Use present tense and current status
 - **Examples of good vs bad headers:**
   - ❌ Bad: "Recently Completed Tasks"
-  - ❌ Bad: "Latest Updates"  
+  - ❌ Bad: "Latest Updates"
   - ❌ Bad: "Finished Features"
   - ✅ Good: "Development Status" with current checkboxes
   - ❌ Bad: "Planned Authentication Features"
@@ -99,7 +99,33 @@ applyTo: "**/*.md"
 - **Error Handling:** Show proper error handling in examples
 - **Best Practices:** Demonstrate best practices in example code
 
-## Documentation Testing
+## Test Documentation Standards
+
+Follow the standardized table format for all test case documentation:
+
+### Required Table Format
+
+```markdown
+| Test Case ID  | Description                                 | Type | Status    |
+| :------------ | :------------------------------------------ | :--- | :-------- |
+| AREA-TYPE-001 | Brief but descriptive test case description | Unit | Completed |
+```
+
+### Test Case ID Conventions
+
+- **Format:** `[AREA]-[TYPE]-[NUMBER]`
+- **Area Prefixes (adapt to your project):** CORE, API, UI, DB, AUTH, UTIL, CONFIG, DOC, E2E, INT
+- **Type Suffixes:** UNIT, INT, E2E
+- **Sequential Numbering:** 001, 002, 003, etc.
+
+### Table Organization Requirements
+
+- **Functional Grouping:** Group test cases by system area/component
+- **Consistent Formatting:** Maintain proper column alignment using pipes
+- **Clear Headers:** Use descriptive section headers (e.g., "Template System", "CLI Commands")
+- **Status Tracking:** Use simple status values: "Completed", "In Progress", "Not Started"
+
+### Documentation Testing
 
 - **Link Checking:** Regularly verify all links work
 - **Code Testing:** Test all code examples in documentation

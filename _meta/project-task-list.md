@@ -69,6 +69,11 @@
 - [x] **Document architecture decisions** - Added architecture-decisions.md with ADRs
 - [x] **Create detailed API design documentation** - Added api-design.md with complete CLI spec
 - [x] **Review and fix README.md file** - Fixed markdown formatting, added version badges, corrected typos, improved structure and navigation, enhanced after manual installation section removal, fixed broken code blocks, moved init description, added template options to installation guide, converted all CLI examples to inline code including installation steps, removed duplicate init section from CLI reference, combined redundant Best Practices sections, updated messaging from "Professional" to "Guided" approach
+- [x] **Implement table format and improved naming conventions for test documentation** - Converted test-documentation.md to use clean table format with structured Test Case IDs following [AREA]-[TYPE]-[NUMBER] pattern
+- [x] **Update instruction files with standardized test documentation format** - Updated all test-runner.instructions.md and docs-update.instructions.md files across main and template directories with table format requirements and naming conventions
+- [x] **Generalize instruction templates for reusability** - Updated area prefixes from metacoding-specific to language-appropriate and generic conventions
+- [x] **Create language-specific area prefixes for test naming** - Implemented React/Frontend (COMP, HOOK, PAGE, STORE), Node.js/Backend (API, SRV, DB, MW, ROUTE), Python/Django (VIEW, MODEL, FORM, CMD), and General (CORE, API, UI, DB) prefixes
+- [x] **Update examples in instruction files to match new conventions** - Replaced all metacoding-specific examples with language-appropriate test case examples
 
 ### Workflow and Quality Enforcement
 
@@ -77,6 +82,14 @@
 - [x] **Push all changes to remote repository** - All template enhancements committed and pushed
 - [x] **Verify workflow consistency across templates** - General and React templates updated with matching workflows
 
+### Test Documentation and Standards
+
+- [x] **Implement standardized table format for test documentation** - Converted from checkbox format to clean markdown tables with Test Case ID, Description, Type, and Status columns
+- [x] **Create structured test case naming conventions** - Implemented [AREA]-[TYPE]-[NUMBER] format with sequential numbering
+- [x] **Update all instruction files with test documentation standards** - Modified test-runner.instructions.md and docs-update.instructions.md across all templates
+- [x] **Generalize instruction templates for project reusability** - Removed metacoding-specific references, made templates adaptable for any project
+- [x] **Implement language-specific area prefixes** - Created React/Frontend, Node.js/Backend, Python/Django, and General conventions
+- [x] **Update all examples to match new naming conventions** - Replaced all template-specific examples with appropriate language examples
 
 ### Publishing and Distribution
 
@@ -106,6 +119,6 @@
 ## Current Focus
 
 **Primary Goal**: Create and publish professional npm package for metacoding
-**Next Major Task**: Complete validate and update command logic, create additional templates
-**Current Status**: Core package infrastructure complete, ready for feature expansion
-**Target Completion**: Additional templates and full command implementation
+**Next Major Task**: Complete validate and update command logic, prepare for npm publishing
+**Current Status**: Core package infrastructure complete, standardized documentation and test formats implemented, ready for feature expansion and publishing
+**Target Completion**: Additional command implementations and npm publishing

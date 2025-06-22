@@ -111,6 +111,9 @@ The project follows its own metacoding methodology:
 - **Documentation**: Comprehensive README and API documentation
 - **Branding**: Consistent naming throughout codebase
 - **Temporary File Management**: Enhanced instruction files with cleanup guidance and best practices
+- **Test Documentation Standardization**: Implemented table format with structured naming conventions ([AREA]-[TYPE]-[NUMBER])
+- **Instruction Template Generalization**: Updated all templates to be reusable across projects with language-specific area prefixes
+- **Documentation Quality Standards**: Comprehensive guidelines for test case documentation, status tracking, and maintainability
 
 ### 🚧 In Progress
 
@@ -235,6 +238,42 @@ The project follows its own metacoding methodology:
 - 📋 Template marketplace
 - 📋 Usage analytics and insights
 - 📋 Enterprise features
+
+### Documentation Standards and Best Practices
+
+#### Test Documentation Standards
+
+The project has implemented standardized test case documentation using table format:
+
+**Required Table Format:**
+```markdown
+| Test Case ID  | Description                                 | Type | Status    |
+| :------------ | :------------------------------------------ | :--- | :-------- |
+| AREA-TYPE-001 | Brief but descriptive test case description | Unit | Completed |
+```
+
+**Test Case Naming Conventions:**
+- **Format**: `[AREA]-[TYPE]-[NUMBER]`
+- **Language-Specific Area Prefixes**:
+  - **React/Frontend**: COMP, HOOK, PAGE, STORE, API, UTIL, AUTH, FORM
+  - **Node.js/Backend**: API, SRV, DB, MW, AUTH, ROUTE, UTIL, CONFIG
+  - **Python/Django**: VIEW, MODEL, FORM, MW, AUTH, UTIL, CMD, CONFIG
+  - **General**: CORE, API, UI, DB, AUTH, UTIL, CONFIG
+- **Type Suffixes**: UNIT, INT, E2E
+- **Sequential Numbering**: 001, 002, 003, etc.
+
+**Examples by Language:**
+- React: `COMP-UNIT-001`, `HOOK-UNIT-001`, `API-INT-001`
+- Node.js: `API-UNIT-001`, `SRV-UNIT-001`, `DB-INT-001`
+- Python: `VIEW-UNIT-001`, `MODEL-UNIT-001`, `AUTH-INT-001`
+
+#### Instruction Template Standards
+
+All instruction files follow generalized patterns:
+- **Reusable Templates**: Instructions work for any project using our methodology
+- **Language-Specific Guidance**: Area prefixes adapted to common patterns in each language
+- **Consistent Structure**: Standardized sections across all instruction types
+- **Anti-Pattern Prevention**: Clear guidance on what to avoid in documentation
 
 ## Contributing Guidelines
 

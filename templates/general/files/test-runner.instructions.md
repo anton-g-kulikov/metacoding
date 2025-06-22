@@ -16,10 +16,54 @@ applyTo: 'test/**/*.ts'
 
 - **New Features:** Ensure all new features have corresponding unit tests
 - **Test Coverage:** Aim for high coverage of critical functionality paths
-- **Test Names:** Use descriptive names that explain the scenario and expected outcome
-  - Format: `methodName_scenario_expectedOutcome`
-  - Example: `getUserById_userExists_returnsUserObject`
+- **Test Documentation:** Follow table format in `test/test-documentation.md` for all test cases
 - **Test Organization:** Group related tests in describe blocks with clear hierarchy
+
+## Test Case Documentation Format
+
+All test cases must be documented using the standardized table format:
+
+```markdown
+| Test Case ID  | Description                                 | Type | Status    |
+| :------------ | :------------------------------------------ | :--- | :-------- |
+| AREA-TYPE-001 | Brief but descriptive test case description | Unit | Completed |
+```
+
+## Test Case Naming Conventions
+
+### Test Case ID Format: `[AREA]-[TYPE]-[NUMBER]`
+
+**Area Prefixes (adapt to your project):**
+
+- `CORE` - Core application logic tests
+- `API` - API/Service layer tests
+- `UI` - User interface component tests
+- `DB` - Database/Data layer tests
+- `AUTH` - Authentication/Authorization tests
+- `UTIL` - Utility function tests
+- `CONFIG` - Configuration management tests
+- `DOC` - Documentation Quality tests
+- `E2E` - End-to-End workflow tests
+- `INT` - Integration tests
+
+**Type Suffixes:**
+
+- `UNIT` - Unit tests
+- `INT` - Integration tests
+- `E2E` - End-to-end tests
+
+**Examples:**
+
+- `CORE-UNIT-001` - First unit test for Core Logic
+- `API-UNIT-001` - First unit test for API Layer
+- `DB-INT-001` - First integration test for Database
+- `E2E-WF-001` - First end-to-end workflow test
+
+### Test Method Naming
+
+- Format: `methodName_scenario_expectedOutcome`
+- Example: `getUserById_userExists_returnsUserObject`
+- Use camelCase for all test method names
 
 ## Test Data Management
 
@@ -57,3 +101,7 @@ applyTo: 'test/**/*.ts'
 - **Documentation:** Document complex test scenarios and their purposes
 - **Continuous Updates:** Update tests when requirements or APIs change
 - **Test Quality:** Apply the same code quality standards to test code as production code
+- **Update test-documentation.md:** Add new test cases to the appropriate table section
+- **Status Tracking:** Update test status as development progresses
+- **Table Format:** Maintain consistent table formatting and column alignment
+- **ID Assignment:** Assign sequential IDs within each area (AREA-TYPE-001, AREA-TYPE-002, etc.)

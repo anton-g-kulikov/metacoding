@@ -1,138 +1,108 @@
 ---
-description: 'Instructions for running and maintaining React tests'
-applyTo: '**/*.test.{ts,tsx,js,jsx}'
+description: 'Instructions for running and maintaining tests'
+applyTo: 'test/**/*.ts'
 ---
 
-# React Test Execution Guidelines
+# Test Execution Guidelines
 
-## React Testing Setup
+## Pre-Commit Testing
 
-- Use React Testing Library for component testing
-- Run tests with Jest: `npm test` or `yarn test`
-- Use `@testing-library/jest-dom` for enhanced assertions
-- Configure MSW (Mock Service Worker) for API mocking when needed
+- Run all tests before committing changes: `npm test`
+- Ensure tests pass in both development and CI environments
+- Fix failing tests before proceeding with commits
+- Run specific test suites for targeted changes when appropriate
 
-## Component Testing Standards
+## Test Development Standards
 
-- **Component Tests:** Test component behavior, not implementation details
-- **User-Centric Testing:** Test from the user's perspective using accessible queries
-- **Props Testing:** Verify components handle all prop variations correctly
-- **Event Testing:** Test user interactions (clicks, form submissions, keyboard events)
-- **Conditional Rendering:** Test all conditional rendering paths
+- **New Features:** Ensure all new features have corresponding unit tests
+- **Test Coverage:** Aim for high coverage of critical functionality paths
+- **Test Documentation:** Follow table format in `test/test-documentation.md` for all test cases
+- **Test Organization:** Group related tests in describe blocks with clear hierarchy
 
-## React Test File Management
+## Test Case Documentation Format
 
-### Component Test Cleanup
+All test cases must be documented using the standardized table format:
 
-- **Debug Components:** Remove temporary test components and debug wrappers after testing
-- **Mock Component Organization:** Move reusable mock components to `/test/__mocks__/` directory
-- **Test Fixture Management:** Organize React component test data in `/test/fixtures/components/`
-- **Snapshot Cleanup:** Remove outdated or unnecessary snapshot files regularly
-
-### Testing Environment Hygiene
-
-- **Test Output Cleanup:** Clean up test coverage reports, debug logs, and temporary test files
-- **Mock API Cleanup:** Organize temporary API mocks into proper mock service structure
-- **Test Media Cleanup:** Remove temporary images, videos, or assets used only for testing
-- **Debug Test Removal:** Remove console.log, debug renders, and temporary test utilities
-
-## React Testing Best Practices
-
-```javascript
-// Good: Test behavior, not implementation
-test('displays error message when form submission fails', async () => {
-  render(<LoginForm onSubmit={failingSubmit} />);
-
-  fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-  expect(await screen.findByRole('alert')).toHaveTextContent('Login failed');
-});
-
-// Avoid: Testing implementation details
-test('sets isLoading state to true when submitting', () => {
-  // This tests internal state, not user-visible behavior
-});
+```markdown
+| Test Case ID  | Description                                 | Type | Status    |
+| :------------ | :------------------------------------------ | :--- | :-------- |
+| AREA-TYPE-001 | Brief but descriptive test case description | Unit | Completed |
 ```
 
-## Testing Queries Priority
+## Test Case Naming Conventions
 
-1. **getByRole** - Most accessible and user-focused
-2. **getByLabelText** - Good for form inputs
-3. **getByText** - For non-interactive text elements
-4. **getByTestId** - Last resort for complex components
+### Test Case ID Format: `[AREA]-[TYPE]-[NUMBER]`
 
-## Hook Testing
+**Area Prefixes (React/Frontend specific):**
 
-- **Custom Hooks:** Test custom hooks using `@testing-library/react-hooks`
-- **Hook Isolation:** Test hooks independently of components when possible
-- **Hook Dependencies:** Test all dependency arrays and side effects
-- **Hook Error Handling:** Test error scenarios and edge cases
+- `COMP` - React component tests
+- `HOOK` - Custom hooks tests
+- `PAGE` - Page/Route component tests
+- `STORE` - State management tests (Redux/Zustand)
+- `API` - API service layer tests
+- `UTIL` - Utility function tests
+- `AUTH` - Authentication flow tests
+- `FORM` - Form validation tests
+- `DOC` - Documentation Quality tests
+- `E2E` - End-to-End workflow tests
+- `INT` - Integration tests
 
-## State Management Testing
+**Type Suffixes:**
 
-- **Context Providers:** Test context providers with realistic component trees
-- **Redux/Zustand:** Test actions, reducers, and selectors independently
-- **Async State:** Test loading states, success states, and error states
-- **State Updates:** Verify state updates trigger appropriate re-renders
+- `UNIT` - Unit tests
+- `INT` - Integration tests
+- `E2E` - End-to-end tests
 
-## Integration Testing Patterns
+**Examples:**
 
-- **Component Trees:** Test realistic component hierarchies
-- **Data Flow:** Test props passing and state lifting patterns
-- **Router Integration:** Test routing behavior and navigation
-- **API Integration:** Mock API calls and test data fetching components
+- `COMP-UNIT-001` - First unit test for React Components
+- `HOOK-UNIT-001` - First unit test for Custom Hooks
+- `API-INT-001` - First integration test for API Services
+- `E2E-WF-001` - First end-to-end workflow test
 
-## E2E Testing with React
+### Test Method Naming
 
-- **User Flows:** Test complete user journeys (login, checkout, etc.)
-- **Cross-Browser:** Test on multiple browsers and devices
-- **Performance:** Monitor and test Core Web Vitals
-- **Accessibility:** Test with screen readers and keyboard navigation
+- Format: `methodName_scenario_expectedOutcome`
+- Example: `getUserById_userExists_returnsUserObject`
+- Use camelCase for all test method names
 
-## Test Organization
+## Test Data Management
 
-```
-src/
-├── components/
-│   ├── Button/
-│   │   ├── Button.tsx
-│   │   └── Button.test.tsx
-│   └── UserCard/
-│       ├── UserCard.tsx
-│       └── UserCard.test.tsx
-├── hooks/
-│   ├── useUserData.ts
-│   └── useUserData.test.ts
-└── __tests__/
-    ├── integration/
-    └── e2e/
-```
+- **Fixtures:** Update test fixtures when data structures change
+- **Realistic Data:** Use realistic data in integration tests to catch real-world issues
+- **Mock Strategy:** Mock external dependencies in unit tests for isolation
+- **Test Database:** Use separate test database/environment for integration tests
+- **Temporary File Cleanup:** Clean up all temporary test files, debug outputs, and mock data after test execution
+- **Fixture Organization:** Move reusable test data to `/test/fixtures/` directory for proper organization
 
-## Mock Strategies for React
+## Test File Hygiene
 
-- **Component Mocks:** Mock child components in unit tests
-- **API Mocks:** Use MSW for realistic API mocking
-- **Router Mocks:** Mock React Router for navigation testing
-- **External Libraries:** Mock third-party libraries appropriately
+- **No Orphaned Files:** Remove temporary test files created during debugging or development
+- **Debug Output Cleanup:** Remove console.log statements and debug files before committing
+- **Test Artifact Management:** Ensure test screenshots, logs, and reports are properly managed or cleaned up
+- **Resource Management:** Properly dispose of file handles, database connections, and other test resources
+
+## Test Types and Patterns
+
+- **Unit Tests:** Test individual functions, methods, and components in isolation
+- **Integration Tests:** Test feature workflows and component interactions
+- **End-to-End Tests:** Test complete user scenarios and workflows
+- **Regression Tests:** Add tests for previously fixed bugs to prevent recurrence
 
 ## Performance Testing
 
-- **Render Performance:** Use React Profiler to identify slow components
-- **Bundle Size:** Monitor component bundle impact
-- **Memory Leaks:** Test for memory leaks in long-running components
-- **Async Operations:** Test cleanup of async operations on unmount
+- **Test Execution Speed:** Keep unit tests fast (under 100ms each when possible)
+- **Parallel Execution:** Structure tests to run safely in parallel
+- **Resource Cleanup:** Ensure proper cleanup of test resources and temporary data
+- **Memory Management:** Monitor and prevent memory leaks in long-running test suites
 
-## Accessibility Testing
+## Test Maintenance
 
-- **ARIA Testing:** Test ARIA labels and roles
-- **Keyboard Navigation:** Test keyboard accessibility
-- **Screen Reader:** Test with screen reader simulation
-- **Color Contrast:** Verify sufficient color contrast ratios
-
-## Common React Testing Pitfalls
-
-- **Testing Implementation:** Focus on behavior, not internal state
-- **Sync/Async Confusion:** Use async/await for async operations
-- **Missing Cleanup:** Clean up timers, subscriptions, and event listeners
-- **Over-Mocking:** Don't mock everything; test realistic scenarios
-- **Snapshot Overuse:** Use snapshots sparingly, prefer specific assertions
+- **Regular Review:** Periodically review and refactor outdated tests
+- **Documentation:** Document complex test scenarios and their purposes
+- **Continuous Updates:** Update tests when requirements or APIs change
+- **Test Quality:** Apply the same code quality standards to test code as production code
+- **Update test-documentation.md:** Add new test cases to the appropriate table section
+- **Status Tracking:** Update test status as development progresses
+- **Table Format:** Maintain consistent table formatting and column alignment
+- **ID Assignment:** Assign sequential IDs within each area (AREA-TYPE-001, AREA-TYPE-002, etc.)
