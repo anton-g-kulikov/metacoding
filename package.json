@@ -37,16 +37,16 @@
   ],
   "author": {
     "name": "Anton Kulikov",
-    "email": "your-email@example.com"
+    "email": "anton.g.kulikov@gmail.com"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/metacoding.git"
+    "url": "https://github.com/anton-g-kulikov/metacoding.git"
   },
-  "homepage": "https://github.com/your-username/metacoding#readme",
+  "homepage": "https://github.com/anton-g-kulikov/metacoding#readme",
   "bugs": {
-    "url": "https://github.com/your-username/metacoding/issues"
+    "url": "https://github.com/anton-g-kulikov/metacoding/issues"
   },
   "files": [
     "bin/",

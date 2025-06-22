@@ -26,8 +26,8 @@ ${chalk.cyan('Examples:')}
   ${chalk.dim('$')} metacoding update                  # Update to latest metacoding version
 
 ${chalk.cyan('Learn more:')}
-  Documentation: https://github.com/your-username/metacoding
-  Issues: https://github.com/your-username/metacoding/issues
+  Documentation: https://github.com/anton-g-kulikov/metacoding
+  Issues: https://github.com/anton-g-kulikov/metacoding/issues
     `
     );
 

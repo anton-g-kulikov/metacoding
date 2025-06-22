@@ -91,7 +91,7 @@ Next steps:
 3. Ask: "What are the coding standards for this project?"
 4. Start coding with professional workflow guidance!
 
-Need help? Visit https://github.com/your-username/metacoding
+Need help? Visit https://github.com/anton-g-kulikov/metacoding
 ```
 
 **Error Output:**

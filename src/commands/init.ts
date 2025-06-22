@@ -244,7 +244,7 @@ export class InitCommand {
     console.log('');
     console.log(
       chalk.cyan('Need help?'),
-      'Visit https://github.com/your-username/metacoding'
+      'Visit https://github.com/anton-g-kulikov/metacoding'
     );
   }
 }
