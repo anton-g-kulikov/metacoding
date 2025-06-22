@@ -8,7 +8,7 @@ describe('WF-UNIT-012 to WF-UNIT-018: Single-Task Focus Enforcement Tests', () =
   beforeAll(() => {
     const templatePath = join(
       __dirname,
-      '../../templates/general/files/copilot-instructions.md.template'
+      '../../templates/general/copilot-instructions.md'
     );
     templateContent = readFileSync(templatePath, 'utf-8');
   });

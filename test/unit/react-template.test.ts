@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { describe, test, expect } from '@jest/globals';
 import { TemplateManager } from '../../src/services/template-manager';
 
 describe('React Template', () => {
@@ -19,10 +20,19 @@ describe('React Template', () => {
       expect(exists).toBe(true);
     });
 
-    test('TMPL-UNIT-021: should have files directory for template files', async () => {
-      const filesDir = path.join(reactTemplateDir, 'files');
-      const exists = await fs.pathExists(filesDir);
-      expect(exists).toBe(true);
+    test('TMPL-UNIT-021: should have React-specific instruction files', async () => {
+      const requiredFiles = [
+        'template.json',
+        'react.coding.instructions.md',
+        'react.docs.instructions.md',
+        'react.testing.instructions.md',
+      ];
+
+      for (const file of requiredFiles) {
+        const filePath = path.join(reactTemplateDir, file);
+        const exists = await fs.pathExists(filePath);
+        expect(exists).toBe(true);
+      }
     });
   });
 
@@ -39,37 +49,34 @@ describe('React Template', () => {
   });
 
   describe('React Instruction Files', () => {
-    test('TMPL-UNIT-023: should have React-specific copilot instructions template', async () => {
+    test('TMPL-UNIT-023: should have React-specific coding instructions', async () => {
       const instructionsPath = path.join(
         reactTemplateDir,
-        'files',
-        'copilot-instructions.md.template'
+        'react.coding.instructions.md'
       );
       const exists = await fs.pathExists(instructionsPath);
       expect(exists).toBe(true);
     });
 
-    test('TMPL-UNIT-024: should have React-specific test runner instructions', async () => {
-      const testRunnerPath = path.join(
+    test('TMPL-UNIT-024: should have React-specific testing instructions', async () => {
+      const testingPath = path.join(
         reactTemplateDir,
-        'files',
-        'test-runner.instructions.md'
+        'react.testing.instructions.md'
       );
-      const exists = await fs.pathExists(testRunnerPath);
+      const exists = await fs.pathExists(testingPath);
       expect(exists).toBe(true);
     });
 
-    test('TMPL-UNIT-025: copilot instructions should contain React-specific content', async () => {
+    test('TMPL-UNIT-025: coding instructions should contain React-specific content', async () => {
       const instructionsPath = path.join(
         reactTemplateDir,
-        'files',
-        'copilot-instructions.md.template'
+        'react.coding.instructions.md'
       );
       const content = await fs.readFile(instructionsPath, 'utf-8');
 
       expect(content).toContain('React');
       expect(content).toContain('component');
-      expect(content).toContain('JSX');
+      expect(content).toContain('TypeScript');
       expect(content).toContain('hooks');
     });
   });

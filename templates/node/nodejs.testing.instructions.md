@@ -5,6 +5,36 @@ applyTo: 'test/**/*.{ts,js}'
 
 # Node.js Backend Testing Guidelines
 
+## Test Case Naming Conventions
+
+### Test Case ID Format: `[AREA]-[TYPE]-[NUMBER]`
+
+**Node.js/Backend Area Prefixes:**
+
+- `API` - REST API endpoint tests
+- `SRV` - Service layer tests
+- `DB` - Database/ORM tests
+- `AUTH` - Authentication/Authorization tests
+- `UTIL` - Backend utility function tests
+- `CONFIG` - Configuration management tests
+- `MIDDLEWARE` - Express middleware tests
+- `QUEUE` - Message queue/job processing tests
+- `CACHE` - Caching layer tests
+- `VALIDATION` - Input validation tests
+
+**Type Suffixes:**
+
+- `UNIT` - Unit tests (isolated component testing)
+- `INT` - Integration tests (component interaction testing)
+- `E2E` - End-to-end tests (full API workflow testing)
+
+**Examples:**
+
+- `API-UNIT-001` - First unit test for API endpoint
+- `SRV-UNIT-001` - First unit test for Service layer
+- `DB-INT-001` - First integration test for Database layer
+- `AUTH-E2E-001` - First end-to-end authentication test
+
 ## Testing Strategy Overview
 
 ### Testing Pyramid for Node.js Backend

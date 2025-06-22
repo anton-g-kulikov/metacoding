@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { describe, it, expect, beforeAll } from '@jest/globals';
 
 /**
  * Test suite for workflow enhancement features in copilot-instructions.md template
@@ -9,7 +10,7 @@ import * as path from 'path';
 describe('Workflow Enhancement - Documentation-First Principle', () => {
   const templatePath = path.join(
     __dirname,
-    '../../templates/general/files/copilot-instructions.md.template'
+    '../../templates/general/copilot-instructions.md'
   );
   let templateContent: string;
 

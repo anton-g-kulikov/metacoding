@@ -6,6 +6,36 @@ category: 'testing'
 
 # React Testing Standards
 
+## Test Case Naming Conventions
+
+### Test Case ID Format: `[AREA]-[TYPE]-[NUMBER]`
+
+**React/Frontend Area Prefixes:**
+
+- `COMP` - React component tests
+- `HOOK` - Custom hooks tests
+- `PAGE` - Page/Route component tests
+- `FORM` - Form validation and submission tests
+- `UI` - UI interaction and behavior tests
+- `STORE` - State management tests (Redux/Zustand/Context)
+- `API` - Frontend API client tests
+- `A11Y` - Accessibility compliance tests
+- `PERF` - Performance and optimization tests
+- `UTIL` - Frontend utility function tests
+
+**Type Suffixes:**
+
+- `UNIT` - Unit tests (isolated component testing)
+- `INT` - Integration tests (component interaction testing)
+- `E2E` - End-to-end tests (full user workflow testing)
+
+**Examples:**
+
+- `COMP-UNIT-001` - First unit test for React Component
+- `HOOK-UNIT-001` - First unit test for Custom Hook
+- `PAGE-E2E-001` - First end-to-end test for Page Component
+- `FORM-INT-001` - First integration test for Form Component
+
 ## Testing Framework Stack
 
 - **Primary Framework:** Jest with React Testing Library

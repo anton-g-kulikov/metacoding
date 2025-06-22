@@ -60,6 +60,12 @@ These language-specific files contain comprehensive guidance on:
 - Security considerations for each language
 - Common anti-patterns to avoid
 
+## {{PROJECT_DOMAIN}} Development Focus
+
+**Technology-Specific Guidelines:**
+
+{{PROJECT_SPECIFIC_GUIDANCE}}
+
 # Project Structure Guidelines
 
 ## Root Directory Standards

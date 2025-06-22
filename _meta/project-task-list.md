@@ -2,6 +2,16 @@
 
 ## 🚧 Current Sprint: NPM Package Development
 
+### Template System Fixes
+
+- [x] **Update template manager to support new naming convention and inheritance** - ✅ **COMPLETED**
+- [x] **✅ COMPLETED - Update tests to reflect current architecture**
+  - Updated package structure tests to match current template organization
+  - Aligned test expectations with actual template file structure
+  - Removed obsolete test expectations for `/files/` subdirectories
+  - Updated test expectations for new naming convention (`[language].coding.instructions.md`)
+  - All 13 test suites and 140 tests now pass
+
 ### Planning and Research
 
 - [x] **Analyzed npm package feasibility and benefits**

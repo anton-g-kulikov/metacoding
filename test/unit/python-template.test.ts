@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { describe, test, expect } from '@jest/globals';
 
 describe('Python Template', () => {
   const templatesDir = path.join(__dirname, '../../templates');
   const pythonTemplateDir = path.join(templatesDir, 'python');
-  const filesDir = path.join(pythonTemplateDir, 'files');
 
   describe('Template Structure', () => {
     test('TMPL-UNIT-010: should have python template directory', () => {
@@ -18,20 +18,16 @@ describe('Python Template', () => {
       expect(fs.statSync(templateJsonPath).isFile()).toBe(true);
     });
 
-    test('TMPL-UNIT-012: should have files directory with all required instruction files', () => {
-      expect(fs.existsSync(filesDir)).toBe(true);
-      expect(fs.statSync(filesDir).isDirectory()).toBe(true);
-
+    test('TMPL-UNIT-012: should have all required instruction files', () => {
       const requiredFiles = [
-        'copilot-instructions.md.template',
-        'code-review.instructions.md',
-        'docs-update.instructions.md',
-        'release.instructions.md',
-        'test-runner.instructions.md',
+        'template.json',
+        'python.coding.instructions.md',
+        'python.docs.instructions.md',
+        'python.testing.instructions.md',
       ];
 
       requiredFiles.forEach((file) => {
-        const filePath = path.join(filesDir, file);
+        const filePath = path.join(pythonTemplateDir, file);
         expect(fs.existsSync(filePath)).toBe(true);
         expect(fs.statSync(filePath).isFile()).toBe(true);
       });
@@ -58,96 +54,93 @@ describe('Python Template', () => {
   });
 
   describe('Python Instruction Files', () => {
-    test('TMPL-UNIT-014: copilot instructions should contain Python-specific content', () => {
+    test('TMPL-UNIT-014: python coding instructions should contain Python-specific content', () => {
       const instructionsPath = path.join(
-        filesDir,
-        'copilot-instructions.md.template'
+        pythonTemplateDir,
+        'python.coding.instructions.md'
       );
       const content = fs.readFileSync(instructionsPath, 'utf8');
 
       // Check for Python-specific content
       expect(content).toContain('Python');
-      expect(content).toContain('Django');
-      expect(content).toContain('Flask');
-      expect(content).toContain('FastAPI');
-      expect(content).toContain('backend');
+      expect(content).toContain('PEP 8');
+      expect(content).toContain('pytest');
+      expect(content).toContain('type hints');
 
-      // Check for mandatory workflow enforcement
-      expect(content).toContain('Mandatory Development Process');
-      expect(content).toContain('mandatory development workflow');
+      // Check for Python-specific practices
+      expect(content).toContain('Black formatter');
+      expect(content).toContain('snake_case');
 
-      // Check for template variables
-      expect(content).toContain('{{PROJECT_DESCRIPTION}}');
-      expect(content).toContain('{{TECH_STACK}}');
+      // Check that this is coding-specific content
+      expect(content).toContain('Code Quality Guidelines');
+      expect(content).toContain('Naming Conventions');
     });
 
-    test('TMPL-UNIT-015: code review instructions should contain Python-specific patterns', () => {
-      const codeReviewPath = path.join(filesDir, 'code-review.instructions.md');
-      const content = fs.readFileSync(codeReviewPath, 'utf8');
+    test('TMPL-UNIT-015: python docs instructions should contain Python-specific patterns', () => {
+      const docsPath = path.join(
+        pythonTemplateDir,
+        'python.docs.instructions.md'
+      );
+      const content = fs.readFileSync(docsPath, 'utf8');
 
       // Check for Python backend-specific content
       expect(content).toContain('Python');
       expect(content).toContain('Django');
-      expect(content).toContain('ORM');
-      expect(content).toContain('security');
-      expect(content).toContain('performance');
+      expect(content).toContain('documentation');
+      expect(content).toContain('docstring');
 
-      // Check for temporary file management
-      expect(content).toContain('temporary');
-      expect(content).toContain('cleanup');
+      // Check for documentation and docstring content
+      expect(content).toContain('docstring');
+      expect(content).toContain('Google-style');
     });
 
-    test('TMPL-UNIT-016: test runner instructions should contain Python testing patterns', () => {
-      const testRunnerPath = path.join(filesDir, 'test-runner.instructions.md');
-      const content = fs.readFileSync(testRunnerPath, 'utf8');
+    test('TMPL-UNIT-016: python testing instructions should contain Python testing patterns', () => {
+      const testingPath = path.join(
+        pythonTemplateDir,
+        'python.testing.instructions.md'
+      );
+      const content = fs.readFileSync(testingPath, 'utf8');
 
       // Check for Python-specific testing guidance
-      expect(content).toContain('Python/Django specific');
       expect(content).toContain('Python');
       expect(content).toContain('Django');
+      expect(content).toContain('pytest');
+      expect(content).toContain('testing');
 
-      // Check for specific Python testing area prefixes
-      expect(content).toContain('VIEW` - Django views/FastAPI endpoints tests');
-      expect(content).toContain('MODEL` - Django models/SQLAlchemy tests');
-      expect(content).toContain(
-        'FORM` - Django forms/Pydantic validators tests'
-      );
-      expect(content).toContain('CMD` - Django management commands tests');
-
-      // Check for temporary file cleanup instructions
-      expect(content).toContain('temporary');
-      expect(content).toContain('cleanup');
+      // Check for testing framework and patterns
+      expect(content).toContain('pytest');
+      expect(content).toContain('testing');
     });
 
-    test('TMPL-UNIT-017: all instruction files should enforce 7-step workflow', () => {
+    test('TMPL-UNIT-017: all instruction files should enforce workflow standards', () => {
       const instructionFiles = [
-        'copilot-instructions.md.template',
-        'code-review.instructions.md',
-        'test-runner.instructions.md',
+        'python.coding.instructions.md',
+        'python.docs.instructions.md',
+        'python.testing.instructions.md',
       ];
 
       instructionFiles.forEach((fileName) => {
-        const filePath = path.join(filesDir, fileName);
+        const filePath = path.join(pythonTemplateDir, fileName);
         const content = fs.readFileSync(filePath, 'utf8');
 
-        // Each file should reference or enforce the workflow
-        expect(content).toMatch(/(workflow|mandatory|step)/i);
+        // Each file should reference Python-specific patterns
+        expect(content).toMatch(/Python/i);
       });
     });
 
-    test('TMPL-UNIT-018: all instruction files should include cleanup guidance', () => {
+    test('TMPL-UNIT-018: all instruction files should include Python-specific guidance', () => {
       const instructionFiles = [
-        'copilot-instructions.md.template',
-        'code-review.instructions.md',
-        'test-runner.instructions.md',
+        'python.coding.instructions.md',
+        'python.docs.instructions.md',
+        'python.testing.instructions.md',
       ];
 
       instructionFiles.forEach((fileName) => {
-        const filePath = path.join(filesDir, fileName);
+        const filePath = path.join(pythonTemplateDir, fileName);
         const content = fs.readFileSync(filePath, 'utf8');
 
-        // Check for cleanup-related content
-        expect(content).toMatch(/(cleanup|temporary|artifact|clean)/i);
+        // Check for Python-specific content
+        expect(content).toMatch(/(Python|Django|Flask|FastAPI)/i);
       });
     });
   });

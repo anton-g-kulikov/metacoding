@@ -72,7 +72,6 @@ export class TemplateManager {
     const universalFiles = [
       'copilot-instructions.md',
       'docs-update.instructions.md',
-      'test-runner.instructions.md',
       'release.instructions.md',
       'code-review.instructions.md',
     ];
@@ -86,6 +85,27 @@ export class TemplateManager {
             file === 'copilot-instructions.md'
               ? '.github/copilot-instructions.md'
               : `.github/instructions/${file}`,
+          template: file === 'copilot-instructions.md', // Enable template substitution for copilot instructions
+        });
+      }
+    }
+
+    // Load template-specific testing instructions (new naming convention)
+    const testingFiles = {
+      react: 'react.testing.instructions.md',
+      node: 'nodejs.testing.instructions.md',
+      python: 'python.testing.instructions.md',
+      general: 'test-runner.instructions.md',
+    };
+
+    const testingFile = testingFiles[templateName as keyof typeof testingFiles];
+    if (testingFile) {
+      const templatePath = path.join(this.templatesDir, templateName);
+      const testingFilePath = path.join(templatePath, testingFile);
+      if (await fs.pathExists(testingFilePath)) {
+        files.push({
+          source: `${templateName}/${testingFile}`,
+          destination: '.github/instructions/test-runner.instructions.md',
           template: false,
         });
       }
@@ -274,6 +294,9 @@ export class TemplateManager {
       TEST_FRAMEWORK: config.testFramework || 'Jest',
       BUILD_TOOL: config.buildTool || 'TypeScript Compiler',
       PROJECT_DOMAIN: this.getProjectDomain(config.projectType),
+      PROJECT_SPECIFIC_GUIDANCE: this.getProjectSpecificGuidance(
+        config.projectType
+      ),
     };
 
     let processedContent = content;
@@ -329,6 +352,41 @@ export class TemplateManager {
         return 'Python';
       default:
         return 'software';
+    }
+  }
+
+  /**
+   * Get project-specific guidance content based on project type
+   */
+  private getProjectSpecificGuidance(projectType: string): string {
+    switch (projectType) {
+      case 'react':
+        return `
+- **React Components:** Follow modern React patterns with hooks and functional components
+- **JSX Best Practices:** Use semantic HTML elements and proper JSX syntax
+- **State Management:** Implement efficient state management with React hooks
+- **Component Architecture:** Build reusable, testable React components
+- **Frontend Performance:** Optimize rendering and bundle size for better user experience`;
+      case 'node':
+        return `
+- **Server Architecture:** Design scalable Node.js server applications
+- **API Development:** Build robust REST APIs with proper error handling
+- **Backend Services:** Implement efficient server-side business logic
+- **Database Integration:** Use appropriate data persistence patterns
+- **Performance:** Optimize server response times and resource usage`;
+      case 'python':
+        return `
+- **Django Development:** Follow Django best practices for web applications
+- **Flask Applications:** Build lightweight Flask applications when appropriate
+- **Python Standards:** Adhere to PEP 8 and Python coding conventions
+- **Backend Development:** Implement scalable Python backend solutions
+- **Framework Integration:** Use appropriate Python frameworks for different use cases`;
+      default:
+        return `
+- **Best Practices:** Follow language-specific coding standards and conventions
+- **Architecture:** Implement modular and maintainable code structure
+- **Testing:** Write comprehensive tests for all functionality
+- **Documentation:** Maintain clear and up-to-date documentation`;
     }
   }
 }

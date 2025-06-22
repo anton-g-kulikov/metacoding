@@ -6,6 +6,36 @@ language: 'python'
 
 # Python Testing Standards
 
+## Test Case Naming Conventions
+
+### Test Case ID Format: `[AREA]-[TYPE]-[NUMBER]`
+
+**Python/Django/FastAPI Area Prefixes:**
+
+- `VIEW` - Django views/FastAPI endpoints tests
+- `MODEL` - Django models/SQLAlchemy tests
+- `FORM` - Django forms/Pydantic validators tests
+- `API` - REST API endpoint tests
+- `SRV` - Service layer tests
+- `DB` - Database/ORM tests
+- `AUTH` - Authentication/Authorization tests
+- `UTIL` - Backend utility function tests
+- `SERIALIZER` - DRF serializers/Pydantic schemas tests
+- `MIDDLEWARE` - Django middleware tests
+
+**Type Suffixes:**
+
+- `UNIT` - Unit tests (isolated component testing)
+- `INT` - Integration tests (component interaction testing)
+- `E2E` - End-to-end tests (full API workflow testing)
+
+**Examples:**
+
+- `VIEW-UNIT-001` - First unit test for Django view
+- `MODEL-UNIT-001` - First unit test for Django model
+- `FORM-INT-001` - First integration test for Django form
+- `API-E2E-001` - First end-to-end API test
+
 ## Testing Framework and Setup
 
 ### Primary Testing Framework: pytest
