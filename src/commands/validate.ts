@@ -5,7 +5,7 @@ import { ValidateOptions } from '../types';
  * Handles the 'validate' command for checking metacoding setup
  */
 export class ValidateCommand {
-  async execute(options: ValidateOptions): Promise<void> {
+  async execute(_options: ValidateOptions): Promise<void> {
     console.log(chalk.cyan('🔍 Validating metacoding setup...\n'));
 
     // TODO: Implement validation logic

@@ -5,7 +5,7 @@ import { UpdateOptions } from '../types';
  * Handles the 'update' command for updating metacoding setup
  */
 export class UpdateCommand {
-  async execute(options: UpdateOptions): Promise<void> {
+  async execute(_options: UpdateOptions): Promise<void> {
     console.log(chalk.cyan('🔄 Updating metacoding setup...\n'));
 
     // TODO: Implement update logic
