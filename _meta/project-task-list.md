@@ -20,6 +20,12 @@
 
 ### Template System Fixes
 
+- [x] **✅ COMPLETED - Fix General Template TypeScript Support**
+  - Issue: General template with TypeScript selection loads all language files instead of only TypeScript
+  - Fix: Modified loadInstructionFiles to accept technology choices parameter
+  - Update: Only load TypeScript instructions when TypeScript is selected with general template
+  - Result: General + TypeScript now only includes universal + TypeScript instruction files
+  - Test: Added comprehensive test suite with 4 test cases to verify fix
 - [x] **Update template manager to support new naming convention and inheritance** - ✅ **COMPLETED**
 - [x] **✅ COMPLETED - Update tests to reflect current architecture**
   - Updated package structure tests to match current template organization

@@ -172,7 +172,8 @@ export class InitCommand {
 
       // Generate and write template files
       const template = await this.templateManager.getTemplate(
-        config.projectType
+        config.projectType,
+        config
       );
       const processedFiles = await this.templateManager.processTemplate(
         template,

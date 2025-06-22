@@ -4,8 +4,8 @@
 
 ### Test Suite Status - ALL TESTS PASSING ✅
 
-- **Test Suites**: 13/13 passing ✅ (100% success rate)
-- **Total Tests**: 140/140 passing ✅ (0 failures)
+- **Test Suites**: 14/14 passing ✅ (100% success rate)
+- **Total Tests**: 144/144 passing ✅ (0 failures)
 - **Template Architecture**: All tests updated to match current structure ✅
 - **Repository Health**: Clean, stable codebase with comprehensive test coverage ✅
 - **Workflow Status**: Ready for npm publishing - all quality gates passed ✅
@@ -237,7 +237,7 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 #### Single-Task Focus Enhancement Tests
 
 | Test Case ID | Description                                              | Type | Status           |
-| :----------- | :------------------------------------------------------- | :--- | :--------------- |
+| :----------- | :------------------------------------------------------- | :--- | :---------------- |
 | WF-UNIT-012  | Single-task focus principle enforcement validation       | Unit | **✅ Completed** |
 | WF-UNIT-013  | Scope creep handling Option A (subtask) validation       | Unit | **✅ Completed** |
 | WF-UNIT-014  | Scope creep handling Option B (separate task) validation | Unit | **✅ Completed** |
@@ -366,3 +366,17 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | INST-INT-010 | Verify existing projects with old instruction files still work      | Integration | Not Started |
 | INST-INT-011 | Verify migration path for projects with duplicate instruction files | Integration | Not Started |
 | INST-INT-012 | Verify template tests updated to reflect new file structure         | Integration | Not Started |
+
+## Test Cases Table
+
+| Test Case ID  | Description                                                     | Type | Status    |
+| :------------ | :-------------------------------------------------------------- | :--- | :-------- |
+| GEN-UNIT-001  | General template with TypeScript loads only TypeScript files   | Unit | Completed |
+
+### Recent Test Additions (June 22, 2025):
+
+✅ **General Template TypeScript Support Test Suite**: Added comprehensive test suite for the template manager fix
+- **Test File**: `test/unit/general-template-typescript.test.ts`
+- **Test Cases**: 4 comprehensive test cases covering the TypeScript template selection fix
+- **Coverage**: Verifies proper loading of TypeScript instructions for general template
+- **Validation**: Ensures backwards compatibility and correct filtering of language-specific files

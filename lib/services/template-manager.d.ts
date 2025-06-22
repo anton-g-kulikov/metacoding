@@ -3,7 +3,7 @@ export declare class TemplateManager {
     private readonly templatesDir;
     private readonly instructionsDir;
     constructor();
-    getTemplate(templateName: string): Promise<Template>;
+    getTemplate(templateName: string, projectConfig?: ProjectConfig): Promise<Template>;
     private loadInstructionFiles;
     processTemplate(template: Template, config: ProjectConfig): Promise<Array<{
         path: string;

@@ -17,9 +17,12 @@ export class TemplateManager {
   }
 
   /**
-   * Get a template by name
+   * Get a template by name, optionally with project configuration for technology-specific instructions
    */
-  async getTemplate(templateName: string): Promise<Template> {
+  async getTemplate(
+    templateName: string,
+    projectConfig?: ProjectConfig
+  ): Promise<Template> {
     const templatePath = path.join(this.templatesDir, templateName);
 
     if (!(await fs.pathExists(templatePath))) {
@@ -38,8 +41,11 @@ export class TemplateManager {
     const filesDir = path.join(templatePath, 'files');
     const templateFiles = await this.loadTemplateFiles(filesDir);
 
-    // Load composable instruction files based on template/project type
-    const instructionFiles = await this.loadInstructionFiles(templateName);
+    // Load composable instruction files based on template/project type and tech stack
+    const instructionFiles = await this.loadInstructionFiles(
+      templateName,
+      projectConfig
+    );
 
     // Combine template files and instruction files
     const files = [...templateFiles, ...instructionFiles];
@@ -57,7 +63,8 @@ export class TemplateManager {
    * Load instruction files from template directories
    */
   private async loadInstructionFiles(
-    templateName: string
+    templateName: string,
+    projectConfig?: ProjectConfig
   ): Promise<
     Array<{ source: string; destination: string; template: boolean }>
   > {
@@ -113,7 +120,11 @@ export class TemplateManager {
 
     // Load TypeScript instructions for templates that use TypeScript
     const typescriptTemplates = ['node', 'react'];
-    if (typescriptTemplates.includes(templateName)) {
+    const useTypeScript =
+      typescriptTemplates.includes(templateName) ||
+      projectConfig?.techStack?.includes('TypeScript');
+
+    if (useTypeScript) {
       const typescriptPath = path.join(this.templatesDir, 'typescript');
       if (await fs.pathExists(typescriptPath)) {
         const typescriptFiles = await fs.readdir(typescriptPath);
