@@ -1,9 +1,53 @@
 ---
-description: 'Guidelines for maintaining project documentation'
-applyTo: '**/*.md'
+description: "Guidelines for maintaining project documentation"
+applyTo: "**/*.md"
 ---
 
 # Documentation Maintenance Guidelines
+
+## Documentation Quality Standards
+
+- **Clarity:** Write clear, concise explanations
+- **Completeness:** Ensure documentation covers all necessary aspects
+- **Accuracy:** Verify all information is current and correct
+- **Consistency:** Maintain consistent tone and formatting
+- **Accessibility:** Use clear language and proper formatting for accessibility
+- **Status Transparency:** Use checkboxes and clear status indicators instead of planning-based language
+
+## Status Indication Guidelines
+
+- **Never use "planned" or "to-do" in titles or headers:** These create outdated documentation
+- **Never use time-based status sections:** Avoid "Recently Completed", "Latest Updates", "Recent Changes" sections that become stale
+- **Never use completion-based headers:** Avoid "Completed Tasks", "Finished Items", "Done" sections - use current status instead
+- **Use checkboxes for task status:** `- [ ]` for incomplete, `- [x]` for complete
+- **Use clear status indicators:**
+  - ✅ Complete/Implemented
+  - 🚧 In Progress
+  - ❌ Not Started
+  - ⚠️ Needs Review
+  - 🔄 Under Revision
+- **Reflect current state in headers:** Use present tense and current status
+- **Examples of good vs bad headers:**
+  - ❌ Bad: "Recently Completed Tasks"
+  - ❌ Bad: "Latest Updates"  
+  - ❌ Bad: "Finished Features"
+  - ✅ Good: "Development Status" with current checkboxes
+  - ❌ Bad: "Planned Authentication Features"
+  - ✅ Good: "Authentication Features" with status checkboxes
+  - ❌ Bad: "TODO: API Documentation"
+  - ✅ Good: "API Documentation Status" with clear indicators
+- **Keep status current:** Update status indicators as work progresses
+- **Use consistent status symbols:** Maintain the same symbols across all documentation
+- **Update completed items:** Move completed tasks to changelog or update with current status - don't keep "completed" sections
+
+## Task Management Documentation
+
+- **Focus on current state:** Document what needs to be done, not what was recently done
+- **Use project phases:** Organize by logical project phases or milestones, not completion status
+- **Move completed work to changelog:** Record completed work in CHANGELOG.md, not in task lists
+- **Keep task lists current:** Update completed items with current status instead of maintaining "completed" sections
+- **Use descriptive section names:** Use functional names like "Core Features", "Infrastructure", "Testing" instead of "Completed Tasks"
+- **Avoid temporal references:** Don't use "Recent", "Latest", "Upcoming" in section headers - they become outdated quickly
 
 ## README.md Standards
 
@@ -14,6 +58,14 @@ applyTo: '**/*.md'
 - **Version Badges:** Keep version badges synchronized with package.json
 - **Links Verification:** Regularly check that all links work correctly
 - **Screenshots/GIFs:** Update visual documentation when UI changes
+
+## CHANGELOG.md Maintenance
+
+- **User-Facing Changes:** Document all changes that affect users
+- **Consistent Format:** Follow established changelog format
+- **Categorization:** Group changes appropriately (Added, Changed, Fixed, etc.)
+- **Breaking Changes:** Clearly mark breaking changes
+- **Migration Guides:** Provide migration guidance for breaking changes
 
 ## Code Documentation
 
@@ -33,47 +85,11 @@ applyTo: '**/*.md'
 
 ## Architectural Documentation
 
-- **Decision Records:** Record significant architectural decisions in `/_meta` folder
+- **Decision Records:** Record significant architectural decisions in `/meta` folder
 - **System Overview:** Maintain high-level system architecture documentation
 - **Data Flow:** Document data flow and process workflows
 - **Integration Points:** Document external system integrations
 - **Performance Considerations:** Document performance implications of design decisions
-
-## CHANGELOG.md Maintenance
-
-- **User-Facing Changes:** Document all changes that affect users
-- **Consistent Format:** Follow established changelog format
-- **Categorization:** Group changes appropriately (Added, Changed, Fixed, etc.)
-- **Breaking Changes:** Clearly mark breaking changes
-- **Migration Guides:** Provide migration guidance for breaking changes
-
-## Documentation Quality Standards
-
-- **Clarity:** Write clear, concise explanations
-- **Completeness:** Ensure documentation covers all necessary aspects
-- **Accuracy:** Verify all information is current and correct
-- **Consistency:** Maintain consistent tone and formatting
-- **Accessibility:** Use clear language and proper formatting for accessibility
-- **Status Transparency:** Use checkboxes and clear status indicators instead of planning-based language
-
-## Status Indication Guidelines
-
-- **Never use "planned" or "to-do" in titles or headers:** These create outdated documentation
-- **Use checkboxes for task status:** `- [ ]` for incomplete, `- [x]` for complete
-- **Use clear status indicators:**
-  - ✅ Complete/Implemented
-  - 🚧 In Progress
-  - ❌ Not Started
-  - ⚠️ Needs Review
-  - 🔄 Under Revision
-- **Reflect current state in headers:** Use present tense and current status
-- **Examples of good vs bad headers:**
-  - ❌ Bad: "Planned Authentication Features"
-  - ✅ Good: "Authentication Features" with status checkboxes
-  - ❌ Bad: "TODO: API Documentation"
-  - ✅ Good: "API Documentation Status" with clear indicators
-- **Keep status current:** Update status indicators as work progresses
-- **Use consistent status symbols:** Maintain the same symbols across all documentation
 
 ## Code Examples and Tutorials
 
