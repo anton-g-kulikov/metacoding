@@ -4,6 +4,9 @@ For more details, visit: https://code.visualstudio.com/docs/copilot/copilot-cust
 
 Instructions are automatically included in every chat request and code completion suggestion.
 Keep instructions clear, specific, and actionable to maximize effectiveness.
+
+This file contains universal workflow and development principles.
+Language-specific coding standards are provided in separate instruction files.
 -->
 
 # Project Overview
@@ -40,39 +43,22 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 - Flag potential issues or improvements proactively
 - **Enforce workflow completion before starting new tasks**
 
-# Coding Standards and Conventions
+# Language-Specific Coding Standards
 
-## Language and Framework Preferences
+**Note:** This file focuses on universal workflow principles. For detailed language-specific coding standards, naming conventions, and best practices, refer to the appropriate language-specific instruction files:
 
-- **Primary Language:** TypeScript for all code files
-- **Code Style:** Follow project's ESLint/Prettier configuration
-- **Target Compatibility:** [Specify target versions, e.g., "Node.js 18+, VS Code 1.74+"]
+- **TypeScript/Node.js Projects:** See `.github/instructions/languages/typescript.coding.instructions.md`
+- **Python Projects:** See `.github/instructions/languages/python.coding.instructions.md`
+- **React/Frontend Projects:** See `.github/instructions/languages/react.coding.instructions.md`
 
-## Code Quality Guidelines
+These language-specific files contain comprehensive guidance on:
 
-- **Readability:** Write self-explanatory code with meaningful names
-- **Functions:** Keep functions focused and under 50 lines when possible
-- **Magic Numbers:** Use named constants or enums instead of magic numbers
-- **Error Handling:** Implement comprehensive error handling with proper logging
-- **Memory Management:** Ensure proper resource cleanup and disposal
-- **Async Patterns:** Use async/await for I/O operations, avoid blocking operations
-
-## Naming Conventions
-
-- **Files:** Use kebab-case for file names (e.g., `user-service.ts`)
-- **Classes:** PascalCase (e.g., `UserService`, `IUserRepository`)
-- **Functions/Methods:** camelCase (e.g., `getUserById`, `validateInput`)
-- **Variables:** camelCase (e.g., `userId`, `isValid`)
-- **Constants:** SCREAMING_SNAKE_CASE (e.g., `MAX_RETRY_ATTEMPTS`)
-- **Interfaces:** PascalCase with 'I' prefix (e.g., `IUserRepository`)
-- **Types:** PascalCase (e.g., `UserData`, `ConfigOptions`)
-
-## Code Organization
-
-- **Single Responsibility:** One class/interface per file
-- **Imports:** Group and order imports (external libraries, internal modules, relative imports)
-- **File Structure:** Organize files by feature or layer, not by file type
-- **Barrel Exports:** Use index.ts files for clean module exports
+- Language-specific coding standards and conventions
+- Framework-specific patterns and best practices
+- Performance optimization techniques
+- Testing frameworks and patterns
+- Security considerations for each language
+- Common anti-patterns to avoid
 
 # Project Structure Guidelines
 
@@ -88,12 +74,12 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 /src                    # All source code
   /components          # Reusable components
   /services           # Business logic and services
-  /types              # TypeScript type definitions
+  /types              # Type definitions
   /utils              # Utility functions
   /constants          # Application constants
 /test                  # All test-related files
   /fixtures           # Test fixtures and sample data
-  /unit               # Unit tests (*.test.ts)
+  /unit               # Unit tests
   /integration        # Integration tests
 /_meta                  # Development documentation
 /.github              # GitHub-specific files (workflows, templates)
@@ -104,7 +90,7 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 
 - **Meta Documentation:** All development docs in `/_meta` folder
   - `project-task-list.md` - Current tasks and roadmap
-  - `project-documentation.md` - General project documentation
+  - `system-documentation.md` - General system documentation
   - `architecture.md` - System architecture decisions
   - `api-design.md` - API design patterns and conventions
 - **Test Documentation:** All test docs in `/test` folder
@@ -132,12 +118,12 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 
 ## Core Development Practices
 
-- **TypeScript First:** Use TypeScript for all code files with strict type checking
+- **Language Standards:** Follow language-specific coding standards defined in language instruction files
 - **Modular Design:** Follow separation of concerns and single responsibility principles
 - **Error Handling:** Implement comprehensive error handling with proper logging and user feedback
 - **Resource Management:** Ensure proper cleanup of resources, event listeners, and disposables
 - **Temporary File Hygiene:** Clean up all temporary files, debug outputs, and experimental code after development sessions
-- **Performance:** Consider performance implications, especially for VS Code extensions (startup time, memory usage)
+- **Performance:** Consider performance implications and optimization opportunities
 - **Security:** Follow secure coding practices, validate inputs, and sanitize outputs
 
 ## Testing Strategy
@@ -154,7 +140,7 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 ## Documentation Standards
 
 - **Documentation Architecture:** Maintain strict separation between system documentation (evergreen, no status indicators) and project management documentation (status tracking, temporal language)
-- **Code Documentation:** Use JSDoc comments for public APIs and complex logic
+- **Code Documentation:** Use appropriate documentation standards for the project language (see language-specific instruction files)
 - **README Updates:** Keep main README.md current with project state and features using factual, present-tense language
 - **Changelog:** Maintain detailed CHANGELOG.md with all notable changes
 - **API Documentation:** Document all public APIs with examples and usage patterns
@@ -167,23 +153,6 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 - **Branch Strategy:** Use feature branches and meaningful branch names
 - **Code Reviews:** All changes require review before merging
 - **Release Management:** Follow semantic versioning (SemVer) principles
-
-## GitHub Release and Version Management
-
-- **Version Bumping:** Update version in package.json following semantic versioning
-- **README Version Badge:** Ensure version badges in README.md reflect current package.json version
-- **Changelog Updates:** Write concise, user-focused changelog entries in CHANGELOG.md
-  - Group changes by type: Added, Changed, Deprecated, Removed, Fixed, Security
-  - Include breaking changes prominently
-  - Keep entries brief but descriptive (1-2 lines per change)
-  - Reference issue/PR numbers when applicable
-- **Release Process:**
-  1. Update version in package.json
-  2. Update README.md badges and version references
-  3. Add entry to CHANGELOG.md with release date
-  4. Commit with message: `chore: bump version to vX.Y.Z`
-  5. Create GitHub release with tag matching package.json version
-  6. Release notes should summarize key changes from CHANGELOG.md
 
 ## Code Review Criteria
 
@@ -206,7 +175,7 @@ When reviewing code or generating suggestions, consider:
 - Inconsistent error handling patterns
 - Missing or inadequate logging
 - Hardcoded configuration values
-- Synchronous operations that could block the main thread
+- Blocking operations that could impact performance
 
 ## Suggested Improvements
 
@@ -219,90 +188,7 @@ When providing code suggestions, prioritize:
 5. **Testability:** Make code easier to test and debug
 6. **Consistency:** Align with existing codebase patterns and conventions
 
-# Task-Specific Instructions Files
-
-## Using .instructions.md Files for Development Routines
-
-Create specialized `.instructions.md` files in `.github/instructions/` for common development tasks:
-
-### Testing Instructions (`test-runner.instructions.md`)
-
-```markdown
----
-description: "Instructions for running and maintaining tests"
-applyTo: "test/**/*.ts"
----
-
-# Test Execution Guidelines
-
-- Run all tests before committing changes
-- Ensure new features have corresponding unit tests
-- Update test fixtures when data structures change
-- Use descriptive test names that explain the scenario and expected outcome
-- Mock external dependencies in unit tests
-- Use realistic data in integration tests
-```
-
-### Release Management (`release.instructions.md`)
-
-```markdown
----
-description: "Step-by-step release process automation"
-applyTo: "package.json"
----
-
-# Release Process Checklist
-
-1. Verify all tests pass: `npm test`
-2. Update version in package.json using semantic versioning
-3. Update README.md version badges to match package.json
-4. Add new entry to CHANGELOG.md with:
-   - Release version and date
-   - Grouped changes: Added, Changed, Fixed, etc.
-   - Breaking changes highlighted
-5. Commit with: `chore: bump version to vX.Y.Z`
-6. Create GitHub release with tag matching version
-7. Copy changelog entry to release notes
-```
-
-### Documentation Updates (`docs-update.instructions.md`)
-
-```markdown
----
-description: "Guidelines for maintaining project documentation"
-applyTo: "**/*.md"
----
-
-# Documentation Maintenance
-
-- Keep README.md current with latest features and installation steps
-- Update JSDoc comments when changing public APIs
-- Record architectural decisions in /_meta folder
-- Ensure code examples in documentation are tested and working
-- Update CHANGELOG.md for all user-facing changes
-- Maintain consistent formatting and tone across all documentation
-```
-
-### Code Review (`code-review.instructions.md`)
-
-```markdown
----
-description: "Automated code review checklist"
-applyTo: "**"
----
-
-# Code Review Focus Areas
-
-- Verify functionality and edge case handling
-- Check for performance implications and memory leaks
-- Ensure proper error handling and logging
-- Validate security best practices
-- Confirm test coverage for new features
-- Review for code consistency and maintainability
-- Check that breaking changes are documented
-```
-
-## Development Workflow
+# Development Workflow
 
 ## Mandatory Development Process
 
@@ -350,7 +236,7 @@ applyTo: "**"
 - **Update task status:** Mark completed tasks in `/_meta/project-task-list.md`
 - **Update test documentation:** Record test status in `/test/test-documentation.md`
 - **Update CHANGELOG.md:** Document user-facing changes
-- **Review code documentation:** Ensure JSDoc comments are current
+- **Review code documentation:** Ensure code documentation is current
 
 ### Step 6: Version Control
 
@@ -381,6 +267,24 @@ applyTo: "**"
   - ❌ Incorrect: "I'll implement this feature and update the documentation afterwards"
   - ✅ Correct: "Let me document these test cases in test-documentation.md first, then implement the tests"
   - ❌ Incorrect: "I'll write the tests now and document them later"
+
+### Single-Task Focus Enforcement
+
+**MANDATORY: One change at a time - never mix tasks in one iteration.**
+
+- **No Task Mixing:** Never work on two different tasks simultaneously or mix unrelated changes in one iteration
+- **Scope Creep Management:** When additional requests arise during active work, use proper scope management:
+  - **Option A (Blocking):** If the new request blocks current work, write it as a subtask in `/_meta/project-task-list.md` and address it within current workflow
+  - **Option B (Non-blocking):** If the new request is unrelated, write it as a separate task and complete current workflow first
+- **Task-Switching Prevention:** Politely but firmly redirect users who try to switch tasks mid-workflow
+- **Enforcement Templates:**
+  - ✅ Correct response: "I've added that request to the task list. Let me complete the current workflow first, then we can address it as a separate task."
+  - ✅ Correct response: "That's a great idea! I'll add it as a subtask since it relates to our current work."
+  - ❌ Incorrect: "Sure, let me switch to that new request right now."
+- **Examples of Proper Scope Management:**
+  - ✅ Good: "I notice you want to add authentication. I'll add that as a separate task and complete our current database setup first."
+  - ❌ Bad: "Let me add authentication while we're working on the database setup."
+  - ✅ Good: "I see this test failure requires fixing the validation logic. I'll add that as a subtask since it blocks our current work."
 
 ### Before Starting Any New Task
 
@@ -413,6 +317,33 @@ If a user requests to skip steps or start new work before completing the workflo
 2. **Remind of benefits:** Emphasize how this maintains code quality and project health
 3. **Offer to complete current workflow:** Help finish the current task properly first
 4. **Suggest task breakdown:** If the current task is too large, suggest breaking it down
+
+#### Handling Scope Creep and Task Switching
+
+When users request additional work or try to switch tasks during active development:
+
+**For New Related Work:**
+
+- Add as subtask to current task if it blocks progress
+- Example: "I'll add that validation fix as a subtask since it's needed for our current feature"
+
+**For New Unrelated Work:**
+
+- Add to task list as separate task
+- Politely redirect to complete current work first
+- Example: "Great idea! I've added that to the task list. Let me finish the current database setup first, then we can tackle the UI updates as a separate task."
+
+**If User Insists on Task Switching:**
+
+- Gently remind about "one change at a time" principle
+- Explain benefits of focused work
+- Example: "I understand the urgency, but following our 'one change at a time' principle ensures we don't leave incomplete work. Let me finish this current task properly, then we can give full attention to your new request."
+
+**Template Responses for Common Scenarios:**
+
+- "I've noted that request in the task list. Completing our current workflow first ensures quality."
+- "That's related to our current work, so I'll add it as a subtask to address now."
+- "I see that's a separate concern. Let me add it to our task list and complete this workflow first."
 
 ## Benefits of This Workflow
 

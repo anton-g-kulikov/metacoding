@@ -205,10 +205,22 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | WF-UNIT-005  | Documentation-first principle enforcement validation | Unit | Completed |
 | WF-UNIT-006  | Task documentation requirement before implementation | Unit | Completed |
 | WF-UNIT-007  | Test case documentation requirement validation       | Unit | Completed |
-| WF-UNIT-008  | Confirmation gate enforcement in workflow steps     | Unit | Completed |
-| WF-UNIT-009  | Enhanced Step 1 confirmation requirements           | Unit | Completed |
-| WF-UNIT-010  | Enhanced Step 2 task management documentation       | Unit | Completed |
-| WF-UNIT-011  | Enhanced Step 3 TDD documentation requirements      | Unit | Completed |
+| WF-UNIT-008  | Confirmation gate enforcement in workflow steps      | Unit | Completed |
+| WF-UNIT-009  | Enhanced Step 1 confirmation requirements            | Unit | Completed |
+| WF-UNIT-010  | Enhanced Step 2 task management documentation        | Unit | Completed |
+| WF-UNIT-011  | Enhanced Step 3 TDD documentation requirements       | Unit | Completed |
+
+#### Single-Task Focus Enhancement Tests
+
+| Test Case ID | Description                                              | Type | Status           |
+| :----------- | :------------------------------------------------------- | :--- | :--------------- |
+| WF-UNIT-012  | Single-task focus principle enforcement validation       | Unit | **✅ Completed** |
+| WF-UNIT-013  | Scope creep handling Option A (subtask) validation       | Unit | **✅ Completed** |
+| WF-UNIT-014  | Scope creep handling Option B (separate task) validation | Unit | **✅ Completed** |
+| WF-UNIT-015  | Task-switching redirect mechanism validation             | Unit | **✅ Completed** |
+| WF-UNIT-016  | Polite decline templates for unrelated requests          | Unit | **✅ Completed** |
+| WF-UNIT-017  | "One at a time" principle reminder validation            | Unit | **✅ Completed** |
+| WF-UNIT-018  | Enhanced workflow violations section validation          | Unit | **✅ Completed** |
 
 ### 12. Enhanced File Content Validation
 
@@ -268,3 +280,65 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | VSC-COV-006  | VS Code settings path detection           | Unit | Planned |
 | VSC-COV-007  | Multi-workspace configuration handling    | Unit | Planned |
 | VSC-COV-008  | Settings validation and schema compliance | Unit | Planned |
+
+## Instruction File Architecture Abstraction Test Cases
+
+### Template System Instruction File Abstraction
+
+| Test Case ID  | Description                                                                        | Type | Status      |
+| :------------ | :--------------------------------------------------------------------------------- | :--- | :---------- |
+| INST-UNIT-001 | Verify universal copilot-instructions.md contains workflow principles only         | Unit | Not Started |
+| INST-UNIT-002 | Verify universal docs-update.instructions.md contains architecture principles only | Unit | Not Started |
+| INST-UNIT-003 | Verify universal test-runner.instructions.md contains TDD principles only          | Unit | Not Started |
+| INST-UNIT-004 | Verify universal code-review.instructions.md contains review criteria only         | Unit | Not Started |
+| INST-UNIT-005 | Verify universal release.instructions.md contains process steps only               | Unit | Not Started |
+
+### Language-Specific Instruction File Creation
+
+| Test Case ID  | Description                                                                     | Type | Status      |
+| :------------ | :------------------------------------------------------------------------------ | :--- | :---------- |
+| INST-UNIT-006 | Verify typescript.coding.instructions.md contains TypeScript-specific standards | Unit | Not Started |
+| INST-UNIT-007 | Verify typescript.docs.instructions.md contains JSDoc conventions               | Unit | Not Started |
+| INST-UNIT-008 | Verify typescript.testing.instructions.md contains Jest patterns                | Unit | Not Started |
+| INST-UNIT-009 | Verify python.coding.instructions.md contains Python-specific standards         | Unit | Not Started |
+| INST-UNIT-010 | Verify python.docs.instructions.md contains docstring conventions               | Unit | Not Started |
+| INST-UNIT-011 | Verify python.testing.instructions.md contains pytest patterns                  | Unit | Not Started |
+| INST-UNIT-012 | Verify react.coding.instructions.md contains React-specific standards           | Unit | Not Started |
+| INST-UNIT-013 | Verify react.docs.instructions.md contains component documentation              | Unit | Not Started |
+| INST-UNIT-014 | Verify react.testing.instructions.md contains React Testing Library patterns    | Unit | Not Started |
+
+### CLI Integration for Instruction File Composition
+
+| Test Case ID | Description                                                               | Type        | Status      |
+| :----------- | :------------------------------------------------------------------------ | :---------- | :---------- |
+| INST-INT-001 | Verify CLI copies universal + typescript files for general template       | Integration | Not Started |
+| INST-INT-002 | Verify CLI copies universal + typescript + react files for react template | Integration | Not Started |
+| INST-INT-003 | Verify CLI copies universal + python files for python template            | Integration | Not Started |
+| INST-INT-004 | Verify CLI copies universal + typescript files for node template          | Integration | Not Started |
+| INST-INT-005 | Verify no duplicate instruction files exist after template generation     | Integration | Not Started |
+
+### File Structure and Organization
+
+| Test Case ID  | Description                                                           | Type | Status      |
+| :------------ | :-------------------------------------------------------------------- | :--- | :---------- |
+| INST-UNIT-015 | Verify universal instruction files exist in correct directory         | Unit | Not Started |
+| INST-UNIT-016 | Verify language-specific instruction files exist in correct directory | Unit | Not Started |
+| INST-UNIT-017 | Verify old template-specific instruction files are removed            | Unit | Not Started |
+| INST-UNIT-018 | Verify universal instructions reference language-specific files       | Unit | Not Started |
+
+### Template Validation After Abstraction
+
+| Test Case ID | Description                                                            | Type        | Status      |
+| :----------- | :--------------------------------------------------------------------- | :---------- | :---------- |
+| INST-INT-006 | Verify React template generates correct instruction file combination   | Integration | Not Started |
+| INST-INT-007 | Verify Node.js template generates correct instruction file combination | Integration | Not Started |
+| INST-INT-008 | Verify Python template generates correct instruction file combination  | Integration | Not Started |
+| INST-INT-009 | Verify General template generates correct instruction file combination | Integration | Not Started |
+
+### Backwards Compatibility and Migration
+
+| Test Case ID | Description                                                         | Type        | Status      |
+| :----------- | :------------------------------------------------------------------ | :---------- | :---------- |
+| INST-INT-010 | Verify existing projects with old instruction files still work      | Integration | Not Started |
+| INST-INT-011 | Verify migration path for projects with duplicate instruction files | Integration | Not Started |
+| INST-INT-012 | Verify template tests updated to reflect new file structure         | Integration | Not Started |

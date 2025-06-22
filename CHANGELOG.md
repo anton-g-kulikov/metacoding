@@ -67,6 +67,11 @@ Existing manual installations can be migrated by:
   - Present-tense headers reflecting current state
 - **Workflow Enforcement Rules**: Quality gates and violation handling procedures
 - **Enhanced Role and Persona**: Updated to emphasize strict workflow adherence
+- **Instruction File Architecture**: Implemented composable instruction system eliminating duplication
+  - Created shared TypeScript instruction component for Node.js and React templates
+  - Established single source of truth for universal instruction files
+  - Built template inheritance system for automatic instruction composition
+  - Achieved clean separation of concerns with maintainable architecture
 
 ### Changed
 

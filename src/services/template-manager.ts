@@ -7,10 +7,13 @@ import { Template, ProjectConfig } from '../types';
  */
 export class TemplateManager {
   private readonly templatesDir: string;
+  private readonly instructionsDir: string;
 
   constructor() {
     // Templates are located relative to the compiled lib directory
     this.templatesDir = path.join(__dirname, '../../templates');
+    // Instructions are now stored within each template directory
+    this.instructionsDir = this.templatesDir;
   }
 
   /**
@@ -33,7 +36,13 @@ export class TemplateManager {
 
     // Load template files
     const filesDir = path.join(templatePath, 'files');
-    const files = await this.loadTemplateFiles(filesDir);
+    const templateFiles = await this.loadTemplateFiles(filesDir);
+
+    // Load composable instruction files based on template/project type
+    const instructionFiles = await this.loadInstructionFiles(templateName);
+
+    // Combine template files and instruction files
+    const files = [...templateFiles, ...instructionFiles];
 
     return {
       name: templateName,
@@ -42,6 +51,92 @@ export class TemplateManager {
       prompts: config.prompts || [],
       vscodeSettings: config.vscodeSettings || {},
     };
+  }
+
+  /**
+   * Load instruction files from template directories
+   */
+  private async loadInstructionFiles(
+    templateName: string
+  ): Promise<
+    Array<{ source: string; destination: string; template: boolean }>
+  > {
+    const files: Array<{
+      source: string;
+      destination: string;
+      template: boolean;
+    }> = [];
+
+    // Always load universal files from the general template
+    const generalPath = path.join(this.templatesDir, 'general');
+    const universalFiles = [
+      'copilot-instructions.md',
+      'docs-update.instructions.md',
+      'test-runner.instructions.md',
+      'release.instructions.md',
+      'code-review.instructions.md',
+    ];
+
+    for (const file of universalFiles) {
+      const filePath = path.join(generalPath, file);
+      if (await fs.pathExists(filePath)) {
+        files.push({
+          source: `general/${file}`,
+          destination:
+            file === 'copilot-instructions.md'
+              ? '.github/copilot-instructions.md'
+              : `.github/instructions/${file}`,
+          template: false,
+        });
+      }
+    }
+
+    // Load TypeScript instructions for templates that use TypeScript
+    const typescriptTemplates = ['node', 'react'];
+    if (typescriptTemplates.includes(templateName)) {
+      const typescriptPath = path.join(this.templatesDir, 'typescript');
+      if (await fs.pathExists(typescriptPath)) {
+        const typescriptFiles = await fs.readdir(typescriptPath);
+
+        for (const file of typescriptFiles) {
+          if (file === 'template.json') {
+            continue;
+          }
+
+          if (file.endsWith('.instructions.md')) {
+            files.push({
+              source: `typescript/${file}`,
+              destination: `.github/instructions/${file}`,
+              template: false,
+            });
+          }
+        }
+      }
+    }
+
+    // Load template-specific files from the specific template directory
+    if (templateName !== 'general') {
+      const templatePath = path.join(this.templatesDir, templateName);
+      const templateFiles = await fs.readdir(templatePath);
+
+      for (const file of templateFiles) {
+        // Skip template.json and universal files (already loaded from general)
+        if (file === 'template.json' || universalFiles.includes(file)) {
+          continue;
+        }
+
+        // Only include instruction files
+        if (file.endsWith('.instructions.md')) {
+          files.push({
+            source: `${templateName}/${file}`,
+            destination: `.github/instructions/${file}`,
+            template: false,
+          });
+        }
+      }
+    }
+
+    return files;
   }
 
   /**
@@ -55,20 +150,24 @@ export class TemplateManager {
 
     for (const file of template.files) {
       let content: string;
+      let filePath: string;
+
+      // Files now include the template directory in the source path
+      if (file.source.includes('/')) {
+        // Source includes directory (e.g., "general/copilot-instructions.md")
+        filePath = path.join(this.templatesDir, file.source);
+      } else {
+        // Fallback for files without directory prefix
+        filePath = path.join(this.templatesDir, template.name, file.source);
+      }
 
       if (file.template) {
         // Process template file with variable substitution
-        const templateContent = await fs.readFile(
-          path.join(this.templatesDir, template.name, 'files', file.source),
-          'utf8'
-        );
+        const templateContent = await fs.readFile(filePath, 'utf8');
         content = this.processTemplateContent(templateContent, config);
       } else {
         // Copy file as-is
-        content = await fs.readFile(
-          path.join(this.templatesDir, template.name, 'files', file.source),
-          'utf8'
-        );
+        content = await fs.readFile(filePath, 'utf8');
       }
 
       processedFiles.push({
@@ -90,12 +189,14 @@ export class TemplateManager {
 
     const items = await fs.readdir(this.templatesDir);
     const templates: string[] = [];
+    // Exclude shared component templates that are not standalone
+    const excludedTemplates = ['typescript'];
 
     for (const item of items) {
       const itemPath = path.join(this.templatesDir, item);
       const stat = await fs.stat(itemPath);
 
-      if (stat.isDirectory()) {
+      if (stat.isDirectory() && !excludedTemplates.includes(item)) {
         const configPath = path.join(itemPath, 'template.json');
         if (await fs.pathExists(configPath)) {
           templates.push(item);
@@ -107,7 +208,7 @@ export class TemplateManager {
   }
 
   /**
-   * Load template files from a directory
+   * Load template files from a directory (excluding instruction files which are handled separately)
    */
   private async loadTemplateFiles(
     filesDir: string
@@ -137,11 +238,12 @@ export class TemplateManager {
           destination = item.name.replace('.template', '');
         }
 
-        // Map certain files to specific locations
-        if (destination === 'copilot-instructions.md') {
-          destination = '.github/copilot-instructions.md';
-        } else if (destination.endsWith('.instructions.md')) {
-          destination = `.github/instructions/${destination}`;
+        // Skip instruction files - they are now handled by loadInstructionFiles()
+        if (
+          destination === 'copilot-instructions.md' ||
+          destination.endsWith('.instructions.md')
+        ) {
+          continue;
         }
 
         files.push({

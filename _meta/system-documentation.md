@@ -283,55 +283,90 @@ Each template contains:
 - `copilot-instructions.md.template`: Main instruction file with variable substitution
 - Instruction files: `test-runner.instructions.md`, `release.instructions.md`, `docs-update.instructions.md`, `code-review.instructions.md`
 
-### Documentation Standards and Best Practices
+## Instruction File Architecture
 
-#### Test Documentation Standards
+### Composable Instruction System
 
-The project has implemented standardized test case documentation using table format:
+The metacoding project implements a sophisticated composable instruction file architecture that eliminates duplication while maintaining single sources of truth for different types of development guidance.
 
-**Required Table Format:**
+### Architecture Structure
 
-```markdown
-| Test Case ID  | Description                                 | Type | Status    |
-| :------------ | :------------------------------------------ | :--- | :-------- |
-| AREA-TYPE-001 | Brief but descriptive test case description | Unit | Completed |
+```
+/templates/
+├── general/                    # Universal instruction files
+│   ├── copilot-instructions.md
+│   ├── code-review.instructions.md
+│   ├── docs-update.instructions.md
+│   ├── release.instructions.md
+│   ├── test-runner.instructions.md
+│   └── template.json
+├── typescript/                 # Shared TypeScript instructions (composition component)
+│   ├── typescript.coding.instructions.md
+│   ├── typescript.docs.instructions.md
+│   ├── typescript.testing.instructions.md
+│   └── template.json
+├── node/                      # Node.js-specific instructions + TypeScript inheritance
+│   ├── nodejs.coding.instructions.md
+│   ├── nodejs.docs.instructions.md
+│   ├── nodejs.testing.instructions.md
+│   └── template.json
+├── react/                     # React-specific instructions + TypeScript inheritance
+│   ├── react.coding.instructions.md
+│   ├── react.docs.instructions.md
+│   ├── react.testing.instructions.md
+│   └── template.json
+└── python/                    # Python-specific instructions only
+    ├── python.coding.instructions.md
+    ├── python.docs.instructions.md
+    ├── python.testing.instructions.md
+    └── template.json
 ```
 
-**Test Case Naming Conventions:**
+### Template Composition Logic
 
-- **Format**: `[AREA]-[TYPE]-[NUMBER]`
-- **Language-Specific Area Prefixes**:
-  - **React/Frontend**: COMP, HOOK, PAGE, STORE, API, UTIL, AUTH, FORM
-  - **Node.js/Backend**: API, SRV, DB, MW, AUTH, ROUTE, UTIL, CONFIG
-  - **Python/Django**: VIEW, MODEL, FORM, MW, AUTH, UTIL, CMD, CONFIG
-  - **General**: CORE, API, UI, DB, AUTH, UTIL, CONFIG
-- **Type Suffixes**: UNIT, INT, E2E
-- **Sequential Numbering**: 001, 002, 003, etc.
+The `TemplateManager` implements intelligent template composition:
 
-**Examples by Language:**
+1. **Universal Files**: Always loaded from `/templates/general/` for all templates
+2. **Language-Specific Composition**: TypeScript-using templates (Node.js, React) automatically inherit TypeScript instructions from `/templates/typescript/`
+3. **Template-Specific Files**: Each template provides its own specialized instruction files
+4. **Exclusion Logic**: Shared components like `/typescript/` are excluded from standalone template listings
 
-- React: `COMP-UNIT-001`, `HOOK-UNIT-001`, `API-INT-001`
-- Node.js: `API-UNIT-001`, `SRV-UNIT-001`, `DB-INT-001`
-- Python: `VIEW-UNIT-001`, `MODEL-UNIT-001`, `AUTH-INT-001`
+### File Loading Hierarchy
 
-#### Instruction Template Standards
+For each template, files are loaded in this order:
 
-All instruction files follow generalized patterns:
+1. **Universal instructions** from `/templates/general/`
+2. **Shared language instructions** (if applicable) from `/templates/typescript/`
+3. **Template-specific instructions** from the template's own directory
 
-- **Reusable Templates**: Instructions work for any project using our methodology
-- **Language-Specific Guidance**: Area prefixes adapted to common patterns in each language/framework
-- **Consistent Structure**: Standardized sections across all instruction types
-- **Anti-Pattern Prevention**: Clear guidance on what to avoid in documentation
-- **Workflow Enforcement**: 7-step mandatory development process embedded in all templates
+### Example: Node.js Template File Loading
 
-#### Template Implementation Status
+When loading the Node.js template, the system includes:
 
-All templates are fully implemented and tested:
+- **Universal files** (5): copilot-instructions.md, code-review.instructions.md, docs-update.instructions.md, release.instructions.md, test-runner.instructions.md
+- **TypeScript files** (3): typescript.coding.instructions.md, typescript.docs.instructions.md, typescript.testing.instructions.md
+- **Node.js-specific files** (3): nodejs.coding.instructions.md, nodejs.docs.instructions.md, nodejs.testing.instructions.md
 
-- **General Template**: Universal instructions for any project type
-- **React Template**: Frontend-specific with React, hooks, and component patterns
-- **Node.js Template**: Backend-specific with API, database, and server patterns
-- **Python Template**: Python-specific with Django/Flask/FastAPI patterns
+**Total: 11 instruction files** providing comprehensive, non-duplicated guidance.
+
+### Benefits of This Architecture
+
+- **Single Source of Truth**: TypeScript instructions exist only in `/templates/typescript/`
+- **Maintainability**: Changes to universal or shared instructions automatically propagate
+- **Composability**: Templates can inherit shared instruction sets
+- **Extensibility**: Easy to add new shared instruction components
+- **Clean Separation**: Each template directory contains only template-specific files
+- **No Duplication**: Eliminates the previous duplication of TypeScript files across multiple templates
+
+### Verification and Testing
+
+The architecture includes comprehensive testing to ensure:
+
+- Template manager correctly excludes shared components from available templates
+- Node.js and React templates properly inherit TypeScript instructions
+- Python template correctly excludes TypeScript instructions
+- All file loading works correctly through the composition system
+- Service integration tests validate the complete workflow
 
 ## Contributing Guidelines
 

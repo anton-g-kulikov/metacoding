@@ -53,12 +53,24 @@
 
 - [x] ✅ **Enhance Documentation-First Principle Enforcement** - Strengthened copilot-instructions.md template to require documentation before execution:
   - Added mandatory task documentation before implementation
-  - Required test case documentation before test implementation  
+  - Required test case documentation before test implementation
   - Added explicit confirmation gates for all planned work
   - Strengthened Step 1, 2, and 3 of development workflow
   - Created comprehensive test suite with 7 test cases (all passing)
   - Enhanced Communication Style to enforce documentation-first principle
-- [x] **Interactive project customization**
+- [x] **Ensure all language-specific templates enforce enhanced workflow principles** - ✅ **COMPLETED** - Updated all language-specific copilot-instructions.md templates (React, Node.js, Python) to strictly enforce enhanced workflow principles:
+  - Updated Communication Style in all templates to match general template's workflow enforcement
+  - Replaced old "7-Step Mandatory Development Process" with enhanced "Mandatory Development Process" section
+  - Added documentation-first enforcement, explicit confirmation gates, and single-task focus
+  - Updated workflow enforcement rules, documentation-first principles, and violation handling
+  - Fixed Node.js and Python template tests to expect new workflow section titles
+  - Validated all changes with comprehensive test suite (140/140 tests passing)
+- [x] ✅ **Enhance Single-Task Focus Enforcement** - Strengthened copilot-instructions.md template to enforce "one change at a time" principle:
+  - Added single-task focus enforcement section and principles
+  - Enhanced workflow violations section with scope creep handling procedures
+  - Added task-switching redirection templates and examples
+  - Created comprehensive test suite with 7 test cases (WF-UNIT-012 to WF-UNIT-018, all passing)
+  - Enhanced workflow enforcement rules to prevent task mixing and maintain focus
 
 ### Testing and Quality
 
@@ -104,6 +116,15 @@
 ### Documentation Architecture and Standards
 
 - [x] **Update all template instruction files with documentation architecture principles** - Added system vs project documentation distinction to all template files (docs-update.instructions.md, copilot-instructions.md.template) across general, node, python, and react templates. New projects generated from templates now receive proper documentation guidance with clear rules for system documentation (evergreen, no status indicators) vs project management documentation (status tracking, temporal language).
+
+## 🔧 Instruction File Architecture Abstraction
+
+### Abstract Instruction Files for Single Source of Truth ✅
+
+- **Objective**: Abstract language-specific coding requirements from copilot-instructions and other instruction files to separate, composable files
+- **Goal**: Create single universal instruction files that reference language-specific instruction files, eliminating duplication and enabling easier maintenance
+- **Status**: ✅ **COMPLETED** - Successfully implemented composable instruction file architecture
+- **Priority**: High (architectural improvement, reduces maintenance burden)
 
 ### Publishing and Distribution
 

@@ -73,7 +73,7 @@ describe('Python Template', () => {
       expect(content).toContain('backend');
 
       // Check for mandatory workflow enforcement
-      expect(content).toContain('7-step mandatory development workflow');
+      expect(content).toContain('Mandatory Development Process');
       expect(content).toContain('mandatory development workflow');
 
       // Check for template variables

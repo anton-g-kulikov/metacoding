@@ -1,0 +1,16 @@
+{
+  "name": "typescript",
+  "description": "Shared TypeScript instructions for Node.js and React projects",
+  "prompts": [],
+  "vscodeSettings": {
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+    "chat.promptFiles": true,
+    "typescript.preferences.inlayHints.parameterNames.enabled": "all",
+    "typescript.preferences.inlayHints.variableTypes.enabled": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll.eslint": true
+    }
+  }
+}

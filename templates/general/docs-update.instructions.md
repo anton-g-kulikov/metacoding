@@ -1,13 +1,13 @@
 ---
-description: 'Guidelines for maintaining project documentation'
+description: 'Universal documentation maintenance guidelines for all project types'
 applyTo: '**/*.md'
 ---
 
-# Documentation Maintenance Guidelines
+# Universal Documentation Maintenance Guidelines
 
 ## Documentation Architecture Principles
 
-This project enforces a strict distinction between different types of documentation to ensure clarity, maintainability, and appropriate use of status indicators.
+This project enforces a strict distinction between different types of documentation to ensure clarity, maintainability, and appropriate use of status indicators across all project types.
 
 ### System Documentation (Evergreen, Factual)
 
@@ -54,10 +54,10 @@ This project enforces a strict distinction between different types of documentat
 
 ## Documentation Quality Standards
 
-- **Clarity:** Write clear, concise explanations
-- **Completeness:** Ensure documentation covers all necessary aspects
+- **Clarity:** Write clear, concise explanations appropriate for the target audience
+- **Completeness:** Ensure documentation covers all necessary aspects of the project
 - **Accuracy:** Verify all information is current and correct
-- **Consistency:** Maintain consistent tone and formatting
+- **Consistency:** Maintain consistent tone and formatting across all documentation
 - **Accessibility:** Use clear language and proper formatting for accessibility
 - **Architecture Compliance:** Follow the system vs project documentation distinction
 
@@ -76,10 +76,6 @@ This project enforces a strict distinction between different types of documentat
   - ✅ Good: "🚧 In Progress - User authentication implementation"
   - ✅ Good: "Development Status" with current checkboxes
   - ✅ Good: "✅ Completed - API endpoint testing"
-- **Examples of incorrect system documentation:**
-  - ❌ Bad: "🚧 Authentication Features" (in README.md)
-  - ❌ Bad: "Authentication system (planned)" (in architecture.md)
-  - ❌ Bad: "📋 API Endpoints" (in api-design.md)
 
 ## Task Management Documentation Guidelines
 
@@ -98,7 +94,7 @@ This project enforces a strict distinction between different types of documentat
 - **Installation Instructions:** Verify and update installation steps with clear, current procedures
 - **Usage Examples:** Ensure all code examples are tested and working, describe what they do
 - **Feature Documentation:** Document all major features with examples using factual descriptions
-- **Version Badges:** Keep version badges synchronized with package.json
+- **Version Badges:** Keep version badges synchronized with package.json (or equivalent for other languages)
 - **Links Verification:** Regularly check that all links work correctly
 - **Screenshots/GIFs:** Update visual documentation when UI changes
 - **Avoid Status Language:** Never use "planned", "upcoming", "in progress", or status emojis
@@ -111,32 +107,42 @@ This project enforces a strict distinction between different types of documentat
 ## CHANGELOG.md Maintenance
 
 - **User-Facing Changes:** Document all changes that affect users
-- **Consistent Format:** Follow established changelog format
-- **Categorization:** Group changes appropriately (Added, Changed, Fixed, etc.)
+- **Consistent Format:** Follow established changelog format (Keep a Changelog standard)
+- **Categorization:** Group changes appropriately (Added, Changed, Fixed, Security, etc.)
 - **Breaking Changes:** Clearly mark breaking changes
 - **Migration Guides:** Provide migration guidance for breaking changes
+- **Version Dating:** Include release dates in consistent format (YYYY-MM-DD)
 
-## Code Documentation
+## Code Documentation Standards
 
-- **JSDoc Comments:** Update JSDoc comments when changing public APIs
-- **Inline Comments:** Add comments for complex logic, not obvious code
+Refer to language-specific coding instruction files for detailed code documentation standards:
+
+- **TypeScript/Node.js:** See `typescript.coding.instructions.md` for JSDoc standards
+- **Python:** See `python.coding.instructions.md` for docstring standards
+- **React/Frontend:** See `react.coding.instructions.md` for component documentation
+
+### Universal Code Documentation Principles
+
+- **Public APIs:** Always document public interfaces with appropriate documentation format
+- **Complex Logic:** Add comments for complex algorithms or business logic
 - **Function Documentation:** Document parameters, return values, and side effects
-- **Class Documentation:** Explain class purpose, responsibilities, and usage patterns
-- **Type Documentation:** Document complex TypeScript types and interfaces
+- **Error Conditions:** Document when and why functions might fail
+- **Usage Examples:** Provide examples for non-trivial usage patterns
 
 ## API Documentation
 
-- **Endpoint Documentation:** Keep API endpoint documentation current
+- **Endpoint Documentation:** Keep API endpoint documentation current with implementation
 - **Parameter Changes:** Update parameter descriptions for any modifications
 - **Response Examples:** Provide realistic response examples
 - **Error Handling:** Document error responses and status codes
 - **Authentication:** Keep authentication documentation accurate
+- **Versioning:** Document API versioning strategy and compatibility
 
 ## Architectural Documentation (System Documentation)
 
 **⚠️ Architecture docs are system documentation - NO status indicators or temporal language allowed**
 
-- **Decision Records:** Record significant architectural decisions in `/meta` folder using factual language
+- **Decision Records:** Record significant architectural decisions in `/_meta` folder using factual language
 - **System Overview:** Maintain high-level system architecture documentation describing current implementation
 - **Data Flow:** Document data flow and process workflows as they currently exist
 - **Integration Points:** Document external system integrations that are implemented
@@ -149,15 +155,16 @@ This project enforces a strict distinction between different types of documentat
 
 ## Code Examples and Tutorials
 
-- **Working Examples:** Ensure all code examples compile and run
+- **Working Examples:** Ensure all code examples compile and run in the target language
 - **Complete Examples:** Provide complete, runnable examples when possible
 - **Progressive Complexity:** Start with simple examples, build to complex ones
-- **Error Handling:** Show proper error handling in examples
+- **Error Handling:** Show proper error handling patterns for the language
 - **Best Practices:** Demonstrate best practices in example code
+- **Language Appropriateness:** Use idiomatic patterns for each language
 
 ## Test Documentation Standards
 
-Follow the standardized table format for all test case documentation:
+Follow the standardized table format for all test case documentation across all project types:
 
 ### Required Table Format
 
@@ -170,7 +177,7 @@ Follow the standardized table format for all test case documentation:
 ### Test Case ID Conventions
 
 - **Format:** `[AREA]-[TYPE]-[NUMBER]`
-- **Area Prefixes (Python/Django):** VIEW, MODEL, FORM, MW, AUTH, UTIL, CMD, CONFIG, DOC, E2E, INT
+- **Area Prefixes:** Adapt to your project (CORE, API, UI, DB, AUTH, UTIL, CONFIG, DOC, etc.)
 - **Type Suffixes:** UNIT, INT, E2E
 - **Sequential Numbering:** 001, 002, 003, etc.
 
@@ -178,15 +185,18 @@ Follow the standardized table format for all test case documentation:
 
 - **Functional Grouping:** Group test cases by system area/component
 - **Consistent Formatting:** Maintain proper column alignment using pipes
-- **Clear Headers:** Use descriptive section headers (e.g., "Template System", "CLI Commands")
+- **Clear Headers:** Use descriptive section headers for test groups
 - **Status Tracking:** Use simple status values: "Completed", "In Progress", "Not Started"
+- **Descriptive Test Cases:** Provide clear, concise descriptions for each test case
+- **Text only** Don't use emojis or bold text in the table - keep it simple and readable
 
-### Documentation Testing
+## Documentation Testing
 
-- **Link Checking:** Regularly verify all links work
-- **Code Testing:** Test all code examples in documentation
+- **Link Checking:** Regularly verify all links work across all documentation
+- **Code Testing:** Test all code examples in documentation using appropriate tools
 - **Installation Testing:** Verify installation instructions work in clean environment
-- **User Testing:** Occasionally have someone unfamiliar try following docs
+- **User Testing:** Occasionally have someone unfamiliar try following documentation
+- **Cross-Platform Testing:** Verify instructions work across supported platforms
 
 ## Maintenance Schedule
 
@@ -194,10 +204,13 @@ Follow the standardized table format for all test case documentation:
 - **Release Updates:** Update documentation as part of release process
 - **Issue Tracking:** Track documentation issues and improvements
 - **Community Feedback:** Incorporate user feedback on documentation clarity
+- **Automated Checks:** Use automated tools to check for broken links and outdated content
 
-## Localization Considerations
+## Localization and Accessibility
 
-- **Clear English:** Use clear, simple English for international audiences
+- **Clear Language:** Use clear, simple language for international audiences
 - **Cultural Sensitivity:** Avoid culture-specific references
 - **Technical Terms:** Define technical terms when first introduced
-- **Consistent Terminology:** Use consistent terminology throughout
+- **Consistent Terminology:** Use consistent terminology throughout all documentation
+- **Screen Reader Compatibility:** Ensure proper heading hierarchy and alt text
+- **High Contrast:** Use sufficient color contrast for accessibility

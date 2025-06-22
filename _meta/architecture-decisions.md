@@ -212,11 +212,82 @@ We implemented a multi-layer testing approach:
 
 ---
 
+## ADR-006: Instruction File Architecture Abstraction
+
+**Date**: June 22, 2025  
+**Status**: Accepted  
+**Deciders**: Development Team
+
+### Context
+
+The original template system had significant duplication of instruction files across templates. TypeScript-specific instruction files were duplicated in `/general/`, `/node/`, and `/react/` templates, violating the single source of truth principle and creating maintenance overhead.
+
+### Decision
+
+We implemented a composable instruction file architecture with:
+
+- **Universal instruction files** in `/templates/general/` for all project types
+- **Shared language-specific components** in `/templates/typescript/` for TypeScript-using templates
+- **Template-specific files** in individual template directories
+- **Template inheritance system** where Node.js and React automatically inherit TypeScript instructions
+- **Exclusion logic** to prevent shared components from appearing as standalone templates
+
+### Architecture Structure
+
+```
+/templates/
+├── general/          # Universal instructions (all templates)
+├── typescript/       # Shared TypeScript component (Node.js + React)
+├── node/            # Node.js-specific + inherits TypeScript
+├── react/           # React-specific + inherits TypeScript
+└── python/          # Python-specific only
+```
+
+### Implementation Details
+
+The `TemplateManager` loads files in hierarchical order:
+
+1. Universal files from `/templates/general/`
+2. Language-specific shared files (TypeScript) for applicable templates
+3. Template-specific files from the template directory
+
+### Consequences
+
+**Positive:**
+
+- **Single source of truth**: TypeScript instructions exist only in `/templates/typescript/`
+- **Maintainability**: Changes to shared instructions automatically propagate
+- **Composability**: Templates can inherit multiple instruction sets
+- **Clean separation**: Each directory contains only relevant files
+- **Extensibility**: Easy to add new shared instruction components
+
+**Negative:**
+
+- **Increased complexity**: Template loading logic more sophisticated
+- **Template dependencies**: Templates now have implicit dependencies on shared components
+- **Testing overhead**: More complex scenarios to test inheritance
+
+### Verification Results
+
+- Node.js template loads 11 files (5 universal + 3 TypeScript + 3 Node.js-specific)
+- React template correctly inherits TypeScript instructions
+- Python template correctly excludes TypeScript instructions
+- Template manager excludes shared components from available templates list
+- All tests passing with comprehensive coverage of inheritance scenarios
+
+### Alternatives Considered
+
+- **Keep duplication**: Simpler but violates DRY principle and creates maintenance burden
+- **Symlinks**: Platform-dependent and Git compatibility issues
+- **Single mega-template**: Less flexible and harder to customize
+- **External references**: More complex dependency management
+
+---
+
 ## Future ADRs
 
 ### Planned Decisions
 
-- **ADR-006**: Template validation and versioning strategy
 - **ADR-007**: Multi-IDE support architecture
 - **ADR-008**: Plugin system design
 - **ADR-009**: Web-based template generator integration
