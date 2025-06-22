@@ -1,4 +1,4 @@
-# metacoding Project Documentation
+# metacoding System Documentation
 
 ## Project Overview
 
@@ -11,7 +11,6 @@ Transform development workflows by providing AI-guided coding standards, structu
 ### Key Value Propositions
 
 - **Guided Development Experience**: GitHub Copilot becomes a knowledgeable development guide
-- **Zero Configuration Setup**: Single command setup vs. 6-step manual process
 - **Quality Standards Guidance**: Helps avoid common mistakes through structured workflows
 - **Test-Driven Development**: Encourages and guides TDD practices step-by-step
 - **Documentation Guidance**: Built-in standards that help keep projects maintainable
@@ -28,12 +27,12 @@ metacoding/
 │   ├── VS Code Integration
 │   └── Project Detection
 ├── Template Library
-│   ├── templates/general/files/ ✅
+│   ├── templates/general/files/
 │   │   ├── copilot-instructions.md.template
 │   │   └── *.instructions.md (source templates)
-│   ├── React Template 📋
-│   ├── Node.js Template 📋
-│   └── Python Template 📋
+│   ├── React Template
+│   ├── Node.js Template
+│   └── Python Template
 ├── Generated User Structure (.github/)
 │   ├── copilot-instructions.md (generated from template)
 │   └── instructions/
@@ -43,7 +42,8 @@ metacoding/
 │       └── code-review.instructions.md
 └── Documentation & Testing
     ├── Comprehensive README
-    ├── API Documentation (_meta/)
+    ├── System Documentation (_meta/system-documentation.md)
+    ├── API Documentation (_meta/api-design.md)
     ├── Test Suite (Unit + Integration)
     └── Migration Guides
 ```
@@ -52,10 +52,12 @@ metacoding/
 
 - **Runtime**: Node.js 18+
 - **Language**: TypeScript with strict type checking
-- **CLI Framework**: Commander.js for command parsing
-- **UI**: Inquirer.js for interactive prompts, Ora for spinners, Chalk for colors
-- **Testing**: Jest with integration and unit tests
-- **Build**: TypeScript compiler with declaration files
+- **CLI Framework**: Commander.js v11.1.0 for command parsing
+- **UI**: Inquirer.js v8.2.6 for interactive prompts, Ora v5.4.1 for spinners, Chalk v4.1.2 for colors
+- **File Operations**: fs-extra v11.2.0 for enhanced file system operations
+- **Testing**: Jest v29.7.0 with integration and unit tests, ts-jest for TypeScript support
+- **Build**: TypeScript compiler v5.3.2 with declaration files and source maps
+- **Code Quality**: ESLint v8.54.0, Prettier v3.1.0, and strict TypeScript configuration
 - **Distribution**: npm registry with global installation
 
 ### Data Flow
@@ -67,6 +69,28 @@ metacoding/
 5. **File Generation**: Create `.github/` structure with customized instruction files
 6. **VS Code Integration**: Update settings.json with required configurations
 7. **Validation**: Verify setup completeness and provide next steps
+
+### CLI Command Implementation
+
+#### Implemented Commands
+
+- **`metacoding init`**: Interactive project setup with:
+
+  - Project configuration prompts
+  - Template selection (general, react, node, python)
+  - Automatic project type detection
+  - VS Code settings configuration
+  - Git repository validation
+  - File generation with variable substitution
+  - Progress indicators and user feedback
+
+- **`metacoding --help`**: Comprehensive help system with examples
+- **`metacoding --version`**: Version display from package.json
+
+#### Additional Commands
+
+- **`metacoding validate`**: Project setup validation (command structure implemented)
+- **`metacoding update`**: Setup updates and migrations (command structure implemented)
 
 ## Development Workflow
 
@@ -80,52 +104,75 @@ The project follows its own metacoding methodology:
 4. **Quality Gates**: All tests must pass before task completion
 5. **Incremental Commits**: Regular commits with conventional commit messages
 
-### Code Quality Standards
+### Test Architecture
 
-- **TypeScript Strict Mode**: Full type safety with strict compiler options
-- **Test Coverage**: High coverage for critical functionality
-- **Error Handling**: Comprehensive error handling with user-friendly messages
-- **Logging**: Appropriate console output for user feedback
-- **Performance**: Optimized for CLI responsiveness and low memory usage
+- **Framework**: Jest v29.7.0 with ts-jest for TypeScript support
+- **Test Types**: Unit tests, integration tests, template validation tests
+- **Coverage**: 40 test cases covering core functionality
+- **Structure**: Tests organized in `/test/unit/` and `/test/integration/` directories
+- **Fixtures**: Temporary directories for safe file system testing
 
-### Release Process
+### Release and Version Management
 
-1. **Version Bump**: Update package.json following semantic versioning
-2. **Documentation Update**: Sync README.md and CHANGELOG.md
-3. **Test Verification**: All tests must pass
-4. **Build Process**: Clean TypeScript compilation
-5. **Git Tagging**: Tag release with version number
-6. **NPM Publishing**: Publish to npm registry
-7. **GitHub Release**: Create GitHub release with changelog
+- **Versioning**: Semantic versioning (SemVer) with package.json as source of truth
+- **Build Process**: TypeScript compilation to `lib/` directory with declaration files
+- **Distribution**: npm registry with global installation pattern
+- **Documentation**: Changelog maintenance with user-facing change tracking
 
-## Current Implementation Status
+## Implementation Architecture
 
-### ✅ Completed Features
+### CLI Command Structure
 
-- **Core CLI Infrastructure**: Command parsing, help system, version management
-- **Init Command**: Full interactive setup with template system
-- **Template Engine**: Variable substitution and file generation
-- **VS Code Integration**: Automatic settings configuration
-- **Project Detection**: Git and project type analysis
-- **Test Suite**: Unit and integration tests with 100% pass rate
-- **Documentation**: Comprehensive README and API documentation
-- **Branding**: Consistent naming throughout codebase
-- **Temporary File Management**: Enhanced instruction files with cleanup guidance and best practices
-- **Test Documentation Standardization**: Implemented table format with structured naming conventions ([AREA]-[TYPE]-[NUMBER])
-- **Instruction Template Generalization**: Updated all templates to be reusable across projects with language-specific area prefixes
-- **Documentation Quality Standards**: Comprehensive guidelines for test case documentation, status tracking, and maintainability
+#### Implemented Commands
 
-### 🚧 In Progress
+- **`metacoding init`**: Interactive project setup
 
-- **Validate Command**: Structure implemented, logic in development
-- **Update Command**: Structure implemented, logic in development
-- **Additional Templates**: React template ✅, Node.js and Python templates 📋
+  - Project configuration prompts
+  - Template selection (general, react, node, python)
+  - Automatic project type detection
+  - VS Code settings configuration
+  - Git repository validation
+  - File generation with variable substitution
+  - Progress indicators and user feedback
 
-### 📋 Future Development
+- **`metacoding --help`**: Comprehensive help system with examples
+- **`metacoding --version`**: Version display from package.json
 
-- **Usage Analytics**: Optional usage metrics collection
-- **IDE Integrations**: Support for other editors beyond VS Code
-- **Team Templates**: Organization-specific template systems
+#### Additional Commands
+
+- **`metacoding validate`**: Project setup validation (command structure complete)
+- **`metacoding update`**: Setup updates and migrations (command structure complete)
+
+## Package Distribution Architecture
+
+### Package Configuration
+
+- **Package Name**: `metacoding`
+- **Current Version**: 1.0.0 (as specified in package.json)
+- **Distribution Method**: Global npm installation (`npm install -g metacoding`)
+- **Entry Point**: `bin/metacoding.js` with compiled TypeScript in `lib/` directory
+
+### Build System
+
+- **TypeScript Compilation**: Source in `src/` compiled to `lib/` with declaration files
+- **Package Files**: Includes `bin/`, `lib/`, `templates/`, and documentation files
+- **Scripts**: Build, test, lint, and publishing preparation scripts
+- **Dependencies**: Production dependencies pinned for stability
+- **Node.js Compatibility**: Requires Node.js 18+ and npm 8+
+
+### Package Structure
+
+```
+metacoding/
+├── bin/metacoding.js          # CLI entry point
+├── lib/                       # Compiled TypeScript
+│   ├── cli.js                # Main CLI logic
+│   ├── commands/             # Command implementations
+│   ├── services/             # Core services
+│   └── types/                # Type definitions
+├── templates/                # Template files
+└── package.json              # Package configuration
+```
 
 ## Integration Points
 
@@ -181,16 +228,21 @@ The project follows its own metacoding methodology:
 
 ### Production Dependencies
 
-- **commander**: CLI argument parsing and command management
-- **inquirer**: Interactive command-line prompts
-- **ora**: Terminal spinners for long-running operations
-- **chalk**: Terminal string styling and colors
-- **fs-extra**: Enhanced file system operations
+- **commander v11.1.0**: CLI argument parsing and command management
+- **inquirer v8.2.6**: Interactive command-line prompts
+- **ora v5.4.1**: Terminal spinners for long-running operations
+- **chalk v4.1.2**: Terminal string styling and colors
+- **fs-extra v11.2.0**: Enhanced file system operations
+- **glob v10.3.10**: File pattern matching utilities
+- **yaml v2.3.4**: YAML parsing and serialization
 
 ### Development Dependencies
 
-- **typescript**: TypeScript compiler and type definitions
-- **jest**: Testing framework for unit and integration tests
+- **typescript v5.3.2**: TypeScript compiler and type definitions
+- **jest v29.7.0**: Testing framework for unit and integration tests
+- **ts-jest v29.1.1**: TypeScript support for Jest
+- **eslint v8.54.0**: Code linting and style enforcement
+- **prettier v3.1.0**: Code formatting
 - **@types/\***: Type definitions for TypeScript support
 
 ### Dependency Management
@@ -214,30 +266,22 @@ The project follows its own metacoding methodology:
 - **Documentation**: Comprehensive troubleshooting in README
 - **Community**: User discussions and community support
 
-## Future Roadmap
+## Template System Documentation
 
-### Short Term (Current Sprint)
+### Available Templates
 
-- ✅ Complete validate and update command structure implementation
-- 🚧 Add implementation logic for validate and update commands
-- ✅ Add React/Frontend template
-- 📋 Expand test coverage for edge cases
-- 📋 Performance optimization for large projects
+- **General Template**: Universal instructions for any project type
+- **React Template**: Frontend-specific with React, hooks, and component patterns
+- **Node.js Template**: Backend-specific with API, database, and server patterns
+- **Python Template**: Python-specific with Django/Flask/FastAPI patterns
 
-### Medium Term (Next Quarter)
+### Template Architecture
 
-- 📋 Add Node.js and Python templates
-- 📋 Implement template validation system
-- 📋 Add configuration file support
-- 📋 Create web-based template generator
+Each template contains:
 
-### Long Term (Next Year)
-
-- 📋 Multi-IDE support (JetBrains, Vim, Emacs)
-- 📋 Team collaboration features
-- 📋 Template marketplace
-- 📋 Usage analytics and insights
-- 📋 Enterprise features
+- `template.json`: Configuration and metadata
+- `copilot-instructions.md.template`: Main instruction file with variable substitution
+- Instruction files: `test-runner.instructions.md`, `release.instructions.md`, `docs-update.instructions.md`, `code-review.instructions.md`
 
 ### Documentation Standards and Best Practices
 
@@ -246,6 +290,7 @@ The project follows its own metacoding methodology:
 The project has implemented standardized test case documentation using table format:
 
 **Required Table Format:**
+
 ```markdown
 | Test Case ID  | Description                                 | Type | Status    |
 | :------------ | :------------------------------------------ | :--- | :-------- |
@@ -253,6 +298,7 @@ The project has implemented standardized test case documentation using table for
 ```
 
 **Test Case Naming Conventions:**
+
 - **Format**: `[AREA]-[TYPE]-[NUMBER]`
 - **Language-Specific Area Prefixes**:
   - **React/Frontend**: COMP, HOOK, PAGE, STORE, API, UTIL, AUTH, FORM
@@ -263,6 +309,7 @@ The project has implemented standardized test case documentation using table for
 - **Sequential Numbering**: 001, 002, 003, etc.
 
 **Examples by Language:**
+
 - React: `COMP-UNIT-001`, `HOOK-UNIT-001`, `API-INT-001`
 - Node.js: `API-UNIT-001`, `SRV-UNIT-001`, `DB-INT-001`
 - Python: `VIEW-UNIT-001`, `MODEL-UNIT-001`, `AUTH-INT-001`
@@ -270,10 +317,21 @@ The project has implemented standardized test case documentation using table for
 #### Instruction Template Standards
 
 All instruction files follow generalized patterns:
+
 - **Reusable Templates**: Instructions work for any project using our methodology
-- **Language-Specific Guidance**: Area prefixes adapted to common patterns in each language
+- **Language-Specific Guidance**: Area prefixes adapted to common patterns in each language/framework
 - **Consistent Structure**: Standardized sections across all instruction types
 - **Anti-Pattern Prevention**: Clear guidance on what to avoid in documentation
+- **Workflow Enforcement**: 7-step mandatory development process embedded in all templates
+
+#### Template Implementation Status
+
+All templates are fully implemented and tested:
+
+- **General Template**: Universal instructions for any project type
+- **React Template**: Frontend-specific with React, hooks, and component patterns
+- **Node.js Template**: Backend-specific with API, database, and server patterns
+- **Python Template**: Python-specific with Django/Flask/FastAPI patterns
 
 ## Contributing Guidelines
 
@@ -294,6 +352,6 @@ All instruction files follow generalized patterns:
 
 ---
 
-**Last Updated**: January 2025
-**Document Version**: 1.1
+**Last Updated**: June 2025
+**Document Version**: 1.2
 **Review Schedule**: Monthly or with major releases

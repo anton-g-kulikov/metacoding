@@ -247,6 +247,16 @@ class ErrorBoundary extends React.Component {
 - Provide retry mechanisms for failed requests
 - Log errors for debugging
 
+## Documentation Standards
+
+- **Documentation Architecture:** Maintain strict separation between system documentation (evergreen, no status indicators) and project management documentation (status tracking, temporal language)
+- **Component Documentation:** Use JSDoc comments for component props and complex logic
+- **API Documentation:** Document component APIs with examples and usage patterns
+- **README Updates:** Keep main README.md current with setup and deployment instructions using factual, present-tense language
+- **Changelog:** Maintain detailed CHANGELOG.md with all notable changes
+- **Architecture Decisions:** Record significant architectural decisions in component design
+- **Status Indicators:** Use status emojis only in project management docs, never in system documentation
+
 ## Build and Development Tools
 
 ### Development Setup

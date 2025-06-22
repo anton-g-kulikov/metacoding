@@ -151,11 +151,13 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 
 ## Documentation Standards
 
+- **Documentation Architecture:** Maintain strict separation between system documentation (evergreen, no status indicators) and project management documentation (status tracking, temporal language)
 - **Code Documentation:** Use JSDoc comments for public APIs and complex logic
-- **README Updates:** Keep main README.md current with project state and features
+- **README Updates:** Keep main README.md current with project state and features using factual, present-tense language
 - **Changelog:** Maintain detailed CHANGELOG.md with all notable changes
 - **API Documentation:** Document all public APIs with examples and usage patterns
 - **Architecture Decisions:** Record significant architectural decisions in `/_meta` folder
+- **Status Indicators:** Use status emojis only in project management docs, never in system documentation
 
 ## Version Control and Workflow
 

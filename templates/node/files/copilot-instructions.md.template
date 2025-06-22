@@ -259,11 +259,13 @@ npm cache clean --force
 
 ## Documentation Standards
 
+- **Documentation Architecture:** Maintain strict separation between system documentation (evergreen, no status indicators) and project management documentation (status tracking, temporal language)
 - **Code Documentation:** Use JSDoc comments for public APIs and complex logic
 - **API Documentation:** Maintain OpenAPI/Swagger specifications
-- **README Updates:** Keep main README.md current with setup and deployment instructions
+- **README Updates:** Keep main README.md current with setup and deployment instructions using factual, present-tense language
 - **Changelog:** Maintain detailed CHANGELOG.md with all notable changes
 - **Architecture Decisions:** Record significant architectural decisions
+- **Status Indicators:** Use status emojis only in project management docs, never in system documentation
 
 ## Development Workflow
 

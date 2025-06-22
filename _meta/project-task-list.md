@@ -65,7 +65,7 @@
 - [x] **Document template system and customization** - General template documented
 - [x] **Add troubleshooting guide for npm package** - Included in README
 - [x] **Create migration guide from manual setup** - Added to CHANGELOG.md
-- [x] **Create comprehensive project documentation** - Added project-documentation.md
+- [x] **Create comprehensive system documentation** - Added system-documentation.md
 - [x] **Document architecture decisions** - Added architecture-decisions.md with ADRs
 - [x] **Create detailed API design documentation** - Added api-design.md with complete CLI spec
 - [x] **Review and fix README.md file** - Fixed markdown formatting, added version badges, corrected typos, improved structure and navigation, enhanced after manual installation section removal, fixed broken code blocks, moved init description, added template options to installation guide, converted all CLI examples to inline code including installation steps, removed duplicate init section from CLI reference, combined redundant Best Practices sections, updated messaging from "Professional" to "Guided" approach
@@ -90,6 +90,10 @@
 - [x] **Generalize instruction templates for project reusability** - Removed metacoding-specific references, made templates adaptable for any project
 - [x] **Implement language-specific area prefixes** - Created React/Frontend, Node.js/Backend, Python/Django, and General conventions
 - [x] **Update all examples to match new naming conventions** - Replaced all template-specific examples with appropriate language examples
+
+### Documentation Architecture and Standards
+
+- [x] **Update all template instruction files with documentation architecture principles** - Added system vs project documentation distinction to all template files (docs-update.instructions.md, copilot-instructions.md.template) across general, node, python, and react templates. New projects generated from templates now receive proper documentation guidance with clear rules for system documentation (evergreen, no status indicators) vs project management documentation (status tracking, temporal language).
 
 ### Publishing and Distribution
 
