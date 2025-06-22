@@ -19,8 +19,9 @@
 ### Test Suite Cleanup:
 
 Removed problematic files that were causing TypeScript errors and blocking workflow:
+
 - `test/unit/init-error-handling-new.test.ts` (removed)
-- `test/unit/vscode-error-handling.test.ts` (removed) 
+- `test/unit/vscode-error-handling.test.ts` (removed)
 - `test/unit/filesystem-error-handling.test.ts` (removed)
 - `test/unit/init-error-handling.test.ts` (removed)
 
