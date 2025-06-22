@@ -96,7 +96,7 @@ export class InitCommand {
         type: 'input',
         name: 'description',
         message: 'Project description:',
-        default: 'A professional development project using metacoding workflow',
+        default: 'A guided development project using metacoding workflow',
       },
       {
         type: 'list',
@@ -240,10 +240,7 @@ export class InitCommand {
       chalk.dim('3.'),
       'Ask: "What are the coding standards for this project?"'
     );
-    console.log(
-      chalk.dim('4.'),
-      'Start coding with professional workflow guidance!'
-    );
+    console.log(chalk.dim('4.'), 'Start coding with guided workflow support!');
     console.log('');
     console.log(
       chalk.cyan('Need help?'),

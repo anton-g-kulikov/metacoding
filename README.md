@@ -1,17 +1,15 @@
-# metacoding: Professional Development Workflow for GitHub Copilot
+# metacoding: Guided Development Workflow for GitHub Copilot
 
 [![Version](https://img.shields.io/npm/v/metacoding.svg)](https://www.npmjs.com/package/metacoding)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-Compatible-brightgreen.svg)](https://github.com/features/copilot)
 
-Transform your development experience with AI-powered coding standards, automated workflows, and quality assurance that enforces best practices from day one.
+Transform your development experience with AI-guided coding standards, structured workflows, and quality practices that help you build better software from day one.
 
 ## Table of Contents
 
 - [🎯 What is metacoding?](#-what-is-metacoding)
 - [🛠 Installation Guide](#-installation-guide)
-  - [Quick Setup (NPM Package)](#quick-setup-npm-package---recommended)
-  - [Manual Setup](#manual-setup-alternative-method)
 - [📦 Using the metacoding CLI](#-using-the-metacoding-cli)
 - [💬 How to Use metacoding with GitHub Copilot](#-how-to-use-metacoding-with-github-copilot)
 - [🆘 Getting Help](#-getting-help)
@@ -20,127 +18,63 @@ Transform your development experience with AI-powered coding standards, automate
 
 ## 🎯 What is metacoding?
 
-metacoding is a **complete development methodology** that uses GitHub Copilot's custom instruction capabilities to create a **senior developer experience** for developers at any level. Instead of just getting code suggestions, you get:
+metacoding is a **guided development methodology** that uses GitHub Copilot's custom instruction capabilities to help developers at any level follow established best practices. Instead of just getting code suggestions, you get:
 
-- **Robust workflows** that guide you through professional development practices
-- **Enforced quality standards** that prevent common mistakes
-- **Test-driven development** that's automatically encouraged and guided
-- **Built-in documentation standards** that keep your project maintainable
+- **Structured workflows** that guide you through proven development practices
+- **Quality standards** that help you avoid common mistakes
+- **Test-driven development** that's encouraged and guided step-by-step
+- **Documentation guidance** that keeps your projects maintainable
 
 ## 🛠 Installation Guide
 
-### Quick Setup (NPM Package) - Recommended
+### Prerequisites
+
+Before installing metacoding, make sure you have:
+
+1. **Visual Studio Code** installed ([download here](https://code.visualstudio.com/))
+2. **GitHub Copilot extension** installed and configured in VS Code
+3. **Active GitHub Copilot subscription** ([get one here](https://github.com/features/copilot))
+4. **Node.js** (version 16 or higher) for the CLI tool
+
+### Quick Setup (Recommended)
 
 The easiest way to get started with metacoding is using our npm package:
 
-```bash
-# Install globally
-npm install -g metacoding
+1. **Install globally:** `npm install -g metacoding`
+2. **Navigate to your project:** `cd your-project`
+3. **Initialize metacoding:** `metacoding init`
+4. **Follow the interactive prompts and you're done!**
 
-# Initialize metacoding in your project
-cd your-project
-metacoding init
+**Available templates:** You can also specify a template during initialization:
 
-# Follow the interactive prompts and you're done!
+- `metacoding init --template react` - Use React template
+- `metacoding init --template node` - Use Node.js/Backend template
+- `metacoding init --template python` - Use Python template
+- `metacoding init --force` - Overwrite existing files
+
+**Note:** The CLI will automatically configure VS Code settings for custom instructions. If you need to configure manually, add these settings to your VS Code settings.json:
+
+```json
+{
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.promptFiles": true
+}
 ```
 
-### Manual Setup (Alternative Method)
+After you finished, your project should now look like this:
 
-If you prefer manual setup or can't use npm, follow these steps:
+```
+my-awesome-project/
+├── .github/
+│   ├── copilot-instructions.md
+│   └── instructions/
+│       ├── test-runner.instructions.md
+│       ├── release.instructions.md
+│       ├── docs-update.instructions.md
+│       └── code-review.instructions.md
+```
 
-### Step 1: Install Visual Studio Code
-
-If you don't have VS Code installed:
-
-1. Go to [code.visualstudio.com](https://code.visualstudio.com/)
-2. Download VS Code for your operating system (Windows, Mac, or Linux)
-3. Install it using the downloaded installer
-4. Open VS Code after installation
-
-### Step 2: Install GitHub Copilot Extension
-
-1. **Open VS Code**
-2. **Open Extensions panel:**
-   - Click the Extensions icon in the sidebar (four squares icon)
-   - Or press `Ctrl+Shift+X` (Windows/Linux) or `Cmd+Shift+X` (Mac)
-3. **Search for GitHub Copilot:**
-   - Type "GitHub Copilot" in the search box
-   - Look for the official extension by GitHub
-4. **Install the extension:**
-   - Click the "Install" button
-   - Wait for installation to complete
-
-### Step 3: Set Up GitHub Copilot
-
-1. **Sign in to GitHub:**
-
-   - VS Code will prompt you to sign in to GitHub
-   - Click "Sign in to GitHub" and follow the authentication steps
-   - Make sure you have an active GitHub Copilot subscription
-
-2. **Enable Custom Instructions:**
-   - Press `Ctrl+,` (Windows/Linux) or `Cmd+,` (Mac) to open Settings
-   - Click the "Open Settings (JSON)" icon in the top-right corner
-   - Add these lines to your settings file:
-   ```json
-   {
-     "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-     "chat.promptFiles": true
-   }
-   ```
-   - Save the file with `Ctrl+S` (Windows/Linux) or `Cmd+S` (Mac)
-
-### Step 4: Set Up metacoding in Your Project
-
-1. **Create your project folder:**
-
-   ```bash
-   mkdir my-awesome-project
-   cd my-awesome-project
-   ```
-
-2. **Open your project in VS Code:**
-
-   - In VS Code, go to File → Open Folder
-   - Select your project folder
-   - Click "Select Folder" (Windows) or "Open" (Mac/Linux)
-
-3. **Create the GitHub configuration folder:**
-
-   - In VS Code, create a new folder called `.github` in your project root
-   - Inside `.github`, create another folder called `instructions`
-
-4. **Download metacoding files:**
-
-   - Download the `copilot-instructions.md` file from this repository
-   - Download all files from the `instructions/` folder
-   - Place `copilot-instructions.md` in your `.github/` folder
-   - Place all instruction files in your `.github/instructions/` folder
-
-   Your project should now look like this:
-
-   ```
-   my-awesome-project/
-   ├── .github/
-   │   ├── copilot-instructions.md
-   │   └── instructions/
-   │       ├── test-runner.instructions.md
-   │       ├── release.instructions.md
-   │       ├── docs-update.instructions.md
-   │       └── code-review.instructions.md
-   ```
-
-### Step 5: Customize for Your Project
-
-1. **Open `copilot-instructions.md`** in VS Code
-2. **Replace the placeholder text:**
-   - Replace `[short project description]` with your actual project description
-   - Replace `[Main goal 1]`, `[Main goal 2]`, etc. with your project goals
-   - Replace `[List primary technologies]` with your tech stack (e.g., "React, Node.js, TypeScript")
-   - Replace `[project specific]` with your domain (e.g., "React", "Node.js", "Python")
-3. **Save the file**
-
-### Step 6: Test Your Setup
+### Test Your Setup
 
 1. **Restart VS Code** to ensure all settings are applied
 2. **Create a new file** in your project (e.g., `test.js` or `main.py`)
@@ -149,7 +83,7 @@ If you don't have VS Code installed:
    - Type "GitHub Copilot: Open Chat"
    - Press Enter
 4. **Test the setup:**
-   - In GitHub Copilot, ask: "What are the coding standards for this project?"
+   - In GitHub Copilot, ask: "What is the development workflow for this project?"
    - Copilot should reference your custom instructions and provide project-specific guidance!
 
 ## ✅ You're Ready to Go!
@@ -158,43 +92,25 @@ If you don't have VS Code installed:
 
 Once installed, you can use these commands:
 
-### `metacoding init`
-
-Initialize metacoding in your current project with interactive setup:
-
-```bash
-metacoding init                     # Interactive setup with default template
-metacoding init --template react    # Use React template
-metacoding init --template node     # Use Node.js/Backend template
-metacoding init --template python   # Use Python template
-metacoding init --force             # Overwrite existing files
-```
-
 ### `metacoding validate`
 
 Check your current metacoding setup:
 
-```bash
-metacoding validate                  # Basic validation
-metacoding validate --strict         # Strict validation rules
-metacoding validate --fix           # Auto-fix issues where possible
-```
+- `metacoding validate` - Basic validation
+- `metacoding validate --strict` - Strict validation rules
+- `metacoding validate --fix` - Auto-fix issues where possible
 
 ### `metacoding update`
 
 Update your metacoding setup to the latest version:
 
-```bash
-metacoding update                    # Update to latest version
-metacoding update --backup          # Create backup before updating
-```
+- `metacoding update` - Update to latest version
+- `metacoding update --backup` - Create backup before updating
 
 ### Help and Version
 
-```bash
-metacoding --help                    # Show all commands
-metacoding --version                 # Show version number
-```
+- `metacoding --help` - Show all commands
+- `metacoding --version` - Show version number
 
 ## 💬 How to Use metacoding with GitHub Copilot
 
@@ -235,13 +151,7 @@ You can explicitly reference specific instruction files in GitHub Copilot:
 
 ## Best Practices for Using GitHub Copilot
 
-- **Use Agent Mode by default** - Agent mode provides the most comprehensive assistance with workflow automation
-- **Start with simple prompts** like "Let's plan feature X" to test your setup
-- **Be specific about context** when manually referencing instructions
-- **Reference multiple instructions** when needed for complex tasks
-- **Provide necessary context**: include documentation, task list, test cases and related files and folders in your prompt (use the "Attach" menu)
-
-### When to Switch Copilot Modes
+### Choose the Right Mode for Your Task
 
 - **Agent Mode (Default)**: Use for complex workflows, multi-step tasks, and when you want Copilot to handle the entire process
   - Examples: "Implement user authentication with tests and documentation" or "Prepare release with version bump and changelog"
@@ -250,35 +160,65 @@ You can explicitly reference specific instruction files in GitHub Copilot:
 - **Edit Mode**: Use for focused code modifications when you want direct file editing
   - Examples: "Refactor this function to use async/await" or "Add error handling to this method"
 
+### Effective Prompting Strategies
+
+- **Start with simple prompts** like "Let's plan feature X" to test your setup
+- **Be specific about context** when manually referencing instructions
+- **Reference multiple instructions** when needed for complex tasks
+- **Provide necessary context**: include documentation, task list, test cases and related files and folders in your prompt (use the "Attach" menu)
+
 ## 🆘 Getting Help
 
 ### Common Questions
 
 **Q: Do I need to be an experienced developer?**
-A: No! metacoding is designed to help developers at any level follow professional practices.
+A: No! metacoding provides guidance and structure to help developers at any level adopt proven practices and improve their skills.
+
+**Q: What if I don't have GitHub Copilot?**
+A: You'll need an active GitHub Copilot subscription to use metacoding. Students can get it free through GitHub Education.
+
+**Q: Can I use this without the CLI tool?**
+A: The CLI tool provides the easiest setup experience. For manual setup, you can download instruction files from our GitHub repository.
 
 **Q: Will this work with my preferred programming language?**
-A: Yes! metacoding works with any language supported by GitHub Copilot.
+A: Yes! The general metacoding template (set of instructions) works with any language supported by GitHub Copilot.
 
 **Q: Can I customize the workflow for my team's needs?**
 A: Absolutely! All instruction files can be modified to match your team's specific requirements.
 
 **Q: Does this replace learning to code?**
-A: No, it enhances your learning by guiding you through professional practices while you develop your coding skills.
+A: No, it enhances your learning by providing guidance on proven practices while you develop your coding skills.
+
+**Q: What VS Code settings are required?**
+A: The CLI automatically configures required settings, but you need `github.copilot.chat.codeGeneration.useInstructionFiles: true` and `chat.promptFiles: true`.
 
 ## Troubleshooting
 
+**Installation Issues:**
+
+- Make sure Node.js (version 16+) is installed: `node --version`
+- Verify npm is working: `npm --version`
+- Try clearing npm cache: `npm cache clean --force`
+
 **GitHub Copilot not responding to instructions:**
 
-- Make sure you've restarted VS Code after adding the settings
+- Make sure you've restarted VS Code after installation
 - Verify your GitHub Copilot subscription is active
 - Check that the instruction files are in the correct `.github/` folder
+- Ensure VS Code settings include the required custom instruction settings
 
 **Instructions not applying automatically:**
 
 - Ensure file names match exactly (including the `.instructions.md` extension)
 - Verify the folder structure is correct
 - Try manually referencing instructions in GitHub Copilot
+- Run `metacoding validate` to check your setup
+
+**CLI Command Issues:**
+
+- Ensure metacoding is installed globally: `npm list -g metacoding`
+- Try reinstalling: `npm uninstall -g metacoding && npm install -g metacoding`
+- Check PATH configuration if command not found
 
 ## Official Resources
 

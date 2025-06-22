@@ -192,7 +192,7 @@ export class TemplateManager {
     );
     processedContent = processedContent.replace(
       /\[Main goal 1\]/g,
-      'Provide robust development workflow'
+      'Provide guided development workflow'
     );
     processedContent = processedContent.replace(
       /\[Main goal 2\]/g,

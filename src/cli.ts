@@ -14,7 +14,7 @@ export async function main(): Promise<void> {
 
   program
     .name('metacoding')
-    .description('Professional Development Workflow for GitHub Copilot')
+    .description('Guided Development Workflow for GitHub Copilot')
     .version(version)
     .addHelpText(
       'after',

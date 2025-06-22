@@ -223,5 +223,103 @@ This document tracks test cases for the metacoding npm package CLI tool, followi
   - **Status**: ✅ Completed - Fixed broken markdown, added version badges, corrected typos, improved structure
   - **Verification**: Manual review and structure validation performed
 
+### README.md Post-Manual-Setup-Removal Review
+
+- **Test Case**: README.md completeness after manual installation section removal
+  - **Input**: Updated README.md without manual setup instructions
+  - **Expected Output**:
+    - Clear prerequisites section explaining requirements
+    - Enhanced troubleshooting covering installation issues
+    - Comprehensive FAQ addressing setup questions
+    - Proper VS Code configuration guidance
+    - No broken references to removed sections
+  - **Status**: ✅ Completed - Added prerequisites, enhanced troubleshooting, expanded FAQ, fixed typos
+  - **Verification**: Manual review confirmed all critical information preserved and enhanced
+
+### README.md Code Block Formatting Fix
+
+- **Test Case**: README.md markdown formatting after init description move
+  - **Input**: README.md with moved init description and potential formatting issues
+  - **Expected Output**:
+    - Clean, properly formatted code blocks without nesting issues
+    - Clear separation between installation and CLI usage sections
+    - Complete init command description in the CLI section
+    - No broken markdown syntax
+  - **Status**: ✅ Completed - Fixed broken nested code blocks, moved init description to proper CLI section
+  - **Verification**: Manual review and markdown syntax validation performed
+
+### README.md Template Options and Inline Code Update
+
+- **Test Case**: README.md template options in installation and inline code formatting
+  - **Input**: User preference for showing init options in installation guide and inline code format
+  - **Expected Output**:
+    - Template options clearly shown in installation section
+    - Inline code format for all CLI commands instead of code blocks
+    - Clean, scannable format that's easier to read
+    - No duplication between installation and CLI sections
+  - **Status**: ✅ Completed - Added template options to installation guide, converted all CLI examples to inline code format
+  - **Verification**: Manual review confirmed improved readability and user experience
+
+### README.md Complete Inline Code Conversion
+
+- **Test Case**: Complete conversion to inline code format throughout README.md
+  - **Input**: Installation section with bash code block format
+  - **Expected Output**:
+    - Numbered steps with inline code commands
+    - Consistent formatting across all sections
+    - Clean, scannable presentation
+    - No code blocks except for JSON configuration examples
+  - **Status**: ✅ Completed - Converted installation steps to numbered list with inline code
+  - **Verification**: All command references now use consistent inline code formatting
+
+### README.md Duplication Removal
+
+- **Test Case**: Removal of duplicate init command information
+  - **Input**: CLI section with redundant init command documentation
+  - **Expected Output**:
+    - Init options only in installation guide where users need them
+    - CLI section focused on post-installation commands
+    - No redundant information between sections
+    - Cleaner, more focused documentation structure
+  - **Status**: ✅ Completed - Removed duplicate init section from CLI reference
+  - **Verification**: CLI section now focuses on validate, update, help commands only
+
+### README.md Best Practices Section Consolidation
+
+- **Test Case**: Combining redundant Best Practices and Mode Switching sections
+  - **Input**: Two separate sections with overlapping content about GitHub Copilot usage
+  - **Expected Output**:
+    - Single cohesive Best Practices section
+    - Clear subsections for mode selection and prompting strategies
+    - All valuable examples preserved
+    - Better organization and flow
+    - Eliminated redundancy
+  - **Status**: ✅ Completed - Combined sections into structured Best Practices with subsections
+  - **Verification**: Content is now organized under "Choose the Right Mode" and "Effective Prompting Strategies"
+
+### README.md Messaging Update
+
+- **Test Case**: Consistent "Guided" messaging throughout project documentation
+  - **Input**: Project using "Professional Development" messaging that may seem exclusive
+  - **Expected Output**:
+    - Title updated to "Guided Development Workflow"
+    - Description emphasizes guidance and learning rather than professional status
+    - FAQ answers use inclusive language
+    - Package description reflects guided approach
+    - Project documentation aligns with new messaging
+  - **Status**: ✅ Completed - Updated all main documentation files with consistent guided messaging
+  - **Verification**: Title, descriptions, FAQ, package.json, and project docs all use guided language
+
+## ✅ Completed Test Cases
+
+### CLI Messaging Tests
+
+- **PASSED**: CLI help output shows "Guided Development Workflow for GitHub Copilot"
+- **PASSED**: Init command uses "guided development project" in default description
+- **PASSED**: Success message shows "guided workflow support"
+- **PASSED**: All existing tests continue to pass after messaging updates
+- **PASSED**: TypeScript compilation succeeds after changes
+- **PASSED**: No references to "professional" workflow remain in codebase
+
 _Last Updated: June 22, 2025_  
 _Next Review: After implementing Python template or additional CLI features_
