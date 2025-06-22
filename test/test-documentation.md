@@ -198,6 +198,18 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | CLI-INT-013  | Workspace configuration persistence            | Integration | Completed |
 | CLI-INT-014  | Resource cleanup and temporary file management | Integration | Completed |
 
+### 12. Workflow Enhancement Tests (`test/unit/workflow-enhancement.test.ts`)
+
+| Test Case ID | Description                                          | Type | Status    |
+| :----------- | :--------------------------------------------------- | :--- | :-------- |
+| WF-UNIT-005  | Documentation-first principle enforcement validation | Unit | Completed |
+| WF-UNIT-006  | Task documentation requirement before implementation | Unit | Completed |
+| WF-UNIT-007  | Test case documentation requirement validation       | Unit | Completed |
+| WF-UNIT-008  | Confirmation gate enforcement in workflow steps     | Unit | Completed |
+| WF-UNIT-009  | Enhanced Step 1 confirmation requirements           | Unit | Completed |
+| WF-UNIT-010  | Enhanced Step 2 task management documentation       | Unit | Completed |
+| WF-UNIT-011  | Enhanced Step 3 TDD documentation requirements      | Unit | Completed |
+
 ### 12. Enhanced File Content Validation
 
 | Test Case ID | Description                                        | Type | Status    |

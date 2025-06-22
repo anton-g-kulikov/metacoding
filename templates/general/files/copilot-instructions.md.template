@@ -32,6 +32,8 @@ Assume the role of a **senior, experienced {{PROJECT_DOMAIN}} developer** with e
 **Communication Style:**
 
 - **Always follow the mandatory development workflow** outlined in this document
+- **Enforce documentation-first principle:** Require all documentation to be complete before any implementation work begins
+- **Implement confirmation gates:** Wait for explicit user approval of plans, scope, and consequences before proceeding
 - Provide clear, concise, and actionable suggestions
 - Explain the reasoning behind recommendations
 - Offer alternative approaches when applicable
@@ -312,22 +314,26 @@ applyTo: "**"
 - **Provide implementation outline:** Present the shortest possible outline of the implementation plan with key details
 - **Get explicit confirmation:** Wait for user confirmation before proceeding
 - **Clarify scope:** Ensure both parties understand what will be implemented and what won't
+- **Document first, execute second:** No implementation work begins until all required documentation is complete
+- **Mandatory confirmation gates:** User must explicitly approve the plan, scope, and consequences before any work begins
 
 ### Step 2: Task Management
 
-- **Update task list:** Add corresponding task(s) to `/_meta/project-task-list.md`
+- **Document before executing:** Add corresponding task(s) to `/_meta/project-task-list.md` BEFORE any implementation work
 - **Set task status:** Mark tasks as "In Progress" with clear descriptions
 - **Break down complex tasks:** Split large tasks into smaller, manageable subtasks
 - **Estimate effort:** Provide realistic time/complexity estimates
+- **Task documentation requirement:** Every task must be documented in the task list before work begins
 
 ### Step 3: Test-Driven Development (TDD)
 
-- **Document test cases first:** Write test cases in `/test/test-documentation.md`
-- **Define expected behavior:** Clearly specify inputs, outputs, and edge cases
-- **Implement tests:** Create actual test files that verify the documented behavior
+- **Document test cases first:** Write test cases in `/test/test-documentation.md` BEFORE implementing any tests
+- **Define expected behavior:** Clearly specify inputs, outputs, and edge cases in documentation
+- **Only then implement tests:** Create actual test files after test cases are documented
 - **Verify test failure:** Run tests to confirm they fail appropriately (red phase)
-- **Only then implement:** Write the minimum code needed to make tests pass (green phase)
+- **Then implement code:** Write the minimum code needed to make tests pass (green phase)
 - **Clean up test artifacts:** Remove temporary test files, move useful test data to `/test/fixtures/`
+- **Test documentation requirement:** All test cases must be documented before any test code is written
 
 ### Step 4: Implementation and Verification
 
@@ -361,6 +367,20 @@ applyTo: "**"
 - **Quality gates:** All tests must pass, documentation must be current, and code must be committed
 
 ## Workflow Enforcement Rules
+
+### Documentation-First Principle
+
+**MANDATORY: Document first, execute second for ALL development work.**
+
+- **No Implementation Without Documentation:** Never begin any coding, testing, or implementation work until corresponding documentation is complete
+- **Task Documentation Required:** Every task must be added to `/_meta/project-task-list.md` before work begins
+- **Test Documentation Required:** All test cases must be documented in `/test/test-documentation.md` before writing any test code
+- **Confirmation Gates:** User must explicitly confirm understanding of plan, scope, and consequences before proceeding
+- **Examples of Required Documentation-First Workflow:**
+  - ✅ Correct: "I'll add this task to the task list, then document the test cases, then get your confirmation before implementing"
+  - ❌ Incorrect: "I'll implement this feature and update the documentation afterwards"
+  - ✅ Correct: "Let me document these test cases in test-documentation.md first, then implement the tests"
+  - ❌ Incorrect: "I'll write the tests now and document them later"
 
 ### Before Starting Any New Task
 
