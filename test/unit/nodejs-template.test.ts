@@ -102,16 +102,22 @@ describe('Node.js Template', () => {
       const testRunnerPath = path.join(filesDir, 'test-runner.instructions.md');
       const content = fs.readFileSync(testRunnerPath, 'utf8');
 
-      // Check for Node.js testing patterns
-      expect(content).toContain('Jest');
-      expect(content).toContain('API testing');
+      // Check for Node.js-specific testing guidance
+      expect(content).toContain('Node.js/Backend specific');
+      expect(content).toContain('REST API endpoint tests');
       expect(content).toContain('integration test');
       expect(content).toContain('Node.js');
+
+      // Check for specific Node.js testing area prefixes
+      expect(content).toContain('`API` - REST API endpoint tests');
+      expect(content).toContain('`SRV` - Service layer tests');
+      expect(content).toContain('`DB` - Database/ORM tests');
+      expect(content).toContain('`AUTH` - Authentication/Authorization tests');
 
       // Check for temporary file cleanup instructions
       expect(content).toContain('temporary');
       expect(content).toContain('cleanup');
-      expect(content).toContain('artifact');
+      expect(content).toContain('Artifact');
     });
 
     test('TMPL-UNIT-008: all instruction files should enforce 7-step workflow', () => {

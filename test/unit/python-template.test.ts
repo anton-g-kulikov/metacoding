@@ -101,10 +101,16 @@ describe('Python Template', () => {
       const testRunnerPath = path.join(filesDir, 'test-runner.instructions.md');
       const content = fs.readFileSync(testRunnerPath, 'utf8');
 
-      // Check for Python testing content
-      expect(content).toContain('pytest');
+      // Check for Python-specific testing guidance
+      expect(content).toContain('Python/Django specific');
       expect(content).toContain('Python');
       expect(content).toContain('Django');
+
+      // Check for specific Python testing area prefixes
+      expect(content).toContain('VIEW` - Django views/FastAPI endpoints tests');
+      expect(content).toContain('MODEL` - Django models/SQLAlchemy tests');
+      expect(content).toContain('FORM` - Django forms/Pydantic validators tests');
+      expect(content).toContain('CMD` - Django management commands tests');
 
       // Check for temporary file cleanup instructions
       expect(content).toContain('temporary');
