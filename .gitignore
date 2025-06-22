@@ -28,3 +28,4 @@ temp/
 node_modules/
 lib/
 coverage/
+*.tgz
