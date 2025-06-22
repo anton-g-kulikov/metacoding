@@ -25,4 +25,6 @@ temp/
 .github
 
 # Build and distribution files
-node_modules
+node_modules/
+lib/
+coverage/
