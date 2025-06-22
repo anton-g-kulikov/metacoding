@@ -85,9 +85,10 @@ npm publish --access public  # For scoped packages
 
 ### Dependency Drift
 
-- **Issue**: Dependencies become outdated between releases
-- **Solution**: Review and update dependencies regularly
-- **Prevention**: Set up dependency monitoring
+- **Issue**: Dependencies become outdated between releases or version mismatches occur
+- **Solution**: Review and update dependencies regularly, ensure TypeScript and ESLint versions are compatible
+- **Prevention**: Set up dependency monitoring and check for compatibility warnings during lint
+- **Common Example**: TypeScript version newer than @typescript-eslint supports
 
 ## 🏆 **RELEASE BEST PRACTICES**
 

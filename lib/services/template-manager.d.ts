@@ -13,5 +13,6 @@ export declare class TemplateManager {
     private loadTemplateFiles;
     private processTemplateContent;
     private getProjectDomain;
+    private getProjectSpecificGuidance;
 }
 //# sourceMappingURL=template-manager.d.ts.map

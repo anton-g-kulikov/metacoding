@@ -27,7 +27,7 @@ export class VSCodeService {
       try {
         const content = await fs.readFile(this.settingsFile, 'utf8');
         existingSettings = JSON.parse(content);
-      } catch (error) {
+      } catch {
         // If settings file is malformed, create a backup and start fresh
         await this.backupSettings();
         existingSettings = {};
