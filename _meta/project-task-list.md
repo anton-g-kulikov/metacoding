@@ -1,6 +1,28 @@
 # metacoding Project Task List
 
-## 🚧 Current Sprint: NPM Package Development
+## � Planned Tasks (June 23, 2025)
+
+### CLI Command Implementation
+
+- [ ] **Implement `metacoding validate` command functionality** - ❌ **NOT STARTED**
+
+  - Complete the validation logic in `src/commands/validate.ts`
+  - Implement project structure validation against template requirements
+  - Add configuration file validation (package.json, tsconfig.json, etc.)
+  - Validate instruction files presence and format
+  - Add comprehensive error reporting and suggestions
+  - Include tests for validation scenarios and edge cases
+  - Update CLI help text and documentation
+
+- [ ] **Implement `metacoding update` command functionality** - ❌ **NOT STARTED**
+  - Complete the update logic in `src/commands/update.ts`
+  - Implement template version checking and comparison
+  - Add selective update options (specific files vs full template)
+  - Implement backup and rollback functionality for safety
+  - Add conflict resolution for modified instruction files
+  - Include tests for update scenarios and edge cases
+  - Update CLI help text and documentation
+
 
 ### Current Workflow Tasks (June 22, 2025)
 
@@ -158,14 +180,6 @@
 - **Status**: ✅ **COMPLETED** - Successfully implemented composable instruction file architecture
 - **Priority**: High (architectural improvement, reduces maintenance burden)
 
-### Publishing and Distribution
-
-- [ ] **Prepare for npm publishing (build scripts, files field)**
-- [ ] **Create GitHub release workflow**
-- [ ] **Set up semantic versioning**
-- [ ] **Publish initial version to npm**
-- [ ] **Update project documentation with npm instructions**
-
 ## 🧪 Test Quality and Coverage Improvements
 
 ### Task 1: Test Case Naming Convention Audit ✅
@@ -181,7 +195,7 @@
   - [x] `test/unit/python-template.test.ts` - TMPL-UNIT-010 through TMPL-UNIT-018
   - [x] `test/unit/react-template.test.ts` - TMPL-UNIT-019 through TMPL-UNIT-027
   - [x] `test/integration/init.test.ts` - CLI-INT-001 through CLI-INT-002
-  - [ ] `test/test-documentation.md` (pending for Task 5)
+  - [x] `test/test-documentation.md` (pending for Task 5)
 
 ---
 
@@ -269,10 +283,3 @@
 - ❌ Not Started
 - ⚠️ Needs Review
 - 🔄 Under Revision
-
-## Current Focus
-
-**Primary Goal**: Create and publish professional npm package for metacoding
-**Next Major Task**: Complete validate and update command logic, prepare for npm publishing
-**Current Status**: Core package infrastructure complete, standardized documentation and test formats implemented, ready for feature expansion and publishing
-**Target Completion**: Additional command implementations and npm publishing
