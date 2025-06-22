@@ -1,14 +1,8 @@
-# NPM Publishing Readiness Checklist
+# NPM Publishing Readiness Checklist - v1.1.1 COMPLETED
 
-> **Usage Instructions:**
->
-> 1. Update the assessment date below
-> 2. Fill in current status for each checklist item
-> 3. Complete all phases of the publication workflow
-> 4. When release is complete, copy this file to `_meta/releases/npm-v[VERSION].md`
-> 5. Reset this template for the next release
+> **Release Archive:** This is the completed checklist for v1.1.1 release on June 22, 2025
 
-**Assessment Date: _[UPDATE DATE]_**
+**Assessment Date: June 22, 2025**
 
 ## 🔄 **ITERATION UPDATE CHECKLIST**
 
@@ -16,27 +10,27 @@
 
 #### 1. **Code Quality Gates**
 
-- [ ] All tests pass (`npm test`) - Current: **_/_**
-- [ ] Linting passes (`npm run lint`) - Status: **\_**
-- [ ] Build succeeds (`npm run build`) - Status: **\_**
-- [ ] Full pipeline passes (`npm run prepublishOnly`)
-- **Notes**: **_[Update with current status]_**
+- [x] All tests pass (`npm test`) - Current: **146/146**
+- [x] Linting passes (`npm run lint`) - Status: **✅ Clean**
+- [x] Build succeeds (`npm run build`) - Status: **✅ Success**
+- [x] Full pipeline passes (`npm run prepublishOnly`)
+- **Notes**: **All quality gates passed - TypeScript support fix validated**
 
 #### 2. **Version & Documentation Updates**
 
-- [ ] Version bumped in package.json (Current: **\_** → Target: **\_**)
-- [ ] CHANGELOG.md updated with new release entry
-- [ ] Breaking changes documented (if any)
-- [ ] README.md updated for new features (if applicable)
-- **Notes**: **_[Update with current status]_**
+- [x] Version bumped in package.json (Current: **1.1.0** → Target: **1.1.1**)
+- [x] CHANGELOG.md updated with new release entry
+- [x] Breaking changes documented (if any) - **None for this patch**
+- [x] README.md updated for new features (if applicable) - **No README changes needed**
+- **Notes**: **Patch release v1.1.1 documented with TypeScript template loading fix**
 
 #### 3. **Release Validation**
 
-- [ ] `npm pack` - Review package contents
-- [ ] Package size reasonable (Current size: **\_** KB)
-- [ ] All intended files included, test files excluded
-- [ ] Version references updated across documentation
-- **Notes**: **_[Update with package validation results]_**
+- [x] `npm pack` - Review package contents
+- [x] Package size reasonable (Current size: **94.8** KB)
+- [x] All intended files included, test files excluded
+- [x] Version references updated across documentation
+- **Notes**: **Package validated - 64 files, 351.4 KB unpacked, includes all templates and built code**
 
 ## 📦 **PUBLICATION WORKFLOW**
 
@@ -66,34 +60,36 @@ npm publish --access public  # For scoped packages
 
 ### Phase 4: Post-Publish Verification
 
-- [ ] Package appears on npmjs.com
-- [ ] Test global installation: `npm install -g metacoding`
-- [ ] Test CLI functionality: `metacoding --help`
-- [ ] Create GitHub release matching npm version
-- **Notes**: **_[Update with post-publish verification results]_**
+- [x] Package appears on npmjs.com
+- [x] Test global installation: `npm install -g metacoding`
+- [x] Test CLI functionality: `metacoding --help`
+- [ ] Create GitHub release matching npm version (Optional)
+- **Notes**: **Package successfully published and verified on npm registry**
 
 ## 🎯 **RELEASE SUMMARY**
 
-**Status: _[UPDATE WHEN COMPLETE]_**
+**Status: ✅ COMPLETED**
 
-- **📦 Package Published:** _[Update with npm URL]_
-- **🔖 Version:** _[FROM → TO]_
-- **📊 Package Size:** _[SIZE]_ KB compressed, _[SIZE]_ KB unpacked
-- **🗂️ Files Included:** _[COUNT]_ files
-- **✅ Quality Gates:** _[TEST RESULTS]_
+- **📦 Package Published:** https://www.npmjs.com/package/metacoding
+- **🔖 Version:** 1.1.0 → 1.1.1
+- **📊 Package Size:** 94.8 KB compressed, 351.4 KB unpacked
+- **🗂️ Files Included:** 64 files
+- **✅ Quality Gates:** 146/146 tests passed, lint clean, build success
 - **🚀 Installation:** `npm install -g metacoding`
-- **🏷️ Git Tag:** _[TAG]_ pushed to GitHub
+- **🏷️ Git Tag:** v1.1.1 pushed to GitHub
 
-**📋 Key Improvements in _[VERSION]_:**
+**📋 Key Improvements in v1.1.1:**
 
-- _[List major improvements and changes]_
+- Fixed General Template TypeScript Support: Resolved issue where selecting TypeScript with general template loaded all language-specific instruction files instead of only TypeScript files
+- Enhanced Template System: Updated loadInstructionFiles method to properly filter instruction files based on technology choices
+- Build Configuration: Fixed TypeScript configuration to exclude test files from production build
 
 **🔧 Next Steps:**
 
 - Monitor package download metrics on npm
 - Address any user feedback or issues
 - Continue development following established workflow
-- Plan next feature set for _[NEXT VERSION]_
+- Plan next feature set for v1.2.0
 
 ## 📋 **COMMON ITERATION ISSUES**
 
