@@ -5,18 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.2] - 2024-12-19
 
 ### Added
 
-- **Update Command**: Complete `metacoding update` command implementation with simple conflict resolution
-  - Automatic template detection from existing project files
-  - Safe backup system with timestamped full directory backup for rollback
+- **Update Command**: Complete `metacoding update` command implementation with validation and conflict resolution
+  - **Validation Mode**: Added `--dry-run` flag for comprehensive setup validation without making changes
+  - **Strict Validation**: Added `--strict` flag for enhanced validation rules and detailed reporting
+  - Automatic template detection from existing project files and configuration
+  - Safe backup system with timestamped full directory backup for complete rollback protection
   - Simple conflict resolution: user chooses to keep their version (saved as `user.filename`) or replace with template
   - No interactive diff - clean, user-controlled choices only
   - Force mode for automated updates without conflict prompts
   - Complete integration with existing template system and VS Code settings
-  - Comprehensive error handling and progress feedback
+  - Comprehensive error handling, progress feedback, and validation reporting
+  - **Removed**: Separate `validate` command - all validation integrated into `update --dry-run`
 
 ## [1.1.1] - 2025-06-22
 

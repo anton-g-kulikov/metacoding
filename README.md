@@ -92,19 +92,23 @@ my-awesome-project/
 
 Once installed, you can use these commands:
 
-### `metacoding validate`
+### `metacoding init`
 
-Check your current metacoding setup:
+Initialize metacoding in your project:
 
-- `metacoding validate` - Basic validation
-- `metacoding validate --strict` - Strict validation rules
-- `metacoding validate --fix` - Auto-fix issues where possible
+- `metacoding init` - Interactive setup with template selection
+- `metacoding init --template react` - Use React template
+- `metacoding init --template node` - Use Node.js template
+- `metacoding init --template python` - Use Python template
+- `metacoding init --force` - Overwrite existing files
 
 ### `metacoding update`
 
 Update your metacoding setup to the latest version:
 
-- `metacoding update` - Update to latest version
+- `metacoding update` - Update to latest version with validation
+- `metacoding update --dry-run` - Validate current state and preview changes without applying them
+- `metacoding update --strict` - Use strict validation rules
 - `metacoding update --backup` - Create backup before updating
 
 ### Help and Version

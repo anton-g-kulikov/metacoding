@@ -37,6 +37,15 @@
   - ✅ Fix TypeScript errors and test environment configuration
   - ✅ **Simplified Scope**: No interactive diff, keep user control simple - user chooses to keep (saved as user.filename) or replace with template
 
+- [x] **CLI-TASK-004: Complete CLI update command implementation and integration** - ✅ **COMPLETED**
+  - ✅ Remove separate `validate` command and integrate validation into `update` command
+  - ✅ Implement comprehensive `--dry-run` validation mode with detailed reporting
+  - ✅ Complete backup creation, conflict resolution, and template updating functionality
+  - ✅ Add comprehensive test coverage for all update scenarios and edge cases (159/159 tests passing)
+  - ✅ Update CLI help text, API documentation, and test documentation
+  - ✅ Remove obsolete validate command files and update CLI interface
+  - ✅ Ensure all functionality properly tested including error handling and validation modes
+
 ### Current Workflow Tasks (June 22, 2025)
 
 - [x] **Fixed TypeScript/ESLint Version Compatibility Issue** - ✅ **COMPLETED**
