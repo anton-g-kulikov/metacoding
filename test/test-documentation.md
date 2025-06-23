@@ -119,15 +119,21 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 
 ### 3. CLI Commands (`src/commands/`)
 
-| Test Case ID | Description                                  | Type        | Status    |
-| :----------- | :------------------------------------------- | :---------- | :-------- |
-| CLI-UNIT-001 | Init command with React template selection   | Unit        | Completed |
-| CLI-UNIT-002 | Init command with Node.js template selection | Unit        | Completed |
-| CLI-UNIT-003 | Init command with Python template selection  | Unit        | Completed |
-| CLI-UNIT-004 | Init command with General template selection | Unit        | Completed |
-| CLI-UNIT-005 | Update command validation                    | Unit        | Completed |
-| CLI-UNIT-006 | Validate command execution                   | Unit        | Completed |
-| CLI-INT-001  | Complete init workflow end-to-end            | Integration | Completed |
+| Test Case ID | Description                                   | Type        | Status      |
+| :----------- | :-------------------------------------------- | :---------- | :---------- |
+| CLI-UNIT-001 | Init command with React template selection    | Unit        | Completed   |
+| CLI-UNIT-002 | Init command with Node.js template selection  | Unit        | Completed   |
+| CLI-UNIT-003 | Init command with Python template selection   | Unit        | Completed   |
+| CLI-UNIT-004 | Init command with General template selection  | Unit        | Completed   |
+| CLI-UNIT-005 | Update command validation                     | Unit        | Completed   |
+| CLI-UNIT-006 | Update --dry-run validation execution         | Unit        | Completed   |
+| CLI-UNIT-031 | Update command with dry-run flag validation   | Unit        | Not Started |
+| CLI-UNIT-032 | Dry-run mode file structure validation        | Unit        | Not Started |
+| CLI-UNIT-033 | Dry-run mode configuration file validation    | Unit        | Not Started |
+| CLI-UNIT-034 | Dry-run mode instruction file validation      | Unit        | Not Started |
+| CLI-UNIT-035 | Dry-run mode error reporting and suggestions  | Unit        | Not Started |
+| CLI-INT-001  | Complete init workflow end-to-end             | Integration | Completed   |
+| CLI-INT-003  | Update dry-run validation workflow end-to-end | Integration | Not Started |
 
 ### 4. Filesystem Service (`src/services/filesystem.ts`)
 
@@ -165,7 +171,7 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | CLI-UNIT-005 | Invalid command handling and error messages | Unit | Completed |
 | CLI-UNIT-006 | Help suggestion for unknown commands        | Unit | Completed |
 | CLI-UNIT-007 | Command availability verification           | Unit | Completed |
-| CLI-UNIT-008 | Validate command listing in help output     | Unit | Completed |
+| CLI-UNIT-008 | Update --dry-run option listing in help     | Unit | Completed |
 | CLI-UNIT-009 | Update command listing in help output       | Unit | Completed |
 
 ### 8. Error Handling and Edge Cases (`test/unit/error-handling.test.ts`)
@@ -411,19 +417,3 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 - **Force Mode**: Skip conflict resolution and replace all files
 - **Complete Integration**: Works with TemplateManager, ProjectDetector, and VSCodeService
 - **Test Coverage**: 13/13 tests passing with comprehensive coverage of all scenarios
-
-### 7. Backup Service Tests
-
-| Test Case ID | Description                      | Type | Status    |
-| :----------- | :------------------------------- | :--- | :-------- |
-| BKP-UNIT-001 | Full directory backup creation   | Unit | Completed |
-| BKP-UNIT-002 | Backup timestamp generation      | Unit | Completed |
-| BKP-UNIT-003 | File content integrity in backup | Unit | Completed |
-| BKP-UNIT-004 | Hash-based change detection      | Unit | Completed |
-
-### 8. Conflict Resolution Service Tests
-
-| Test Case ID | Description                                    | Type | Status    |
-| :----------- | :--------------------------------------------- | :--- | :-------- |
-| CFT-UNIT-001 | File content comparison for conflict detection | Unit | Completed |
-| CFT-UNIT-002 | User filename generation with user. prefix     | Unit | Completed |

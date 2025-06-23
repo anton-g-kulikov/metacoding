@@ -1,5 +1,4 @@
 import { InitCommand } from '../../src/commands/init';
-import { ValidateCommand } from '../../src/commands/validate';
 import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
 import * as fs from 'fs-extra';
@@ -105,26 +104,38 @@ describe('Error Handling', () => {
     });
   });
 
-  describe('Validate Command Error Handling', () => {
+  describe('Update Command Validation Error Handling', () => {
     test('CLI-UNIT-013: should handle validation when no metacoding setup exists', async () => {
-      const validateCommand = new ValidateCommand();
+      const updateCommand = new UpdateCommand();
 
-      // Should not throw even when no setup exists
-      await expect(validateCommand.execute({})).resolves.not.toThrow();
+      // Should throw when validating with no setup in dry-run mode
+      await expect(updateCommand.execute({ dryRun: true })).rejects.toThrow(
+        'Validation failed'
+      );
     });
 
-    test('CLI-UNIT-014: should handle corrupted metacoding files', async () => {
+    test('CLI-UNIT-014: should handle corrupted metacoding files in dry-run mode', async () => {
+      // Setup initial metacoding
+      const initCommand = new InitCommand();
+      await initCommand.execute({
+        template: 'general',
+        force: true,
+        skipVscode: true,
+        skipGit: true,
+      });
+
       // Create invalid .github/copilot-instructions.md
-      await fs.ensureDir('.github');
       await fs.writeFile(
         '.github/copilot-instructions.md',
         'invalid content without proper structure'
       );
 
-      const validateCommand = new ValidateCommand();
+      const updateCommand = new UpdateCommand();
 
-      // Should not crash when validating corrupted files
-      await expect(validateCommand.execute({})).resolves.not.toThrow();
+      // Should not crash when validating corrupted files in dry-run mode
+      await expect(
+        updateCommand.execute({ dryRun: true })
+      ).resolves.not.toThrow();
     });
   });
 

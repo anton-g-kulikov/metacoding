@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import * as path from 'path';
+import { describe, test, expect } from '@jest/globals';
 
 describe('CLI Commands', () => {
   const cliPath = path.join(__dirname, '../../bin/metacoding.js');
@@ -10,7 +11,6 @@ describe('CLI Commands', () => {
 
       expect(output).toContain('Usage: metacoding');
       expect(output).toContain('init');
-      expect(output).toContain('validate');
       expect(output).toContain('update');
       expect(output).toContain('Options:');
     });
@@ -48,7 +48,7 @@ describe('CLI Commands', () => {
           encoding: 'utf8',
           stdio: 'pipe',
         });
-        fail('Should have thrown an error');
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         expect(error.status).not.toBe(0);
         expect(error.stderr || error.stdout).toContain('unknown command');
@@ -61,7 +61,7 @@ describe('CLI Commands', () => {
           encoding: 'utf8',
           stdio: 'pipe',
         });
-        fail('Should have thrown an error');
+        throw new Error('Should have thrown an error');
       } catch (error: any) {
         const output = error.stderr || error.stdout || '';
         expect(output).toContain('unknown command');
@@ -77,10 +77,13 @@ describe('CLI Commands', () => {
       expect(output).toMatch(/init.*metacoding/i);
     });
 
-    test('CLI-UNIT-008: should list validate command as available', () => {
-      const output = execSync(`node ${cliPath} --help`, { encoding: 'utf8' });
+    test('CLI-UNIT-008: should list update command with validation option', () => {
+      const output = execSync(`node ${cliPath} update --help`, {
+        encoding: 'utf8',
+      });
 
-      expect(output).toContain('validate');
+      expect(output).toContain('--dry-run');
+      expect(output).toMatch(/dry.*run.*validate/i);
     });
 
     test('CLI-UNIT-009: should list update command as available', () => {

@@ -10,6 +10,7 @@ export declare class UpdateCommand {
     private detectCurrentTemplate;
     private getProjectConfig;
     private getExistingMetacodingFiles;
+    private validateSetup;
     private displayUpdateSummary;
 }
 //# sourceMappingURL=update.d.ts.map

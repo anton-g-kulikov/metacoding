@@ -1,5 +1,4 @@
 import { InitCommand } from '../../src/commands/init';
-import { ValidateCommand } from '../../src/commands/validate';
 import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
 import * as fs from 'fs-extra';
@@ -40,16 +39,13 @@ describe('Advanced Integration Tests', () => {
         await fileSystem.fileExists('.github/copilot-instructions.md')
       ).toBe(true);
 
-      // Step 2: Validate
-      const validateCommand = new ValidateCommand();
-      await validateCommand.execute({});
-
-      // Should validate (command currently only logs)
-      const validationCommand = new ValidateCommand();
-      await validationCommand.execute({});
+      // Step 2: Validate using update --dry-run
+      const updateCommand = new UpdateCommand();
+      await expect(
+        updateCommand.execute({ dryRun: true })
+      ).resolves.not.toThrow();
 
       // Step 3: Update (with force option to avoid interactive prompts)
-      const updateCommand = new UpdateCommand();
       await expect(
         updateCommand.execute({
           force: true, // Use force mode to avoid interactive prompts

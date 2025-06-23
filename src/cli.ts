@@ -1,7 +1,6 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { InitCommand } from './commands/init';
-import { ValidateCommand } from './commands/validate';
 import { UpdateCommand } from './commands/update';
 const packageJson = require('../package.json');
 const version = packageJson.version;
@@ -22,7 +21,7 @@ export async function main(): Promise<void> {
 ${chalk.cyan('Examples:')}
   ${chalk.dim('$')} metacoding init                    # Initialize metacoding in current directory
   ${chalk.dim('$')} metacoding init --template react   # Initialize with React template
-  ${chalk.dim('$')} metacoding validate                # Validate current metacoding setup
+  ${chalk.dim('$')} metacoding update --dry-run        # Validate current metacoding setup
   ${chalk.dim('$')} metacoding update                  # Update to latest metacoding version
 
 ${chalk.cyan('Learn more:')}
@@ -56,31 +55,16 @@ ${chalk.cyan('Learn more:')}
       }
     });
 
-  // Validate command
-  program
-    .command('validate')
-    .description('Validate current metacoding setup')
-    .option('--fix', 'automatically fix issues where possible')
-    .option('--strict', 'use strict validation rules')
-    .action(async (options) => {
-      try {
-        const validateCommand = new ValidateCommand();
-        await validateCommand.execute(options);
-      } catch (error) {
-        console.error(
-          chalk.red('Error during validation:'),
-          error instanceof Error ? error.message : error
-        );
-        process.exit(1);
-      }
-    });
-
   // Update command
   program
     .command('update')
-    .description('Update existing metacoding setup to latest version')
+    .description(
+      'Update existing metacoding setup to latest version or validate current setup'
+    )
     .option('--template <type>', 'update to specific template type')
     .option('--backup', 'create backup of existing files before updating')
+    .option('--dry-run', 'validate setup without making changes')
+    .option('--strict', 'use strict validation rules (with --dry-run)')
     .action(async (options) => {
       try {
         const updateCommand = new UpdateCommand();

@@ -1,9 +1,15 @@
-import { jest } from '@jest/globals';
+import {
+  jest,
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+} from '@jest/globals';
 import { main } from '../../src/cli';
 
 // Mock dependencies
 jest.mock('../../src/commands/init');
-jest.mock('../../src/commands/validate');
 jest.mock('../../src/commands/update');
 jest.mock('chalk', () => ({
   cyan: (text: string) => text,
@@ -237,13 +243,13 @@ describe('CLI Entry Point Coverage', () => {
       mockExit.mockRestore();
     });
 
-    test('should exit with code 1 on validate command error', async () => {
-      process.argv = ['node', 'cli.js', 'validate'];
+    test('should exit with code 1 on update command error', async () => {
+      process.argv = ['node', 'cli.js', 'update'];
 
-      const { ValidateCommand } = await import('../../src/commands/validate');
+      const { UpdateCommand } = await import('../../src/commands/update');
       const mockExecute = jest.fn() as jest.MockedFunction<any>;
-      mockExecute.mockRejectedValue(new Error('Validation failed'));
-      (ValidateCommand as any).mockImplementation(() => ({
+      mockExecute.mockRejectedValue(new Error('Update failed'));
+      (UpdateCommand as any).mockImplementation(() => ({
         execute: mockExecute,
       }));
 
@@ -259,8 +265,8 @@ describe('CLI Entry Point Coverage', () => {
 
       expect(mockExit).toHaveBeenCalledWith(1);
       expect(console.error).toHaveBeenCalledWith(
-        expect.stringContaining('Error during validation:'),
-        'Validation failed'
+        expect.stringContaining('Error during update:'),
+        'Update failed'
       );
 
       mockExit.mockRestore();
@@ -297,20 +303,20 @@ describe('CLI Entry Point Coverage', () => {
   });
 
   describe('CLI-COV-006: Command delegation to subcommands', () => {
-    test('should delegate validate command with options', async () => {
-      process.argv = ['node', 'cli.js', 'validate', '--fix', '--strict'];
+    test('should delegate update command with dry-run option', async () => {
+      process.argv = ['node', 'cli.js', 'update', '--dry-run', '--strict'];
 
-      const { ValidateCommand } = await import('../../src/commands/validate');
+      const { UpdateCommand } = await import('../../src/commands/update');
       const mockExecute = jest.fn() as jest.MockedFunction<any>;
       mockExecute.mockResolvedValue(undefined);
-      (ValidateCommand as any).mockImplementation(() => ({
+      (UpdateCommand as any).mockImplementation(() => ({
         execute: mockExecute,
       }));
 
       await main();
 
-      expect(ValidateCommand).toHaveBeenCalled();
-      expect(mockExecute).toHaveBeenCalledWith({ fix: true, strict: true });
+      expect(UpdateCommand).toHaveBeenCalled();
+      expect(mockExecute).toHaveBeenCalledWith({ dryRun: true, strict: true });
     });
 
     test('should delegate update command with options', async () => {

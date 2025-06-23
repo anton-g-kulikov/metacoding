@@ -4,14 +4,12 @@ export interface InitOptions {
     skipVscode?: boolean;
     skipGit?: boolean;
 }
-export interface ValidateOptions {
-    fix?: boolean;
-    strict?: boolean;
-}
 export interface UpdateOptions {
     template?: string;
     backup?: boolean;
     force?: boolean;
+    dryRun?: boolean;
+    strict?: boolean;
 }
 export interface ProjectConfig {
     name: string;

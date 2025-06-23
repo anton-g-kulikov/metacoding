@@ -28,6 +28,11 @@ export class UpdateCommand {
   }
 
   async execute(options: UpdateOptions): Promise<void> {
+    // Handle dry-run mode (validation only)
+    if (options.dryRun) {
+      return this.validateSetup(options);
+    }
+
     console.log(chalk.cyan('🔄 Updating metacoding setup...\n'));
 
     try {
@@ -212,6 +217,278 @@ export class UpdateCommand {
     }
 
     return files;
+  }
+
+  /**
+   * Validate current metacoding setup without making changes
+   */
+  private async validateSetup(options: UpdateOptions): Promise<void> {
+    console.log(chalk.cyan('🔍 Validating metacoding setup...\n'));
+
+    const validationResults: {
+      check: string;
+      status: 'pass' | 'warn' | 'fail';
+      message?: string;
+    }[] = [];
+    let hasErrors = false;
+    let hasWarnings = false;
+
+    try {
+      // Step 1: Validate file structure
+      const fileSpinner = ora('Checking file structure...').start();
+
+      const requiredFiles = [
+        '.github/copilot-instructions.md',
+        '.github/instructions/code-review.instructions.md',
+        '.github/instructions/docs-update.instructions.md',
+        '.github/instructions/release.instructions.md',
+        '.github/instructions/test-runner.instructions.md',
+      ];
+
+      let missingFiles = 0;
+      for (const file of requiredFiles) {
+        if (!(await fs.pathExists(file))) {
+          validationResults.push({
+            check: `File ${file}`,
+            status: 'fail',
+            message: 'Missing required file',
+          });
+          missingFiles++;
+          hasErrors = true;
+        }
+      }
+
+      if (missingFiles === 0) {
+        fileSpinner.succeed('File structure complete');
+        validationResults.push({
+          check: 'File structure',
+          status: 'pass',
+        });
+      } else {
+        fileSpinner.fail(`Missing ${missingFiles} required files`);
+      }
+
+      // Step 2: Validate VS Code configuration
+      const vscodeSpinner = ora('Checking VS Code configuration...').start();
+
+      try {
+        const vscodeSettingsPath = '.vscode/settings.json';
+        if (await fs.pathExists(vscodeSettingsPath)) {
+          const settings = await fs.readJson(vscodeSettingsPath);
+          const requiredSettings = ['github.copilot.chat.promptFiles'];
+
+          let missingSettings = 0;
+          for (const setting of requiredSettings) {
+            if (!settings[setting]) {
+              validationResults.push({
+                check: `VS Code setting '${setting}'`,
+                status: options.strict ? 'fail' : 'warn',
+                message: 'Not configured',
+              });
+              missingSettings++;
+              if (options.strict) {
+                hasErrors = true;
+              } else {
+                hasWarnings = true;
+              }
+            }
+          }
+
+          if (missingSettings === 0) {
+            vscodeSpinner.succeed('VS Code configuration valid');
+            validationResults.push({
+              check: 'VS Code configuration',
+              status: 'pass',
+            });
+          } else if (options.strict) {
+            vscodeSpinner.fail(`Missing ${missingSettings} required settings`);
+          } else {
+            vscodeSpinner.warn(
+              `Missing ${missingSettings} recommended settings`
+            );
+          }
+        } else {
+          vscodeSpinner.warn('VS Code settings file not found');
+          validationResults.push({
+            check: 'VS Code settings file',
+            status: 'warn',
+            message: 'File not found',
+          });
+          hasWarnings = true;
+        }
+      } catch {
+        vscodeSpinner.fail('Error reading VS Code settings');
+        validationResults.push({
+          check: 'VS Code configuration',
+          status: 'fail',
+          message: 'Error reading settings file',
+        });
+        hasErrors = true;
+      }
+
+      // Step 3: Validate Git repository
+      const gitSpinner = ora('Checking Git repository...').start();
+
+      if (await fs.pathExists('.git')) {
+        gitSpinner.succeed('Git repository configured');
+        validationResults.push({
+          check: 'Git repository',
+          status: 'pass',
+        });
+      } else {
+        const message = 'No Git repository found';
+        if (options.strict) {
+          gitSpinner.fail(message);
+          validationResults.push({
+            check: 'Git repository',
+            status: 'fail',
+            message,
+          });
+          hasErrors = true;
+        } else {
+          gitSpinner.warn(message);
+          validationResults.push({
+            check: 'Git repository',
+            status: 'warn',
+            message,
+          });
+          hasWarnings = true;
+        }
+      }
+
+      // Step 4: Validate template integrity
+      const templateSpinner = ora('Checking template integrity...').start();
+
+      try {
+        // Just verify we can detect the template
+        await this.detectCurrentTemplate(options.template);
+
+        // Check for placeholder text in main copilot instructions
+        if (await fs.pathExists('.github/copilot-instructions.md')) {
+          const content = await fs.readFile(
+            '.github/copilot-instructions.md',
+            'utf-8'
+          );
+          const hasPlaceholders =
+            content.includes('{{') && content.includes('}}');
+
+          if (hasPlaceholders) {
+            templateSpinner.fail('Template variables not substituted');
+            validationResults.push({
+              check: 'Template integrity',
+              status: 'fail',
+              message: 'Unprocessed template variables found',
+            });
+            hasErrors = true;
+          } else {
+            templateSpinner.succeed('Template integrity verified');
+            validationResults.push({
+              check: 'Template integrity',
+              status: 'pass',
+            });
+          }
+        } else {
+          templateSpinner.warn(
+            'Cannot verify template integrity - main file missing'
+          );
+          validationResults.push({
+            check: 'Template integrity',
+            status: 'warn',
+            message: 'Main instruction file missing',
+          });
+          hasWarnings = true;
+        }
+      } catch {
+        templateSpinner.fail('Error checking template integrity');
+        validationResults.push({
+          check: 'Template integrity',
+          status: 'fail',
+          message: 'Error during template validation',
+        });
+        hasErrors = true;
+      }
+
+      // Display results
+      console.log('');
+      for (const result of validationResults) {
+        const icon =
+          result.status === 'pass'
+            ? '✅'
+            : result.status === 'warn'
+              ? '⚠️'
+              : '❌';
+        const message = result.message ? ` - ${result.message}` : '';
+        console.log(`${icon} ${result.check}${message}`);
+      }
+
+      // Summary
+      console.log('');
+      const totalChecks = validationResults.length;
+      const passedChecks = validationResults.filter(
+        (r) => r.status === 'pass'
+      ).length;
+
+      if (hasErrors) {
+        console.log(chalk.red.bold('❌ Validation failed with errors\n'));
+
+        console.log(chalk.cyan('Suggestions:'));
+        console.log("- Run 'metacoding update' to restore missing files");
+        console.log('- Check VS Code settings configuration');
+        console.log("- Ensure you're in a Git repository");
+
+        console.log(
+          chalk.dim(`\nSummary: ${passedChecks}/${totalChecks} checks passed`)
+        );
+
+        // Don't call process.exit in tests
+        if (process.env.NODE_ENV !== 'test') {
+          process.exit(1);
+        } else {
+          throw new Error('Validation failed');
+        }
+      } else if (hasWarnings && options.strict) {
+        console.log(
+          chalk.yellow.bold('⚠️ Validation completed with warnings\n')
+        );
+
+        console.log(chalk.cyan('Suggestions:'));
+        console.log('- Configure recommended VS Code settings');
+        console.log('- Consider initializing a Git repository');
+
+        console.log(
+          chalk.dim(`\nSummary: ${passedChecks}/${totalChecks} checks passed`)
+        );
+
+        // Don't call process.exit in tests
+        if (process.env.NODE_ENV !== 'test') {
+          process.exit(2);
+        } else {
+          throw new Error('Validation completed with warnings');
+        }
+      } else {
+        console.log(
+          chalk.green.bold('🎉 metacoding setup is valid and ready to use!\n')
+        );
+        console.log(
+          chalk.dim(`Summary: ${passedChecks}/${totalChecks} checks passed`)
+        );
+      }
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('Validation')) {
+        throw error; // Re-throw validation errors for tests
+      }
+
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.error(chalk.red('\n❌ Validation failed:'), errorMessage);
+
+      // Don't call process.exit in tests
+      if (process.env.NODE_ENV !== 'test') {
+        process.exit(1);
+      } else {
+        throw error;
+      }
+    }
   }
 
   /**
