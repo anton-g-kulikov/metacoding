@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.4] - 2025-06-23
+
+### Added
+
+- **Automatic .gitignore Management**: New GitIgnoreManager service ensures AI coding assistant files are excluded from version control
+  - **Append-Only Strategy**: Preserves existing user .gitignore configurations while adding essential exclusions
+  - **Minimal Pattern Focus**: Only excludes files that metacoding actually creates (not broad AI assistant patterns)
+  - **Template Integration**: Simplified to single general .gitignore template for all project types
+  - **Init Command Integration**: Automatically updates .gitignore during project setup
+  - **Essential Exclusions**: 
+    - `.github/copilot-instructions.md`
+    - `.github/instructions/`
+    - `.vscode/copilot-instructions.md`
+    - `.idea/copilot-instructions.md`
+  - **Clear Section Marker**: Uses `# metacoding: AI coding assistant exclusions` for easy identification
+  - **Duplicate Detection**: Skips adding patterns that already exist in the file
+
+### Changed
+
+- **Template System Simplification**: Removed redundant template-specific .gitignore files in favor of unified approach
+- **Architecture Documentation**: Added ADR-007 documenting .gitignore handling strategy and design decisions
+
 ## [1.1.3] - 2025-06-23
 
 ### Changed

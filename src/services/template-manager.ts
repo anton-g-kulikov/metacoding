@@ -256,12 +256,16 @@ export class TemplateManager {
       return files;
     }
 
+    // Extract template name from filesDir path 
+    // filesDir is like "/path/to/templates/general/files"
+    const templateName = path.basename(path.dirname(filesDir));
+    
     const items = await fs.readdir(filesDir, { withFileTypes: true });
 
     for (const item of items) {
       if (item.isFile()) {
         const isTemplate = item.name.endsWith('.template');
-        const source = item.name;
+        const source = `${templateName}/files/${item.name}`; // Include template name and files/ prefix
         let destination = item.name;
 
         if (isTemplate) {

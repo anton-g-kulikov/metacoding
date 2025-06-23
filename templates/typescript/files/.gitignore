@@ -1,0 +1,8 @@
+# metacoding: AI coding assistant exclusions
+.github/copilot-instructions.md
+.github/instructions/
+.vscode/copilot-instructions.md
+.vscode/extensions/github.copilot*/
+.vscode/copilot-workspace.json
+.vscode/.copilotignore
+.idea/copilot-instructions.md

@@ -38,7 +38,7 @@ export class GitIgnoreManager {
 
       // Check if our patterns are already present to avoid duplicates
       const hasMetacodingSection = existingContent.includes('# metacoding:');
-      
+
       if (hasMetacodingSection) {
         // Skip if our patterns are already present
         return;
@@ -46,9 +46,13 @@ export class GitIgnoreManager {
 
       // Prepare content to append
       let contentToAppend = '';
-      
+
       // Add newlines if file exists and doesn't end with newline
-      if (hasExistingFile && existingContent.length > 0 && !existingContent.endsWith('\n')) {
+      if (
+        hasExistingFile &&
+        existingContent.length > 0 &&
+        !existingContent.endsWith('\n')
+      ) {
         contentToAppend = '\n\n';
       } else if (hasExistingFile && existingContent.length > 0) {
         contentToAppend = '\n';
@@ -64,7 +68,9 @@ export class GitIgnoreManager {
         await fs.writeFile(gitignorePath, contentToAppend);
       }
     } catch (error) {
-      throw new Error(`Failed to update .gitignore: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to update .gitignore: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -73,7 +79,7 @@ export class GitIgnoreManager {
    */
   async hasMetacodingPatterns(projectPath: string): Promise<boolean> {
     const gitignorePath = path.join(projectPath, '.gitignore');
-    
+
     try {
       if (!(await fs.pathExists(gitignorePath))) {
         return false;
@@ -92,7 +98,7 @@ export class GitIgnoreManager {
    */
   static createTemplateContent(): string {
     const patterns = GitIgnoreManager.getAIAssistantPatterns();
-    
+
     return `# Dependencies
 node_modules/
 *.tgz

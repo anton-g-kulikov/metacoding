@@ -243,7 +243,7 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 #### Single-Task Focus Enhancement Tests
 
 | Test Case ID | Description                                              | Type | Status           |
-| :----------- | :------------------------------------------------------- | :--- | :---------------- |
+| :----------- | :------------------------------------------------------- | :--- | :--------------- |
 | WF-UNIT-012  | Single-task focus principle enforcement validation       | Unit | **✅ Completed** |
 | WF-UNIT-013  | Scope creep handling Option A (subtask) validation       | Unit | **✅ Completed** |
 | WF-UNIT-014  | Scope creep handling Option B (separate task) validation | Unit | **✅ Completed** |
@@ -422,16 +422,16 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 
 **Purpose**: Test functionality for managing .gitignore files to exclude AI coding assistant files while preserving user configurations.
 
-| Test Case ID | Description                                    | Type | Status      |
-| :----------- | :--------------------------------------------- | :--- | :---------- |
-| GIT-UNIT-001 | Append patterns to existing .gitignore file   | Unit | Completed   |
-| GIT-UNIT-002 | Create new .gitignore when none exists        | Unit | Completed   |
-| GIT-UNIT-003 | Skip duplicates when patterns already exist   | Unit | Completed   |
-| GIT-UNIT-004 | Handle .gitignore file permission errors      | Unit | Not Started |
-| GIT-UNIT-005 | Validate minimal AI assistant patterns        | Unit | Completed   |
-| GIT-INT-001  | Template .gitignore file creation             | Int  | Completed   |
-| GIT-INT-002  | Integration with init command workflow        | Int  | Completed   |
-| GIT-INT-003  | Cross-platform path handling validation      | Int  | Not Started |
+| Test Case ID | Description                                 | Type | Status      |
+| :----------- | :------------------------------------------ | :--- | :---------- |
+| GIT-UNIT-001 | Append patterns to existing .gitignore file | Unit | Completed   |
+| GIT-UNIT-002 | Create new .gitignore when none exists      | Unit | Completed   |
+| GIT-UNIT-003 | Skip duplicates when patterns already exist | Unit | Completed   |
+| GIT-UNIT-004 | Handle .gitignore file permission errors    | Unit | Not Started |
+| GIT-UNIT-005 | Validate minimal AI assistant patterns      | Unit | Completed   |
+| GIT-INT-001  | Template .gitignore file creation           | Int  | Completed   |
+| GIT-INT-002  | Integration with init command workflow      | Int  | Completed   |
+| GIT-INT-003  | Cross-platform path handling validation     | Int  | Not Started |
 
 **Key Features Implemented:**
 
