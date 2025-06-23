@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Future enhancements and features will be listed here
+- **Update Command**: Complete `metacoding update` command implementation with simple conflict resolution
+  - Automatic template detection from existing project files
+  - Safe backup system with timestamped full directory backup for rollback
+  - Simple conflict resolution: user chooses to keep their version (saved as `user.filename`) or replace with template
+  - No interactive diff - clean, user-controlled choices only
+  - Force mode for automated updates without conflict prompts
+  - Complete integration with existing template system and VS Code settings
+  - Comprehensive error handling and progress feedback
 
 ## [1.1.1] - 2025-06-22
 
