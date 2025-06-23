@@ -22,7 +22,7 @@ Transform development workflows by providing AI-guided coding standards, structu
 ```
 metacoding/
 ├── CLI Tool (Node.js/TypeScript)
-│   ├── Commands (init, validate, update)
+│   ├── Commands (init, update)
 │   ├── Template System
 │   ├── VS Code Integration
 │   └── Project Detection
@@ -54,10 +54,11 @@ metacoding/
 - **Language**: TypeScript with strict type checking
 - **CLI Framework**: Commander.js v11.1.0 for command parsing
 - **UI**: Inquirer.js v8.2.6 for interactive prompts, Ora v5.4.1 for spinners, Chalk v4.1.2 for colors
-- **File Operations**: fs-extra v11.2.0 for enhanced file system operations
-- **Testing**: Jest v29.7.0 with integration and unit tests, ts-jest for TypeScript support
-- **Build**: TypeScript compiler v5.3.2 with declaration files and source maps
-- **Code Quality**: ESLint v8.54.0, Prettier v3.1.0, and strict TypeScript configuration
+- **File Operations**: fs-extra v11.2.0 for enhanced file system operations, glob v10.3.10 for pattern matching
+- **Configuration**: YAML v2.3.4 for configuration file parsing
+- **Testing**: Jest v29.7.0 with integration and unit tests, ts-jest v29.1.1 for TypeScript support
+- **Build**: TypeScript compiler v5.8.3 with declaration files and source maps
+- **Code Quality**: ESLint v8.54.0 with @typescript-eslint v8.0.0, Prettier v3.1.0, and strict TypeScript configuration
 - **Distribution**: npm registry with global installation
 
 ### Data Flow
@@ -72,7 +73,7 @@ metacoding/
 
 ### CLI Command Implementation
 
-#### Implemented Commands
+#### Available Commands
 
 - **`metacoding init`**: Interactive project setup with:
 
@@ -84,13 +85,17 @@ metacoding/
   - File generation with variable substitution
   - Progress indicators and user feedback
 
+- **`metacoding update`**: Setup updates and migrations with:
+
+  - Template updates to latest version
+  - Conflict resolution with user prompts
+  - Backup creation before changes
+  - Validation mode with `--dry-run` flag
+  - Strict validation with `--strict` flag
+  - Template switching with `--template` option
+
 - **`metacoding --help`**: Comprehensive help system with examples
 - **`metacoding --version`**: Version display from package.json
-
-#### Additional Commands
-
-- **`metacoding validate`**: Project setup validation (command structure implemented)
-- **`metacoding update`**: Setup updates and migrations (command structure implemented)
 
 ## Development Workflow
 
@@ -108,7 +113,7 @@ The project follows its own metacoding methodology:
 
 - **Framework**: Jest v29.7.0 with ts-jest for TypeScript support
 - **Test Types**: Unit tests, integration tests, template validation tests
-- **Coverage**: 40 test cases covering core functionality
+- **Coverage**: 159 test cases covering core functionality
 - **Structure**: Tests organized in `/test/unit/` and `/test/integration/` directories
 - **Fixtures**: Temporary directories for safe file system testing
 
@@ -134,21 +139,27 @@ The project follows its own metacoding methodology:
   - Git repository validation
   - File generation with variable substitution
   - Progress indicators and user feedback
+  - **Options**: `--template <type>`, `--force`, `--skip-vscode`, `--skip-git`
 
 - **`metacoding --help`**: Comprehensive help system with examples
 - **`metacoding --version`**: Version display from package.json
 
-#### Additional Commands
-
-- **`metacoding validate`**: Project setup validation (command structure complete)
-- **`metacoding update`**: Setup updates and migrations (command structure complete)
+- **`metacoding update`**: Setup updates and migrations with:
+  - Template updates to latest version
+  - Conflict resolution with user prompts
+  - Backup creation before changes
+  - Validation mode with `--dry-run` flag (replaces separate validate command)
+  - Strict validation with `--strict` flag
+  - Template switching with `--template` option
+  - Force mode with `--force` flag
+  - **Options**: `--template <type>`, `--backup`, `--dry-run`, `--strict`, `--force`
 
 ## Package Distribution Architecture
 
 ### Package Configuration
 
 - **Package Name**: `metacoding`
-- **Current Version**: 1.0.0 (as specified in package.json)
+- **Current Version**: 1.1.4 (as specified in package.json)
 - **Distribution Method**: Global npm installation (`npm install -g metacoding`)
 - **Entry Point**: `bin/metacoding.js` with compiled TypeScript in `lib/` directory
 
@@ -159,6 +170,14 @@ The project follows its own metacoding methodology:
 - **Scripts**: Build, test, lint, and publishing preparation scripts
 - **Dependencies**: Production dependencies pinned for stability
 - **Node.js Compatibility**: Requires Node.js 18+ and npm 8+
+
+### Current Package Statistics
+
+- **Latest Version**: 1.1.4 (published June 23, 2025)
+- **Package Size**: ~107 KB compressed, ~418 KB unpacked
+- **File Count**: 72 files in distribution package
+- **NPM URL**: https://www.npmjs.com/package/metacoding
+- **Global Installation**: `npm install -g metacoding@1.1.4`
 
 ### Package Structure
 
@@ -207,7 +226,7 @@ metacoding/
 ### Scalability
 
 - **Template System**: Designed for easy addition of new templates
-- **Plugin Architecture**: Extensible command system
+- **Modular Architecture**: Service-oriented design enables easy extension
 - **Configuration**: JSON-based configuration for flexibility
 
 ## Security Considerations
@@ -238,10 +257,11 @@ metacoding/
 
 ### Development Dependencies
 
-- **typescript v5.3.2**: TypeScript compiler and type definitions
+- **typescript v5.8.3**: TypeScript compiler and type definitions
 - **jest v29.7.0**: Testing framework for unit and integration tests
 - **ts-jest v29.1.1**: TypeScript support for Jest
 - **eslint v8.54.0**: Code linting and style enforcement
+- **@typescript-eslint v8.0.0**: TypeScript-specific ESLint rules and parser
 - **prettier v3.1.0**: Code formatting
 - **@types/\***: Type definitions for TypeScript support
 
@@ -299,6 +319,8 @@ The metacoding project implements a sophisticated composable instruction file ar
 │   ├── docs-update.instructions.md
 │   ├── release.instructions.md
 │   ├── test-runner.instructions.md
+│   ├── files/
+│   │   └── .gitignore          # Universal .gitignore patterns
 │   └── template.json
 ├── typescript/                 # Shared TypeScript instructions (composition component)
 │   ├── typescript.coding.instructions.md
