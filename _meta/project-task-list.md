@@ -4,7 +4,9 @@
 
 ### CLI Command Implementation
 
-- [ ] **Implement `metacoding validate` command functionality** - ❌ **NOT STARTED**
+
+
+- [ ] **CLI-TASK-002: Implement `metacoding validate` command functionality** - ❌ **NOT STARTED**
 
   - Complete the validation logic in `src/commands/validate.ts`
   - Implement project structure validation against template requirements
@@ -14,7 +16,8 @@
   - Include tests for validation scenarios and edge cases
   - Update CLI help text and documentation
 
-- [ ] **Implement `metacoding update` command functionality** - ❌ **NOT STARTED**
+- [ ] **CLI-TASK-001: Implement `metacoding update` command functionality** - ❌ **NOT STARTED**
+
   - Complete the update logic in `src/commands/update.ts`
   - Implement template version checking and comparison
   - Add selective update options (specific files vs full template)
@@ -22,7 +25,6 @@
   - Add conflict resolution for modified instruction files
   - Include tests for update scenarios and edge cases
   - Update CLI help text and documentation
-
 
 ### Current Workflow Tasks (June 22, 2025)
 

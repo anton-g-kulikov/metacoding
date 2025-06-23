@@ -212,8 +212,11 @@ When providing code suggestions, prioritize:
 ### Step 2: Task Management
 
 - **Document before executing:** Add corresponding task(s) to `/_meta/project-task-list.md` BEFORE any implementation work
-- **Set task status:** Mark tasks as "In Progress" with clear descriptions
-- **Break down complex tasks:** Split large tasks into smaller, manageable subtasks
+- **Use standardized task naming:** Follow the `[AREA]-TASK-[NUMBER]` format for all tasks
+  - **Area Prefixes:** Use appropriate prefixes (CORE, API, UI, DB, AUTH, UTIL, CONFIG, DOC, CLI, TMPL, etc.)
+  - **Examples:** `CLI-TASK-001: Implement validate command`, `DOC-TASK-002: Update API documentation`
+- **Set task status:** Mark tasks as "In Progress" with clear descriptions and status indicators
+- **Break down complex tasks:** Split large tasks into smaller, manageable subtasks with sequential numbering
 - **Estimate effort:** Provide realistic time/complexity estimates
 - **Task documentation requirement:** Every task must be documented in the task list before work begins
 

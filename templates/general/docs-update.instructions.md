@@ -86,6 +86,38 @@ This project enforces a strict distinction between different types of documentat
 - **Use descriptive section names:** Use functional names like "Core Features", "Infrastructure", "Testing" instead of "Completed Tasks"
 - **Avoid temporal references:** Don't use "Recent", "Latest", "Upcoming" in section headers - they become outdated quickly
 
+### Task ID Naming Convention
+
+Follow the standardized task naming format for all project management documentation:
+
+#### Required Task Format
+
+```markdown
+- [ ] **[AREA]-TASK-001: Task title** - ❌ **NOT STARTED**
+  - Detailed task description and requirements
+  - Implementation steps and acceptance criteria
+```
+
+#### Task ID Conventions
+
+- **Format:** `[AREA]-TASK-[NUMBER]`
+- **Area Prefixes:** Adapt to your project (CORE, API, UI, DB, AUTH, UTIL, CONFIG, DOC, CLI, TMPL, etc.)
+- **Task Type:** Always use "TASK" for consistency
+- **Sequential Numbering:** 001, 002, 003, etc. within each area
+- **Examples:**
+  - `CLI-TASK-001: Implement validate command`
+  - `API-TASK-002: Add authentication middleware`
+  - `DOC-TASK-003: Update README installation guide`
+  - `TMPL-TASK-004: Create Python project template`
+
+#### Task Organization Requirements
+
+- **Functional Grouping:** Group tasks by system area/component
+- **Clear Descriptions:** Provide specific, actionable task descriptions
+- **Status Tracking:** Use standard status indicators (❌ NOT STARTED, 🚧 IN PROGRESS, ✅ COMPLETED)
+- **Acceptance Criteria:** Include clear completion criteria in task details
+- **Dependencies:** Note task dependencies and prerequisites when relevant
+
 ## README.md Standards (System Documentation)
 
 **⚠️ README.md is system documentation - NO status indicators or temporal language allowed**
