@@ -225,18 +225,28 @@ my-awesome-project/
 
 Once installed, you can use these commands:
 
+### `metacoding init`
+
+Initialize metacoding in your current project:
+
+- `metacoding init` - Interactive setup with template selection
+- `metacoding init --template react` - Initialize with React template
+- `metacoding init --template node` - Initialize with Node.js template
+- `metacoding init --template python` - Initialize with Python template
+- `metacoding init --force` - Overwrite existing files without confirmation
+
 ### `metacoding update`
 
 Update your `metacoding` setup to the latest version:
 
-- `metacoding update` - Update to latest version with validation
-- `metacoding update --dry-run` - Validate current state and preview changes without applying them
-- `metacoding update --strict` - Use strict validation rules
+- `metacoding update` - Update to latest version
+- `metacoding update --dry-run` - Validate current setup without making changes
+- `metacoding update --dry-run --strict` - Strict validation rules
 - `metacoding update --backup` - Create backup before updating
 
 ### Help and Version
 
-- `metacoding --help` - Show all commands
+- `metacoding --help` - Show all commands and examples
 - `metacoding --version` - Show version number
 
 ## 🆘 Getting Help
@@ -284,7 +294,7 @@ A: The CLI automatically configures required settings, but you need `github.copi
 - Ensure file names match exactly (including the `.instructions.md` extension)
 - Verify the folder structure is correct
 - Try manually referencing instructions in GitHub Copilot
-- Run `metacoding validate` to check your setup
+- Run `metacoding update --dry-run` to validate your setup
 
 **CLI Command Issues:**
 

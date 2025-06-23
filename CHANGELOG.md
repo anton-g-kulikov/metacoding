@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3] - 2025-06-23
+
+### Changed
+
+- **README.md Synchronization**: Updated README.md to match current CLI implementation
+  - Removed references to deprecated `validate` command (functionality now integrated into `update --dry-run`)
+  - Updated CLI examples to reflect actual available commands (`init` and `update`)
+  - Enhanced troubleshooting section with correct command usage
+  - Synchronized npm package documentation with GitHub repository version
+
 ## [1.1.2] - 2024-12-19
 
 ### Added
