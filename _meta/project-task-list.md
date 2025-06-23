@@ -316,3 +316,69 @@
 - ❌ Not Started
 - ⚠️ Needs Review
 - 🔄 Under Revision
+
+## 📋 Backlog Tasks
+
+### Repository and Infrastructure Improvements
+
+- [ ] **INFRA-TASK-001: Update .gitignore to exclude Copilot instruction files**
+  - Update project .gitignore patterns to exclude `.github/copilot-instructions.md` files
+  - Ensure generated Copilot instruction files are not committed to version control
+  - Add patterns for common IDE-specific Copilot configuration files
+  - Test .gitignore patterns with actual file generation scenarios
+  - Update template .gitignore files to include these patterns by default
+
+### Language-Specific Instruction Templates
+
+- [ ] **LANG-TASK-001: Create JavaScript-specific instruction template**
+
+  - Create `templates/javascript/` directory with complete instruction set
+  - Implement JavaScript coding standards (ES6+, modern patterns, async/await)
+  - Add Node.js runtime considerations and npm ecosystem best practices
+  - Include JavaScript testing frameworks (Jest, Mocha, Vitest) guidance
+  - Add browser compatibility and build tool (Webpack, Vite) considerations
+  - Create comprehensive template.json configuration for JavaScript projects
+
+- [ ] **LANG-TASK-002: Create Java-specific instruction template**
+
+  - Create `templates/java/` directory with enterprise Java patterns
+  - Implement Java coding standards (naming conventions, package structure)
+  - Add Spring Framework, Maven/Gradle build tool guidance
+  - Include JUnit testing patterns and enterprise architecture principles
+  - Add performance optimization and memory management considerations
+  - Create comprehensive template.json configuration for Java projects
+
+- [ ] **LANG-TASK-003: Create C++-specific instruction template**
+
+  - Create `templates/cpp/` directory with modern C++ standards
+  - Implement C++17/C++20 best practices and memory management patterns
+  - Add CMake build system and dependency management guidance
+  - Include Google Test framework and performance optimization patterns
+  - Add RAII principles and smart pointer usage guidelines
+  - Create comprehensive template.json configuration for C++ projects
+
+- [ ] **LANG-TASK-004: Create C#-specific instruction template**
+
+  - Create `templates/csharp/` directory with .NET ecosystem guidance
+  - Implement C# coding standards and .NET Framework/Core patterns
+  - Add ASP.NET, Entity Framework, and NuGet package management
+  - Include xUnit/NUnit testing frameworks and dependency injection patterns
+  - Add async/await patterns and performance considerations
+  - Create comprehensive template.json configuration for C# projects
+
+- [ ] **LANG-TASK-005: Create Go-specific instruction template**
+
+  - Create `templates/go/` directory with Go idioms and conventions
+  - Implement Go coding standards (gofmt, golint, effective Go principles)
+  - Add Go modules, goroutines, and channel patterns
+  - Include testing with go test and benchmark considerations
+  - Add concurrency patterns and error handling best practices
+  - Create comprehensive template.json configuration for Go projects
+
+- [ ] **LANG-TASK-006: Create Ruby on Rails-specific instruction template**
+  - Create `templates/ruby/` directory with Rails conventions and patterns
+  - Implement Ruby coding standards and Rails MVC architecture
+  - Add ActiveRecord patterns, Gem management, and Rails testing (RSpec)
+  - Include Rails-specific security considerations and performance optimization
+  - Add deployment patterns (Capistrano, Docker) and database migrations
+  - Create comprehensive template.json configuration for Ruby on Rails projects
