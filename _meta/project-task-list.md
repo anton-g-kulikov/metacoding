@@ -17,15 +17,15 @@
 
 ### CLI Command Implementation
 
-- [ ] **CLI-TASK-002: Implement `metacoding validate` command functionality** - ❌ **NOT STARTED**
+- [x] **CLI-TASK-003: Enhance `metacoding update` command with validation capabilities** - ✅ **COMPLETED**
 
-  - Complete the validation logic in `src/commands/validate.ts`
-  - Implement project structure validation against template requirements
-  - Add configuration file validation (package.json, tsconfig.json, etc.)
-  - Validate instruction files presence and format
-  - Add comprehensive error reporting and suggestions
-  - Include tests for validation scenarios and edge cases
-  - Update CLI help text and documentation
+  - ✅ Add `--dry-run` flag to update command for validation-only mode
+  - ✅ Implement comprehensive validation reporting without file modifications
+  - ✅ Remove separate `validate` command from CLI interface
+  - ✅ Add validation checks for project structure, configuration files, and instruction files
+  - ✅ Provide detailed error reporting and actionable suggestions
+  - ✅ Include tests for dry-run validation scenarios and edge cases
+  - ✅ Update CLI help text and API documentation to reflect simplified approach
 
 - [x] **CLI-TASK-001: Implement `metacoding update` command functionality** - ✅ **COMPLETED**
 
@@ -288,6 +288,17 @@
   - [✅] Update status tracking for all completed test categories
 
 ---
+
+### Documentation and Repository Maintenance
+
+- [x] **DOC-TASK-001: Fix corruption and structural issues in api-design.md** - ✅ **COMPLETED**
+  - ✅ Identified and removed all corrupted table structures and duplicated content
+  - ✅ Created backup of corrupted file (`api-design.md.backup`)
+  - ✅ Replaced file with clean, properly formatted version
+  - ✅ Verified all CLI options documented correctly (including `--dry-run` and `--strict`)
+  - ✅ Ensured all Markdown tables use proper syntax with consistent `<name>` parameter format
+  - ✅ Validated clean file structure with no hidden corruption or malformed content
+  - ✅ Maintained all existing content while fixing structural corruption
 
 ## Task Status Legend
 

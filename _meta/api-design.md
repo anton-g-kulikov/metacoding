@@ -2,7 +2,7 @@
 
 ## Overview
 
-The metacoding CLI provides a professional development workflow setup for GitHub Copilot. This document defines the command-line interface, options, and behaviors.
+The metacoding CLI provides a professional development workflow setup for Git repositories with GitHub Copilot instructions. This document defines the command-line interface, options, and behaviors.
 
 ## Global Options
 
@@ -105,113 +105,9 @@ Use 'metacoding init --help' for more information.
 
 ---
 
-### `metacoding validate`
-
-Check the current metacoding setup for completeness and correctness.
-
-#### Syntax
-
-```bash
-metacoding validate [options]
-```
-
-#### Options
-
-| Option            | Alias | Type    | Default | Description                             |
-| ----------------- | ----- | ------- | ------- | --------------------------------------- |
-| `--strict`        | `-s`  | boolean | `false` | Use strict validation rules             |
-| `--fix`           |       | boolean | `false` | Automatically fix issues where possible |
-| `--format <type>` | `-f`  | string  | `text`  | Output format: `text`, `json`, `table`  |
-
-#### Validation Checks
-
-1. **File Structure**
-
-   - `.github/copilot-instructions.md` exists
-   - `.github/instructions/` directory exists
-   - Required instruction files present
-
-2. **VS Code Configuration**
-
-   - Required settings in settings.json
-   - GitHub Copilot extension compatibility
-   - File associations correct
-
-3. **Git Repository**
-
-   - Valid git repository
-   - Appropriate .gitignore entries
-   - No uncommitted instruction file changes
-
-4. **Template Integrity**
-   - Template variables properly substituted
-   - No placeholder text remaining
-   - File permissions correct
-
-#### Examples
-
-```bash
-# Basic validation
-metacoding validate
-
-# Strict validation with detailed checks
-metacoding validate --strict
-
-# Auto-fix issues
-metacoding validate --fix
-
-# JSON output for automation
-metacoding validate --format json
-```
-
-#### Exit Codes
-
-- `0`: All checks passed
-- `1`: Validation failed with errors
-- `2`: Warnings found (only in strict mode)
-- `3`: Configuration not found
-
-#### Output
-
-**Success Output:**
-
-```
-🔍 Validating metacoding setup...
-
-✅ File structure complete
-✅ VS Code configuration valid
-✅ Git repository configured
-✅ Template integrity verified
-
-🎉 metacoding setup is valid and ready to use!
-
-Summary: 4/4 checks passed
-```
-
-**Error Output:**
-
-```
-🔍 Validating metacoding setup...
-
-❌ Missing file: .github/copilot-instructions.md
-⚠️  VS Code setting 'chat.promptFiles' not configured
-✅ Git repository configured
-✅ Template integrity verified
-
-❌ Validation failed: 1 error, 1 warning
-
-Suggestions:
-- Run 'metacoding init' to restore missing files
-- Check VS Code settings configuration
-
-Summary: 2/4 checks passed
-```
-
----
-
 ### `metacoding update`
 
-Update existing metacoding setup to the latest version.
+Update existing metacoding setup to the latest version or validate current setup.
 
 #### Syntax
 
@@ -221,21 +117,39 @@ metacoding update [options]
 
 #### Options
 
-| Option              | Alias | Type     | Default | Description                         |
-| ------------------- | ----- | -------- | ------- | ----------------------------------- |
-| `--backup`          | `-b`  | boolean  | `true`  | Create backup before updating       |
-| `--force`           | `-f`  | boolean  | `false` | Force update without confirmation   |
-| `--template <name>` | `-t`  | string   | `auto`  | Update to specific template         |
-| `--preserve`        | `-p`  | string[] |         | Preserve specific files from update |
+| Option              | Alias | Type     | Default | Description                           |
+| ------------------- | ----- | -------- | ------- | ------------------------------------- |
+| `--backup`          | `-b`  | boolean  | `true`  | Create backup before updating         |
+| `--force`           | `-f`  | boolean  | `false` | Force update without confirmation     |
+| `--template <name>` | `-t`  | string   | `auto`  | Update to specific template           |
+| `--preserve`        | `-p`  | string[] |         | Preserve specific files from update   |
+| `--dry-run`         | `-d`  | boolean  | `false` | Validate setup without making changes |
+| `--strict`          | `-s`  | boolean  | `false` | Use strict validation rules           |
 
 #### Update Process
 
-1. **Backup Creation**: Create `.backup/` directory with current files
+1. **Backup Creation**: Create `.backup/` directory with current files (skipped in dry-run mode)
 2. **Version Detection**: Determine current metacoding version
 3. **Template Analysis**: Identify current template type
 4. **Conflict Resolution**: Handle modified instruction files
 5. **Settings Merge**: Update VS Code settings without overwriting custom settings
 6. **Validation**: Run validation checks after update
+
+#### Validation Mode (--dry-run)
+
+When `--dry-run` is used, the command performs comprehensive validation without making any changes:
+
+- **Setup Validation**: Check if metacoding is properly initialized
+- **File Structure**: Verify expected files exist and are readable
+- **Template Compliance**: Check if current setup matches template requirements
+- **VS Code Settings**: Validate `.vscode/settings.json` configuration
+- **Git Integration**: Verify git repository status if applicable
+
+Use `--strict` with `--dry-run` for enhanced validation rules:
+
+- Stricter file format validation
+- Additional compliance checks
+- More detailed reporting
 
 #### Examples
 
@@ -254,14 +168,23 @@ metacoding update --template react
 
 # Preserve custom instruction files
 metacoding update --preserve test-runner.instructions.md
+
+# Validation mode (dry-run) - check setup without changes
+metacoding update --dry-run
+
+# Strict validation mode
+metacoding update --dry-run --strict
+
+# Validate specific template compliance
+metacoding update --dry-run --template react
 ```
 
 #### Exit Codes
 
-- `0`: Update successful
-- `1`: Update failed
+- `0`: Update successful / Validation passed
+- `1`: Update failed / Validation failed
 - `2`: User cancelled update
-- `3`: No updates available
+- `3`: No updates available / Setup not found
 - `4`: Backup creation failed
 
 #### Output
@@ -284,6 +207,44 @@ Changes:
 - Merged VS Code settings
 
 Backup location: .backup/2025-06-21_14-30-15/
+```
+
+**Validation Output (--dry-run):**
+
+```
+🔍 Validating metacoding setup...
+
+✅ metacoding configuration found
+✅ Instruction files present and valid
+✅ VS Code settings configured correctly
+✅ Template compliance verified
+
+✅ Validation passed! Setup is healthy.
+
+Summary:
+- Template: react (v1.1.0)
+- Files: 5/5 present
+- Settings: properly configured
+- No issues detected
+```
+
+**Validation with Issues:**
+
+```
+🔍 Validating metacoding setup...
+
+✅ metacoding configuration found
+❌ Missing instruction file: test-runner.instructions.md
+⚠️  VS Code setting 'github.copilot.enable' not configured
+✅ Template compliance verified
+
+❌ Validation failed with 1 error, 1 warning.
+
+Issues found:
+- Missing: test-runner.instructions.md
+- Warning: VS Code Copilot not enabled
+
+Run 'metacoding update' to fix these issues.
 ```
 
 ---
@@ -439,5 +400,5 @@ Future plugin system will support:
 ---
 
 **API Version**: 1.0  
-**Last Updated**: June 21, 2025  
+**Last Updated**: June 23, 2025  
 **Compatibility**: Node.js 18+
