@@ -96,6 +96,9 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setup.ts"
+    ],
     "transform": {
       "^.+\\.ts$": [
         "ts-jest",

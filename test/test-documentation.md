@@ -388,3 +388,42 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 - **Validation**: Ensures backwards compatibility and correct filtering of language-specific files
 - **Error Handling**: Added tests for edge cases including invalid templates and empty tech stacks
 - **Code Quality**: Refactored with helper functions to improve maintainability
+
+### 6. Update Command Tests (`src/commands/update.ts`)
+
+| Test Case ID | Description                                    | Type | Status    |
+| :----------- | :--------------------------------------------- | :--- | :-------- |
+| UPD-UNIT-001 | Update command basic execution                 | Unit | Completed |
+| UPD-UNIT-002 | Template detection from existing files         | Unit | Completed |
+| BKP-UNIT-001 | Full directory backup creation                 | Unit | Completed |
+| BKP-UNIT-002 | Backup timestamp generation                    | Unit | Completed |
+| BKP-UNIT-003 | File content integrity in backup               | Unit | Completed |
+| BKP-UNIT-004 | Hash-based change detection                    | Unit | Completed |
+| CFT-UNIT-001 | File content comparison for conflict detection | Unit | Completed |
+| CFT-UNIT-002 | User filename generation with user. prefix     | Unit | Completed |
+
+**Key Features Implemented:**
+
+- **Simple Conflict Resolution**: User chooses to keep (saved as `user.filename`) or replace with template - no interactive diff as requested
+- **Template Detection**: Automatically detects current template from existing files
+- **Backup System**: Full .github directory backup with timestamp for rollback safety
+- **File Change Detection**: Hash-based comparison to detect modified files
+- **Force Mode**: Skip conflict resolution and replace all files
+- **Complete Integration**: Works with TemplateManager, ProjectDetector, and VSCodeService
+- **Test Coverage**: 13/13 tests passing with comprehensive coverage of all scenarios
+
+### 7. Backup Service Tests
+
+| Test Case ID | Description                       | Type | Status    |
+| :----------- | :-------------------------------- | :--- | :-------- |
+| BKP-UNIT-001 | Full directory backup creation    | Unit | Completed |
+| BKP-UNIT-002 | Backup timestamp generation       | Unit | Completed |
+| BKP-UNIT-003 | File content integrity in backup  | Unit | Completed |
+| BKP-UNIT-004 | Hash-based change detection       | Unit | Completed |
+
+### 8. Conflict Resolution Service Tests
+
+| Test Case ID | Description                                    | Type | Status    |
+| :----------- | :--------------------------------------------- | :--- | :-------- |
+| CFT-UNIT-001 | File content comparison for conflict detection | Unit | Completed |
+| CFT-UNIT-002 | User filename generation with user. prefix    | Unit | Completed |

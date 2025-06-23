@@ -17,6 +17,7 @@ export interface ValidateOptions {
 export interface UpdateOptions {
   template?: string;
   backup?: boolean;
+  force?: boolean;
 }
 
 export interface ProjectConfig {
@@ -76,4 +77,23 @@ export interface FileSystemResult {
   created?: string[];
   updated?: string[];
   skipped?: string[];
+}
+
+export interface ConflictResolution {
+  action: 'keep' | 'replace' | 'skip';
+  userFileName?: string | undefined;
+  applyToAll?: boolean;
+}
+
+export interface UpdateConflict {
+  filePath: string;
+  templateContent: string;
+  userContent: string;
+  hasChanges: boolean;
+}
+
+export interface BackupResult {
+  backupPath: string;
+  timestamp: string;
+  filesBackedUp: string[];
 }
