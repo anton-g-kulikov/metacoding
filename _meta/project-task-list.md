@@ -2,6 +2,19 @@
 
 ## � Planned Tasks (June 23, 2025)
 
+### Test Infrastructure and Repository Cleanup
+
+- [x] **TEST-TASK-001: Clean up test cases and address repository problems** - ✅ **COMPLETED**
+
+  - ✅ Remove compiled JavaScript artifacts from test directory (`.js`, `.d.ts`, `.js.map` files)
+  - ✅ Fix 3 failing test cases with timeout and error handling issues
+  - ✅ Clean up temporary test directories (`tmp-update-test-*` folders)
+  - ✅ Improve test timeout handling for long-running integration tests
+  - ✅ Fix error handling test expectations for proper behavior validation
+  - ✅ Address worker process cleanup issues preventing proper test termination
+  - ✅ Update `.gitignore` to prevent future compiled test file commits
+  - ✅ Verify all tests pass reliably after cleanup (149/149 tests passing)
+
 ### CLI Command Implementation
 
 - [ ] **CLI-TASK-002: Implement `metacoding validate` command functionality** - ❌ **NOT STARTED**

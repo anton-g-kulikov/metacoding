@@ -3,6 +3,14 @@ import { BackupService } from '../../src/services/backup';
 import { ConflictResolutionService } from '../../src/services/conflict-resolution';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import {
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  jest,
+} from '@jest/globals';
 
 // Mock inquirer to avoid interactive prompts in tests
 jest.mock('inquirer', () => ({

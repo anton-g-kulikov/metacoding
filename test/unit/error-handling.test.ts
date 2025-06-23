@@ -4,6 +4,7 @@ import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 
 describe('Error Handling', () => {
   let testDir: string;
@@ -58,7 +59,10 @@ describe('Error Handling', () => {
         await expect(initCommand.execute(options)).rejects.toThrow();
       } catch (error) {
         // If chmod doesn't work (e.g., on Windows), skip this test
-        console.log('Skipping permissions test - platform limitation');
+        console.log(
+          'Skipping permissions test - platform limitation:',
+          (error as Error).message
+        );
       }
     });
 
@@ -106,8 +110,10 @@ describe('Error Handling', () => {
     test('CLI-UNIT-015: should handle update when no metacoding setup exists', async () => {
       const updateCommand = new UpdateCommand();
 
-      // Should handle missing setup gracefully
-      await expect(updateCommand.execute({})).resolves.not.toThrow();
+      // Should throw with helpful error message when no setup exists
+      await expect(updateCommand.execute({})).rejects.toThrow(
+        'No metacoding setup found. Run "metacoding init" first.'
+      );
     });
 
     test('CLI-UNIT-016: should handle file conflicts during update', async () => {

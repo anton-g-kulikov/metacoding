@@ -414,16 +414,16 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 
 ### 7. Backup Service Tests
 
-| Test Case ID | Description                       | Type | Status    |
-| :----------- | :-------------------------------- | :--- | :-------- |
-| BKP-UNIT-001 | Full directory backup creation    | Unit | Completed |
-| BKP-UNIT-002 | Backup timestamp generation       | Unit | Completed |
-| BKP-UNIT-003 | File content integrity in backup  | Unit | Completed |
-| BKP-UNIT-004 | Hash-based change detection       | Unit | Completed |
+| Test Case ID | Description                      | Type | Status    |
+| :----------- | :------------------------------- | :--- | :-------- |
+| BKP-UNIT-001 | Full directory backup creation   | Unit | Completed |
+| BKP-UNIT-002 | Backup timestamp generation      | Unit | Completed |
+| BKP-UNIT-003 | File content integrity in backup | Unit | Completed |
+| BKP-UNIT-004 | Hash-based change detection      | Unit | Completed |
 
 ### 8. Conflict Resolution Service Tests
 
 | Test Case ID | Description                                    | Type | Status    |
 | :----------- | :--------------------------------------------- | :--- | :-------- |
 | CFT-UNIT-001 | File content comparison for conflict detection | Unit | Completed |
-| CFT-UNIT-002 | User filename generation with user. prefix    | Unit | Completed |
+| CFT-UNIT-002 | User filename generation with user. prefix     | Unit | Completed |

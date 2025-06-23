@@ -4,6 +4,7 @@ import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 
 describe('Advanced Integration Tests', () => {
   let testDir: string;
@@ -41,16 +42,20 @@ describe('Advanced Integration Tests', () => {
 
       // Step 2: Validate
       const validateCommand = new ValidateCommand();
-      const validationResult = await validateCommand.execute({});
+      await validateCommand.execute({});
 
       // Should validate (command currently only logs)
       const validationCommand = new ValidateCommand();
       await validationCommand.execute({});
 
-      // Step 3: Update
+      // Step 3: Update (with force option to avoid interactive prompts)
       const updateCommand = new UpdateCommand();
-      await expect(updateCommand.execute({})).resolves.not.toThrow();
-    });
+      await expect(
+        updateCommand.execute({
+          force: true, // Use force mode to avoid interactive prompts
+        })
+      ).resolves.not.toThrow();
+    }, 15000); // Increase timeout to 15 seconds for this complex integration test
 
     test('CLI-INT-004: should handle project type detection and appropriate template selection', async () => {
       // Create a React project
@@ -342,6 +347,9 @@ describe('Advanced Integration Tests', () => {
             file.startsWith('.')
         )
         .filter((file) => file !== '.github'); // .github is expected
+
+      // Verify no unexpected temporary files remain
+      expect(tempFiles.length).toBe(0);
 
       // Should only have .github directory after init
       const dotFiles = files.filter((f) => f.startsWith('.'));

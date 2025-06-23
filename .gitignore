@@ -20,6 +20,13 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
+tmp-*
+
+# Compiled test files (should not be committed)
+test/**/*.js
+test/**/*.d.ts
+test/**/*.js.map
+test/**/*.d.ts.map
 
 # Copilot instruction files
 .github
