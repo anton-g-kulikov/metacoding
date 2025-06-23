@@ -29,6 +29,9 @@
 - [ ] CHANGELOG.md updated with new release entry
 - [ ] Breaking changes documented (if any)
 - [ ] README.md updated for new features (if applicable)
+- [ ] **README.md synchronization verified** - GitHub and npm versions match
+- [ ] **Version badges in README.md updated** to reflect new version
+- [ ] **CLI examples in README.md tested** and working correctly
 - **Notes**: [Add notes about version change, features, and documentation updates]
 
 #### 3. **Release Validation**
@@ -55,6 +58,7 @@ npm pack               # Review package contents
 # Update CHANGELOG.md entry
 git commit -m "chore: bump version to vX.Y.Z"
 git tag vX.Y.Z
+git push origin vX.Y.Z  # CRITICAL: Push tag to GitHub
 ```
 
 ### Phase 3: Publish
@@ -70,7 +74,8 @@ npm publish --access public  # For scoped packages
 - [ ] Package appears on npmjs.com
 - [ ] Test global installation: `npm install -g metacoding`
 - [ ] Test CLI functionality: `metacoding --help`
-- [ ] Create GitHub release matching npm version
+- [ ] **Verify GitHub tag exists:** Check `git ls-remote --tags origin | grep vX.Y.Z`
+- [ ] **Create GitHub release** (recommended for professional presentation and user notifications)
 - **Notes**: [Add post-publish verification results]
 
 ## 🎯 **RELEASE SUMMARY**
@@ -89,7 +94,7 @@ npm publish --access public  # For scoped packages
 - **🗂️ Files Included:** [Number] files
 - **✅ Quality Gates:** [X]/[Y] tests passed
 - **🚀 Installation:** `npm install -g metacoding`
-- **🏷️ Git Tag:** [Tag status]
+- **🏷️ Git Tag:** [Tag status - MUST be pushed to GitHub]
 
 ## 📋 **COMMON ITERATION ISSUES**
 
@@ -104,6 +109,13 @@ npm publish --access public  # For scoped packages
 - **Issue**: Forgetting to bump version or using wrong semver
 - **Solution**: Follow semantic versioning strictly
 - **Prevention**: Automate version bumping
+
+### Git Tag Management
+
+- **Issue**: Creating git tag locally but forgetting to push to GitHub
+- **Solution**: Always run `git push origin vX.Y.Z` after creating tag
+- **Prevention**: Include tag push in Phase 2 workflow script
+- **Verification**: Check `git ls-remote --tags origin | grep vX.Y.Z`
 
 ### Documentation Lag
 
@@ -139,6 +151,8 @@ npm publish --access public  # For scoped packages
 - No linting errors
 - Build must succeed
 - Documentation must be current
+- **Git tag must be pushed to GitHub remote**
+- **GitHub release recommended** (enhances project professionalism)
 
 ---
 
