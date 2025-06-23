@@ -342,7 +342,7 @@ describe('Advanced Integration Tests', () => {
             file.includes('temp') ||
             file.startsWith('.')
         )
-        .filter((file) => file !== '.github'); // .github is expected
+        .filter((file) => file !== '.github' && file !== '.gitignore'); // .github and .gitignore are expected
 
       // Verify no unexpected temporary files remain
       expect(tempFiles.length).toBe(0);
@@ -350,6 +350,7 @@ describe('Advanced Integration Tests', () => {
       // Should only have .github directory after init
       const dotFiles = files.filter((f) => f.startsWith('.'));
       expect(dotFiles).toContain('.github');
+      expect(dotFiles).toContain('.gitignore'); // .gitignore should be created by init
     });
   });
 });
