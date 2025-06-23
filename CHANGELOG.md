@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Minimal Pattern Focus**: Only excludes files that metacoding actually creates (not broad AI assistant patterns)
   - **Template Integration**: Simplified to single general .gitignore template for all project types
   - **Init Command Integration**: Automatically updates .gitignore during project setup
-  - **Essential Exclusions**: 
+  - **Essential Exclusions**:
     - `.github/copilot-instructions.md`
     - `.github/instructions/`
     - `.vscode/copilot-instructions.md`

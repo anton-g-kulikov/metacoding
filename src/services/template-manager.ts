@@ -256,10 +256,10 @@ export class TemplateManager {
       return files;
     }
 
-    // Extract template name from filesDir path 
+    // Extract template name from filesDir path
     // filesDir is like "/path/to/templates/general/files"
     const templateName = path.basename(path.dirname(filesDir));
-    
+
     const items = await fs.readdir(filesDir, { withFileTypes: true });
 
     for (const item of items) {
