@@ -243,7 +243,7 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 #### Single-Task Focus Enhancement Tests
 
 | Test Case ID | Description                                              | Type | Status           |
-| :----------- | :------------------------------------------------------- | :--- | :--------------- |
+| :----------- | :------------------------------------------------------- | :--- | :---------------- |
 | WF-UNIT-012  | Single-task focus principle enforcement validation       | Unit | **✅ Completed** |
 | WF-UNIT-013  | Scope creep handling Option A (subtask) validation       | Unit | **✅ Completed** |
 | WF-UNIT-014  | Scope creep handling Option B (separate task) validation | Unit | **✅ Completed** |
@@ -417,3 +417,28 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 - **Force Mode**: Skip conflict resolution and replace all files
 - **Complete Integration**: Works with TemplateManager, ProjectDetector, and VSCodeService
 - **Test Coverage**: 13/13 tests passing with comprehensive coverage of all scenarios
+
+### .gitignore Management Tests
+
+**Purpose**: Test functionality for managing .gitignore files to exclude AI coding assistant files while preserving user configurations.
+
+| Test Case ID | Description                                    | Type | Status      |
+| :----------- | :--------------------------------------------- | :--- | :---------- |
+| GIT-UNIT-001 | Append patterns to existing .gitignore file   | Unit | Completed   |
+| GIT-UNIT-002 | Create new .gitignore when none exists        | Unit | Completed   |
+| GIT-UNIT-003 | Skip duplicates when patterns already exist   | Unit | Completed   |
+| GIT-UNIT-004 | Handle .gitignore file permission errors      | Unit | Not Started |
+| GIT-UNIT-005 | Validate minimal AI assistant patterns        | Unit | Completed   |
+| GIT-INT-001  | Template .gitignore file creation             | Int  | Completed   |
+| GIT-INT-002  | Integration with init command workflow        | Int  | Completed   |
+| GIT-INT-003  | Cross-platform path handling validation      | Int  | Not Started |
+
+**Key Features Implemented:**
+
+- **Append-Only Strategy**: Never modify existing .gitignore content, only append
+- **Section Markers**: Clear "# metacoding:" section identification
+- **Minimal Patterns**: Only patterns for files that metacoding actually creates
+- **Template Integration**: Single general .gitignore template for all project types
+- **Error Handling**: Permission errors, file access issues handled appropriately
+- **Duplicate Detection**: Skip adding patterns that already exist in file
+- **Simplified Approach**: Focus only on metacoding-generated files, not general AI assistant exclusions

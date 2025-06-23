@@ -28,8 +28,20 @@ test/**/*.d.ts
 test/**/*.js.map
 test/**/*.d.ts.map
 
-# Copilot instruction files
-.github
+# Copilot instruction files (auto-generated, should not be committed)
+.github/copilot-instructions.md
+.github/instructions/
+.vscode/copilot-instructions.md
+
+# IDE-specific Copilot configuration files
+.vscode/copilot-workspace.json
+.vscode/.copilotignore
+.idea/copilot-instructions.md
+.idea/copilot-workspace.json
+**/.copilot/
+**/copilot-workspace.json
+**/copilot-instructions.md
+!templates/**/copilot-instructions.md
 
 # Build and distribution files
 node_modules/

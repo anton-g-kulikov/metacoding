@@ -6,6 +6,7 @@ import { TemplateManager } from '../services/template-manager';
 import { FileSystemService } from '../services/filesystem';
 import { VSCodeService } from '../services/vscode';
 import { ProjectDetector } from '../services/project-detector';
+import { GitIgnoreManager } from '../services/gitignore-manager';
 
 /**
  * Handles the 'init' command for setting up metacoding in a project
@@ -15,12 +16,14 @@ export class InitCommand {
   private fileSystem: FileSystemService;
   private vscodeService: VSCodeService;
   private projectDetector: ProjectDetector;
+  private gitIgnoreManager: GitIgnoreManager;
 
   constructor() {
     this.templateManager = new TemplateManager();
     this.fileSystem = new FileSystemService();
     this.vscodeService = new VSCodeService();
     this.projectDetector = new ProjectDetector();
+    this.gitIgnoreManager = new GitIgnoreManager();
   }
 
   /**
@@ -184,6 +187,10 @@ export class InitCommand {
         await this.fileSystem.writeFile(file.path, file.content);
         spinner.text = `Created ${file.path}`;
       }
+
+      // Update .gitignore with AI assistant exclusion patterns
+      spinner.text = 'Updating .gitignore with AI assistant exclusions...';
+      await this.gitIgnoreManager.updateGitIgnore(process.cwd());
 
       // Configure VS Code settings (unless skipped)
       if (!options.skipVscode) {

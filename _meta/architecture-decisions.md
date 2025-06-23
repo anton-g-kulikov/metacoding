@@ -284,11 +284,79 @@ The `TemplateManager` loads files in hierarchical order:
 
 ---
 
+## ADR-007: .gitignore Handling Strategy
+
+**Date**: June 23, 2025  
+**Status**: Accepted  
+**Deciders**: Development Team
+
+### Context
+
+The metacoding CLI generates `.github/copilot-instructions.md` files that should not be committed to version control. However, many users already have existing `.gitignore` files with their own patterns. We needed to decide how to handle .gitignore updates without disrupting existing user configurations.
+
+### Decision
+
+We implemented an **append-only strategy** for .gitignore handling:
+
+- **Check for existing .gitignore**: Detect if `.gitignore` already exists in target project
+- **Preserve existing content**: Never modify or overwrite existing .gitignore patterns
+- **Append with clear markers**: Add metacoding patterns with section comments for easy identification
+- **Template inclusion**: Provide .gitignore templates for new projects via template system
+- **Comprehensive patterns**: Include patterns for GitHub Copilot, VSCode, JetBrains, and other AI coding assistants
+
+### Implementation Pattern
+
+```gitignore
+# Existing user content remains untouched
+
+# metacoding: AI coding assistant exclusions
+.github/copilot-instructions.md
+.vscode/extensions/github.copilot*/
+.idea/copilot/
+```
+
+### Consequences
+
+**Positive:**
+
+- **Non-destructive**: Preserves all existing user configurations
+- **Transparent**: Clear section markers show what metacoding added
+- **Reversible**: Users can easily identify and remove metacoding additions
+- **Safe**: Zero risk of breaking existing ignore patterns
+- **Automatic**: Works for both new projects (via templates) and existing projects
+
+**Negative:**
+
+- **Potential duplication**: May add duplicate patterns if users already have similar rules
+- **File size growth**: Appends content rather than merging intelligently
+- **Manual cleanup**: Users must manually remove duplicates if desired
+
+### Alternatives Considered
+
+- **Smart merge strategy**: More complex, higher risk of edge cases and conflicts
+- **Template-only strategy**: Doesn't solve problem for existing metacoding users
+- **Overwrite strategy**: Risk of data loss and user frustration
+- **Interactive prompts**: Poor user experience, breaks automation
+
+### Validation Requirements
+
+- Test with existing .gitignore files containing various patterns
+- Verify patterns effectively exclude generated files
+- Ensure templates create appropriate .gitignore files for new projects
+- Test cross-platform path handling (Windows vs Unix)
+
+### Future Considerations
+
+- Consider smart duplicate detection in future versions
+- Monitor user feedback for pain points
+- Evaluate option for .gitignore cleanup command
+
+---
+
 ## Future ADRs
 
 ### Planned Decisions
 
-- **ADR-007**: Multi-IDE support architecture
 - **ADR-008**: Plugin system design
 - **ADR-009**: Web-based template generator integration
 - **ADR-010**: Enterprise features and team collaboration

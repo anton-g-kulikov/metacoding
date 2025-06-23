@@ -4,6 +4,7 @@ export declare class InitCommand {
     private fileSystem;
     private vscodeService;
     private projectDetector;
+    private gitIgnoreManager;
     constructor();
     execute(options: InitOptions): Promise<void>;
     private getProjectConfiguration;
