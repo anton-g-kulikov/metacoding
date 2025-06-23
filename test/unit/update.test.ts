@@ -14,7 +14,17 @@ import {
 
 // Mock inquirer to avoid interactive prompts in tests
 jest.mock('inquirer', () => ({
-  prompt: jest.fn().mockResolvedValue({ globalChoice: 'replace' }),
+  prompt: jest.fn().mockImplementation((questions: any) => {
+    const questionName = questions[0]?.name;
+    if (questionName === 'globalChoice') {
+      return Promise.resolve({ globalChoice: 'replace' });
+    }
+    if (questionName === 'choice') {
+      return Promise.resolve({ choice: 'replace' });
+    }
+    // Default response for any other inquirer prompts
+    return Promise.resolve({ globalChoice: 'replace' });
+  }),
 }));
 
 describe('Update Command Tests', () => {

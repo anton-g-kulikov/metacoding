@@ -4,7 +4,29 @@ import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+import {
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  jest,
+} from '@jest/globals';
+
+// Mock inquirer to avoid interactive prompts in tests
+jest.mock('inquirer', () => ({
+  prompt: jest.fn().mockImplementation((questions: any) => {
+    const questionName = questions[0]?.name;
+    if (questionName === 'globalChoice') {
+      return Promise.resolve({ globalChoice: 'replace' });
+    }
+    if (questionName === 'choice') {
+      return Promise.resolve({ choice: 'replace' });
+    }
+    // Default response for any other inquirer prompts
+    return Promise.resolve({ globalChoice: 'replace' });
+  }),
+}));
 
 describe('Error Handling', () => {
   let testDir: string;
@@ -135,7 +157,9 @@ describe('Error Handling', () => {
       const updateCommand = new UpdateCommand();
 
       // Should handle conflicts gracefully
-      await expect(updateCommand.execute({})).resolves.not.toThrow();
+      await expect(
+        updateCommand.execute({ backup: false })
+      ).resolves.not.toThrow();
     });
   });
 
