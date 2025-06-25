@@ -88,42 +88,42 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 
 ### 1. Template System (`templates/`)
 
-| Test Case ID  | Description                                       | Type | Status    |
-| :------------ | :------------------------------------------------ | :--- | :-------- |
-| TMPL-UNIT-001 | React template directory validation               | Unit | Completed |
-| TMPL-UNIT-002 | React template.json validation                    | Unit | Completed |
-| TMPL-UNIT-003 | React-specific Copilot instructions generation    | Unit | Completed |
-| TMPL-UNIT-004 | Node.js template directory validation             | Unit | Completed |
-| TMPL-UNIT-005 | Node.js template.json validation                  | Unit | Completed |
-| TMPL-UNIT-006 | Node.js-specific Copilot instructions generation  | Unit | Completed |
-| TMPL-UNIT-007 | Node.js backend-specific code review instructions | Unit | Completed |
-| TMPL-UNIT-008 | Node.js test runner instructions                  | Unit | Completed |
-| TMPL-UNIT-009 | Python template directory validation              | Unit | Completed |
-| TMPL-UNIT-010 | Python template.json validation                   | Unit | Completed |
-| TMPL-UNIT-011 | Python-specific Copilot instructions generation   | Unit | Completed |
-| TMPL-UNIT-012 | Python-specific code review instructions          | Unit | Completed |
-| TMPL-UNIT-013 | Python test runner instructions                   | Unit | Completed |
-| TMPL-UNIT-014 | General template directory validation             | Unit | Completed |
-| TMPL-UNIT-015 | General template.json validation                  | Unit | Completed |
-| TMPL-UNIT-016 | General-specific Copilot instructions generation  | Unit | Completed |
-| TMPL-UNIT-017 | JavaScript template directory validation          | Unit | Completed |
-| TMPL-UNIT-018 | JavaScript template.json validation               | Unit | Completed |
+| Test Case ID  | Description                                         | Type | Status    |
+| :------------ | :-------------------------------------------------- | :--- | :-------- |
+| TMPL-UNIT-001 | React template directory validation                 | Unit | Completed |
+| TMPL-UNIT-002 | React template.json validation                      | Unit | Completed |
+| TMPL-UNIT-003 | React-specific Copilot instructions generation      | Unit | Completed |
+| TMPL-UNIT-004 | Node.js template directory validation               | Unit | Completed |
+| TMPL-UNIT-005 | Node.js template.json validation                    | Unit | Completed |
+| TMPL-UNIT-006 | Node.js-specific Copilot instructions generation    | Unit | Completed |
+| TMPL-UNIT-007 | Node.js backend-specific code review instructions   | Unit | Completed |
+| TMPL-UNIT-008 | Node.js test runner instructions                    | Unit | Completed |
+| TMPL-UNIT-009 | Python template directory validation                | Unit | Completed |
+| TMPL-UNIT-010 | Python template.json validation                     | Unit | Completed |
+| TMPL-UNIT-011 | Python-specific Copilot instructions generation     | Unit | Completed |
+| TMPL-UNIT-012 | Python-specific code review instructions            | Unit | Completed |
+| TMPL-UNIT-013 | Python test runner instructions                     | Unit | Completed |
+| TMPL-UNIT-014 | General template directory validation               | Unit | Completed |
+| TMPL-UNIT-015 | General template.json validation                    | Unit | Completed |
+| TMPL-UNIT-016 | General-specific Copilot instructions generation    | Unit | Completed |
+| TMPL-UNIT-017 | JavaScript template directory validation            | Unit | Completed |
+| TMPL-UNIT-018 | JavaScript template.json validation                 | Unit | Completed |
 | TMPL-UNIT-019 | JavaScript-specific Copilot instructions generation | Unit | Completed |
-| TMPL-UNIT-020 | JavaScript instruction file loading for Cursor   | Unit | Completed |
-| TMPL-UNIT-021 | JavaScript template CLI and Cursor compatibility | Unit | Completed |
+| TMPL-UNIT-020 | JavaScript instruction file loading for Cursor      | Unit | Completed |
+| TMPL-UNIT-021 | JavaScript template CLI and Cursor compatibility    | Unit | Completed |
 
 ### 2. Template Manager Service (`src/services/template-manager.ts`)
 
-| Test Case ID  | Description                              | Type | Status    |
-| :------------ | :--------------------------------------- | :--- | :-------- |
-| TMGR-UNIT-001 | React template detection and selection   | Unit | Completed |
-| TMGR-UNIT-002 | Node.js template detection and selection | Unit | Completed |
-| TMGR-UNIT-003 | Python template detection and selection  | Unit | Completed |
-| TMGR-UNIT-004 | General template fallback selection      | Unit | Completed |
-| TMGR-UNIT-005 | Template variable substitution           | Unit | Completed |
-| TMGR-UNIT-006 | Template file processing                 | Unit | Completed |
+| Test Case ID  | Description                                 | Type | Status    |
+| :------------ | :------------------------------------------ | :--- | :-------- |
+| TMGR-UNIT-001 | React template detection and selection      | Unit | Completed |
+| TMGR-UNIT-002 | Node.js template detection and selection    | Unit | Completed |
+| TMGR-UNIT-003 | Python template detection and selection     | Unit | Completed |
+| TMGR-UNIT-004 | General template fallback selection         | Unit | Completed |
+| TMGR-UNIT-005 | Template variable substitution              | Unit | Completed |
+| TMGR-UNIT-006 | Template file processing                    | Unit | Completed |
 | TMGR-UNIT-007 | JavaScript template detection and selection | Unit | Completed |
-| TMGR-UNIT-008 | JavaScript instruction file loading      | Unit | Completed |
+| TMGR-UNIT-008 | JavaScript instruction file loading         | Unit | Completed |
 
 ### 3. CLI Commands (`src/commands/`)
 
