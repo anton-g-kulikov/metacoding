@@ -394,7 +394,21 @@
 
 ### Language-Specific Instruction Templates
 
-- [x] **LANG-TASK-001: Create JavaScript-specific instruction template** - ✅ **COMPLETED** (See TMPL-TASK-001 above for details)
+- [x] **LANG-TASK-001: Create JavaScript-specific instruction template** - ✅ **COMPLETED**
+  - ✅ Create `templates/javascript/` directory with complete instruction set
+  - ✅ Implement JavaScript coding standards (ES6+, modern patterns, async/await)  
+  - ✅ Add Node.js runtime considerations and npm ecosystem best practices
+  - ✅ Include JavaScript testing frameworks (Jest, Mocha, Vitest) guidance
+  - ✅ Add browser compatibility and build tool (Webpack, Vite) considerations
+  - ✅ Create comprehensive template.json configuration for JavaScript projects
+  - ✅ Fix template manager to properly load JavaScript instruction files for both CLI and Cursor IDE
+  - ✅ Ensure JavaScript template uses global .gitignore patterns (no language-specific)
+  - ✅ Add comprehensive test suite (12 tests) for JavaScript template functionality
+  - ✅ **Make JavaScript available as CLI project type option**
+  - ✅ **Add JavaScript to project detector logic with hasJavaScriptIndicators**
+  - ✅ **Update CLI prompts to include JavaScript option**
+  - ✅ **Create unit tests for project detector JavaScript support (5 tests)**
+  - ✅ **Finalize user-facing documentation for JavaScript workflow**
 
 - [ ] **LANG-TASK-002: Create Java-specific instruction template**
 

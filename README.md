@@ -193,6 +193,7 @@ The easiest way to get started with `metacoding` is using our npm package:
 - `metacoding init` - Interactive setup with AI assistant and template selection
 - `metacoding init --template react` - Use React template with interactive AI setup
 - `metacoding init --template node` - Use Node.js template with interactive AI setup
+- `metacoding init --template javascript` - Use JavaScript template with interactive AI setup
 - `metacoding init --template python` - Use Python template with interactive AI setup
 - `metacoding init --force` - Overwrite existing files
 
@@ -201,6 +202,7 @@ The easiest way to get started with `metacoding` is using our npm package:
 - `metacoding init --vscode` - Set up for VS Code + GitHub Copilot
 - `metacoding init --cursor` - Set up for Cursor IDE
 - `metacoding init --cursor --template react` - Cursor setup with React template
+- `metacoding init --cursor --template javascript` - Cursor setup with JavaScript template
 
 #### Post-Installation Configuration
 
@@ -284,6 +286,7 @@ Initialize metacoding in your current project:
 - `metacoding init` - Interactive setup with AI assistant and template selection
 - `metacoding init --template react` - Initialize with React template (interactive AI setup)
 - `metacoding init --template node` - Initialize with Node.js template (interactive AI setup)
+- `metacoding init --template javascript` - Initialize with JavaScript template (interactive AI setup)
 - `metacoding init --template python` - Initialize with Python template (interactive AI setup)
 - `metacoding init --force` - Overwrite existing files without confirmation
 
@@ -292,6 +295,7 @@ Initialize metacoding in your current project:
 - `metacoding init --vscode` - Set up for VS Code + GitHub Copilot
 - `metacoding init --cursor` - Set up for Cursor IDE
 - `metacoding init --vscode --template react` - VS Code setup with React template
+- `metacoding init --cursor --template javascript` - Cursor setup with JavaScript template
 - `metacoding init --cursor --template python` - Cursor setup with Python template
 
 ### `metacoding update`
