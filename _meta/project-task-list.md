@@ -2,6 +2,21 @@
 
 ## 🔄 In Progress Tasks (June 23, 2025) - ✅ **ALL COMPLETED**
 
+### JavaScript Template Compatibility Fix
+
+- [x] **TMPL-TASK-001: Ensure JavaScript template is fully compatible with both CLI and Cursor IDE** - ✅ **COMPLETED**
+  - ✅ Verify JavaScript template uses only global .gitignore patterns (no language-specific)
+  - ✅ Confirm all JavaScript instruction files are correctly named and placed:
+    - `javascript.coding.instructions.md`
+    - `javascript.testing.instructions.md`
+    - `javascript.docs.instructions.md`
+  - ✅ Fix `getCodingInstructionFiles` in template-manager.ts to include JavaScript case
+  - ✅ Update fallback logic in `loadInstructionFiles` for proper test-runner.instructions.md handling
+  - ✅ Create and run comprehensive tests to verify instruction file loading for Cursor support
+  - ✅ Validate all JavaScript template tests pass (12/12 tests passing)
+  - ✅ Run full project test suite to confirm no regressions (228/228 tests passing)
+  - ✅ Clean up temporary test files after verification
+
 ### Cursor IDE Integration Fix
 
 - [x] **CUR-TASK-001: Update Cursor rules file structure to match modern Cursor IDE requirements** - ✅ **COMPLETED**
@@ -356,7 +371,7 @@
 
 ### Language-Specific Instruction Templates
 
-- [ ] **LANG-TASK-001: Create JavaScript-specific instruction template**
+- [ ] **LANG-TASK-001: Create JavaScript-specific instruction template** - 🚧 **IN PROGRESS**
 
   - Create `templates/javascript/` directory with complete instruction set
   - Implement JavaScript coding standards (ES6+, modern patterns, async/await)

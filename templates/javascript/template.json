@@ -1,0 +1,36 @@
+{
+  "name": "javascript",
+  "description": "Modern JavaScript development template for browser and Node.js environments with ES6+, testing frameworks, and build tools",
+  "prompts": [],
+  "vscodeSettings": {
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+    "chat.promptFiles": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true,
+      "source.fixAll.eslint": true
+    },
+    "javascript.preferences.inlayHints.parameterNames.enabled": "all",
+    "javascript.preferences.inlayHints.variableTypes.enabled": true,
+    "javascript.preferences.inlayHints.functionLikeReturnTypes.enabled": true,
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.nyc_output": true,
+      "**/coverage": true,
+      "**/public/build": true,
+      "**/.cache": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/coverage": true
+    },
+    "javascript.suggest.autoImports": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "eslint.enable": true,
+    "eslint.format.enable": true
+  }
+}

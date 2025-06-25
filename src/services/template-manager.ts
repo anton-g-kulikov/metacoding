@@ -102,6 +102,7 @@ export class TemplateManager {
       react: 'react.testing.instructions.md',
       node: 'nodejs.testing.instructions.md',
       python: 'python.testing.instructions.md',
+      javascript: 'test-runner.instructions.md', // JavaScript uses general test-runner
       general: 'test-runner.instructions.md',
     };
 
@@ -115,6 +116,19 @@ export class TemplateManager {
           destination: '.github/instructions/test-runner.instructions.md',
           template: false,
         });
+      } else if (templateName === 'javascript') {
+        // JavaScript template uses general test-runner instructions
+        const generalTestingPath = path.join(
+          generalPath,
+          'test-runner.instructions.md'
+        );
+        if (await fs.pathExists(generalTestingPath)) {
+          files.push({
+            source: 'general/test-runner.instructions.md',
+            destination: '.github/instructions/test-runner.instructions.md',
+            template: false,
+          });
+        }
       }
     }
 
@@ -485,6 +499,13 @@ export class TemplateManager {
           ...commonFiles,
           'python.coding.instructions.md',
           'python.testing.instructions.md',
+        ];
+      case 'javascript':
+        return [
+          ...commonFiles,
+          'javascript.coding.instructions.md',
+          'javascript.testing.instructions.md',
+          'javascript.docs.instructions.md',
         ];
       default:
         return commonFiles;

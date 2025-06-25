@@ -106,6 +106,11 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | TMPL-UNIT-014 | General template directory validation             | Unit | Completed |
 | TMPL-UNIT-015 | General template.json validation                  | Unit | Completed |
 | TMPL-UNIT-016 | General-specific Copilot instructions generation  | Unit | Completed |
+| TMPL-UNIT-017 | JavaScript template directory validation          | Unit | Completed |
+| TMPL-UNIT-018 | JavaScript template.json validation               | Unit | Completed |
+| TMPL-UNIT-019 | JavaScript-specific Copilot instructions generation | Unit | Completed |
+| TMPL-UNIT-020 | JavaScript instruction file loading for Cursor   | Unit | Completed |
+| TMPL-UNIT-021 | JavaScript template CLI and Cursor compatibility | Unit | Completed |
 
 ### 2. Template Manager Service (`src/services/template-manager.ts`)
 
@@ -117,6 +122,8 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 | TMGR-UNIT-004 | General template fallback selection      | Unit | Completed |
 | TMGR-UNIT-005 | Template variable substitution           | Unit | Completed |
 | TMGR-UNIT-006 | Template file processing                 | Unit | Completed |
+| TMGR-UNIT-007 | JavaScript template detection and selection | Unit | Completed |
+| TMGR-UNIT-008 | JavaScript instruction file loading      | Unit | Completed |
 
 ### 3. CLI Commands (`src/commands/`)
 
