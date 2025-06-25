@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { describe, test, expect } from '@jest/globals';
 
 describe('Node.js Template', () => {
   const templateDir = path.join(__dirname, '../../templates/node');

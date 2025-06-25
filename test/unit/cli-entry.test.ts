@@ -113,7 +113,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -155,7 +155,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -171,7 +171,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -189,7 +189,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -205,7 +205,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -230,7 +230,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -259,7 +259,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -288,7 +288,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 
@@ -361,7 +361,7 @@ describe('CLI Entry Point Coverage', () => {
 
       try {
         await main();
-      } catch (error) {
+      } catch (_error) {
         // Expected to throw due to mocked process.exit
       }
 

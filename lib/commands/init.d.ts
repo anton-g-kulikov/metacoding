@@ -3,6 +3,7 @@ export declare class InitCommand {
     private templateManager;
     private fileSystem;
     private vscodeService;
+    private cursorService;
     private projectDetector;
     private gitIgnoreManager;
     constructor();
@@ -11,6 +12,7 @@ export declare class InitCommand {
     private setupProject;
     private getDefaultTestFramework;
     private getDefaultBuildTool;
+    private validateAndGetIdeChoice;
     private displayNextSteps;
 }
 //# sourceMappingURL=init.d.ts.map

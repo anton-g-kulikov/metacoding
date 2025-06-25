@@ -443,3 +443,446 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 - **Error Handling**: Permission errors, file access issues handled appropriately
 - **Duplicate Detection**: Skip adding patterns that already exist in file
 - **Simplified Approach**: Focus only on metacoding-generated files, not general AI assistant exclusions
+
+## Cursor IDE Support Test Cases (CURSOR-TASK-001)
+
+### Overview
+
+Test cases for implementing Cursor IDE support as an alternative to VS Code + GitHub Copilot. These test cases must be completed BEFORE implementing any Cursor-related code, following our documentation-first workflow.
+
+### Test Categories
+
+#### 1. CursorService Unit Tests
+
+**Test Suite: `cursor.service.test.ts`**
+
+- **Test Group: Cursor IDE Detection and Validation**
+
+  - [ ] `detectCursorIDE()` - Should detect if Cursor IDE is installed on the system
+  - [ ] `validateCursorCompatibility()` - Should validate that Cursor version supports .cursorrules
+  - [ ] `getCursorConfigPath()` - Should return correct Cursor configuration directory path
+  - [ ] `getCursorConfigPath()` with custom path - Should handle user-specified Cursor config paths
+
+- **Test Group: Cursor Rules File Management**
+
+  - [ ] `generateWorkflowRules()` - Should generate workflow.cursorrules content from instruction templates
+  - [ ] `generatePatternRules()` - Should generate .cursor/rules/\*.mdc files for specific patterns
+  - [ ] `installCursorRules()` - Should safely install rules files without overwriting existing files
+  - [ ] `backupExistingRules()` - Should create backups of existing .cursorrules files
+  - [ ] `detectRulesConflicts()` - Should detect and report conflicts with existing Cursor rules
+
+- **Test Group: Template Content Processing**
+  - [ ] `processInstructionTemplate()` - Should convert Copilot instructions to Cursor rules format
+  - [ ] `mergeInstructionFiles()` - Should combine multiple instruction files into workflow.cursorrules
+  - [ ] `extractPatternSpecificRules()` - Should identify and extract pattern-specific rules for .mdc files
+  - [ ] `validateRulesContent()` - Should validate generated rules content for Cursor compatibility
+
+#### 2. CLI Integration Tests
+
+**Test Suite: `cli.cursor.integration.test.ts`** - ✅ **COMPLETED** (9/9 tests passing)
+
+- **Test Group: Init Command with Cursor Flag**
+
+  - [x] CLI-CUR-001: Initialize with --cursor flag - Should initialize project with Cursor support
+  - [x] CLI-CUR-002: Initialize with --vscode flag - Should maintain existing VS Code behavior
+  - [x] CLI-CUR-003: Conflicting flags validation - Should reject conflicting --vscode and --cursor flags
+
+- **Test Group: File Installation Flow**
+
+  - [x] CLI-CUR-004: Install Cursor files - Should install Cursor files in empty project
+  - [x] CLI-CUR-005: Handle existing files - Should handle existing workflow.cursorrules safely
+
+- **Test Group: Template-Specific Behavior**
+
+  - [x] CLI-CUR-006: TypeScript template - Should generate files for TypeScript template
+  - [x] CLI-CUR-007: React template - Should generate files for React template
+  - [x] CLI-CUR-008: Python template - Should generate files for Python template
+
+- **Test Group: Error Handling**
+
+  - [x] CLI-CUR-009: Invalid template - Should handle invalid template gracefully
+
+#### 3. End-to-End Integration Tests
+
+**Test Suite: `e2e.cursor.integration.test.ts`** - ✅ **COMPLETED** (10/10 tests passing)
+
+- **Test Group: Complete Cursor Setup Workflow**
+
+  - [x] E2E-CUR-001: Complete full Cursor setup for fresh TypeScript project
+  - [x] E2E-CUR-002: Complete full Cursor setup for React project
+  - [x] E2E-CUR-003: Handle project migration from VS Code to Cursor
+  - [x] E2E-CUR-004: Generate appropriate content for Python project
+
+- **Test Group: Cross-Platform Compatibility**
+
+  - [x] E2E-CUR-005: Create valid file paths on current platform
+  - [x] E2E-CUR-006: Handle special characters in project paths
+
+- **Test Group: User Experience Validation**
+
+  - [x] E2E-CUR-007: Provide meaningful file content for users
+  - [x] E2E-CUR-008: Create well-structured directory layout
+
+- **Test Group: Error Recovery and Edge Cases**
+
+  - [x] E2E-CUR-009: Handle empty project directory gracefully
+  - [x] E2E-CUR-010: Provide consistent results across multiple runs
+
+#### 4. Template Manager Extension Tests
+
+**Test Suite: `template-manager.cursor.test.ts`** - ⚠️ **NOT NEEDED** (covered by unit and integration tests)
+
+#### 4. File Generation Logic Tests (Phase 3)
+
+**Test Suite: `cursor.file-generation.test.ts`**
+
+- **Test Group: Workflow Rules Generation**
+
+  - [x] `generateWorkflowCursorRules()` - Should create workflow.cursorrules from copilot-instructions.md
+  - [x] `includeMetacodingHeader()` - Should add metacoding version and source attribution
+  - [x] `preserveMarkdownStructure()` - Should maintain original markdown formatting
+  - [x] `handleEmptyInstructions()` - Should generate minimal valid rules for empty instructions
+  - [x] `validateWorkflowRulesContent()` - Should ensure generated content is valid Cursor format
+
+- **Test Group: Pattern-Specific Rule Generation**
+
+  - [x] `generatePatternMdcFiles()` - Should create .cursor/rules/\*.mdc files from language instructions
+  - [x] `addMdcFrontmatter()` - Should include frontmatter with glob patterns and descriptions
+  - [x] `mapLanguageToPatterns()` - Should correctly map language files to glob patterns (_.ts, _.py, etc.)
+  - [x] `handleMultipleLanguages()` - Should generate separate .mdc files for each language
+  - [x] `validateMdcFormat()` - Should ensure .mdc files follow Cursor specification
+
+- **Test Group: File Installation and Safety**
+
+  - [x] `installGeneratedFiles()` - Should install all generated Cursor files to correct locations
+  - [x] `detectFileConflicts()` - Should identify existing files that would be overwritten
+  - [x] `createBackupBeforeInstall()` - Should backup existing .cursorrules and .cursor/ directory
+  - [x] `respectUserPreferences()` - Should skip installation if user chooses to keep existing files
+  - [x] `validateFilePermissions()` - Should ensure generated files have correct permissions
+
+- **Test Group: Cross-Platform Compatibility**
+
+  - [x] `generateOnWindows()` - Should create valid files on Windows systems
+  - [x] `generateOnMacOS()` - Should create valid files on macOS systems
+  - [x] `generateOnLinux()` - Should create valid files on Linux systems
+  - [x] `handlePathSeparators()` - Should use correct path separators for each platform
+  - [x] `respectFileSystemLimitations()` - Should handle filesystem-specific constraints
+
+#### 4. Filesystem Integration Tests
+
+**Test Suite: `filesystem.cursor.integration.test.ts`**
+
+- **Test Group: Safe File Operations**
+
+  - [ ] `createCursorDirectory()` - Should create .cursor/ directory structure safely
+  - [ ] `installWorkflowRules()` - Should write workflow.cursorrules without conflicts
+  - [ ] `installPatternRules()` - Should write .cursor/rules/\*.mdc files correctly
+  - [ ] `backupConflictingFiles()` - Should create timestamped backups of existing files
+
+- **Test Group: Conflict Detection and Resolution**
+  - [ ] Existing .cursorrules file - Should detect and offer resolution options
+  - [ ] Existing .cursor/rules/ files - Should merge or replace based on user choice
+  - [ ] Permission issues - Should handle file permission errors gracefully
+  - [ ] Disk space issues - Should handle insufficient disk space errors
+
+#### 5. End-to-End Integration Tests
+
+**Test Suite: `e2e.cursor.integration.test.ts`** - ✅ **COMPLETED** (10/10 tests passing)
+
+- **Test Group: Complete Cursor Setup Workflow**
+
+  - [x] E2E-CUR-001: Fresh TypeScript project with Cursor - Should complete full setup successfully
+  - [x] E2E-CUR-002: React project Cursor setup - Should complete full setup successfully
+  - [x] E2E-CUR-003: VS Code to Cursor migration - Should migrate from VS Code to Cursor safely
+  - [x] E2E-CUR-004: Python project with Cursor - Should generate appropriate content for Python projects
+
+- **Test Group: Cross-Platform Compatibility**
+
+  - [x] E2E-CUR-005: Valid file paths - Should create valid file paths on current platform
+  - [x] E2E-CUR-006: Special characters in paths - Should handle special characters in project paths
+
+- **Test Group: User Experience Validation**
+
+  - [x] E2E-CUR-007: Meaningful file content - Should provide meaningful file content for users (VS Code references replaced with Cursor)
+  - [x] E2E-CUR-008: Well-structured directory layout - Should create well-structured directory layout
+
+- **Test Group: Error Recovery and Edge Cases**
+
+  - [x] E2E-CUR-009: Empty project directory - Should handle empty project directory gracefully
+  - [x] E2E-CUR-010: Consistent results - Should provide consistent results across multiple runs
+
+#### 6. Compatibility and Edge Case Tests
+
+**Test Suite: `cursor.compatibility.test.ts`**
+
+- **Test Group: Cross-Platform Compatibility**
+
+  - [ ] Windows path handling - Should handle Windows-style paths for Cursor config
+  - [ ] macOS path handling - Should handle macOS-style paths for Cursor config
+  - [ ] Linux path handling - Should handle Linux-style paths for Cursor config
+  - [ ] Permission variations - Should adapt to different file permission models
+
+- **Test Group: Edge Cases and Error Conditions**
+
+  - [ ] Insufficient disk space - Should handle disk space errors gracefully
+  - [ ] Invalid file permissions - Should provide clear error messages for permission issues
+  - [ ] Corrupted template files - Should detect and handle corrupted instruction templates
+  - [ ] Network issues during setup - Should handle network-related errors appropriately
+  - [ ] Interrupted installation - Should clean up partial installations properly
+
+- **Test Group: Integration with Existing Tools**
+
+  - [ ] Git repository detection - Should respect .gitignore patterns for Cursor files
+  - [ ] VS Code workspace conflicts - Should handle projects with existing VS Code configurations
+  - [ ] Package manager compatibility - Should work with npm, yarn, pnpm project structures
+  - [ ] CI/CD environment compatibility - Should function correctly in automated environments
+
+- **Test Group: Edge Cases and Error Conditions**
+  - [ ] Corrupted instruction files - Should handle and report corrupted template files
+  - [ ] Network unavailable - Should work offline with locally available templates
+  - [ ] Insufficient permissions - Should provide clear guidance for permission issues
+  - [ ] Cursor not installed - Should detect missing Cursor installation and guide user
+
+### Test Data Requirements
+
+**Fixtures needed in `/test/fixtures/`:**
+
+- [ ] `cursor-rules/` - Sample Cursor rules files for testing
+- [ ] `instruction-templates/` - Sample instruction files for transformation testing
+- [ ] `project-structures/` - Various project layouts for testing setup scenarios
+- [ ] `existing-configs/` - Pre-existing Cursor configurations for conflict testing
+
+### Test Execution Strategy
+
+**Phase 1: Unit Tests**
+
+- Implement and validate all CursorService unit tests
+- Ensure 80%+ code coverage for new CursorService functionality
+- Validate template processing and content transformation logic
+
+**Phase 2: Integration Tests**
+
+- Test CLI integration with Cursor options
+- Validate filesystem operations and conflict resolution
+- Test template manager extensions for Cursor support
+
+**Phase 3: End-to-End Validation**
+
+- Complete workflow testing with real project scenarios
+- User experience validation with interactive prompts
+- Cross-platform compatibility verification
+
+### Test Success Criteria
+
+- [ ] All unit tests pass with 80%+ code coverage for CursorService
+- [ ] CLI integration tests validate both VS Code and Cursor workflows
+- [ ] No regressions in existing VS Code functionality
+- [ ] Cursor setup completes successfully in various project scenarios
+- [ ] Conflict detection and resolution works reliably
+- [ ] Generated Cursor rules files are syntactically valid and functional
+- [ ] Documentation accurately reflects both IDE setup options
+
+### Test Implementation Dependencies
+
+- **Before implementation:** All test cases must be documented (this section)
+- **During implementation:** Tests must be written before corresponding code
+- **After implementation:** All tests must pass before considering task complete
+- **Ongoing:** Test coverage reports must maintain 80%+ coverage targets
+
+## Cursor IDE Support Test Cases (Phase 2B: CLI Integration)
+
+### CLI Integration Test Cases
+
+| Test Case ID | Description                                       | Type        | Status    |
+| :----------- | :------------------------------------------------ | :---------- | :-------- |
+| CUR-CLI-001  | `init --vscode` flag initializes VS Code setup    | Integration | Completed |
+| CUR-CLI-002  | `init --cursor` flag initializes Cursor setup     | Integration | Completed |
+| CUR-CLI-003  | `init` without flags prompts for IDE choice       | Integration | Completed |
+| CUR-CLI-004  | Interactive prompt shows VS Code + Copilot option | Integration | Completed |
+| CUR-CLI-005  | Interactive prompt shows Cursor IDE option        | Integration | Completed |
+| CUR-CLI-006  | User selects VS Code from interactive prompt      | Integration | Completed |
+| CUR-CLI-007  | User selects Cursor from interactive prompt       | Integration | Completed |
+| CUR-CLI-008  | Invalid IDE selection shows error message         | Integration | Completed |
+| CUR-CLI-009  | CLI help text includes new IDE options            | Integration | Completed |
+| CUR-CLI-010  | Cursor setup generates workflow.cursorrules       | Integration | Completed |
+| CUR-CLI-011  | Cursor setup generates .cursor/rules/ directory   | Integration | Completed |
+| CUR-CLI-012  | Cursor setup creates language-specific .mdc files | Integration | Completed |
+| CUR-CLI-013  | VS Code setup maintains existing behavior         | Integration | Completed |
+| CUR-CLI-014  | Conflicting IDE flags show error message          | Integration | Completed |
+| CUR-CLI-015  | Cursor setup includes metacoding version header   | Integration | Completed |
+
+## Jest Linting Assessment - Phase 1 Results
+
+### Assessment Summary
+
+Comprehensive ESLint analysis completed on all Jest test files (20 TypeScript files) to identify linting violations and categorize issues by type.
+
+### Test Case for Linting Assessment
+
+| Test Case ID        | Description                                        | Type          | Status    |
+| :------------------ | :------------------------------------------------- | :------------ | :-------- |
+| LINT-ASSESSMENT-001 | Run ESLint analysis on all Jest test files         | Assessment    | Completed |
+| LINT-ASSESSMENT-002 | Categorize linting violations by type              | Analysis      | Completed |
+| LINT-ASSESSMENT-003 | Document current state and create improvement plan | Documentation | Completed |
+
+### Key Findings
+
+**Issue Pattern Identified:**
+
+- **Root Cause**: Inconsistent Jest globals import strategy across test files
+- **Primary Issue**: ESLint `no-undef` errors for Jest globals (`describe`, `test`, `expect`, etc.)
+
+### File Categorization
+
+**Files WITH `@jest/globals` imports (11 files) - ✅ NO LINTING ISSUES:**
+
+- `test/unit/cli.test.ts`
+- `test/unit/cursor.service.test.ts`
+- `test/unit/update.test.ts`
+- `test/unit/workflow-enhancement.test.ts`
+- `test/unit/general-template-typescript.test.ts`
+- `test/unit/react-template.test.ts`
+- `test/unit/single-task-focus.test.ts`
+- `test/unit/error-handling.test.ts`
+- `test/unit/cli-entry.test.ts`
+- `test/unit/python-template.test.ts`
+- `test/integration/advanced-workflows.test.ts`
+
+**Files WITHOUT `@jest/globals` imports (9 files) - ❌ LINTING ISSUES:**
+
+- `test/unit/filesystem.test.ts` - 30 violations
+- `test/unit/package-structure.test.ts`
+- `test/unit/nodejs-template.test.ts`
+- `test/unit/cursor.file-generation.test.ts`
+- `test/unit/service-integration.test.ts`
+- `test/integration/init.test.ts`
+- `test/integration/e2e.cursor.integration.test.ts`
+- `test/integration/cli.cursor.integration.test.ts`
+- `test/setup.ts` (setup file, not a test file)
+
+### Issue Types and Severity
+
+**1. Critical Issues (ESLint Errors):**
+
+- **Type**: `no-undef` violations for Jest globals
+- **Count**: ~30+ violations per affected file
+- **Affected Functions**: `describe`, `test`, `expect`, `beforeEach`, `afterEach`, `beforeAll`, `afterAll`
+
+**2. Consistency Issues (Project Standards):**
+
+- **Type**: Inconsistent import patterns across test files
+- **Impact**: Some files import Jest globals, others rely on global definitions
+
+**3. No Issues Found:**
+
+- **TypeScript type issues**: Already resolved (cursor.service.test.ts completed)
+- **Formatting violations**: Not detected in current scan
+- **Unused imports**: Not detected in current scan
+
+### Recommended Solution Strategy
+
+**Simple and Consistent Approach:**
+
+1. **Standardize on explicit imports**: Add `@jest/globals` imports to all test files
+2. **Maintain current functionality**: All tests continue working as expected
+3. **Follow existing patterns**: Use the import pattern already successful in 11 files
+
+**Implementation Priority:**
+
+- **Phase 2a**: Fix Jest globals imports (9 test files)
+- **Phase 2b**: Verify no other linting issues remain
+- **Phase 3**: Establish coding standards to prevent regression
+
+### Expected Outcome
+
+After implementing the recommended solution:
+
+- **0 ESLint violations** across all test files
+- **Consistent import patterns** throughout test suite
+- **Maintained test functionality** with improved code quality
+- **Prevention framework** to avoid future inconsistencies
+
+### Test Cases for Jest Globals Import Fixes
+
+| Test Case ID    | Description                                                 | Type         | Status      |
+| :-------------- | :---------------------------------------------------------- | :----------- | :---------- |
+| LINT-FIX-001    | Add @jest/globals imports to filesystem.test.ts             | Fix          | In Progress |
+| LINT-FIX-002    | Add @jest/globals imports to package-structure.test.ts      | Fix          | In Progress |
+| LINT-FIX-003    | Add @jest/globals imports to nodejs-template.test.ts        | Fix          | In Progress |
+| LINT-FIX-004    | Add @jest/globals imports to cursor.file-generation.test.ts | Fix          | In Progress |
+| LINT-FIX-005    | Add @jest/globals imports to service-integration.test.ts    | Fix          | In Progress |
+| LINT-FIX-006    | Add @jest/globals imports to init.test.ts                   | Fix          | In Progress |
+| LINT-FIX-007    | Add @jest/globals imports to e2e.cursor.integration.test.ts | Fix          | In Progress |
+| LINT-FIX-008    | Add @jest/globals imports to cli.cursor.integration.test.ts | Fix          | In Progress |
+| LINT-VERIFY-001 | Verify all ESLint violations resolved                       | Verification | Not Started |
+| LINT-VERIFY-002 | Verify all tests still pass after fixes                     | Verification | Not Started |
+
+## Jest Linting Status ✅
+
+**Phase 1 - Assessment (Completed):**
+
+- ✅ Ran ESLint on all test files to identify issues
+- ✅ Found 9 files with inconsistent Jest globals imports and 30+ `no-undef` errors each
+- ✅ Categorized files and documented improvement plan
+
+**Phase 2 - Fixes (Completed):**
+
+- ✅ Added `@jest/globals` imports to the following files:
+  - `test/integration/init.test.ts`
+  - `test/unit/filesystem.test.ts`
+  - `test/unit/package-structure.test.ts`
+  - `test/unit/nodejs-template.test.ts`
+  - `test/unit/service-integration.test.ts`
+- ✅ Fixed corrupted content in `test/unit/cli-entry.test.ts`
+- ✅ Updated ESLint configuration in `.eslintrc.js` to ignore unused catch block variables starting with underscore
+- ✅ Verified all test files now pass ESLint without errors
+
+**Phase 3 - Prevention (Next):**
+
+- 📋 Document Jest coding standards and best practices
+- 📋 Consider adding pre-commit hooks for Jest test linting
+- 📋 Update Jest configuration if needed
+
+**Current Status:** All Jest test files pass ESLint validation ✅
+
+### Jest Coding Standards
+
+To maintain consistent Jest usage across all test files:
+
+1. **Jest Globals Import:** Always import Jest globals from `@jest/globals`:
+
+   ```typescript
+   import {
+     describe,
+     test,
+     expect,
+     beforeEach,
+     afterEach,
+     jest,
+   } from '@jest/globals';
+   ```
+
+2. **Unused Variables:** Prefix unused variables in catch blocks with underscore:
+
+   ```typescript
+   try {
+     // code that might throw
+   } catch (_error) {
+     // Expected error, no handling needed
+   }
+   ```
+
+3. **Mock Imports:** Import mocking functions from Jest globals:
+
+   ```typescript
+   jest.mock('module-name');
+   const mockFunction = jest.fn();
+   ```
+
+4. **File Structure:** Keep all test files in `/test` directory with appropriate subdirectories:
+
+   - `/test/unit/` for unit tests
+   - `/test/integration/` for integration tests
+   - `/test/fixtures/` for test data and fixtures
+
+5. **Test Naming:** Use descriptive test names that explain the behavior being tested.

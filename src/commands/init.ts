@@ -5,6 +5,7 @@ import { InitOptions, ProjectConfig } from '../types';
 import { TemplateManager } from '../services/template-manager';
 import { FileSystemService } from '../services/filesystem';
 import { VSCodeService } from '../services/vscode';
+import { CursorService } from '../services/cursor';
 import { ProjectDetector } from '../services/project-detector';
 import { GitIgnoreManager } from '../services/gitignore-manager';
 
@@ -15,6 +16,7 @@ export class InitCommand {
   private templateManager: TemplateManager;
   private fileSystem: FileSystemService;
   private vscodeService: VSCodeService;
+  private cursorService: CursorService;
   private projectDetector: ProjectDetector;
   private gitIgnoreManager: GitIgnoreManager;
 
@@ -22,6 +24,10 @@ export class InitCommand {
     this.templateManager = new TemplateManager();
     this.fileSystem = new FileSystemService();
     this.vscodeService = new VSCodeService();
+    this.cursorService = new CursorService(
+      this.templateManager,
+      this.fileSystem
+    );
     this.projectDetector = new ProjectDetector();
     this.gitIgnoreManager = new GitIgnoreManager();
   }
@@ -31,6 +37,9 @@ export class InitCommand {
    */
   async execute(options: InitOptions): Promise<void> {
     console.log(chalk.cyan.bold('🚀 Welcome to metacoding Setup!\n'));
+
+    // Validate IDE options
+    const ideChoice = await this.validateAndGetIdeChoice(options);
 
     // Detect current project context
     const projectInfo = await this.projectDetector.detectProject();
@@ -57,10 +66,10 @@ export class InitCommand {
     const config = await this.getProjectConfiguration(options, projectInfo);
 
     // Set up the project
-    await this.setupProject(config, options);
+    await this.setupProject(config, options, ideChoice);
 
     console.log(chalk.green.bold('\n✅ metacoding setup complete!\n'));
-    this.displayNextSteps();
+    this.displayNextSteps(ideChoice);
   }
 
   /**
@@ -164,7 +173,8 @@ export class InitCommand {
    */
   private async setupProject(
     config: ProjectConfig,
-    options: InitOptions
+    options: InitOptions,
+    ideChoice: 'vscode' | 'cursor'
   ): Promise<void> {
     const spinner = ora('Setting up metacoding files...').start();
 
@@ -192,10 +202,36 @@ export class InitCommand {
       spinner.text = 'Updating .gitignore with AI assistant exclusions...';
       await this.gitIgnoreManager.updateGitIgnore(process.cwd());
 
-      // Configure VS Code settings (unless skipped)
-      if (!options.skipVscode) {
-        spinner.text = 'Configuring VS Code settings...';
-        await this.vscodeService.updateSettings(template.vscodeSettings || {});
+      // Configure IDE-specific settings
+      if (ideChoice === 'vscode') {
+        // Configure VS Code settings (unless skipped)
+        if (!options.skipVscode) {
+          spinner.text = 'Configuring VS Code settings...';
+          await this.vscodeService.updateSettings(
+            template.vscodeSettings || {}
+          );
+        }
+      } else if (ideChoice === 'cursor') {
+        // Configure Cursor IDE settings
+        spinner.text = 'Configuring Cursor IDE rules...';
+
+        // Generate workflow content and pattern rules
+        const workflowContent = await this.cursorService.generateWorkflowRules(
+          process.cwd(),
+          config.projectType,
+          config
+        );
+        const patternRules = await this.cursorService.generatePatternRules(
+          process.cwd(),
+          config.projectType
+        );
+
+        // Install Cursor rules
+        await this.cursorService.installCursorRules(
+          process.cwd(),
+          workflowContent,
+          patternRules
+        );
       }
 
       spinner.succeed('metacoding files created successfully');
@@ -238,17 +274,84 @@ export class InitCommand {
   }
 
   /**
+   * Validate IDE options and get the user's choice
+   */
+  private async validateAndGetIdeChoice(
+    options: InitOptions
+  ): Promise<'vscode' | 'cursor'> {
+    // Check for conflicting flags
+    if (options.vscode && options.cursor) {
+      throw new Error(
+        'Cannot specify both --vscode and --cursor flags. Please choose one.'
+      );
+    }
+
+    // Return explicit choice if provided
+    if (options.vscode) {
+      return 'vscode';
+    }
+    if (options.cursor) {
+      return 'cursor';
+    }
+
+    // For testing or force mode, default to VS Code
+    if (options.force && process.env.NODE_ENV === 'test') {
+      return 'vscode';
+    }
+
+    // Interactive prompt for IDE choice
+    const { ideChoice } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'ideChoice',
+        message: 'Which AI coding environment would you like to set up?',
+        choices: [
+          {
+            name: 'VS Code + GitHub Copilot (recommended for most users)',
+            value: 'vscode',
+          },
+          {
+            name: 'Cursor IDE (alternative AI-powered editor)',
+            value: 'cursor',
+          },
+        ],
+        default: 'vscode',
+      },
+    ]);
+
+    return ideChoice;
+  }
+
+  /**
    * Display next steps to the user
    */
-  private displayNextSteps(): void {
+  private displayNextSteps(ideChoice: 'vscode' | 'cursor'): void {
     console.log(chalk.cyan('Next steps:'));
-    console.log(chalk.dim('1.'), 'Restart VS Code to apply settings');
-    console.log(chalk.dim('2.'), 'Open GitHub Copilot Chat');
-    console.log(
-      chalk.dim('3.'),
-      'Ask: "What are the coding standards for this project?"'
-    );
-    console.log(chalk.dim('4.'), 'Start coding with guided workflow support!');
+
+    if (ideChoice === 'vscode') {
+      console.log(chalk.dim('1.'), 'Restart VS Code to apply settings');
+      console.log(chalk.dim('2.'), 'Open GitHub Copilot Chat');
+      console.log(
+        chalk.dim('3.'),
+        'Ask: "What is the development workflow for this project?"'
+      );
+      console.log(
+        chalk.dim('4.'),
+        'Start coding with guided workflow support!'
+      );
+    } else if (ideChoice === 'cursor') {
+      console.log(chalk.dim('1.'), 'Open your project in Cursor IDE');
+      console.log(chalk.dim('2.'), 'Check that workflow.cursorrules is loaded');
+      console.log(
+        chalk.dim('3.'),
+        'Ask Cursor: "What is the development workflow for this project?"'
+      );
+      console.log(
+        chalk.dim('4.'),
+        'Start coding with guided workflow support!'
+      );
+    }
+
     console.log('');
     console.log(
       chalk.cyan('Need help?'),

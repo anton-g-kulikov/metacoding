@@ -2,6 +2,7 @@ import { InitCommand } from '../../src/commands/init';
 import { FileSystemService } from '../../src/services/filesystem';
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 
 /**
  * Basic integration test for the init command

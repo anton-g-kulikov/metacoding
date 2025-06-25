@@ -14,5 +14,10 @@ export declare class TemplateManager {
     private processTemplateContent;
     private getProjectDomain;
     private getProjectSpecificGuidance;
+    getInstructionFiles(templateType: string): Promise<Array<{
+        path: string;
+        content: string;
+    }>>;
+    private getCodingInstructionFiles;
 }
 //# sourceMappingURL=template-manager.d.ts.map

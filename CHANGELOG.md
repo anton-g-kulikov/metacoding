@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-06-25
+
+### Added
+
+- **Cursor IDE Support**: Complete integration with Cursor IDE for AI-assisted development
+  - **New CLI Flags**: Added `--vscode` and `--cursor` flags for direct AI assistant setup
+  - **Interactive AI Selection**: Interactive prompts to choose between VS Code + GitHub Copilot or Cursor IDE
+  - **Cursor File Generation**: Automatic generation of `workflow.cursorrules` and `.cursor/rules/*.mdc` files
+  - **Content Transformation**: Smart conversion of VS Code instruction content for Cursor IDE compatibility
+  - **Template Variable Substitution**: Dynamic replacement of project variables in generated Cursor workflows
+  - **Non-Intrusive Approach**: Uses `workflow.cursorrules` to respect existing user `.cursorrules` configurations
+  - **Safe Installation**: Conflict detection and backup functionality for existing files
+  - **Cross-Platform Support**: Full compatibility across different operating systems
+  - **Comprehensive Testing**: 56 new tests covering CLI integration, end-to-end workflows, and unit functionality
+
+### Changed
+
+- **Multi-AI Assistant Support**: Updated CLI and documentation to support both GitHub Copilot and Cursor IDE workflows
+- **Enhanced Template System**: Extended TemplateManager to support multiple AI assistant file formats
+- **Updated Documentation**: Comprehensive updates to README.md, API documentation, and troubleshooting guides
+- **CLI Interface**: Enhanced `metacoding init` command with AI assistant selection prompts and validation
+
+### Technical Details
+
+- **New Services**: Added CursorService for Cursor-specific file management and content transformation
+- **File Structure Support**: Added support for `.mdc` (Markdown + Code) file format with proper frontmatter
+- **Template Integration**: Enhanced template system to generate appropriate files for chosen AI assistant
+- **Error Handling**: Robust error handling for conflicting flags and invalid configurations
+- **Documentation Architecture**: Maintains clear separation between system documentation and Cursor-specific guides
+
 ## [1.1.4] - 2025-06-23
 
 ### Added

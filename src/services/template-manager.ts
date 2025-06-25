@@ -404,4 +404,90 @@ export class TemplateManager {
 - **Documentation:** Maintain clear and up-to-date documentation`;
     }
   }
+
+  /**
+   * Get instruction files for a specific template type (for Cursor support)
+   */
+  async getInstructionFiles(
+    templateType: string
+  ): Promise<Array<{ path: string; content: string }>> {
+    const instructionFiles: Array<{ path: string; content: string }> = [];
+
+    try {
+      // Load universal files from general template
+      const generalPath = path.join(this.templatesDir, 'general');
+      const universalFiles = [
+        'copilot-instructions.md',
+        'docs-update.instructions.md',
+        'code-review.instructions.md',
+      ];
+
+      for (const file of universalFiles) {
+        const filePath = path.join(generalPath, file);
+        if (await fs.pathExists(filePath)) {
+          const content = await fs.readFile(filePath, 'utf-8');
+          instructionFiles.push({
+            path: `general/${file}`,
+            content,
+          });
+        }
+      }
+
+      // Load template-specific files
+      const templatePath = path.join(this.templatesDir, templateType);
+      if (await fs.pathExists(templatePath)) {
+        // Load language-specific coding instructions
+        const codingFiles = await this.getCodingInstructionFiles(templateType);
+        for (const file of codingFiles) {
+          const filePath = path.join(templatePath, file);
+          if (await fs.pathExists(filePath)) {
+            const content = await fs.readFile(filePath, 'utf-8');
+            instructionFiles.push({
+              path: `${templateType}/${file}`,
+              content,
+            });
+          }
+        }
+      }
+
+      return instructionFiles;
+    } catch (error) {
+      throw new Error(
+        `Failed to load instruction files for ${templateType}: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
+  }
+
+  /**
+   * Get coding instruction files for a specific template type
+   */
+  private getCodingInstructionFiles(templateType: string): string[] {
+    const commonFiles = ['test-runner.instructions.md'];
+
+    switch (templateType) {
+      case 'typescript':
+      case 'node':
+        return [
+          ...commonFiles,
+          'typescript.coding.instructions.md',
+          'nodejs.testing.instructions.md',
+        ];
+      case 'react':
+        return [
+          ...commonFiles,
+          'react.coding.instructions.md',
+          'react.testing.instructions.md',
+        ];
+      case 'python':
+        return [
+          ...commonFiles,
+          'python.coding.instructions.md',
+          'python.testing.instructions.md',
+        ];
+      default:
+        return commonFiles;
+    }
+  }
 }

@@ -3,6 +3,7 @@ import { ProjectDetector } from '../../src/services/project-detector';
 import { VSCodeService } from '../../src/services/vscode';
 import { FileSystemService } from '../../src/services/filesystem';
 import { ProjectConfig } from '../../src/types';
+import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 

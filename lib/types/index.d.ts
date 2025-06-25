@@ -3,6 +3,9 @@ export interface InitOptions {
     force?: boolean;
     skipVscode?: boolean;
     skipGit?: boolean;
+    vscode?: boolean;
+    cursor?: boolean;
+    ide?: string;
 }
 export interface UpdateOptions {
     template?: string;

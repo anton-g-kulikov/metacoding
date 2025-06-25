@@ -21,6 +21,8 @@ export async function main(): Promise<void> {
 ${chalk.cyan('Examples:')}
   ${chalk.dim('$')} metacoding init                    # Initialize metacoding in current directory
   ${chalk.dim('$')} metacoding init --template react   # Initialize with React template
+  ${chalk.dim('$')} metacoding init --vscode          # Initialize with VS Code + Copilot setup
+  ${chalk.dim('$')} metacoding init --cursor          # Initialize with Cursor IDE setup
   ${chalk.dim('$')} metacoding update --dry-run        # Validate current metacoding setup
   ${chalk.dim('$')} metacoding update                  # Update to latest metacoding version
 
@@ -36,12 +38,14 @@ ${chalk.cyan('Learn more:')}
     .description('Initialize metacoding in the current project')
     .option(
       '-t, --template <type>',
-      'project template (general, react, node, python)',
+      'project template (general, react, node, python, typescript)',
       'general'
     )
     .option('-f, --force', 'overwrite existing files without confirmation')
     .option('--skip-vscode', 'skip VS Code settings configuration')
     .option('--skip-git', 'skip Git repository initialization check')
+    .option('--vscode', 'set up VS Code + GitHub Copilot configuration')
+    .option('--cursor', 'set up Cursor IDE configuration')
     .action(async (options) => {
       try {
         const initCommand = new InitCommand();

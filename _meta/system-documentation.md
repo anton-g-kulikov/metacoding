@@ -23,28 +23,35 @@ Transform development workflows by providing AI-guided coding standards, structu
 metacoding/
 ├── CLI Tool (Node.js/TypeScript)
 │   ├── Commands (init, update)
-│   ├── Template System
-│   ├── VS Code Integration
+│   ├── Template System (5 templates)
+│   ├── VS Code + GitHub Copilot Integration
+│   ├── Cursor IDE Integration
 │   └── Project Detection
 ├── Template Library
 │   ├── templates/general/files/
 │   │   ├── copilot-instructions.md.template
 │   │   └── *.instructions.md (source templates)
+│   ├── TypeScript Template (shared component)
 │   ├── React Template
 │   ├── Node.js Template
 │   └── Python Template
-├── Generated User Structure (.github/)
-│   ├── copilot-instructions.md (generated from template)
-│   └── instructions/
-│       ├── test-runner.instructions.md
-│       ├── release.instructions.md
-│       ├── docs-update.instructions.md
-│       └── code-review.instructions.md
+├── Generated User Structure
+│   ├── VS Code Setup (.github/ + .vscode/settings.json)
+│   │   ├── copilot-instructions.md (generated from template)
+│   │   └── instructions/
+│   │       ├── test-runner.instructions.md
+│   │       ├── release.instructions.md
+│   │       ├── docs-update.instructions.md
+│   │       └── code-review.instructions.md
+│   └── Cursor IDE Setup (workflow.cursorrules + .cursor/rules/)
+│       ├── workflow.cursorrules (generated from copilot-instructions.md)
+│       └── .cursor/rules/
+│           ├── test-runner.mdc
+│           ├── release.mdc
+│           ├── docs-update.mdc
+│           └── code-review.mdc
 └── Documentation & Testing
     ├── Comprehensive README
-    ├── System Documentation (_meta/system-documentation.md)
-    ├── API Documentation (_meta/api-design.md)
-    ├── Test Suite (Unit + Integration)
     └── Migration Guides
 ```
 
@@ -64,12 +71,13 @@ metacoding/
 ### Data Flow
 
 1. **User Invocation**: `metacoding init` command execution
-2. **Project Detection**: Analyze current directory structure and git status
-3. **Template Selection**: Choose appropriate template based on project type
-4. **Interactive Configuration**: Gather user preferences and project details
-5. **File Generation**: Create `.github/` structure with customized instruction files
-6. **VS Code Integration**: Update settings.json with required configurations
-7. **Validation**: Verify setup completeness and provide next steps
+2. **IDE Choice**: User selects between VS Code + GitHub Copilot or Cursor IDE
+3. **Project Detection**: Analyze current directory structure and git status
+4. **Template Selection**: Choose appropriate template based on project type
+5. **Interactive Configuration**: Gather user preferences and project details
+6. **File Generation**: Create instruction files with customized content
+7. **IDE Integration**: Configure selected IDE (VS Code settings or Cursor rules)
+8. **Validation**: Verify setup completeness and provide next steps
 
 ### CLI Command Implementation
 
@@ -77,10 +85,11 @@ metacoding/
 
 - **`metacoding init`**: Interactive project setup with:
 
+  - AI assistant choice (VS Code + GitHub Copilot or Cursor IDE)
   - Project configuration prompts
-  - Template selection (general, react, node, python)
+  - Template selection (general, react, node, python, typescript)
   - Automatic project type detection
-  - VS Code settings configuration
+  - IDE-specific settings configuration
   - Git repository validation
   - File generation with variable substitution
   - Progress indicators and user feedback
@@ -132,14 +141,15 @@ The project follows its own metacoding methodology:
 
 - **`metacoding init`**: Interactive project setup
 
+  - AI assistant choice (VS Code + GitHub Copilot or Cursor IDE)
   - Project configuration prompts
-  - Template selection (general, react, node, python)
+  - Template selection (general, react, node, python, typescript)
   - Automatic project type detection
-  - VS Code settings configuration
+  - IDE-specific settings configuration
   - Git repository validation
   - File generation with variable substitution
   - Progress indicators and user feedback
-  - **Options**: `--template <type>`, `--force`, `--skip-vscode`, `--skip-git`
+  - **Options**: `--template <type>`, `--force`, `--skip-vscode`, `--skip-git`, `--vscode`, `--cursor`
 
 - **`metacoding --help`**: Comprehensive help system with examples
 - **`metacoding --version`**: Version display from package.json
@@ -201,6 +211,14 @@ metacoding/
 - **Automatic Context**: Files automatically apply based on editing context
 - **Workflow Enforcement**: Instructions enforce development best practices
 - **Manual Attachment**: Users can manually attach specific instruction files
+
+### Cursor IDE Integration
+
+- **Rule System**: Uses Cursor's `.cursorrules` and `.mdc` rule files
+- **Workflow Rules**: Generates `workflow.cursorrules` from instruction content
+- **Pattern-Specific Rules**: Creates `.cursor/rules/*.mdc` files with glob patterns
+- **Content Transformation**: Converts VS Code references to Cursor IDE terminology
+- **Non-Intrusive Setup**: Uses `workflow.cursorrules` to respect existing user configurations
 
 ### VS Code Integration
 
@@ -291,6 +309,7 @@ metacoding/
 ### Available Templates
 
 - **General Template**: Universal instructions for any project type
+- **TypeScript Template**: Shared TypeScript instructions (composition component)
 - **React Template**: Frontend-specific with React, hooks, and component patterns
 - **Node.js Template**: Backend-specific with API, database, and server patterns
 - **Python Template**: Python-specific with Django/Flask/FastAPI patterns
@@ -412,3 +431,11 @@ The architecture includes comprehensive testing to ensure:
 **Last Updated**: June 2025
 **Document Version**: 1.2
 **Review Schedule**: Monthly or with major releases
+
+## Related Documentation
+
+- **[API Reference](./api-design.md)**: Complete CLI command reference, usage examples, and troubleshooting
+- **[Architecture Decisions](./architecture-decisions.md)**: Record of key architectural decisions
+- **[Project Task List](./project-task-list.md)**: Current development tasks and project planning
+
+---

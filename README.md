@@ -1,15 +1,16 @@
-# `metacoding`: Guided Development Workflow for GitHub Copilot
+# `metacoding`: Guided Development Workflow for AI Assistants
 
 [![Version](https://img.shields.io/npm/v/metacoding.svg)](https://www.npmjs.com/package/metacoding)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-Compatible-brightgreen.svg)](https://github.com/features/copilot)
+[![Cursor IDE](https://img.shields.io/badge/Cursor%20IDE-Compatible-brightgreen.svg)](https://www.cursor.com/)
 
-Transform your development experience with AI-guided coding standards, structured workflows, and quality practices that help you build better software from day one.
+Transform your development experience with AI-guided coding standards, structured workflows, and quality practices that help you build better software from day one. Works with both GitHub Copilot in VS Code and Cursor IDE.
 
 ## Table of Contents
 
 - [🎯 What is `metacoding`?](#-what-is-metacoding)
-- [💬 How to Use `metacoding` with GitHub Copilot](#-how-to-use-metacoding-with-github-copilot)
+- [💬 How to Use `metacoding` with AI Assistants](#-how-to-use-metacoding-with-ai-assistants)
 - [🛠 Installation Guide](#-installation-guide)
 - [📦 Using the `metacoding` CLI](#-using-the-metacoding-cli)
 - [🆘 Getting Help](#-getting-help)
@@ -18,16 +19,16 @@ Transform your development experience with AI-guided coding standards, structure
 
 ## 🎯 What is `metacoding`?
 
-`metacoding` is a **guided development methodology** that uses GitHub Copilot's custom instruction capabilities to help developers at any level follow established best practices. Instead of just getting code suggestions, you get:
+`metacoding` is a **guided development methodology** that uses AI assistant custom instruction capabilities to help developers at any level follow established best practices. Works seamlessly with GitHub Copilot in VS Code and Cursor IDE. Instead of just getting code suggestions, you get:
 
 - **Structured workflows** that guide you through proven development practices
 - **Quality standards** that help you avoid common mistakes
 - **Test-driven development** that's encouraged and guided step-by-step
 - **Documentation guidance** that keeps your projects maintainable
 
-## 💬 How to Use `metacoding` with GitHub Copilot
+## 💬 How to Use `metacoding` with AI Assistants
 
-`metacoding` transforms GitHub Copilot into an autonomous development partner that executes structured workflows. You specify what you want built, and Copilot independently follows a disciplined 7-step process that ensures quality, maintainability, and thorough testing. Your role is to provide clear requirements, validate results, and approve each stage before proceeding.
+`metacoding` transforms AI assistants (GitHub Copilot or Cursor IDE) into autonomous development partners that execute structured workflows. You specify what you want built, and your AI assistant independently follows a disciplined 7-step process that ensures quality, maintainability, and thorough testing. Your role is to provide clear requirements, validate results, and approve each stage before proceeding.
 
 ### The `metacoding` 7-Step Development Workflow
 
@@ -161,12 +162,20 @@ The `metacoding` workflow transforms chaotic development into a structured, qual
 
 ### Prerequisites
 
-Before installing `metacoding`, make sure you have:
+Before installing `metacoding`, choose your AI development setup:
+
+#### Option A: VS Code + GitHub Copilot
 
 1. **Visual Studio Code** installed ([download here](https://code.visualstudio.com/))
 2. **GitHub Copilot extension** installed and configured in VS Code
 3. **Active GitHub Copilot subscription** ([get one here](https://github.com/features/copilot))
 4. **Node.js** (version 16 or higher) for the CLI tool
+
+#### Option B: Cursor IDE
+
+1. **Cursor IDE** installed ([download here](https://www.cursor.com/))
+2. **Active Cursor Pro subscription** for advanced AI features (recommended)
+3. **Node.js** (version 16 or higher) for the CLI tool
 
 ### Quick Setup (Recommended)
 
@@ -175,17 +184,28 @@ The easiest way to get started with `metacoding` is using our npm package:
 1. **Install globally:** `npm install -g metacoding`
 2. **Navigate to your project:** `cd your-project`
 3. **Initialize `metacoding`:** `metacoding init`
-4. **Follow the interactive prompts and you're done!**
+4. **Follow the interactive prompts** to choose your AI setup and you're done!
 
 #### Init options
 
-- `metacoding init` - Interactive setup with template selection
-- `metacoding init --template react` - Use React template
-- `metacoding init --template node` - Use Node.js template
-- `metacoding init --template python` - Use Python template
+**Basic usage:**
+
+- `metacoding init` - Interactive setup with AI assistant and template selection
+- `metacoding init --template react` - Use React template with interactive AI setup
+- `metacoding init --template node` - Use Node.js template with interactive AI setup
+- `metacoding init --template python` - Use Python template with interactive AI setup
 - `metacoding init --force` - Overwrite existing files
 
-**Note:** The CLI will automatically configure VS Code settings for custom instructions. If you need to configure manually, add these settings to your VS Code settings.json:
+**Direct AI setup:**
+
+- `metacoding init --vscode` - Set up for VS Code + GitHub Copilot
+- `metacoding init --cursor` - Set up for Cursor IDE
+- `metacoding init --cursor --template react` - Cursor setup with React template
+
+#### Post-Installation Configuration
+
+**For VS Code + GitHub Copilot:**
+The CLI automatically configures VS Code settings for custom instructions. If you need to configure manually, add these settings to your VS Code settings.json:
 
 ```json
 {
@@ -194,7 +214,12 @@ The easiest way to get started with `metacoding` is using our npm package:
 }
 ```
 
-After you finished, your project should now look like this:
+**For Cursor IDE:**
+No additional configuration needed! Cursor automatically detects and uses `workflow.cursorrules` and `.cursor/rules/*.mdc` files.
+
+### File Structure by AI Setup
+
+**VS Code + GitHub Copilot setup:**
 
 ```
 my-awesome-project/
@@ -207,7 +232,22 @@ my-awesome-project/
 │       └── code-review.instructions.md
 ```
 
+**Cursor IDE setup:**
+
+```
+my-awesome-project/
+├── workflow.cursorrules
+├── .cursor/
+│   └── rules/
+│       ├── test-runner.mdc
+│       ├── release.mdc
+│       ├── docs-update.mdc
+│       └── code-review.mdc
+```
+
 ### Test Your Setup
+
+#### For VS Code + GitHub Copilot:
 
 1. **Restart VS Code** to ensure all settings are applied
 2. **Create a new file** in your project (e.g., `test.js` or `main.py`)
@@ -219,6 +259,16 @@ my-awesome-project/
    - In GitHub Copilot, ask: "What is the development workflow for this project?"
    - Copilot should reference your custom instructions and provide project-specific guidance!
 
+#### For Cursor IDE:
+
+1. **Open your project in Cursor IDE**
+2. **Verify rules are loaded:**
+   - Check that `workflow.cursorrules` appears in the Cursor IDE interface
+   - Look for rule indicators showing active patterns
+3. **Test the setup:**
+   - In Cursor chat, ask: "What is the development workflow for this project?"
+   - Cursor should reference your workflow rules and provide project-specific guidance!
+
 ## ✅ You're Ready to Go!
 
 ## 📦 Using the `metacoding` CLI
@@ -229,11 +279,20 @@ Once installed, you can use these commands:
 
 Initialize metacoding in your current project:
 
-- `metacoding init` - Interactive setup with template selection
-- `metacoding init --template react` - Initialize with React template
-- `metacoding init --template node` - Initialize with Node.js template
-- `metacoding init --template python` - Initialize with Python template
+**Interactive setup:**
+
+- `metacoding init` - Interactive setup with AI assistant and template selection
+- `metacoding init --template react` - Initialize with React template (interactive AI setup)
+- `metacoding init --template node` - Initialize with Node.js template (interactive AI setup)
+- `metacoding init --template python` - Initialize with Python template (interactive AI setup)
 - `metacoding init --force` - Overwrite existing files without confirmation
+
+**Direct AI setup:**
+
+- `metacoding init --vscode` - Set up for VS Code + GitHub Copilot
+- `metacoding init --cursor` - Set up for Cursor IDE
+- `metacoding init --vscode --template react` - VS Code setup with React template
+- `metacoding init --cursor --template python` - Cursor setup with Python template
 
 ### `metacoding update`
 
@@ -256,23 +315,35 @@ Update your `metacoding` setup to the latest version:
 **Q: Do I need to be an experienced developer?**
 A: No! `metacoding` provides guidance and structure to help developers at any level adopt proven practices and improve their skills.
 
-**Q: What if I don't have GitHub Copilot?**
-A: You'll need an active GitHub Copilot subscription to use `metacoding`. Students can get it free through GitHub Education.
+**Q: Should I choose VS Code + GitHub Copilot or Cursor IDE?**
+A: Both work great! Choose based on your preference:
+
+- **VS Code + GitHub Copilot**: Best if you already use VS Code and have GitHub Copilot
+- **Cursor IDE**: Best for AI-first development with built-in AI features
+
+**Q: What if I don't have an AI assistant subscription?**
+A: You'll need either an active GitHub Copilot subscription (for VS Code) or Cursor Pro (for advanced Cursor features). Students can get GitHub Copilot free through GitHub Education.
+
+**Q: Can I switch between VS Code and Cursor later?**
+A: Yes! Run `metacoding init --vscode` or `metacoding init --cursor` to switch your setup. The CLI will install the appropriate files for your chosen AI assistant.
 
 **Q: Can I use this without the CLI tool?**
 A: The CLI tool provides the easiest setup experience. For manual setup, you can download instruction files from our GitHub repository.
 
 **Q: Will this work with my preferred programming language?**
-A: Yes! The general `metacoding` template (set of instructions) works with any language supported by GitHub Copilot.
+A: Yes! The general `metacoding` template works with any language supported by your AI assistant.
 
 **Q: Can I customize the workflow for my team's needs?**
-A: Absolutely! All instruction files can be modified to match your team's specific requirements.
+A: Absolutely! All instruction files can be modified to match your specific requirements.
 
 **Q: Does this replace learning to code?**
-A: No, it enhances your learning by providing guidance on proven practices while you develop your coding skills.
+A: Nope. But it's totally up to you!.
 
 **Q: What VS Code settings are required?**
-A: The CLI automatically configures required settings, but you need `github.copilot.chat.codeGeneration.useInstructionFiles: true` and `chat.promptFiles: true`.
+A: For VS Code + GitHub Copilot, you need `github.copilot.chat.codeGeneration.useInstructionFiles: true` and `chat.promptFiles: true`. The CLI configures these automatically.
+
+**Q: Does Cursor IDE require special settings?**
+A: No additional settings needed! Cursor automatically detects `workflow.cursorrules` and `.cursor/rules/*.mdc` files.
 
 ## Troubleshooting
 
@@ -282,19 +353,29 @@ A: The CLI automatically configures required settings, but you need `github.copi
 - Verify npm is working: `npm --version`
 - Try clearing npm cache: `npm cache clean --force`
 
-**GitHub Copilot not responding to instructions:**
+**VS Code + GitHub Copilot Issues:**
 
 - Make sure you've restarted VS Code after installation
 - Verify your GitHub Copilot subscription is active
 - Check that the instruction files are in the correct `.github/` folder
 - Ensure VS Code settings include the required custom instruction settings
+- Try manually referencing instructions in GitHub Copilot
+
+**Cursor IDE Issues:**
+
+- Verify `workflow.cursorrules` file exists in your project root
+- Check that `.cursor/rules/*.mdc` files are present
+- Ensure Cursor IDE is updated to the latest version
+- Look for rule indicators in Cursor IDE interface showing active patterns
+- Try asking Cursor: "What rules are active for this project?"
 
 **Instructions not applying automatically:**
 
-- Ensure file names match exactly (including the `.instructions.md` extension)
-- Verify the folder structure is correct
-- Try manually referencing instructions in GitHub Copilot
+- Ensure file names match exactly (including extensions)
+- Verify the folder structure is correct for your AI setup
 - Run `metacoding update --dry-run` to validate your setup
+- For VS Code: Check `.github/instructions/` folder structure
+- For Cursor: Check `workflow.cursorrules` and `.cursor/rules/` files
 
 **CLI Command Issues:**
 
