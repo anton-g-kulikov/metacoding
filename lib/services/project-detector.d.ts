@@ -3,6 +3,7 @@ export declare class ProjectDetector {
     private detectProjectType;
     private hasReactIndicators;
     private hasNodeIndicators;
+    private hasJavaScriptIndicators;
     private hasPythonIndicators;
     private hasGitRepository;
     private hasVSCodeConfiguration;

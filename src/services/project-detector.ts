@@ -36,6 +36,11 @@ export class ProjectDetector {
       return 'node';
     }
 
+    // Check for JavaScript project indicators
+    if (await this.hasJavaScriptIndicators()) {
+      return 'javascript';
+    }
+
     // Check for Python project indicators
     if (await this.hasPythonIndicators()) {
       return 'python';
@@ -111,19 +116,129 @@ export class ProjectDetector {
     }
 
     // Check for common Node.js files
-    const nodeFiles = [
-      'server.js',
-      'server.ts',
-      'app.js',
-      'app.ts',
-      'index.js',
-      'index.ts',
-    ];
+    const nodeFiles = ['server.js', 'server.ts', 'app.js', 'app.ts'];
 
     for (const file of nodeFiles) {
       if (await fs.pathExists(file)) {
         return true;
       }
+    }
+
+    // Check for index.js/index.ts only if they appear to be Node.js entry points
+    const indexFiles = ['index.js', 'index.ts'];
+    for (const file of indexFiles) {
+      if (await fs.pathExists(file)) {
+        try {
+          const content = await fs.readFile(file, 'utf-8');
+          // Look for Node.js specific patterns in the file
+          const nodePatterns = [
+            'require\\(.*express.*\\)',
+            'require\\(.*http.*\\)',
+            'require\\(.*fs.*\\)',
+            'require\\(.*path.*\\)',
+            'process\\.env',
+            'module\\.exports',
+            '__dirname',
+            '__filename',
+            'createServer',
+            'app\\.listen',
+          ];
+
+          if (
+            nodePatterns.some((pattern) => new RegExp(pattern).test(content))
+          ) {
+            return true;
+          }
+        } catch {
+          // If we can't read the file, assume it's not Node.js specific
+        }
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if this looks like a JavaScript project
+   */
+  private async hasJavaScriptIndicators(): Promise<boolean> {
+    const packageJsonPath = 'package.json';
+
+    if (await fs.pathExists(packageJsonPath)) {
+      try {
+        const packageJson = await fs.readJson(packageJsonPath);
+        const deps = {
+          ...packageJson.dependencies,
+          ...packageJson.devDependencies,
+        };
+
+        // Look for JavaScript-specific dependencies (not Node.js backend or React)
+        const jsIndicators = [
+          'webpack',
+          'parcel',
+          'rollup',
+          'browserify',
+          'lodash',
+          'moment',
+          'axios',
+          'jquery',
+          '@babel/core',
+          'babel-core',
+        ];
+
+        // Check if it has JS indicators but not backend/React indicators
+        const hasJsIndicators = jsIndicators.some(
+          (indicator) => deps[indicator]
+        );
+        const hasBackendIndicators = ['express', 'fastify', 'koa'].some(
+          (indicator) => deps[indicator]
+        );
+        const hasReactIndicators = ['react', 'react-dom'].some(
+          (indicator) => deps[indicator]
+        );
+
+        if (hasJsIndicators && !hasBackendIndicators && !hasReactIndicators) {
+          return true;
+        }
+
+        // Check if package.json indicates a browser/frontend project without React
+        if (packageJson.main || packageJson.browser) {
+          return !hasBackendIndicators && !hasReactIndicators;
+        }
+      } catch {
+        // Ignore JSON parse errors
+      }
+    }
+
+    // Check for common JavaScript files without TypeScript
+    const jsFiles = [
+      'index.js',
+      'main.js',
+      'app.js',
+      'src/index.js',
+      'src/main.js',
+    ];
+    const tsFiles = [
+      'index.ts',
+      'main.ts',
+      'app.ts',
+      'src/index.ts',
+      'src/main.ts',
+    ];
+
+    // Has JS files but not TS files
+    const hasJsFiles = await Promise.all(
+      jsFiles.map((file) => fs.pathExists(file))
+    );
+    const hasTsFiles = await Promise.all(
+      tsFiles.map((file) => fs.pathExists(file))
+    );
+
+    if (
+      hasJsFiles.some((exists) => exists) &&
+      !hasTsFiles.some((exists) => exists)
+    ) {
+      return true;
     }
 
     return false;

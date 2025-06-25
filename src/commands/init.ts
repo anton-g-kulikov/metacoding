@@ -117,6 +117,7 @@ export class InitCommand {
         choices: [
           { name: 'React/Frontend Application', value: 'react' },
           { name: 'Node.js/Backend Application', value: 'node' },
+          { name: 'JavaScript Application', value: 'javascript' },
           { name: 'Python Application', value: 'python' },
           { name: 'General/Other', value: 'general' },
         ],
@@ -132,6 +133,8 @@ export class InitCommand {
               return 'React, TypeScript, Jest, Vite';
             case 'node':
               return 'Node.js, TypeScript, Express, Jest';
+            case 'javascript':
+              return 'JavaScript, Node.js, Jest, npm';
             case 'python':
               return 'Python, FastAPI, Pytest';
             default:
@@ -250,6 +253,8 @@ export class InitCommand {
         return 'Jest + React Testing Library';
       case 'node':
         return 'Jest';
+      case 'javascript':
+        return 'Jest';
       case 'python':
         return 'Pytest';
       default:
@@ -266,6 +271,8 @@ export class InitCommand {
         return 'Vite';
       case 'node':
         return 'TypeScript Compiler';
+      case 'javascript':
+        return 'Webpack/Vite';
       case 'python':
         return 'Poetry';
       default:
