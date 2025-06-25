@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2024-12-26
+
+### Added
+
+- **JavaScript Template Support**: Complete JavaScript project template with modern development standards
+  - **ES6+ Standards**: Modern JavaScript coding conventions with async/await patterns
+  - **Node.js Integration**: Runtime considerations and npm ecosystem best practices
+  - **Testing Framework Support**: Comprehensive guidance for Jest, Mocha, and Vitest
+  - **Build Tool Integration**: Webpack, Vite, and other modern build tool considerations
+  - **Browser Compatibility**: Cross-browser development guidelines and polyfill strategies
+  - **CLI and Cursor IDE Compatibility**: Full support for both VS Code + GitHub Copilot and Cursor IDE workflows
+
+### Enhanced
+
+- **Template Manager**: Improved instruction file loading with proper JavaScript support
+- **Test Coverage**: Expanded test suite with 12 JavaScript template-specific tests
+- **Documentation**: Updated system documentation with JavaScript template capabilities
+
 ## [1.2.1] - 2025-01-09
 
 ### Changed

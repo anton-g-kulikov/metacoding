@@ -1,5 +1,20 @@
 # metacoding Project Task List
 
+## 🔄 In Progress Tasks (December 26, 2024)
+
+### Package Version Management and Testing
+
+- [ ] **CORE-TASK-002: Bump package version to 1.3.0 and test locally** - 🔄 **IN PROGRESS**
+  - [ ] Update package.json version from 1.2.1 to 1.3.0 (minor bump for JavaScript template feature)
+  - [ ] Update CHANGELOG.md with v1.3.0 release entry and feature summary
+  - [ ] Review and update README.md for any version-specific content or badges
+  - [ ] Commit version bump changes with conventional commit message
+  - [ ] Test package locally with npm pack to verify contents
+  - [ ] Test CLI functionality after local installation
+  - [ ] Validate all quality gates pass (lint, build, test)
+  - [ ] Update release checklist with progress status
+  - [ ] Prepare for optional GitHub release and npm publishing
+
 ## 🔄 In Progress Tasks (June 25, 2025) - ✅ **ALL COMPLETED**
 
 ### JavaScript Template Compatibility Fix (June 25, 2025)
