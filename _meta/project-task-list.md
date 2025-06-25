@@ -381,6 +381,20 @@
 
 ### Repository and Infrastructure Improvements
 
+- [x] **INFRA-TASK-002: Standardize universal gitignore approach across all templates** - ✅ **COMPLETED**
+
+  - ✅ Update GitIgnoreManager with comprehensive AI assistant exclusion patterns (VS Code, IntelliJ, Cursor, etc.)
+  - ✅ Remove individual template .gitignore files to eliminate inconsistencies across 6 templates
+  - ✅ Ensure all templates use GitIgnoreManager's minimal approach (AI assistant exclusions only)
+  - ✅ Update template manager to rely solely on GitIgnoreManager's append logic
+  - ✅ Validate consistent behavior across all 6 templates (general, javascript, node, python, react, typescript)
+  - ✅ Test universal gitignore patterns work correctly for all project types
+  - ✅ Update tests to reflect new universal approach
+  - ✅ **Universal gitignore approach implemented**: All template-specific .gitignore files removed, universal patterns centralized in GitIgnoreManager
+  - ✅ **Minimal AI assistant focus**: Only excludes metacoding-generated files (.github/copilot-instructions.md, .cursor/, etc.)
+  - ✅ **Tests updated**: All failing tests fixed, JavaScript template tests now use universal GitIgnoreManager patterns
+  - ✅ **Consistent across templates**: Single source of truth for gitignore patterns, eliminates duplication and inconsistencies
+
 - [x] **INFRA-TASK-001: Update .gitignore to exclude Copilot instruction files** - ✅ **COMPLETED**
   - ✅ **COMPLETED: Update project .gitignore patterns to exclude metacoding-generated files**
   - ✅ Ensure generated Copilot instruction files are not committed to version control

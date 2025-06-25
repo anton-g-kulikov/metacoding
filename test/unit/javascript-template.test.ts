@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { describe, test, expect } from '@jest/globals';
+import { GitIgnoreManager } from '../../src/services/gitignore-manager';
 
 describe('JavaScript Template', () => {
   const templateDir = path.join(__dirname, '../../templates/javascript');
@@ -31,14 +32,12 @@ describe('JavaScript Template', () => {
       });
     });
 
-    test('TMPL-UNIT-031: should have files directory with .gitignore', () => {
+    test('TMPL-UNIT-031: should not have files directory with universal gitignore approach', () => {
       const filesDir = path.join(templateDir, 'files');
-      const gitignorePath = path.join(filesDir, '.gitignore');
 
-      expect(fs.existsSync(filesDir)).toBe(true);
-      expect(fs.statSync(filesDir).isDirectory()).toBe(true);
-      expect(fs.existsSync(gitignorePath)).toBe(true);
-      expect(fs.statSync(gitignorePath).isFile()).toBe(true);
+      // With universal gitignore approach, templates no longer need files directories
+      // since all gitignore patterns are handled by GitIgnoreManager
+      expect(fs.existsSync(filesDir)).toBe(false);
     });
   });
 
@@ -125,18 +124,20 @@ describe('JavaScript Template', () => {
   });
 
   describe('File Generation', () => {
-    test('TMPL-UNIT-037: gitignore should contain metacoding-specific patterns', () => {
-      const gitignorePath = path.join(templateDir, 'files', '.gitignore');
-      const content = fs.readFileSync(gitignorePath, 'utf8');
+    test('TMPL-UNIT-037: GitIgnoreManager should provide universal AI assistant exclusion patterns', () => {
+      // Test the universal gitignore approach instead of template-specific files
+      const patterns = GitIgnoreManager.getAIAssistantPatterns();
 
-      expect(content).toContain('# metacoding: AI coding assistant exclusions');
-      expect(content).toContain('.github/copilot-instructions.md');
-      expect(content).toContain('.vscode/copilot-instructions.md');
-      expect(content).toContain('**/copilot-instructions.md');
-      expect(content).toContain('!templates/**/copilot-instructions.md');
-      expect(content).toContain('.cursor/');
-      expect(content).toContain('.aide/');
-      expect(content).toContain('.codeium/');
+      expect(patterns).toContain(
+        '# metacoding: AI coding assistant exclusions'
+      );
+      expect(patterns).toContain('.github/copilot-instructions.md');
+      expect(patterns).toContain('.cursor/');
+      expect(patterns).toContain('.vscode/copilot-instructions.md');
+
+      // Verify patterns work universally for all templates including JavaScript
+      expect(Array.isArray(patterns)).toBe(true);
+      expect(patterns.length).toBeGreaterThan(0);
     });
   });
 

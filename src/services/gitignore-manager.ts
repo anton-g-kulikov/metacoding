@@ -7,6 +7,7 @@ import * as path from 'path';
 export class GitIgnoreManager {
   /**
    * Get comprehensive AI coding assistant exclusion patterns
+   * Universal patterns that work across all project types and IDEs
    */
   static getAIAssistantPatterns(): string[] {
     return [
@@ -15,6 +16,7 @@ export class GitIgnoreManager {
       '.github/instructions/',
       '.vscode/copilot-instructions.md',
       '.idea/copilot-instructions.md',
+      '.cursor/',
     ];
   }
 
