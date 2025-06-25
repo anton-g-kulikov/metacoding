@@ -1,5 +1,21 @@
 # metacoding Project Task List
 
+## 🔄 In Progress Tasks (June 23, 2025) - ✅ **ALL COMPLETED**
+
+### Cursor IDE Integration Fix
+
+- [x] **CUR-TASK-001: Update Cursor rules file structure to match modern Cursor IDE requirements** - ✅ **COMPLETED**
+  - ✅ Research current Cursor IDE rules file requirements (.cursor/rules/\*.mdc vs .cursorrules)
+  - ✅ Confirm that .cursorrules in project root is deprecated
+  - ✅ Update implementation to write general workflow rules to .cursor/rules/workflow.mdc
+  - ✅ Update pattern-specific rules to remain in .cursor/rules/\*.mdc
+  - ✅ Validate that general and pattern-specific rules use correct MDC format with frontmatter
+  - ✅ Update all test expectations from workflow.cursorrules to .cursor/rules/workflow.mdc
+  - ✅ Fix failing Cursor-related tests (CUR-UNIT-010, CUR-GEN-013, E2E-CUR-003, E2E-CUR-006)
+  - ✅ Update backup/migration test logic to handle both legacy and modern file paths
+  - ✅ Re-run all Cursor-related tests to ensure compatibility (all tests now passing)
+  - ✅ Update test mocks to properly distinguish between legacy and modern file structures
+
 ## � Planned Tasks (June 23, 2025)
 
 ### Test Infrastructure and Repository Cleanup

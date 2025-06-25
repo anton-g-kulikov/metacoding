@@ -48,6 +48,7 @@ describe('CursorService', () => {
       fileExists: jest.fn(),
       copyFile: jest.fn(),
       backupFile: jest.fn(),
+      listFiles: jest.fn(),
     } as any;
 
     cursorService = new CursorService(
@@ -182,8 +183,8 @@ describe('CursorService', () => {
       expect(result.success).toBe(true);
       expect(result.conflicts).toHaveLength(0);
       expect(mockFileSystemService.writeFile).toHaveBeenCalledWith(
-        path.join(tempDir, 'workflow.cursorrules'),
-        workflowContent
+        path.join(tempDir, '.cursor', 'rules', 'workflow.mdc'),
+        expect.stringContaining(workflowContent)
       );
       expect(mockFileSystemService.writeFile).toHaveBeenCalledWith(
         path.join(tempDir, '.cursor', 'rules', 'typescript.mdc'),
@@ -191,14 +192,16 @@ describe('CursorService', () => {
       );
     });
 
-    it('CUR-UNIT-009: Should detect conflicts with existing .cursorrules files', async () => {
+    it('CUR-UNIT-009: Should detect conflicts with existing .cursor/rules files', async () => {
       const workflowContent = 'Generated workflow rules';
       const patternRules: any[] = [];
 
-      // Mock existing workflow.cursorrules file
+      // Mock existing workflow.mdc file in .cursor/rules
       mockFileSystemService.fileExists.mockImplementation(
         (filePath: string) => {
-          return Promise.resolve(filePath.includes('workflow.cursorrules'));
+          return Promise.resolve(
+            filePath.includes('.cursor/rules/workflow.mdc')
+          );
         }
       );
 
@@ -209,21 +212,50 @@ describe('CursorService', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.conflicts).toContain('workflow.cursorrules');
+      expect(result.conflicts).toContain('.cursor/rules/workflow.mdc');
     });
 
     it('CUR-UNIT-010: Should create backups of existing Cursor rules files', async () => {
-      const existingRulesPath = path.join(tempDir, 'workflow.cursorrules');
+      const existingRulesPath = path.join(
+        tempDir,
+        '.cursor',
+        'rules',
+        'workflow.mdc'
+      );
+      const cursorRulesDir = path.join(tempDir, '.cursor', 'rules');
+      const legacyWorkflowPath = path.join(tempDir, 'workflow.cursorrules');
       const backupPath = `${existingRulesPath}.backup.${Date.now()}`;
 
-      mockFileSystemService.fileExists.mockResolvedValue(true);
+      // Mock specific file existence checks
+      mockFileSystemService.fileExists.mockImplementation(
+        async (filePath: string) => {
+          if (filePath === legacyWorkflowPath) return false; // No legacy file
+          if (filePath === cursorRulesDir) return true; // .cursor/rules directory exists
+          return false;
+        }
+      );
+
+      mockFileSystemService.listFiles.mockResolvedValue([
+        'rule1.mdc',
+        'rule2.mdc',
+        'workflow.mdc',
+      ]);
       mockFileSystemService.backupFile.mockResolvedValue(backupPath);
 
       const result = await cursorService.backupExistingRules(tempDir);
 
-      expect(result).toContain(backupPath);
+      expect(result.length).toBe(3); // 3 .mdc files
       expect(mockFileSystemService.backupFile).toHaveBeenCalledWith(
-        existingRulesPath
+        path.join(cursorRulesDir, 'rule1.mdc')
+      );
+      expect(mockFileSystemService.backupFile).toHaveBeenCalledWith(
+        path.join(cursorRulesDir, 'rule2.mdc')
+      );
+      expect(mockFileSystemService.backupFile).toHaveBeenCalledWith(
+        path.join(cursorRulesDir, 'workflow.mdc')
+      );
+      expect(mockFileSystemService.listFiles).toHaveBeenCalledWith(
+        cursorRulesDir
       );
     });
   });

@@ -341,7 +341,10 @@ export class InitCommand {
       );
     } else if (ideChoice === 'cursor') {
       console.log(chalk.dim('1.'), 'Open your project in Cursor IDE');
-      console.log(chalk.dim('2.'), 'Check that workflow.cursorrules is loaded');
+      console.log(
+        chalk.dim('2.'),
+        'Check that .cursor/rules/workflow.mdc is loaded'
+      );
       console.log(
         chalk.dim('3.'),
         'Ask Cursor: "What is the development workflow for this project?"'

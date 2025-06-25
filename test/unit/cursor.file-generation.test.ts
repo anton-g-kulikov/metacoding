@@ -20,6 +20,7 @@ describe('CursorService - File Generation Logic (Phase 3)', () => {
       writeFile: jest.fn(),
       ensureDirectoryExists: jest.fn(),
       backupFile: jest.fn(),
+      listFiles: jest.fn(),
     } as any;
 
     cursorService = new CursorService(
@@ -220,7 +221,7 @@ This is valid markdown content for Cursor AI.`;
 
       expect(result).toHaveLength(1);
       expect(result[0]!.content).toMatch(
-        /^---\npatterns: \["\*\*\/\*\.ts"\]\ndescription: "AI rules for \*\*\/\*\.ts files"\n---\n\n/
+        /^---\ndescription: "AI rules for \*\*\/\*\.ts files"\npatterns: \["\*\*\/\*\.ts"\]\nalwaysApply: false\n---\n\n/
       );
       expect(result[0]!.content).toContain('TypeScript rules');
     });
@@ -351,8 +352,8 @@ This is valid markdown content for Cursor AI.`;
         '/test/project/.cursor/rules'
       );
       expect(mockFileSystemService.writeFile).toHaveBeenCalledWith(
-        '/test/project/workflow.cursorrules',
-        workflowContent
+        '/test/project/.cursor/rules/workflow.mdc',
+        expect.stringContaining(workflowContent)
       );
       expect(mockFileSystemService.writeFile).toHaveBeenCalledWith(
         '/test/project/.cursor/rules/typescript.mdc',
@@ -372,7 +373,7 @@ This is valid markdown content for Cursor AI.`;
 
       mockFileSystemService.fileExists.mockImplementation(
         (filePath: string) => {
-          if (filePath.endsWith('workflow.cursorrules'))
+          if (filePath.endsWith('.cursor/rules/workflow.mdc'))
             return Promise.resolve(true);
           if (filePath.endsWith('typescript.mdc')) return Promise.resolve(true);
           return Promise.resolve(false);
@@ -386,28 +387,35 @@ This is valid markdown content for Cursor AI.`;
       );
 
       expect(result.success).toBe(false);
-      expect(result.conflicts).toContain('workflow.cursorrules');
+      expect(result.conflicts).toContain('.cursor/rules/workflow.mdc');
       expect(result.conflicts).toContain('.cursor/rules/typescript.mdc');
     });
 
     test('CUR-GEN-013: Should create backup before installation', async () => {
       const projectPath = '/test/project';
+      const cursorRulesDir = '/test/project/.cursor/rules';
+      const legacyWorkflow = '/test/project/workflow.cursorrules';
 
       mockFileSystemService.fileExists.mockImplementation(
         (filePath: string) => {
-          return Promise.resolve(filePath.endsWith('workflow.cursorrules'));
+          if (filePath === legacyWorkflow) return Promise.resolve(false);
+          if (filePath === cursorRulesDir) return Promise.resolve(true);
+          return Promise.resolve(false);
         }
       );
 
+      mockFileSystemService.listFiles.mockResolvedValue(['workflow.mdc']);
       mockFileSystemService.backupFile.mockResolvedValue(
-        '/test/project/workflow.cursorrules.backup'
+        '/test/project/.cursor/rules/workflow.mdc.backup'
       );
 
       const result = await cursorService.backupExistingRules(projectPath);
 
-      expect(result).toContain('/test/project/workflow.cursorrules.backup');
+      expect(result).toContain(
+        '/test/project/.cursor/rules/workflow.mdc.backup'
+      );
       expect(mockFileSystemService.backupFile).toHaveBeenCalledWith(
-        '/test/project/workflow.cursorrules'
+        '/test/project/.cursor/rules/workflow.mdc'
       );
     });
 
