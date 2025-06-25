@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2024-12-26
+
+### Changed
+
+- **Universal GitIgnore Handling**: Standardized gitignore management across all templates
+  - **Unified Approach**: Removed template-specific .gitignore files in favor of universal patterns
+  - **AI Assistant Focus**: GitIgnore patterns now focus exclusively on AI assistant instruction files
+  - **Append-Only Logic**: GitIgnore patterns are appended to user's existing .gitignore when not present
+  - **Template Cleanup**: Removed empty /files directories from all templates after gitignore consolidation
+
+### Breaking Changes
+
+- **Template Structure**: Templates no longer include template-specific .gitignore files
+- **Files Directory**: Removed empty /files directories from all language templates
+
 ## [1.3.0] - 2024-12-26
 
 ### Added
