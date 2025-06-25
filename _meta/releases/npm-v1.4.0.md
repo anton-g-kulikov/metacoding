@@ -2,7 +2,7 @@
 
 **Release Date:** December 26, 2024  
 **Type:** Minor Release  
-**NPM Package:** [metacoding@1.4.0](https://www.npmjs.com/package/metacoding)  
+**NPM Package:** [metacoding@1.4.0](https://www.npmjs.com/package/metacoding)
 
 ## Release Overview
 
@@ -11,6 +11,7 @@ This release standardizes gitignore handling across all templates by implementin
 ## Key Changes
 
 ### 🔄 Universal GitIgnore Management
+
 - **Consolidated Approach**: Removed all template-specific .gitignore files
 - **AI Assistant Focus**: GitIgnore patterns now exclusively target AI assistant instruction files:
   - `.github/copilot-instructions.md`
@@ -21,6 +22,7 @@ This release standardizes gitignore handling across all templates by implementin
 - **Template Cleanup**: Removed empty `/files` directories from all templates
 
 ### 🧹 Template Structure Cleanup
+
 - Removed template-specific .gitignore files from:
   - `templates/general/files/.gitignore`
   - `templates/javascript/files/.gitignore`
@@ -34,6 +36,7 @@ This release standardizes gitignore handling across all templates by implementin
 ## Breaking Changes
 
 ⚠️ **Template Structure Changes**
+
 - Templates no longer include template-specific .gitignore files
 - Empty `/files` directories have been removed from all templates
 - Users upgrading existing projects may need to manually manage template-specific gitignore patterns
@@ -41,11 +44,13 @@ This release standardizes gitignore handling across all templates by implementin
 ## Technical Implementation
 
 ### GitIgnoreManager Updates
+
 - Enhanced `getAIAssistantPatterns()` to return universal patterns
 - Implemented append-only logic for existing .gitignore files
 - Simplified pattern management and reduced duplication
 
 ### Test Updates
+
 - Updated TMPL-UNIT-031 to expect absence of `/files` directories
 - Modified JavaScript template tests to reflect new structure
 - All 236 tests passing after changes
@@ -53,10 +58,13 @@ This release standardizes gitignore handling across all templates by implementin
 ## Migration Guide
 
 ### For New Projects
+
 No action required - new projects will automatically use the universal gitignore approach.
 
 ### For Existing Projects
+
 If you have template-specific gitignore patterns in your project:
+
 1. Review your current .gitignore file
 2. Add any template-specific patterns manually if needed
 3. The universal AI assistant patterns will be appended automatically on next update
@@ -100,6 +108,7 @@ metacoding init       # Test universal gitignore handling
 ## Next Steps
 
 This release sets the foundation for:
+
 - Simplified template maintenance
 - Consistent gitignore behavior across all projects
 - Focus on AI assistant integration patterns
