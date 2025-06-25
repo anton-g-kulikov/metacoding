@@ -1,6 +1,6 @@
 {
   "name": "metacoding",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Guided Development Workflow for GitHub Copilot - Transform your coding experience with AI-guided standards, structured workflows, and quality practices",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
