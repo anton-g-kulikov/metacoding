@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **Cursor Workflow Rules Generation**: Fixed workflow.mdc file generation to only include copilot-instructions.md content
+  - **Single Source Logic**: workflow.mdc now mirrors only the general copilot-instructions.md template instead of merging all instruction files
+  - **Deduplication**: Eliminated duplicate content that was causing the workflow.mdc file to be unnecessarily large
+  - **Clean Output**: Reduced workflow.mdc file size and complexity while maintaining all essential workflow guidance
+  - **Pattern-Specific Rules**: Preserved existing logic for generating pattern-specific .mdc files (e.g., typescript.mdc, python.mdc)
+
 ## [1.4.1] - 2024-12-26
 
 ### Added

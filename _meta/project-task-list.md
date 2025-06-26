@@ -91,6 +91,8 @@
 
 ## 9. Backlog
 
+- [x] **CUR-TASK-002: Ensure Cursor rules are cleanly generated from copilot instructions template** - ✅ **COMPLETED** - Successfully implemented clean workflow.mdc generation that mirrors only the general copilot-instructions.md content instead of merging all instruction files. Fixed CursorService to filter and process only the copilot-instructions file for workflow rules, while other instruction files go to pattern-specific .mdc files. Verified through testing that workflow.mdc now contains clean, deduplicated content derived solely from the copilot-instructions template with proper template variable substitution.
+
 - [ ] **LANG-TASK-002: Create Java-specific instruction template** - ❌ **NOT STARTED**
 
   - Create enterprise Java patterns with Spring Framework, Maven/Gradle build tools, JUnit testing patterns, and performance optimization guidance

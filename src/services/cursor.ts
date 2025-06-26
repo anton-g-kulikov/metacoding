@@ -64,7 +64,7 @@ export class CursorService {
   }
 
   /**
-   * Generate workflow rules content from instruction templates
+   * Generate workflow rules content from general copilot-instructions template only
    * This content will be wrapped in MDC format when written to .cursor/rules/workflow.mdc
    */
   async generateWorkflowRules(
@@ -73,14 +73,21 @@ export class CursorService {
     projectConfig?: any
   ): Promise<string> {
     try {
+      // Only use the general copilot-instructions.md file for workflow rules
       const instructionFiles =
         await this.templateManager.getInstructionFiles(templateType);
 
-      if (instructionFiles.length === 0) {
+      // Filter to only include the main copilot-instructions file
+      const copilotInstructionsFile = instructionFiles.find(file => 
+        file.path.includes('copilot-instructions.md')
+      );
+
+      if (!copilotInstructionsFile) {
         return this.createDefaultWorkflowRules();
       }
 
-      return this.mergeInstructionFiles(instructionFiles, projectConfig);
+      // Process only the copilot-instructions file, not the entire collection
+      return this.processInstructionFile(copilotInstructionsFile, projectConfig);
     } catch (error) {
       throw new Error(
         `Failed to generate workflow rules: ${
@@ -233,6 +240,30 @@ export class CursorService {
   }
 
   /**
+   * Process a single instruction file with template substitution
+   * Used specifically for the copilot-instructions.md file in workflow rules
+   */
+  processInstructionFile(
+    instructionFile: { path: string; content: string },
+    projectConfig?: any
+  ): string {
+    let content = instructionFile.content;
+
+    // Apply template substitution if projectConfig is available
+    if (projectConfig) {
+      content = this.applyTemplateSubstitution(content, projectConfig);
+    }
+
+    // Clean the content and convert to Cursor format without adding header
+    const cleanedContent = this.processInstructionContentOnly(content);
+
+    // Create single header and add the processed content
+    const header = this.createCursorRulesHeader();
+    
+    return `${header}\n\n<!-- Source: ${instructionFile.path} -->\n${cleanedContent}`;
+  }
+
+  /**
    * Combine multiple instruction files into workflow rules content
    * The content will be wrapped in MDC format when saved to .cursor/rules/workflow.mdc
    */
@@ -240,20 +271,24 @@ export class CursorService {
     instructionFiles: Array<{ path: string; content: string }>,
     projectConfig?: any
   ): string {
+    // Process and merge content without adding multiple headers
+    const processedFiles = instructionFiles.map((file) => {
+      let content = file.content;
+
+      // Apply template substitution if projectConfig is available
+      if (projectConfig) {
+        content = this.applyTemplateSubstitution(content, projectConfig);
+      }
+
+      // Clean the content and convert to Cursor format without adding header
+      const cleanedContent = this.processInstructionContentOnly(content);
+
+      return `<!-- Source: ${file.path} -->\n${cleanedContent}`;
+    });
+
+    // Create single header and merge all content
     const header = this.createCursorRulesHeader();
-
-    const mergedContent = instructionFiles
-      .map((file) => {
-        let processed = this.processInstructionTemplate(file.content);
-
-        // Apply template substitution if projectConfig is available
-        if (projectConfig) {
-          processed = this.applyTemplateSubstitution(processed, projectConfig);
-        }
-
-        return `<!-- Source: ${file.path} -->\n${processed}`;
-      })
-      .join('\n\n---\n\n');
+    const mergedContent = processedFiles.join('\n\n---\n\n');
 
     return `${header}\n\n${mergedContent}`;
   }
@@ -395,8 +430,17 @@ alwaysApply: ${pattern === '**/*' ? 'true' : 'false'}
 
 `;
 
-    const processedContent =
-      this.processInstructionTemplate(instructionContent);
+    // For workflow content that already has headers, don't add another one
+    // For pattern-specific content, process normally
+    let processedContent;
+    if (pattern === '**/*' && instructionContent.includes('# Cursor AI Development Rules')) {
+      // Already processed workflow content - use as-is
+      processedContent = instructionContent;
+    } else {
+      // Pattern-specific content - needs processing
+      processedContent = this.processInstructionTemplate(instructionContent);
+    }
+    
     return frontmatter + processedContent;
   }
 
@@ -417,51 +461,36 @@ alwaysApply: ${pattern === '**/*' ? 'true' : 'false'}
   ): string {
     let substituted = content;
 
-    // Replace project variables
-    if (projectConfig.projectName) {
-      substituted = substituted.replace(
-        /\{\{PROJECT_NAME\}\}/g,
-        projectConfig.projectName
-      );
-    }
+    // Replace project variables with actual values or defaults
+    const replacements = {
+      '{{PROJECT_NAME}}': projectConfig?.projectName || 'Project',
+      '{{PROJECT_DESCRIPTION}}': projectConfig?.projectDescription || 'A guided development project using metacoding workflow',
+      '{{TECH_STACK}}': projectConfig?.techStack ? 
+        (Array.isArray(projectConfig.techStack) ? projectConfig.techStack.join(', ') : projectConfig.techStack) : 
+        'TypeScript, Jest',
+      '{{PROJECT_DOMAIN}}': projectConfig?.projectDomain || 'software',
+      '{{PROJECT_SPECIFIC_GUIDANCE}}': projectConfig?.projectSpecificGuidance || 
+        '- **Best Practices:** Follow language-specific coding standards and conventions\n- **Architecture:** Implement modular and maintainable code structure\n- **Testing:** Write comprehensive tests for all functionality\n- **Documentation:** Maintain clear and up-to-date documentation'
+    };
 
-    if (projectConfig.projectDescription) {
-      substituted = substituted.replace(
-        /\{\{PROJECT_DESCRIPTION\}\}/g,
-        projectConfig.projectDescription
-      );
+    // Apply all replacements
+    for (const [placeholder, value] of Object.entries(replacements)) {
+      substituted = substituted.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
     }
-
-    if (projectConfig.techStack && Array.isArray(projectConfig.techStack)) {
-      substituted = substituted.replace(
-        /\{\{TECH_STACK\}\}/g,
-        projectConfig.techStack.join(', ')
-      );
-    }
-
-    if (projectConfig.projectDomain) {
-      substituted = substituted.replace(
-        /\{\{PROJECT_DOMAIN\}\}/g,
-        projectConfig.projectDomain
-      );
-    }
-
-    // Default fallbacks for missing variables
-    substituted = substituted.replace(/\{\{PROJECT_NAME\}\}/g, 'Project');
-    substituted = substituted.replace(
-      /\{\{PROJECT_DESCRIPTION\}\}/g,
-      'A guided development project using metacoding workflow'
-    );
-    substituted = substituted.replace(
-      /\{\{TECH_STACK\}\}/g,
-      'TypeScript, Jest'
-    );
-    substituted = substituted.replace(/\{\{PROJECT_DOMAIN\}\}/g, 'software');
-    substituted = substituted.replace(
-      /\{\{PROJECT_SPECIFIC_GUIDANCE\}\}/g,
-      '- **Best Practices:** Follow language-specific coding standards and conventions\n- **Architecture:** Implement modular and maintainable code structure\n- **Testing:** Write comprehensive tests for all functionality\n- **Documentation:** Maintain clear and up-to-date documentation'
-    );
 
     return substituted;
+  }
+
+  /**
+   * Process instruction content for Cursor without adding header (content-only processing)
+   */
+  private processInstructionContentOnly(instructionContent: string): string {
+    return instructionContent
+      .replace(/# GitHub Copilot/gi, '# Cursor AI')
+      .replace(/GitHub Copilot/g, 'Cursor AI')
+      .replace(/Copilot/g, 'Cursor AI')
+      .replace(/\.vscode/g, '.cursor')
+      .replace(/VS Code/g, 'Cursor IDE')
+      .replace(/Visual Studio Code/g, 'Cursor IDE');
   }
 }

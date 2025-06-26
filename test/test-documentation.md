@@ -831,72 +831,51 @@ After implementing the recommended solution:
 | LINT-VERIFY-001 | Verify all ESLint violations resolved                       | Verification | Not Started |
 | LINT-VERIFY-002 | Verify all tests still pass after fixes                     | Verification | Not Started |
 
-## Jest Linting Status ✅
+## Test Cases for CUR-TASK-002: Fix Cursor MDC Generation Issues
 
-**Phase 1 - Assessment (Completed):**
+| Test Case ID | Description | Type | Status |
+| :----------- | :---------- | :--- | :----- |
+| CUR-UNIT-015 | MDC generation should not duplicate content | Unit | Not Started |
+| CUR-UNIT-016 | MDC frontmatter should be generated only once | Unit | Not Started |
+| CUR-UNIT-017 | Template variables should be properly substituted | Unit | Not Started |
+| CUR-UNIT-018 | Generated MDC file should have appropriate length | Unit | Not Started |
+| CUR-UNIT-019 | MDC structure should be valid and well-formed | Unit | Not Started |
+| CUR-INT-006 | Full workflow.mdc generation should produce clean output | Integration | Not Started |
+| CUR-INT-007 | Content deduplication should work in real project scenarios | Integration | Not Started |
 
-- ✅ Ran ESLint on all test files to identify issues
-- ✅ Found 9 files with inconsistent Jest globals imports and 30+ `no-undef` errors each
-- ✅ Categorized files and documented improvement plan
+### Test Requirements Documentation
 
-**Phase 2 - Fixes (Completed):**
+**CUR-UNIT-015: MDC generation should not duplicate content**
+- Input: Template content with standard copilot-instructions structure
+- Expected: Single occurrence of each section in generated MDC
+- Edge cases: Multiple template sources, nested content structures
 
-- ✅ Added `@jest/globals` imports to the following files:
-  - `test/integration/init.test.ts`
-  - `test/unit/filesystem.test.ts`
-  - `test/unit/package-structure.test.ts`
-  - `test/unit/nodejs-template.test.ts`
-  - `test/unit/service-integration.test.ts`
-- ✅ Fixed corrupted content in `test/unit/cli-entry.test.ts`
-- ✅ Updated ESLint configuration in `.eslintrc.js` to ignore unused catch block variables starting with underscore
-- ✅ Verified all test files now pass ESLint without errors
+**CUR-UNIT-016: MDC frontmatter should be generated only once**
+- Input: Template processing with MDC wrapper
+- Expected: Single frontmatter block at file beginning
+- Edge cases: Multiple processing passes, error conditions
 
-**Phase 3 - Prevention (Next):**
+**CUR-UNIT-017: Template variables should be properly substituted**
+- Input: Template with {{PROJECT_DESCRIPTION}}, {{TECH_STACK}}, etc.
+- Expected: All variables replaced with actual values
+- Edge cases: Missing variables, malformed variable syntax
 
-- 📋 Document Jest coding standards and best practices
-- 📋 Consider adding pre-commit hooks for Jest test linting
-- 📋 Update Jest configuration if needed
+**CUR-UNIT-018: Generated MDC file should have appropriate length**
+- Input: Standard copilot-instructions template
+- Expected: File length under 1000 lines (reasonable for single template)
+- Edge cases: Complex templates, multiple instruction files
 
-**Current Status:** All Jest test files pass ESLint validation ✅
+**CUR-UNIT-019: MDC structure should be valid and well-formed**
+- Input: Generated MDC content
+- Expected: Valid frontmatter, proper markdown structure, no corruption
+- Edge cases: Special characters, code blocks, complex formatting
 
-### Jest Coding Standards
+**CUR-INT-006: Full workflow.mdc generation should produce clean output**
+- Input: Complete project setup with Cursor IDE integration
+- Expected: Clean, well-formatted workflow.mdc file without duplication
+- Edge cases: Multiple template types, existing files, update scenarios
 
-To maintain consistent Jest usage across all test files:
-
-1. **Jest Globals Import:** Always import Jest globals from `@jest/globals`:
-
-   ```typescript
-   import {
-     describe,
-     test,
-     expect,
-     beforeEach,
-     afterEach,
-     jest,
-   } from '@jest/globals';
-   ```
-
-2. **Unused Variables:** Prefix unused variables in catch blocks with underscore:
-
-   ```typescript
-   try {
-     // code that might throw
-   } catch (_error) {
-     // Expected error, no handling needed
-   }
-   ```
-
-3. **Mock Imports:** Import mocking functions from Jest globals:
-
-   ```typescript
-   jest.mock('module-name');
-   const mockFunction = jest.fn();
-   ```
-
-4. **File Structure:** Keep all test files in `/test` directory with appropriate subdirectories:
-
-   - `/test/unit/` for unit tests
-   - `/test/integration/` for integration tests
-   - `/test/fixtures/` for test data and fixtures
-
-5. **Test Naming:** Use descriptive test names that explain the behavior being tested.
+**CUR-INT-007: Content deduplication should work in real project scenarios**
+- Input: Real project with multiple instruction files
+- Expected: No content duplication across generated MDC files
+- Edge cases: File conflicts, partial generations, error recovery
