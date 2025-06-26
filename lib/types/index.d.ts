@@ -21,6 +21,7 @@ export interface ProjectConfig {
     projectType: string;
     testFramework?: string;
     buildTool?: string;
+    ideChoice?: 'vscode' | 'cursor';
 }
 export interface Template {
     name: string;

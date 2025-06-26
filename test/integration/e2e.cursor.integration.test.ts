@@ -52,7 +52,7 @@ describe('End-to-End Cursor Integration Tests', () => {
       expect(await fs.pathExists('.cursor/rules/workflow.mdc')).toBe(true);
       expect(await fs.pathExists('.cursor')).toBe(true);
       expect(await fs.pathExists('.cursor/rules')).toBe(true);
-      
+
       // BUG FIX: Cursor setup should NOT create .github files
       expect(await fileSystem.fileExists('.github/instructions')).toBe(false);
 
@@ -268,23 +268,17 @@ describe('End-to-End Cursor Integration Tests', () => {
       await initCommand.execute(options);
 
       // Verify logical directory structure for Cursor setup
-      const expectedDirs = [
-        '.cursor',
-        '.cursor/rules',
-      ];
-      
+      const expectedDirs = ['.cursor', '.cursor/rules'];
+
       // BUG FIX: .github directories should NOT be created for Cursor setup
-      const notExpectedDirs = [
-        '.github',
-        '.github/instructions',
-      ];
+      const notExpectedDirs = ['.github', '.github/instructions'];
 
       for (const dir of expectedDirs) {
         expect(await fs.pathExists(dir)).toBe(true);
         const stats = await fs.stat(dir);
         expect(stats.isDirectory()).toBe(true);
       }
-      
+
       for (const dir of notExpectedDirs) {
         expect(await fs.pathExists(dir)).toBe(false);
       }

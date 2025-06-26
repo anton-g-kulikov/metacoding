@@ -24,11 +24,13 @@ describe('TemplateManager IDE Choice Integration', () => {
         name: 'test-project',
         description: 'Test project',
         techStack: ['typescript'],
-        projectType: 'general'
+        projectType: 'general',
       };
 
       // This should not throw an error when ideChoice is passed
-      await expect(templateManager.getTemplate('general', projectConfig)).resolves.toBeDefined();
+      await expect(
+        templateManager.getTemplate('general', projectConfig)
+      ).resolves.toBeDefined();
     });
 
     it('should accept ideChoice parameter with vscode value', async () => {
@@ -36,10 +38,12 @@ describe('TemplateManager IDE Choice Integration', () => {
         name: 'test-project',
         description: 'Test project',
         techStack: ['typescript'],
-        projectType: 'general'
+        projectType: 'general',
       };
 
-      await expect(templateManager.getTemplate('general', projectConfig)).resolves.toBeDefined();
+      await expect(
+        templateManager.getTemplate('general', projectConfig)
+      ).resolves.toBeDefined();
     });
   });
 
@@ -50,20 +54,23 @@ describe('TemplateManager IDE Choice Integration', () => {
         description: 'Test project',
         techStack: ['typescript'],
         projectType: 'general',
-        ideChoice: 'vscode'
+        ideChoice: 'vscode',
       };
 
-      const template = await templateManager.getTemplate('general', projectConfig);
-      
+      const template = await templateManager.getTemplate(
+        'general',
+        projectConfig
+      );
+
       // Should contain .github file destinations for VS Code
-      const githubFiles = template.files.filter(file => 
+      const githubFiles = template.files.filter((file) =>
         file.destination.startsWith('.github/')
       );
       expect(githubFiles.length).toBeGreaterThan(0);
-      
+
       // Should include copilot-instructions.md for VS Code
-      const copilotFile = template.files.find(file => 
-        file.destination === '.github/copilot-instructions.md'
+      const copilotFile = template.files.find(
+        (file) => file.destination === '.github/copilot-instructions.md'
       );
       expect(copilotFile).toBeDefined();
     });
@@ -74,14 +81,17 @@ describe('TemplateManager IDE Choice Integration', () => {
         description: 'Test project',
         techStack: ['typescript'],
         projectType: 'general',
-        ideChoice: 'cursor'
+        ideChoice: 'cursor',
       };
 
       // This will fail initially since we haven't implemented the ideChoice parameter yet
-      const template = await templateManager.getTemplate('general', projectConfig);
-      
+      const template = await templateManager.getTemplate(
+        'general',
+        projectConfig
+      );
+
       // Should NOT contain any .github file destinations for Cursor
-      const githubFiles = template.files.filter(file => 
+      const githubFiles = template.files.filter((file) =>
         file.destination.startsWith('.github/')
       );
       expect(githubFiles.length).toBe(0); // This will fail until we implement the fix
@@ -92,13 +102,16 @@ describe('TemplateManager IDE Choice Integration', () => {
         name: 'test-project',
         description: 'Test project',
         techStack: ['typescript'],
-        projectType: 'general'
+        projectType: 'general',
       };
 
-      const template = await templateManager.getTemplate('general', projectConfig);
-      
+      const template = await templateManager.getTemplate(
+        'general',
+        projectConfig
+      );
+
       // Should create .github files by default (backwards compatibility)
-      const githubFiles = template.files.filter(file => 
+      const githubFiles = template.files.filter((file) =>
         file.destination.startsWith('.github/')
       );
       expect(githubFiles.length).toBeGreaterThan(0);
@@ -112,17 +125,22 @@ describe('TemplateManager IDE Choice Integration', () => {
         description: 'Test project',
         techStack: ['typescript'],
         projectType: 'general',
-        ideChoice: 'vscode'
+        ideChoice: 'vscode',
       };
 
-      const template = await templateManager.getTemplate('general', projectConfig);
-      
-      // All instruction files should go to .github
-      const instructionFiles = template.files.filter(file => 
-        file.source.includes('.instructions.md') || file.source.includes('copilot-instructions.md')
+      const template = await templateManager.getTemplate(
+        'general',
+        projectConfig
       );
-      
-      instructionFiles.forEach(file => {
+
+      // All instruction files should go to .github
+      const instructionFiles = template.files.filter(
+        (file) =>
+          file.source.includes('.instructions.md') ||
+          file.source.includes('copilot-instructions.md')
+      );
+
+      instructionFiles.forEach((file) => {
         expect(file.destination).toMatch(/^\.github\//);
       });
     });
@@ -135,17 +153,20 @@ describe('TemplateManager IDE Choice Integration', () => {
         description: 'Test project',
         techStack: ['typescript'],
         projectType: 'general',
-        ideChoice: 'cursor'
+        ideChoice: 'cursor',
       };
 
       // This will fail initially since we haven't implemented ideChoice parameter yet
-      const template = await templateManager.getTemplate('general', projectConfig);
-      
+      const template = await templateManager.getTemplate(
+        'general',
+        projectConfig
+      );
+
       // No files should have .github destinations
-      const githubFiles = template.files.filter(file => 
+      const githubFiles = template.files.filter((file) =>
         file.destination.startsWith('.github/')
       );
-      
+
       expect(githubFiles).toHaveLength(0); // This will fail until we implement the fix
     });
 
@@ -155,16 +176,21 @@ describe('TemplateManager IDE Choice Integration', () => {
         description: 'Test project',
         techStack: ['typescript'],
         projectType: 'general',
-        ideChoice: 'cursor'
+        ideChoice: 'cursor',
       };
 
-      const template = await templateManager.getTemplate('general', projectConfig);
-      
-      // Template should not include instruction files when IDE choice is cursor
-      const instructionSources = template.files.filter(file => 
-        file.source.includes('.instructions.md') || file.source.includes('copilot-instructions.md')
+      const template = await templateManager.getTemplate(
+        'general',
+        projectConfig
       );
-      
+
+      // Template should not include instruction files when IDE choice is cursor
+      const instructionSources = template.files.filter(
+        (file) =>
+          file.source.includes('.instructions.md') ||
+          file.source.includes('copilot-instructions.md')
+      );
+
       // Sources should not be included for Cursor since CursorService handles them separately
       expect(instructionSources).toHaveLength(0); // This will fail until we implement the fix
     });

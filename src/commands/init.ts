@@ -63,7 +63,11 @@ export class InitCommand {
     }
 
     // Get project configuration
-    const config = await this.getProjectConfiguration(options, projectInfo, ideChoice);
+    const config = await this.getProjectConfiguration(
+      options,
+      projectInfo,
+      ideChoice
+    );
 
     // Set up the project
     await this.setupProject(config, options, ideChoice);
