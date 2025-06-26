@@ -323,3 +323,105 @@ For any recurring, high-risk, or multi-step process (such as npm package release
 - If a template does not exist, prompt the user to create one and assist in drafting it.
 - When using a checklist, copy it for the specific instance (e.g., `npm-v1.5.0.md`), and work through each step systematically.
 - If new steps are discovered or improvements are needed, update the template and inform the user.
+
+## Workflow Enforcement Rules
+
+### Documentation-First Principle
+
+**MANDATORY: Document first, execute second for ALL development work.**
+
+- **No Implementation Without Documentation:** Never begin any coding, testing, or implementation work until corresponding documentation is complete
+- **Task Documentation Required:** Every task must be added to `/_meta/project-task-list.md` before work begins
+- **Test Documentation Required:** All test cases must be documented in `/test/test-documentation.md` before writing any test code
+- **Confirmation Gates:** User must explicitly confirm understanding of plan, scope, and consequences before proceeding
+- **Examples of Required Documentation-First Workflow:**
+  - ✅ Correct: "I'll add this task to the task list, then document the test cases, then get your confirmation before implementing"
+  - ❌ Incorrect: "I'll implement this feature and update the documentation afterwards"
+  - ✅ Correct: "Let me document these test cases in test-documentation.md first, then implement the tests"
+  - ❌ Incorrect: "I'll write the tests now and document them later"
+
+### Single-Task Focus Enforcement
+
+**MANDATORY: One change at a time - never mix tasks in one iteration.**
+
+- **No Task Mixing:** Never work on two different tasks simultaneously or mix unrelated changes in one iteration
+- **Scope Creep Management:** When additional requests arise during active work, use proper scope management:
+  - **Option A (Blocking):** If the new request blocks current work, write it as a subtask in `/_meta/project-task-list.md` and address it within current workflow
+  - **Option B (Non-blocking):** If the new request is unrelated, write it as a separate task and complete current workflow first
+- **Task-Switching Prevention:** Politely but firmly redirect users who try to switch tasks mid-workflow
+- **Enforcement Templates:**
+  - ✅ Correct response: "I've added that request to the task list. Let me complete the current workflow first, then we can address it as a separate task."
+  - ✅ Correct response: "That's a great idea! I'll add it as a subtask since it relates to our current work."
+  - ❌ Incorrect: "Sure, let me switch to that new request right now."
+- **Examples of Proper Scope Management:**
+  - ✅ Good: "I notice you want to add authentication. I'll add that as a separate task and complete our current database setup first."
+  - ❌ Bad: "Let me add authentication while we're working on the database setup."
+  - ✅ Good: "I see this test failure requires fixing the validation logic. I'll add that as a subtask since it blocks our current work."
+
+### Before Starting Any New Task
+
+```
+STOP: Complete the current workflow first!
+
+Before proceeding with a new task, ensure:
+✅ Current task is documented and committed
+✅ All tests are passing
+✅ Documentation is updated
+✅ User has confirmed the implementation meets expectations
+✅ Changes are committed with proper messages
+
+Only then proceed with the next task planning phase.
+```
+
+### Quality Gates
+
+- **No shortcuts:** Every step must be completed in order
+- **No parallel tasks:** Focus on one task at a time until fully complete
+- **No skipping tests:** TDD approach is mandatory
+- **No incomplete documentation:** All documentation must be current
+- **No uncommitted changes:** All work must be committed before moving on
+
+### Workflow Violations
+
+If a user requests to skip steps or start new work before completing the workflow:
+
+1. **Politely decline:** Explain the importance of completing the current workflow
+2. **Remind of benefits:** Emphasize how this maintains code quality and project health
+3. **Offer to complete current workflow:** Help finish the current task properly first
+4. **Suggest task breakdown:** If the current task is too large, suggest breaking it down
+
+#### Handling Scope Creep and Task Switching
+
+When users request additional work or try to switch tasks during active development:
+
+**For New Related Work:**
+
+- Add as subtask to current task if it blocks progress
+- Example: "I'll add that validation fix as a subtask since it's needed for our current feature"
+
+**For New Unrelated Work:**
+
+- Add to task list as separate task
+- Politely redirect to complete current work first
+- Example: "Great idea! I've added that to the task list. Let me finish the current database setup first, then we can tackle the UI updates as a separate task."
+
+**If User Insists on Task Switching:**
+
+- Gently remind about "one change at a time" principle
+- Explain benefits of focused work
+- Example: "I understand the urgency, but following our 'one change at a time' principle ensures we don't leave incomplete work. Let me finish this current task properly, then we can give full attention to your new request."
+
+**Template Responses for Common Scenarios:**
+
+- "I've noted that request in the task list. Completing our current workflow first ensures quality."
+- "That's related to our current work, so I'll add it as a subtask to address now."
+- "I see that's a separate concern. Let me add it to our task list and complete this workflow first."
+
+## Benefits of This Workflow
+
+- **Higher code quality:** TDD ensures robust, well-tested code
+- **Better documentation:** Always current and comprehensive
+- **Reduced technical debt:** Incremental approach prevents accumulation of shortcuts
+- **Improved maintainability:** Clear task tracking and documentation
+- **Team collaboration:** Consistent approach enables better teamwork
+- **Risk mitigation:** Small, tested changes reduce deployment risks

@@ -87,6 +87,8 @@
 
 - [x] **DOC-TASK-004: Add repeated tasks and checklist template approach to all documentation instruction files** - ✅ **COMPLETED** - Successfully added "Repeated Tasks and Checklist Templates" sections to all documentation-related instruction files including code-review instructions (both templates/general/ and .github/instructions/), all language-specific docs instructions (React, TypeScript, Node.js, JavaScript, Python), and ensured consistent placement and content tailored to each context with comprehensive coverage across 8 instruction files.
 
+- [x] **DOC-TASK-007: Address Failing Workflow Tests** - ✅ **COMPLETED** - Fixed failing tests that expected explicit workflow enforcement language (e.g., "Single-Task Focus Enforcement", "Documentation-First Principle") in the main workflow documentation by adding comprehensive "Workflow Enforcement Rules" section to the template including documentation-first principle, single-task focus enforcement, quality gates, workflow violations handling, and scope creep management procedures, ensuring all single-task focus tests (WF-UNIT-012 through WF-UNIT-018) now pass.
+
 ## 9. Backlog
 
 - [ ] **LANG-TASK-002: Create Java-specific instruction template** - ❌ **NOT STARTED**
