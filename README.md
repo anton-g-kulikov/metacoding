@@ -238,9 +238,10 @@ my-awesome-project/
 
 ```
 my-awesome-project/
-├── workflow.mdc
+
 ├── .cursor/
 │   └── rules/
+│       ├── workflow.mdc
 │       ├── test-runner.mdc
 │       ├── release.mdc
 │       ├── docs-update.mdc
