@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Cursor IDE File Creation Bug**: Fixed `metacoding init --cursor` incorrectly creating both `.github` and `.cursor` files
+  - **IDE-Specific Generation**: Cursor setup now only creates `.cursor/rules/*.mdc` files, not `.github` instruction files
+  - **VS Code Compatibility**: VS Code setup (default) continues to only create `.github` instruction files
+  - **Conditional Logic**: Added `ideChoice` parameter to control file generation based on selected IDE
+  - **Backward Compatibility**: Existing VS Code setups remain unaffected by changes
+  - **Comprehensive Testing**: Added unit, integration, and E2E tests to prevent regression
+
 ## [1.4.2] - 2024-12-26
 
 ### Fixed

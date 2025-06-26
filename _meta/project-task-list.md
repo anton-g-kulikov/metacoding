@@ -59,6 +59,16 @@
 
 - [x] **CUR-TASK-001: Update Cursor rules file structure to match modern Cursor IDE requirements** - ✅ **COMPLETED** - Researched current Cursor IDE rules file requirements, updated implementation to write general workflow rules to .cursor/rules/workflow.mdc, validated MDC format with frontmatter, fixed failing Cursor-related tests, and updated backup/migration test logic to handle both legacy and modern file paths.
 
+- [x] **CUR-TASK-003: Fix Cursor init creating unwanted .github files** - ✅ **COMPLETED**
+  - Fixed bug where `cursor init` creates both `.github` and `.cursor` files instead of only `.cursor` files
+  - Added `ideChoice` parameter to `ProjectConfig` interface and template processing
+  - Implemented conditional file creation based on IDE choice (VS Code: `.github` only, Cursor: skip `.github` files)
+  - Updated `TemplateManager.loadInstructionFiles()` to conditionally skip `.github` file creation when `ideChoice` is `'cursor'`
+  - Updated `InitCommand` to pass IDE choice to template processing through project configuration
+  - Ensured Cursor setup only creates `.cursor/rules/*.mdc` files as intended
+  - Added comprehensive unit and E2E tests for IDE choice functionality
+  - All 253 tests passing with 100% test suite completion
+
 ## 6. Architecture & Standards
 
 - [x] **ARCH-TASK-001: Abstract Instruction Files for Single Source of Truth** - ✅ **COMPLETED** - Successfully implemented composable instruction file architecture to abstract language-specific coding requirements from copilot-instructions and other instruction files to separate, composable files, creating single universal instruction files that reference language-specific instruction files, eliminating duplication and enabling easier maintenance.

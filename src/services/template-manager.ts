@@ -74,7 +74,15 @@ export class TemplateManager {
       template: boolean;
     }> = [];
 
-    // Always load universal files from the general template
+    // Skip .github file creation for Cursor IDE setup
+    const ideChoice = projectConfig?.ideChoice || 'vscode'; // Default to vscode for backwards compatibility
+    if (ideChoice === 'cursor') {
+      // For Cursor IDE, CursorService handles file generation separately
+      // We don't create any .github files in the template
+      return files;
+    }
+
+    // Load universal files from the general template for VS Code setup
     const generalPath = path.join(this.templatesDir, 'general');
     const universalFiles = [
       'copilot-instructions.md',
@@ -97,7 +105,7 @@ export class TemplateManager {
       }
     }
 
-    // Load template-specific testing instructions (new naming convention)
+    // Load template-specific testing instructions for VS Code setup only
     const testingFiles = {
       react: 'react.testing.instructions.md',
       node: 'nodejs.testing.instructions.md',
@@ -132,7 +140,7 @@ export class TemplateManager {
       }
     }
 
-    // Load TypeScript instructions for templates that use TypeScript
+    // Load TypeScript instructions for templates that use TypeScript (VS Code setup only)
     const typescriptTemplates = ['node', 'react'];
     const useTypeScript =
       typescriptTemplates.includes(templateName) ||
@@ -159,7 +167,7 @@ export class TemplateManager {
       }
     }
 
-    // Load template-specific files from the specific template directory
+    // Load template-specific files from the specific template directory (VS Code setup only)
     if (templateName !== 'general') {
       const templatePath = path.join(this.templatesDir, templateName);
       const templateFiles = await fs.readdir(templatePath);

@@ -63,7 +63,7 @@ export class InitCommand {
     }
 
     // Get project configuration
-    const config = await this.getProjectConfiguration(options, projectInfo);
+    const config = await this.getProjectConfiguration(options, projectInfo, ideChoice);
 
     // Set up the project
     await this.setupProject(config, options, ideChoice);
@@ -77,7 +77,8 @@ export class InitCommand {
    */
   private async getProjectConfiguration(
     options: InitOptions,
-    projectInfo: any
+    projectInfo: any,
+    ideChoice: 'vscode' | 'cursor'
   ): Promise<ProjectConfig> {
     // For testing or force mode, use defaults
     if (options.force && process.env.NODE_ENV === 'test') {
@@ -88,6 +89,7 @@ export class InitCommand {
         projectType: options.template,
         testFramework: 'Jest',
         buildTool: 'TypeScript Compiler',
+        ideChoice,
       };
     }
 
@@ -168,6 +170,7 @@ export class InitCommand {
         ? this.getDefaultTestFramework(answers.projectType)
         : undefined,
       buildTool: this.getDefaultBuildTool(answers.projectType),
+      ideChoice,
     } as ProjectConfig;
   }
 
@@ -182,9 +185,14 @@ export class InitCommand {
     const spinner = ora('Setting up metacoding files...').start();
 
     try {
-      // Create .github directory structure
-      await this.fileSystem.ensureDirectoryExists('.github');
-      await this.fileSystem.ensureDirectoryExists('.github/instructions');
+      // Create IDE-specific directory structure
+      if (ideChoice === 'vscode') {
+        await this.fileSystem.ensureDirectoryExists('.github');
+        await this.fileSystem.ensureDirectoryExists('.github/instructions');
+      } else if (ideChoice === 'cursor') {
+        await this.fileSystem.ensureDirectoryExists('.cursor');
+        await this.fileSystem.ensureDirectoryExists('.cursor/rules');
+      }
 
       // Generate and write template files
       const template = await this.templateManager.getTemplate(
