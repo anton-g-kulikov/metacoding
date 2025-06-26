@@ -238,7 +238,7 @@ my-awesome-project/
 
 ```
 my-awesome-project/
-├── workflow.cursorrules
+├── workflow.mdc
 ├── .cursor/
 │   └── rules/
 │       ├── test-runner.mdc
