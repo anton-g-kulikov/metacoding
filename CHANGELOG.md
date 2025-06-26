@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2024-12-26
+
 ### Fixed
 
 - **Cursor Workflow Rules Generation**: Fixed workflow.mdc file generation to only include copilot-instructions.md content
