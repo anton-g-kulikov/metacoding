@@ -200,14 +200,26 @@ When providing code suggestions, prioritize:
 
 **ALL development tasks must follow this strict workflow to ensure code quality, proper testing, and comprehensive documentation.**
 
+**General Instruction:**
+
+- The agent must always proceed through all workflow steps in order, without stopping or waiting for reminders, unless explicit user confirmation is required by the workflow. After completing each step, immediately continue to the next, ensuring the workflow is fully completed for every task.
+
 ### Step 1: Task Understanding and Planning
 
-- **Always start with clarification:** Ask questions to fully understand the requirements
+- **Always start with clarification:**
+  - Begin by thoroughly reading the project system documentation, reviewing the project folders and files structure, and examining the most important code sections.
+  - Measure your own uncertainty level regarding the user's initial query or answers on a scale from 1 (total uncertainty) to 0.1 (very low uncertainty).
+  - If your uncertainty is greater than 0.1, continue reading documentation and exploring the project and codebase before asking clarifying questions.
+  - If, after 5 clarification attempts, your uncertainty remains above 0.1, explicitly state this and propose a research plan before proceeding.
 - **Provide implementation outline:** Present the shortest possible outline of the implementation plan with key details
 - **Get explicit confirmation:** Wait for user confirmation before proceeding
 - **Clarify scope:** Ensure both parties understand what will be implemented and what won't
 - **Document first, execute second:** No implementation work begins until all required documentation is complete
 - **Mandatory confirmation gates:** User must explicitly approve the plan, scope, and consequences before any work begins
+
+**After completing Step 1:**
+
+- Immediately proceed to Step 2 (Task Management) once user confirmation is received and documentation is complete.
 
 ### Step 2: Task Management
 
@@ -220,6 +232,10 @@ When providing code suggestions, prioritize:
 - **Estimate effort:** Provide realistic time/complexity estimates
 - **Task documentation requirement:** Every task must be documented in the task list before work begins
 
+**After completing Step 2:**
+
+- Immediately proceed to Step 3 (Test-Driven Development) and ensure all test cases are documented before writing any test code.
+
 ### Step 3: Test-Driven Development (TDD)
 
 - **Document test cases first:** Write test cases in `/test/test-documentation.md` BEFORE implementing any tests
@@ -230,6 +246,10 @@ When providing code suggestions, prioritize:
 - **Clean up test artifacts:** Remove temporary test files, move useful test data to `/test/fixtures/`
 - **Test documentation requirement:** All test cases must be documented before any test code is written
 
+**After completing Step 3:**
+
+- Immediately proceed to Step 4 (Implementation and Verification) and implement the required functionality.
+
 ### Step 4: Implementation and Verification
 
 - **Write production code:** Implement the actual functionality
@@ -239,6 +259,10 @@ When providing code suggestions, prioritize:
 - **Refactor if needed:** Clean up code while maintaining test coverage (refactor phase)
 - **File cleanup:** Remove all temporary files, debug outputs, and experimental code created during development
 
+**After completing Step 4:**
+
+- Immediately proceed to Step 5 (Documentation and Status Updates) and update all relevant documentation and status indicators.
+
 ### Step 5: Documentation and Status Updates
 
 - **Update all documentation:** Follow documentation maintenance guidelines
@@ -247,12 +271,20 @@ When providing code suggestions, prioritize:
 - **Update CHANGELOG.md:** Document user-facing changes
 - **Review code documentation:** Ensure code documentation is current
 
+**After completing Step 5:**
+
+- Immediately proceed to Step 6 (Version Control) and commit all changes with proper messages.
+
 ### Step 6: Version Control
 
 - **Commit changes:** Use conventional commit messages
 - **Include all related files:** Ensure tests, documentation, and code are committed together
 - **Write descriptive commit messages:** Explain what was implemented and why
 - **Keep commits atomic:** Each commit should represent a complete, working feature
+
+**After completing Step 6:**
+
+- Immediately proceed to Step 7 (Workflow Completion Check) and verify that all workflow requirements are satisfied.
 
 ### Step 7: Workflow Completion Check
 
@@ -261,104 +293,33 @@ When providing code suggestions, prioritize:
 - **Repository hygiene:** Ensure codebase, documentation, and repository remain up-to-date
 - **Quality gates:** All tests must pass, documentation must be current, and code must be committed
 
-## Workflow Enforcement Rules
+**After completing Step 7:**
 
-### Documentation-First Principle
+- Confirm that the workflow is fully complete and only then allow planning or starting a new task. Never stop at an intermediate step unless user confirmation is explicitly required by the workflow.
 
-**MANDATORY: Document first, execute second for ALL development work.**
+# Repeated Tasks and Checklist Templates
 
-- **No Implementation Without Documentation:** Never begin any coding, testing, or implementation work until corresponding documentation is complete
-- **Task Documentation Required:** Every task must be added to `/_meta/project-task-list.md` before work begins
-- **Test Documentation Required:** All test cases must be documented in `/test/test-documentation.md` before writing any test code
-- **Confirmation Gates:** User must explicitly confirm understanding of plan, scope, and consequences before proceeding
-- **Examples of Required Documentation-First Workflow:**
-  - ✅ Correct: "I'll add this task to the task list, then document the test cases, then get your confirmation before implementing"
-  - ❌ Incorrect: "I'll implement this feature and update the documentation afterwards"
-  - ✅ Correct: "Let me document these test cases in test-documentation.md first, then implement the tests"
-  - ❌ Incorrect: "I'll write the tests now and document them later"
+For any recurring, high-risk, or multi-step process (such as npm package release, GitHub release, major version update, or similar workflows), always use a dedicated checklist template to ensure all necessary steps are followed and nothing is missed.
 
-### Single-Task Focus Enforcement
+- **Checklist Template Principle:**
+  - Maintain a template checklist file for each repeated process (e.g., `npm-publish-checklist.md`).
+  - For each new instance (e.g., each release or version), copy the template checklist and tag it with the relevant version or context, preserving the original template for future use.
+  - Systematically work through the checklist for every instance of the repeated task, marking each step as completed.
+  - Proactively identify any process that would benefit from a checklist and prompt the user to use or create one if it does not exist.
+  - If, during execution, you or the user identify missing or unclear steps, update the template checklist to improve future reliability.
 
-**MANDATORY: One change at a time - never mix tasks in one iteration.**
+**Examples of repeated tasks requiring checklists:**
 
-- **No Task Mixing:** Never work on two different tasks simultaneously or mix unrelated changes in one iteration
-- **Scope Creep Management:** When additional requests arise during active work, use proper scope management:
-  - **Option A (Blocking):** If the new request blocks current work, write it as a subtask in `/_meta/project-task-list.md` and address it within current workflow
-  - **Option B (Non-blocking):** If the new request is unrelated, write it as a separate task and complete current workflow first
-- **Task-Switching Prevention:** Politely but firmly redirect users who try to switch tasks mid-workflow
-- **Enforcement Templates:**
-  - ✅ Correct response: "I've added that request to the task list. Let me complete the current workflow first, then we can address it as a separate task."
-  - ✅ Correct response: "That's a great idea! I'll add it as a subtask since it relates to our current work."
-  - ❌ Incorrect: "Sure, let me switch to that new request right now."
-- **Examples of Proper Scope Management:**
-  - ✅ Good: "I notice you want to add authentication. I'll add that as a separate task and complete our current database setup first."
-  - ❌ Bad: "Let me add authentication while we're working on the database setup."
-  - ✅ Good: "I see this test failure requires fixing the validation logic. I'll add that as a subtask since it blocks our current work."
+- npm package publishing
+- GitHub release process
+- Major/minor version updates
+- Production deployment
+- Onboarding new contributors
+- Any other process with multiple required steps or risk of omission
 
-### Before Starting Any New Task
+**Agent Guidance:**
 
-```
-STOP: Complete the current workflow first!
-
-Before proceeding with a new task, ensure:
-✅ Current task is documented and committed
-✅ All tests are passing
-✅ Documentation is updated
-✅ User has confirmed the implementation meets expectations
-✅ Changes are committed with proper messages
-
-Only then proceed with the next task planning phase.
-```
-
-### Quality Gates
-
-- **No shortcuts:** Every step must be completed in order
-- **No parallel tasks:** Focus on one task at a time until fully complete
-- **No skipping tests:** TDD approach is mandatory
-- **No incomplete documentation:** All documentation must be current
-- **No uncommitted changes:** All work must be committed before moving on
-
-### Workflow Violations
-
-If a user requests to skip steps or start new work before completing the workflow:
-
-1. **Politely decline:** Explain the importance of completing the current workflow
-2. **Remind of benefits:** Emphasize how this maintains code quality and project health
-3. **Offer to complete current workflow:** Help finish the current task properly first
-4. **Suggest task breakdown:** If the current task is too large, suggest breaking it down
-
-#### Handling Scope Creep and Task Switching
-
-When users request additional work or try to switch tasks during active development:
-
-**For New Related Work:**
-
-- Add as subtask to current task if it blocks progress
-- Example: "I'll add that validation fix as a subtask since it's needed for our current feature"
-
-**For New Unrelated Work:**
-
-- Add to task list as separate task
-- Politely redirect to complete current work first
-- Example: "Great idea! I've added that to the task list. Let me finish the current database setup first, then we can tackle the UI updates as a separate task."
-
-**If User Insists on Task Switching:**
-
-- Gently remind about "one change at a time" principle
-- Explain benefits of focused work
-- Example: "I understand the urgency, but following our 'one change at a time' principle ensures we don't leave incomplete work. Let me finish this current task properly, then we can give full attention to your new request."
-
-**Template Responses for Common Scenarios:**
-
-- "I've noted that request in the task list. Completing our current workflow first ensures quality."
-- "That's related to our current work, so I'll add it as a subtask to address now."
-- "I see that's a separate concern. Let me add it to our task list and complete this workflow first."
-
-## Benefits of This Workflow
-
-- **Higher code quality:** TDD ensures robust, well-tested code
-- **Better documentation:** Always current and comprehensive
-- **Reduced technical debt:** Incremental approach prevents accumulation of shortcuts
-- **Improved maintainability:** Clear task tracking and documentation
-- **Team collaboration:** Consistent approach enables better teamwork
-- **Risk mitigation:** Small, tested changes reduce deployment risks
+- Always check for the existence of a checklist template before starting a repeated task.
+- If a template does not exist, prompt the user to create one and assist in drafting it.
+- When using a checklist, copy it for the specific instance (e.g., `npm-v1.5.0.md`), and work through each step systematically.
+- If new steps are discovered or improvements are needed, update the template and inform the user.
