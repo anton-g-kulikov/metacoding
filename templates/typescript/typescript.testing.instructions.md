@@ -1,7 +1,6 @@
 ---
 description: 'TypeScript/Node.js-specific testing patterns and frameworks'
 applyTo: 'test/**/*.{ts,js}'
-language: 'typescript'
 ---
 
 # TypeScript/Node.js Testing Standards

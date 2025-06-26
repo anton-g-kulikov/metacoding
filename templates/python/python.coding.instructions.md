@@ -1,7 +1,6 @@
 ---
 description: 'Python-specific coding standards and best practices'
 applyTo: '**/*.py'
-language: 'python'
 ---
 
 # Python Coding Standards and Best Practices

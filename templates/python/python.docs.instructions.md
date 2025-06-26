@@ -1,7 +1,6 @@
 ---
 description: 'Python-specific documentation standards and docstring patterns'
 applyTo: '**/*.py'
-language: 'python'
 ---
 
 # Python Documentation Standards

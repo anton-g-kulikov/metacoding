@@ -1,7 +1,6 @@
 ---
 description: 'React-specific documentation standards and guidelines'
-language: 'react'
-category: 'documentation'
+applyTo: '**/*.{jsx,tsx}'
 ---
 
 # React Documentation Standards

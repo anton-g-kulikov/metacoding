@@ -1,7 +1,6 @@
 ---
 description: 'React/Frontend-specific coding standards and best practices'
 applyTo: '**/*.{tsx,jsx,ts,js}'
-language: 'react'
 ---
 
 # React/Frontend Coding Standards and Best Practices

@@ -1,7 +1,6 @@
 ---
 description: 'Python-specific testing patterns and frameworks (pytest, Django, FastAPI)'
 applyTo: 'test/**/*.py,tests/**/*.py,**/test_*.py'
-language: 'python'
 ---
 
 # Python Testing Standards

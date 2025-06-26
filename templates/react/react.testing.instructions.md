@@ -1,7 +1,6 @@
 ---
 description: 'React-specific testing guidelines and standards'
-language: 'react'
-category: 'testing'
+applyTo: 'test/**/*.{tsx,jsx,ts,js}'
 ---
 
 # React Testing Standards

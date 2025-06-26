@@ -1,7 +1,6 @@
 ---
 description: 'TypeScript/Node.js-specific documentation standards and JSDoc patterns'
 applyTo: '**/*.{ts,js}'
-language: 'typescript'
 ---
 
 # TypeScript/Node.js Documentation Standards
