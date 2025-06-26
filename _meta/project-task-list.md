@@ -85,6 +85,8 @@
 
 - [x] **API-DOC-TASK-001: Complete overhaul and update of api-design.md** - ✅ **COMPLETED** - Successfully transformed api-design.md into pure User API Reference eliminating all duplication with system-documentation.md, conducted comprehensive content audit and documentation strategy, updated system documentation with missing Cursor IDE architecture details, rewrote API documentation as user reference focusing on CLI command syntax and practical usage patterns, and validated all documented APIs match actual implementation with comprehensive testing.
 
+- [x] **DOC-TASK-004: Add repeated tasks and checklist template approach to all documentation instruction files** - ✅ **COMPLETED** - Successfully added "Repeated Tasks and Checklist Templates" sections to all documentation-related instruction files including code-review instructions (both templates/general/ and .github/instructions/), all language-specific docs instructions (React, TypeScript, Node.js, JavaScript, Python), and ensured consistent placement and content tailored to each context with comprehensive coverage across 8 instruction files.
+
 ## 9. Backlog
 
 - [ ] **LANG-TASK-002: Create Java-specific instruction template** - ❌ **NOT STARTED**

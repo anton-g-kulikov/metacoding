@@ -12,7 +12,7 @@ Code reviews are essential for maintaining code quality, sharing knowledge, and 
 ## Language-Specific Review Guidelines
 
 For detailed language-specific review criteria, refer to:
-
+- **JavaScript** See `javascript.coding.instructions.md` for JavaScript-specific patterns and best practices
 - **TypeScript/Node.js:** See `typescript.coding.instructions.md` for TypeScript-specific patterns and best practices
 - **Python:** See `python.coding.instructions.md` for Python-specific patterns and conventions
 - **React/Frontend:** See `react.coding.instructions.md` for React-specific patterns and component design

@@ -732,3 +732,30 @@ export class DataProcessor extends Transform {
   "includeVersion": true
 }
 ```
+
+## Repeated TypeScript Documentation Tasks and Checklist Templates
+
+For any recurring TypeScript documentation process (such as API releases, type definition updates, or migration guides), always use a dedicated checklist template to ensure all necessary documentation steps are followed and nothing is missed.
+
+- **TypeScript Documentation Checklist Template Principle:**
+  - Maintain a template checklist file for each repeated TypeScript documentation process (e.g., `api-release-docs-checklist.md`, `type-migration-docs-checklist.md`).
+  - For each new instance (e.g., each API release or migration), copy the template checklist and tag it with the relevant version or context, preserving the original template for future use.
+  - Systematically work through the checklist for every instance of the repeated documentation task, marking each step as completed.
+  - Proactively identify any TypeScript documentation process that would benefit from a checklist and prompt the user to use or create one if it does not exist.
+  - If, during execution, you or the user identify missing or unclear documentation steps, update the template checklist to improve future reliability.
+
+**Examples of repeated TypeScript documentation tasks requiring checklists:**
+
+- API releases (JSDoc updates, type definition exports, example verification, TypeDoc generation)
+- TypeScript version migrations (type system changes, breaking changes documentation, compatibility guides)
+- Package documentation (README updates, API reference generation, installation guides, usage examples)
+- Type definition updates (interface changes, generic constraints, utility type documentation)
+- Node.js documentation (environment setup, deployment guides, configuration documentation)
+- Any other TypeScript documentation process with multiple required steps or risk of omission
+
+**Agent Guidance for TypeScript Documentation Tasks:**
+
+- Always check for the existence of a TypeScript documentation checklist template before starting a repeated documentation task.
+- If a template does not exist, prompt the user to create one and assist in drafting it.
+- When using a documentation checklist, copy it for the specific instance (e.g., `api-release-v3.2.0.md`), and work through each step systematically.
+- If new documentation steps are discovered or improvements are needed, update the template and inform the user.

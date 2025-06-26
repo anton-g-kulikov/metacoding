@@ -61,6 +61,33 @@ This project enforces a strict distinction between different types of documentat
 - **Accessibility:** Use clear language and proper formatting for accessibility
 - **Architecture Compliance:** Follow the system vs project documentation distinction
 
+## Repeated Documentation Tasks and Checklist Templates
+
+For any recurring documentation process (such as release documentation, API documentation updates, documentation reviews, or similar workflows), always use a dedicated checklist template to ensure all necessary steps are followed and nothing is missed.
+
+- **Documentation Checklist Template Principle:**
+  - Maintain a template checklist file for each repeated documentation process (e.g., `release-documentation-checklist.md`, `api-docs-update-checklist.md`).
+  - For each new instance (e.g., each release or major update), copy the template checklist and tag it with the relevant version or context, preserving the original template for future use.
+  - Systematically work through the checklist for every instance of the repeated documentation task, marking each step as completed.
+  - Proactively identify any documentation process that would benefit from a checklist and prompt the user to use or create one if it does not exist.
+  - If, during execution, you or the user identify missing or unclear documentation steps, update the template checklist to improve future reliability.
+
+**Examples of repeated documentation tasks requiring checklists:**
+
+- Release documentation (README updates, CHANGELOG maintenance, version synchronization)
+- API documentation updates (endpoint changes, parameter updates, example verification)
+- Documentation reviews and audits (link checking, content verification, accessibility checks)
+- Migration documentation (breaking changes, upgrade guides, compatibility notes)
+- Onboarding documentation updates
+- Any other documentation process with multiple required steps or risk of omission
+
+**Agent Guidance for Documentation Tasks:**
+
+- Always check for the existence of a documentation checklist template before starting a repeated documentation task.
+- If a template does not exist, prompt the user to create one and assist in drafting it.
+- When using a documentation checklist, copy it for the specific instance (e.g., `release-docs-v1.5.0.md`), and work through each step systematically.
+- If new documentation steps are discovered or improvements are needed, update the template and inform the user.
+
 ## Status Indication Guidelines (For Project Management Documentation Only)
 
 **⚠️ IMPORTANT: These guidelines apply ONLY to project management documentation (task lists, planning docs). System documentation (README, architecture, API docs) must NEVER use status indicators.**

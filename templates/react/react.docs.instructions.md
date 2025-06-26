@@ -424,4 +424,29 @@ describe('Button Component', () => {
 - **Version Alignment:** Keep documentation in sync with component versions
 - **Accessibility Updates:** Update accessibility docs when ARIA patterns change
 - **Performance Notes:** Document performance implications of component usage
+
+## Repeated React Documentation Tasks and Checklist Templates
+
+For any recurring React documentation process (such as component library releases, API documentation updates, or component migration guides), always use a dedicated checklist template to ensure all necessary documentation steps are followed and nothing is missed.
+
+- **React Documentation Checklist Template Principle:**
+  - Maintain a template checklist file for each repeated React documentation process (e.g., `component-release-docs-checklist.md`, `react-migration-docs-checklist.md`).
+  - For each new instance (e.g., each component release or migration), copy the template checklist and tag it with the relevant version or context, preserving the original template for future use.
+  - Systematically work through the checklist for every instance of the repeated documentation task, marking each step as completed.
+  - Proactively identify any React documentation process that would benefit from a checklist and prompt the user to use or create one if it does not exist.
+  - If, during execution, you or the user identify missing or unclear documentation steps, update the template checklist to improve future reliability.
+
+**Examples of repeated React documentation tasks requiring checklists:**
+- Component library releases (PropTypes updates, example verification, Storybook updates)
+- React version migrations (hook migration guides, breaking changes documentation, compatibility notes)
+- Performance optimization documentation (profiling results, optimization guides, benchmark updates)
+- Accessibility documentation updates (ARIA pattern updates, keyboard navigation guides, screen reader testing)
+- Testing documentation (test pattern updates, snapshot reviews, accessibility test updates)
+- Any other React documentation process with multiple required steps or risk of omission
+
+**Agent Guidance for React Documentation Tasks:**
+- Always check for the existence of a React documentation checklist template before starting a repeated documentation task.
+- If a template does not exist, prompt the user to create one and assist in drafting it.
+- When using a documentation checklist, copy it for the specific instance (e.g., `component-release-v2.1.0.md`), and work through each step systematically.
+- If new documentation steps are discovered or improvements are needed, update the template and inform the user.
 ```

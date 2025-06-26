@@ -53,6 +53,37 @@ This project enforces a strict distinction between different types of documentat
 - **Accessibility:** Use clear language and proper formatting for accessibility
 - **Architecture Compliance:** Follow the system vs project documentation distinction
 
+## Repeated JavaScript Documentation Tasks and Checklist Templates
+
+For any recurring documentation process specific to JavaScript projects (such as package release documentation, API documentation updates, JSDoc updates, or similar workflows), always use a dedicated checklist template to ensure all necessary steps are followed and nothing is missed.
+
+- **JavaScript Documentation Checklist Template Principle:**
+  - Maintain a template checklist file for each repeated JavaScript documentation process (e.g., `package-release-docs-checklist.md`, `jsdoc-update-checklist.md`, `api-docs-checklist.md`).
+  - For each new instance (e.g., each package release or major API update), copy the template checklist and tag it with the relevant version or context, preserving the original template for future use.
+  - Systematically work through the checklist for every instance of the repeated documentation task, marking each step as completed.
+  - Proactively identify any JavaScript documentation process that would benefit from a checklist and prompt the user to use or create one if it does not exist.
+  - If, during execution, you or the user identify missing or unclear documentation steps, update the template checklist to improve future reliability.
+
+**Examples of repeated JavaScript documentation tasks requiring checklists:**
+
+- Package release documentation (README updates, CHANGELOG maintenance, package.json synchronization, JSDoc updates)
+- API documentation updates (JavaScript API changes, parameter updates, example code verification)
+- JSDoc documentation reviews and updates (type annotations, parameter descriptions, example code)
+- Build and deployment documentation updates (build script changes, deployment process updates)
+- JavaScript library documentation (usage examples, compatibility notes, migration guides)
+- Browser compatibility documentation updates
+- Node.js version compatibility documentation
+- Module system documentation (CommonJS, ES modules, bundler compatibility)
+- Any other JavaScript documentation process with multiple required steps or risk of omission
+
+**Agent Guidance for JavaScript Documentation Tasks:**
+
+- Always check for the existence of a JavaScript documentation checklist template before starting a repeated documentation task.
+- If a template does not exist, prompt the user to create one and assist in drafting it with JavaScript-specific considerations.
+- When using a documentation checklist, copy it for the specific instance (e.g., `package-release-docs-v2.1.0.md`), and work through each step systematically.
+- If new JavaScript documentation steps are discovered or improvements are needed, update the template and inform the user.
+- Consider JavaScript-specific requirements like JSDoc standards, package.json synchronization, and browser/Node.js compatibility when creating or using checklists.
+
 ## Task ID Naming Convention for JavaScript Projects
 
 Follow the standardized task naming format for all project management documentation:

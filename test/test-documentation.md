@@ -164,13 +164,20 @@ Our testing approach follows the architecture decisions documented in `_meta/arc
 
 ### 6. Documentation Quality Tests
 
-| Test Case ID | Description                                   | Type | Status    |
-| :----------- | :-------------------------------------------- | :--- | :-------- |
-| DOC-UNIT-001 | README.md formatting and structure validation | Unit | Completed |
-| DOC-UNIT-002 | README.md messaging consistency check         | Unit | Completed |
-| DOC-UNIT-003 | CLI help output validation                    | Unit | Completed |
-| DOC-UNIT-004 | Init command messaging validation             | Unit | Completed |
-| DOC-UNIT-005 | Codebase messaging consistency check          | Unit | Completed |
+| Test Case ID | Description                                                                    | Type | Status    |
+| :----------- | :----------------------------------------------------------------------------- | :--- | :-------- |
+| DOC-UNIT-001 | README.md formatting and structure validation                                  | Unit | Completed |
+| DOC-UNIT-002 | README.md messaging consistency check                                          | Unit | Completed |
+| DOC-UNIT-003 | CLI help output validation                                                     | Unit | Completed |
+| DOC-UNIT-004 | Init command messaging validation                                              | Unit | Completed |
+| DOC-UNIT-005 | Codebase messaging consistency check                                           | Unit | Completed |
+| DOC-UNIT-009 | Verify checklist template section in code-review.instructions.md               | Unit | Completed |
+| DOC-UNIT-010 | Verify checklist template section in react.docs.instructions.md                | Unit | Completed |
+| DOC-UNIT-011 | Verify checklist template section placement in typescript.docs.instructions.md | Unit | Completed |
+| DOC-UNIT-012 | Verify checklist template section in javascript.docs.instructions.md           | Unit | Completed |
+| DOC-UNIT-013 | Verify checklist template section in python.docs.instructions.md               | Unit | Completed |
+| DOC-UNIT-014 | Verify checklist template section in nodejs.docs.instructions.md               | Unit | Completed |
+| DOC-UNIT-015 | Verify checklist template section in github instructions directory             | Unit | Completed |
 
 ### 7. CLI Entry Point and Command Tests (`test/unit/cli.test.ts`)
 

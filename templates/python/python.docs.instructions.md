@@ -6,6 +6,38 @@ language: 'python'
 
 # Python Documentation Standards
 
+## Repeated Python Documentation Tasks and Checklist Templates
+
+For any recurring documentation process specific to Python projects (such as package release documentation, Sphinx documentation updates, docstring reviews, or similar workflows), always use a dedicated checklist template to ensure all necessary steps are followed and nothing is missed.
+
+- **Python Documentation Checklist Template Principle:**
+  - Maintain a template checklist file for each repeated Python documentation process (e.g., `python-package-release-docs-checklist.md`, `sphinx-docs-update-checklist.md`, `docstring-review-checklist.md`).
+  - For each new instance (e.g., each PyPI release or major documentation update), copy the template checklist and tag it with the relevant version or context, preserving the original template for future use.
+  - Systematically work through the checklist for every instance of the repeated documentation task, marking each step as completed.
+  - Proactively identify any Python documentation process that would benefit from a checklist and prompt the user to use or create one if it does not exist.
+  - If, during execution, you or the user identify missing or unclear documentation steps, update the template checklist to improve future reliability.
+
+**Examples of repeated Python documentation tasks requiring checklists:**
+
+- PyPI package release documentation (README updates, CHANGELOG maintenance, setup.py/pyproject.toml synchronization, docstring updates)
+- Sphinx documentation updates (API documentation generation, docstring compilation, cross-references)
+- Docstring reviews and standardization (Google/NumPy style compliance, type annotation consistency, example verification)
+- Django application documentation updates (model documentation, API endpoint documentation, admin interface docs)
+- FastAPI documentation updates (automatic API documentation, Pydantic model documentation, endpoint descriptions)
+- Python library documentation (usage examples, installation guides, compatibility matrices)
+- Virtual environment and dependency documentation (requirements.txt, poetry, pipenv setup)
+- Python version compatibility documentation
+- Testing documentation (pytest configuration, test coverage, testing patterns)
+- Any other Python documentation process with multiple required steps or risk of omission
+
+**Agent Guidance for Python Documentation Tasks:**
+
+- Always check for the existence of a Python documentation checklist template before starting a repeated documentation task.
+- If a template does not exist, prompt the user to create one and assist in drafting it with Python-specific considerations.
+- When using a documentation checklist, copy it for the specific instance (e.g., `pypi-release-docs-v1.2.0.md`), and work through each step systematically.
+- If new Python documentation steps are discovered or improvements are needed, update the template and inform the user.
+- Consider Python-specific requirements like docstring standards, Sphinx integration, type annotations, and PyPI packaging when creating or using checklists.
+
 ## Docstring Conventions
 
 ### Google Style Docstrings
