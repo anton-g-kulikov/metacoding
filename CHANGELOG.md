@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2024-12-26
+
+### Added
+
+- **Enhanced Workflow Instructions**: Comprehensive workflow guidance for AI agents
+  - **Detailed Step Progression**: Added clear step-by-step workflow with automatic continuation
+  - **Single-Task Focus Enforcement**: Enhanced scope creep management with proper response templates  
+  - **Documentation-First Principle**: Made documentation completion mandatory before implementation
+  - **Quality Gates**: Added workflow completion checks and quality assurance measures
+  - **Repeated Task Checklist Guidance**: Added template-based approach for recurring processes
+
+### Changed
+
+- **Improved Copilot Instructions Template**: Enhanced workflow enforcement and consistency
+  - **Automatic Step Progression**: Added "After completing Step X" guidance for each workflow step
+  - **Enhanced Scope Management**: Improved blocking vs non-blocking request handling
+  - **Confirmation Gates**: Enhanced user approval requirements before proceeding
+  - **Task Documentation Requirements**: Strengthened mandatory documentation-first workflow
+
+### Technical
+
+- **Template Improvements**: All instruction templates now include enhanced repeated task sections
+- **Test Coverage**: Added comprehensive test coverage for workflow enhancement features
+- **Documentation**: Updated all language-specific instruction templates with checklist guidance
+
 ## [1.4.0] - 2024-12-26
 
 ### Changed
