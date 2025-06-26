@@ -78,7 +78,7 @@ export class CursorService {
         await this.templateManager.getInstructionFiles(templateType);
 
       // Filter to only include the main copilot-instructions file
-      const copilotInstructionsFile = instructionFiles.find(file => 
+      const copilotInstructionsFile = instructionFiles.find((file) =>
         file.path.includes('copilot-instructions.md')
       );
 
@@ -87,7 +87,10 @@ export class CursorService {
       }
 
       // Process only the copilot-instructions file, not the entire collection
-      return this.processInstructionFile(copilotInstructionsFile, projectConfig);
+      return this.processInstructionFile(
+        copilotInstructionsFile,
+        projectConfig
+      );
     } catch (error) {
       throw new Error(
         `Failed to generate workflow rules: ${
@@ -259,7 +262,7 @@ export class CursorService {
 
     // Create single header and add the processed content
     const header = this.createCursorRulesHeader();
-    
+
     return `${header}\n\n<!-- Source: ${instructionFile.path} -->\n${cleanedContent}`;
   }
 
@@ -433,14 +436,17 @@ alwaysApply: ${pattern === '**/*' ? 'true' : 'false'}
     // For workflow content that already has headers, don't add another one
     // For pattern-specific content, process normally
     let processedContent;
-    if (pattern === '**/*' && instructionContent.includes('# Cursor AI Development Rules')) {
+    if (
+      pattern === '**/*' &&
+      instructionContent.includes('# Cursor AI Development Rules')
+    ) {
       // Already processed workflow content - use as-is
       processedContent = instructionContent;
     } else {
       // Pattern-specific content - needs processing
       processedContent = this.processInstructionTemplate(instructionContent);
     }
-    
+
     return frontmatter + processedContent;
   }
 
@@ -464,18 +470,26 @@ alwaysApply: ${pattern === '**/*' ? 'true' : 'false'}
     // Replace project variables with actual values or defaults
     const replacements = {
       '{{PROJECT_NAME}}': projectConfig?.projectName || 'Project',
-      '{{PROJECT_DESCRIPTION}}': projectConfig?.projectDescription || 'A guided development project using metacoding workflow',
-      '{{TECH_STACK}}': projectConfig?.techStack ? 
-        (Array.isArray(projectConfig.techStack) ? projectConfig.techStack.join(', ') : projectConfig.techStack) : 
-        'TypeScript, Jest',
+      '{{PROJECT_DESCRIPTION}}':
+        projectConfig?.projectDescription ||
+        'A guided development project using metacoding workflow',
+      '{{TECH_STACK}}': projectConfig?.techStack
+        ? Array.isArray(projectConfig.techStack)
+          ? projectConfig.techStack.join(', ')
+          : projectConfig.techStack
+        : 'TypeScript, Jest',
       '{{PROJECT_DOMAIN}}': projectConfig?.projectDomain || 'software',
-      '{{PROJECT_SPECIFIC_GUIDANCE}}': projectConfig?.projectSpecificGuidance || 
-        '- **Best Practices:** Follow language-specific coding standards and conventions\n- **Architecture:** Implement modular and maintainable code structure\n- **Testing:** Write comprehensive tests for all functionality\n- **Documentation:** Maintain clear and up-to-date documentation'
+      '{{PROJECT_SPECIFIC_GUIDANCE}}':
+        projectConfig?.projectSpecificGuidance ||
+        '- **Best Practices:** Follow language-specific coding standards and conventions\n- **Architecture:** Implement modular and maintainable code structure\n- **Testing:** Write comprehensive tests for all functionality\n- **Documentation:** Maintain clear and up-to-date documentation',
     };
 
     // Apply all replacements
     for (const [placeholder, value] of Object.entries(replacements)) {
-      substituted = substituted.replace(new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'), value);
+      substituted = substituted.replace(
+        new RegExp(placeholder.replace(/[{}]/g, '\\$&'), 'g'),
+        value
+      );
     }
 
     return substituted;

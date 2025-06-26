@@ -833,49 +833,56 @@ After implementing the recommended solution:
 
 ## Test Cases for CUR-TASK-002: Fix Cursor MDC Generation Issues
 
-| Test Case ID | Description | Type | Status |
-| :----------- | :---------- | :--- | :----- |
-| CUR-UNIT-015 | MDC generation should not duplicate content | Unit | Not Started |
-| CUR-UNIT-016 | MDC frontmatter should be generated only once | Unit | Not Started |
-| CUR-UNIT-017 | Template variables should be properly substituted | Unit | Not Started |
-| CUR-UNIT-018 | Generated MDC file should have appropriate length | Unit | Not Started |
-| CUR-UNIT-019 | MDC structure should be valid and well-formed | Unit | Not Started |
-| CUR-INT-006 | Full workflow.mdc generation should produce clean output | Integration | Not Started |
-| CUR-INT-007 | Content deduplication should work in real project scenarios | Integration | Not Started |
+| Test Case ID | Description                                                 | Type        | Status      |
+| :----------- | :---------------------------------------------------------- | :---------- | :---------- |
+| CUR-UNIT-015 | MDC generation should not duplicate content                 | Unit        | Not Started |
+| CUR-UNIT-016 | MDC frontmatter should be generated only once               | Unit        | Not Started |
+| CUR-UNIT-017 | Template variables should be properly substituted           | Unit        | Not Started |
+| CUR-UNIT-018 | Generated MDC file should have appropriate length           | Unit        | Not Started |
+| CUR-UNIT-019 | MDC structure should be valid and well-formed               | Unit        | Not Started |
+| CUR-INT-006  | Full workflow.mdc generation should produce clean output    | Integration | Not Started |
+| CUR-INT-007  | Content deduplication should work in real project scenarios | Integration | Not Started |
 
 ### Test Requirements Documentation
 
 **CUR-UNIT-015: MDC generation should not duplicate content**
+
 - Input: Template content with standard copilot-instructions structure
 - Expected: Single occurrence of each section in generated MDC
 - Edge cases: Multiple template sources, nested content structures
 
 **CUR-UNIT-016: MDC frontmatter should be generated only once**
+
 - Input: Template processing with MDC wrapper
 - Expected: Single frontmatter block at file beginning
 - Edge cases: Multiple processing passes, error conditions
 
 **CUR-UNIT-017: Template variables should be properly substituted**
+
 - Input: Template with {{PROJECT_DESCRIPTION}}, {{TECH_STACK}}, etc.
 - Expected: All variables replaced with actual values
 - Edge cases: Missing variables, malformed variable syntax
 
 **CUR-UNIT-018: Generated MDC file should have appropriate length**
+
 - Input: Standard copilot-instructions template
 - Expected: File length under 1000 lines (reasonable for single template)
 - Edge cases: Complex templates, multiple instruction files
 
 **CUR-UNIT-019: MDC structure should be valid and well-formed**
+
 - Input: Generated MDC content
 - Expected: Valid frontmatter, proper markdown structure, no corruption
 - Edge cases: Special characters, code blocks, complex formatting
 
 **CUR-INT-006: Full workflow.mdc generation should produce clean output**
+
 - Input: Complete project setup with Cursor IDE integration
 - Expected: Clean, well-formatted workflow.mdc file without duplication
 - Edge cases: Multiple template types, existing files, update scenarios
 
 **CUR-INT-007: Content deduplication should work in real project scenarios**
+
 - Input: Real project with multiple instruction files
 - Expected: No content duplication across generated MDC files
 - Edge cases: File conflicts, partial generations, error recovery
