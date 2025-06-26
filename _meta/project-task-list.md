@@ -75,11 +75,17 @@
 
 - [x] **ARCH-TASK-002: Workflow Standards Implementation** - ✅ **COMPLETED** - Updated instruction templates with 7-step mandatory workflow enforced across all templates, added comprehensive temporary file management guidance with cleanup instructions for all file types, pushed all changes to remote repository with all template enhancements committed, and verified workflow consistency across templates with General and React templates updated with matching workflows.
 
-## 7. Testing & Quality
+## 7. Release Management
 
-- [x] **TEST-TASK-002: Test Suite Foundation** - ✅ **COMPLETED** - Wrote unit tests for CLI commands with FileSystem service tests complete, wrote integration tests for setup process with Init command integration tests complete, tested template generation and validation with template system tested, tested VS Code integration with settings update and validation tested, and created test fixtures and sample projects with test environment using temp directories.
-
-- [x] **TEST-TASK-001: Clean up test cases and address repository problems** - ✅ **COMPLETED** - Removed compiled JavaScript artifacts from test directory, cleaned up temporary test directories, improved test timeout handling for long-running integration tests, fixed error handling test expectations, addressed worker process cleanup issues, updated .gitignore to prevent future compiled test file commits, and verified all tests pass reliably after cleanup (149/149 tests passing).
+- [x] **NPM-TASK-001: Release v1.4.3 with Cursor IDE fix** - ✅ **COMPLETED** 
+  - Successfully published metacoding@1.4.3 to npm
+  - Fixed critical bug where Cursor IDE init was creating both .github and .cursor files
+  - All 253 tests passing with comprehensive coverage
+  - Package size optimized: 134.5 KB compressed, 537.0 kB unpacked
+  - Version bumped from 1.4.2 → 1.4.3 as patch release
+  - Git tag v1.4.3 created and pushed to GitHub
+  - Package live and available: https://www.npmjs.com/package/metacoding
+  - CLI functionality verified with proper IDE choice handling
 
 - [x] **Test Quality Enhancement Suite** - ✅ **COMPLETED** - Implemented test case naming convention audit with [AREA]-[TYPE]-[NUMBER] format, fixed failing template tests by updating expectations to match actual template content, added critical NPM publishing tests covering CLI functionality and integration scenarios (82 total test cases), achieved code coverage analysis and improvement with 80%+ statement and line coverage targets, and updated comprehensive test documentation with coverage achievements.
 

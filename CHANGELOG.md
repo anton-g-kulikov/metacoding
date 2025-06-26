@@ -7,7 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.3] - 2025-06-26
+
 ### Fixed
+- Fixed critical bug where `metacoding init --cursor` was creating both `.github` and `.cursor` files instead of only `.cursor` files
+- Cursor IDE initialization now properly skips `.github` file creation when `ideChoice` is `'cursor'`
+- Added `ideChoice` parameter to `ProjectConfig` interface for conditional file creation
+- Improved IDE choice validation and template processing logic
+
+### Changed
+- Enhanced IDE choice handling in `TemplateManager.loadInstructionFiles()` method
+- Updated `InitCommand` to pass IDE choice through project configuration
+- Comprehensive test coverage for IDE choice functionality (253/253 tests passing)
+
+### Technical
+- Added conditional file creation based on IDE choice (VS Code: `.github` only, Cursor: skip `.github` files)
+- Fixed template manager to handle IDE-specific file generation properly
+- Ensured Cursor setup only creates `.cursor/rules/*.mdc` files as intended
 
 - **Cursor IDE File Creation Bug**: Fixed `metacoding init --cursor` incorrectly creating both `.github` and `.cursor` files
   - **IDE-Specific Generation**: Cursor setup now only creates `.cursor/rules/*.mdc` files, not `.github` instruction files
