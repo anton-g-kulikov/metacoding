@@ -22,11 +22,12 @@
 - [x] Build succeeds (`npm run build`) - Status: **✅ PASSED**
 - [ ] Full pipeline passes (`npm run prepublishOnly`)
 - **Notes**: Core functionality verified working with 218 passing tests. 35 failing tests are legacy tests expecting old behavior (single-assistant setup, old CLI flags). These tests validate:
-  - Cursor-specific file generation expecting `.cursor/rules/workflow.mdc` 
+
+  - Cursor-specific file generation expecting `.cursor/rules/workflow.mdc`
   - Old init command behavior without environment/IDE/assistant selection
   - Package structure tests expecting only `.github` files without multi-assistant options
   - Advanced workflow tests not providing required assistant parameters
-  
+
   **Decision**: Proceed with release. Failing tests document old behavior that's been superseded by multi-assistant architecture. Will create follow-up task to update/remove these legacy tests in v1.5.1.
 
 #### 2. **Version & Documentation Updates**

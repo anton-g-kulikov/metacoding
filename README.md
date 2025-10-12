@@ -170,7 +170,7 @@ Before installing `metacoding`, choose your AI development setup:
 #### Supported AI Assistants
 
 - **GitHub Copilot** (VS Code) - Uses `.github/copilot-instructions.md`
-- **Claude Code** (Terminal or IDE) - Uses `CLAUDE.md` 
+- **Claude Code** (Terminal or IDE) - Uses `CLAUDE.md`
 - **Codex/OpenAI** (Terminal) - Uses `AGENTS.md`
 - **Gemini Code Assist** (VS Code/IntelliJ) - Uses `GEMINI.md`
 - **Cursor IDE** - Uses `.cursor/rules/*.mdc` files
@@ -229,12 +229,14 @@ The CLI automatically configures VS Code settings for custom instructions. If yo
 
 **For Claude Code:**
 Use the generated `CLAUDE.md` file as project instructions. In your terminal, run:
+
 ```bash
 claude --project-instructions CLAUDE.md
 ```
 
 **For Codex/OpenAI:**
 Configure your OpenAI client to use `AGENTS.md` as the system message:
+
 ```bash
 # Example with OpenAI CLI
 openai api chat.completions.create --system-file AGENTS.md
@@ -331,8 +333,10 @@ my-awesome-project/
 └── test/
     └── test-documentation.md
 ```
-│       └── code-review.mdc
-```
+
+│ └── code-review.mdc
+
+````
 
 ### Test Your Setup
 
@@ -353,7 +357,8 @@ my-awesome-project/
 1. **Run Claude with project instructions:**
    ```bash
    claude --project-instructions CLAUDE.md
-   ```
+````
+
 2. **Test the setup:**
    - Ask: "What is the development workflow for this project?"
    - Claude should reference the canonical 7-step workflow from your CLAUDE.md file!
@@ -376,7 +381,7 @@ my-awesome-project/
 #### For Cursor IDE:
 
 1. **Open your project** in Cursor IDE
-2. **Cursor automatically detects** .cursor/rules/*.mdc files
+2. **Cursor automatically detects** .cursor/rules/\*.mdc files
 3. **Test the setup:**
    - Open Cursor Chat (Cmd/Ctrl + L)
    - Ask: "What is the development workflow for this project?"

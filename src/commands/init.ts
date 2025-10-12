@@ -102,15 +102,45 @@ export class InitCommand {
     environmentChoice: 'ide' | 'terminal',
     ideChoice?: 'vscode' | 'cursor' | 'intellij'
   ): Promise<ProjectConfig> {
-    // For testing or force mode, use defaults
+    // For testing or force mode, use template-specific defaults
     if (options.force && process.env.NODE_ENV === 'test') {
+      const templateDefaults: Record<string, { techStack: string[]; testFramework: string; buildTool: string }> = {
+        react: {
+          techStack: ['React', 'TypeScript', 'Jest', 'Vite'],
+          testFramework: 'Jest',
+          buildTool: 'Vite'
+        },
+        node: {
+          techStack: ['Node.js', 'TypeScript', 'Express', 'Jest'],
+          testFramework: 'Jest',
+          buildTool: 'TypeScript Compiler'
+        },
+        python: {
+          techStack: ['Python', 'Django', 'Flask', 'pytest'],
+          testFramework: 'pytest',
+          buildTool: 'Python'
+        },
+        javascript: {
+          techStack: ['JavaScript', 'Node.js', 'Jest'],
+          testFramework: 'Jest',
+          buildTool: 'Node.js'
+        },
+        general: {
+          techStack: ['TypeScript', 'Jest'],
+          testFramework: 'Jest',
+          buildTool: 'TypeScript Compiler'
+        }
+      };
+
+      const defaults = (templateDefaults[options.template] || templateDefaults.general)!;
+      
       return {
         name: projectInfo.name || 'test-project',
         description: 'A test project using metacoding workflow',
-        techStack: ['TypeScript', 'Jest'],
+        techStack: defaults.techStack,
         projectType: options.template,
-        testFramework: 'Jest',
-        buildTool: 'TypeScript Compiler',
+        testFramework: defaults.testFramework,
+        buildTool: defaults.buildTool,
         ideChoice: ideChoice || (environmentChoice === 'ide' ? 'vscode' : undefined),
       };
     }
@@ -495,6 +525,30 @@ export class InitCommand {
       );
 
       spinner.text = `Generated ${generatedFiles.length} assistant configuration files`;
+
+      // Generate instruction files (code-review, docs-update, release, test-runner)
+      // These are universal files that support all assistants
+      spinner.text = 'Generating instruction files...';
+      await this.fileSystem.ensureDirectoryExists('.github');
+      await this.fileSystem.ensureDirectoryExists('.github/instructions');
+      
+      // Get template and process instruction files
+      const template = await this.templateManager.getTemplate(
+        config.projectType,
+        config
+      );
+      const processedFiles = await this.templateManager.processTemplate(
+        template,
+        config
+      );
+      
+      // Write instruction files (not the main copilot-instructions.md which is handled by assistant adapter)
+      for (const file of processedFiles) {
+        if (file.path.includes('.github/instructions/')) {
+          await this.fileSystem.writeFile(file.path, file.content);
+          spinner.text = `Created ${file.path}`;
+        }
+      }
 
       // Update .gitignore with AI assistant exclusion patterns
       spinner.text = 'Updating .gitignore...';

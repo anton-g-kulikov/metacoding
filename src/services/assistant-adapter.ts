@@ -94,12 +94,13 @@ export class AssistantAdapterService {
 
       switch (assistantType) {
         case 'copilot':
-          // Use existing copilot-instructions.md from templates
+          // Always use copilot-instructions.md from general template
+          // It will be processed with template substitution for project-specific content
           templatePath = path.join(
             __dirname,
             '../..',
             'templates',
-            projectConfig.projectType,
+            'general',
             'copilot-instructions.md'
           );
           outputPath = path.join(targetPath, '.github', 'copilot-instructions.md');

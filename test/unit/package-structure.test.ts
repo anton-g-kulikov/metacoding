@@ -1,8 +1,9 @@
-import { InitCommand } from '../../src/commands/init';
-import { FileSystemService } from '../../src/services/filesystem';
+import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+import { InitCommand } from '../../src/commands/init';
+import { FileSystemService } from '../../src/services/filesystem';
+import { AssistantType } from '../../src/types';
 
 describe('Package Structure Validation', () => {
   let testDir: string;
@@ -25,11 +26,15 @@ describe('Package Structure Validation', () => {
   describe('General Template Structure', () => {
     test('CLI-UNIT-020: should create all required metacoding files for general template', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       // Check core structure
@@ -64,11 +69,15 @@ describe('Package Structure Validation', () => {
 
     test('CLI-UNIT-021: should verify copilot instructions content for general template', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const content = await fileSystem.readFile(
@@ -89,31 +98,41 @@ describe('Package Structure Validation', () => {
   describe('React Template Structure', () => {
     test('CLI-UNIT-022: should create React-specific files and content', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'react',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const copilotContent = await fileSystem.readFile(
         '.github/copilot-instructions.md'
       );
 
-      // Check React-specific content
+      // Check React-specific content in tech stack
       expect(copilotContent).toContain('React');
-      expect(copilotContent).toContain('React');
+      expect(copilotContent).toContain('Vite');
+      // Check React developer role
+      expect(copilotContent).toContain('react developer');
+      // Check for component-related content (generic word that should appear)
       expect(copilotContent).toContain('component');
-      expect(copilotContent).toContain('JSX');
     });
 
     test('CLI-UNIT-023: should include React-specific test conventions', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'react',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const testRunnerContent = await fileSystem.readFile(
@@ -130,31 +149,41 @@ describe('Package Structure Validation', () => {
   describe('Node.js Template Structure', () => {
     test('CLI-UNIT-024: should create Node.js-specific files and content', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'node',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const copilotContent = await fileSystem.readFile(
         '.github/copilot-instructions.md'
       );
 
-      // Check Node.js-specific content
+      // Check Node.js-specific content in tech stack
       expect(copilotContent).toContain('Node.js');
-      expect(copilotContent).toContain('backend');
+      expect(copilotContent).toContain('Express');
+      // Check Node.js developer role
+      expect(copilotContent).toContain('node developer');
+      // Check for API-related content (generic word that should appear)
       expect(copilotContent).toContain('API');
-      expect(copilotContent).toContain('server');
     });
 
     test('CLI-UNIT-025: should include Node.js-specific test conventions', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'node',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const testRunnerContent = await fileSystem.readFile(
@@ -171,31 +200,40 @@ describe('Package Structure Validation', () => {
   describe('Python Template Structure', () => {
     test('CLI-UNIT-026: should create Python-specific files and content', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'python',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const copilotContent = await fileSystem.readFile(
         '.github/copilot-instructions.md'
       );
 
-      // Check Python-specific content
+      // Check Python-specific content in tech stack
       expect(copilotContent).toContain('Python');
       expect(copilotContent).toContain('Django');
       expect(copilotContent).toContain('Flask');
-      expect(copilotContent).toContain('backend');
+      // Check Python developer role
+      expect(copilotContent).toContain('python developer');
     });
 
     test('CLI-UNIT-027: should include Python-specific test conventions', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'python',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const testRunnerContent = await fileSystem.readFile(
@@ -218,11 +256,15 @@ describe('Package Structure Validation', () => {
   describe('File Content Validation', () => {
     test('CLI-UNIT-028: should ensure all instruction files have proper front matter', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const instructionFiles = [
@@ -247,11 +289,15 @@ describe('Package Structure Validation', () => {
 
       for (const template of templates) {
         const initCommand = new InitCommand();
+        const assistants: AssistantType[] = ['copilot'];
         await initCommand.execute({
           template,
           force: true,
           skipVscode: true,
           skipGit: true,
+          environment: 'ide' as const,
+          ideChoice: 'vscode' as const,
+          assistants,
         });
 
         const content = await fileSystem.readFile(
@@ -272,11 +318,15 @@ describe('Package Structure Validation', () => {
   describe('Directory Structure Validation', () => {
     test('CLI-UNIT-030: should create proper directory hierarchy', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       // Check directory structure

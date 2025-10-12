@@ -1,16 +1,17 @@
+import {
+    afterEach,
+    beforeEach,
+    describe,
+    expect,
+    jest,
+    test,
+} from '@jest/globals';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import { InitCommand } from '../../src/commands/init';
 import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import {
-  describe,
-  test,
-  expect,
-  beforeEach,
-  afterEach,
-  jest,
-} from '@jest/globals';
+import { AssistantType } from '../../src/types';
 
 // Mock inquirer to avoid interactive prompts in tests
 jest.mock('inquirer', () => ({
@@ -47,11 +48,15 @@ describe('Error Handling', () => {
     test('CLI-UNIT-010: should handle invalid template selection gracefully', async () => {
       const initCommand = new InitCommand();
 
+      const assistants: AssistantType[] = ['copilot'];
       const options = {
         template: 'invalid-template',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       };
 
       await expect(initCommand.execute(options)).rejects.toThrow(
@@ -117,11 +122,15 @@ describe('Error Handling', () => {
     test('CLI-UNIT-014: should handle corrupted metacoding files in dry-run mode', async () => {
       // Setup initial metacoding
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       // Create invalid .github/copilot-instructions.md

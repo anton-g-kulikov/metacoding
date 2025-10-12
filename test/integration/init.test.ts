@@ -1,9 +1,9 @@
+import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import { InitCommand } from '../../src/commands/init';
 import { FileSystemService } from '../../src/services/filesystem';
 import { AssistantType } from '../../src/types';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 
 /**
  * Basic integration test for the init command
