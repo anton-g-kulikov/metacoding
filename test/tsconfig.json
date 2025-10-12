@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "rootDir": "..",
     "types": ["jest", "node"],
     "resolveJsonModule": true,
     "esModuleInterop": true,

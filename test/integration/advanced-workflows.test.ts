@@ -1,10 +1,10 @@
+import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import { InitCommand } from '../../src/commands/init';
 import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
 import { AssistantType } from '../../src/types';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 
 describe('Advanced Integration Tests', () => {
   let testDir: string;
