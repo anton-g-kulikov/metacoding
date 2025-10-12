@@ -1,6 +1,7 @@
 import { InitCommand } from '../../src/commands/init';
 import { UpdateCommand } from '../../src/commands/update';
 import { FileSystemService } from '../../src/services/filesystem';
+import { AssistantType } from '../../src/types';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
@@ -27,11 +28,15 @@ describe('Advanced Integration Tests', () => {
     test('CLI-INT-003: should complete full init-validate-update cycle', async () => {
       // Step 1: Initialize
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       // Verify initialization
@@ -67,11 +72,15 @@ describe('Advanced Integration Tests', () => {
       );
 
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'react', // Use React template to get React-specific content
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const copilotContent = await fileSystem.readFile(
@@ -94,11 +103,15 @@ describe('Advanced Integration Tests', () => {
       );
 
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'react',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       let content = await fileSystem.readFile(
@@ -120,22 +133,29 @@ describe('Advanced Integration Tests', () => {
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       content = await fileSystem.readFile('.github/copilot-instructions.md');
       expect(content).toContain('Node.js');
-      expect(content).toContain('backend');
+      expect(content).toContain('Express');
     });
   });
 
   describe('VSCode Integration Tests', () => {
     test('CLI-INT-006: should create and configure VSCode settings properly', async () => {
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: false, // Enable VSCode setup
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       // Check VSCode settings were created
@@ -159,11 +179,15 @@ describe('Advanced Integration Tests', () => {
       );
 
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: false,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const settings = JSON.parse(
@@ -187,12 +211,16 @@ describe('Advanced Integration Tests', () => {
       const initCommand = new InitCommand();
 
       // Should not throw even with git repository present
+      const assistants: AssistantType[] = ['copilot'];
       await expect(
         initCommand.execute({
           template: 'general',
           force: true,
           skipVscode: true,
           skipGit: false,
+          environment: 'ide' as const,
+          ideChoice: 'vscode' as const,
+          assistants,
         })
       ).resolves.not.toThrow();
     });
@@ -202,12 +230,16 @@ describe('Advanced Integration Tests', () => {
 
       const initCommand = new InitCommand();
 
+      const assistants: AssistantType[] = ['copilot'];
       await expect(
         initCommand.execute({
           template: 'general',
           force: true,
           skipVscode: true,
           skipGit: false,
+          environment: 'ide' as const,
+          ideChoice: 'vscode' as const,
+          assistants,
         })
       ).resolves.not.toThrow();
     });
@@ -233,11 +265,15 @@ describe('Advanced Integration Tests', () => {
       );
 
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'react',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       // Should create metacoding files without affecting existing structure
@@ -252,11 +288,15 @@ describe('Advanced Integration Tests', () => {
       const initCommand = new InitCommand();
 
       // First installation
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       // Modify the copilot instructions
@@ -271,6 +311,9 @@ describe('Advanced Integration Tests', () => {
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const content = await fileSystem.readFile(
@@ -286,12 +329,16 @@ describe('Advanced Integration Tests', () => {
       const initCommand = new InitCommand();
 
       // This tests that file operations are atomic and don't interfere
+      const assistants: AssistantType[] = ['copilot'];
       const promises = [
         initCommand.execute({
           template: 'general',
           force: true,
           skipVscode: true,
           skipGit: true,
+          environment: 'ide' as const,
+          ideChoice: 'vscode' as const,
+          assistants,
         }),
         // Second execution should wait or handle gracefully
       ];
@@ -310,11 +357,15 @@ describe('Advanced Integration Tests', () => {
       const startTime = Date.now();
 
       const initCommand = new InitCommand();
+      const assistants: AssistantType[] = ['copilot'];
       await initCommand.execute({
         template: 'general',
         force: true,
         skipVscode: true,
         skipGit: true,
+        environment: 'ide' as const,
+        ideChoice: 'vscode' as const,
+        assistants,
       });
 
       const duration = Date.now() - startTime;

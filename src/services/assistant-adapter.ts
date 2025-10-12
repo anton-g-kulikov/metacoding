@@ -185,7 +185,8 @@ export class AssistantAdapterService {
       LINT_COMMAND: this.getLintCommand(projectConfig),
       TYPECHECK_COMMAND: this.getTypecheckCommand(projectConfig),
       CODE_STYLE_GUIDELINES: this.getCodeStyleGuidelines(projectConfig),
-      REPOSITORY_STRUCTURE: this.getRepositoryStructure(projectConfig)
+      REPOSITORY_STRUCTURE: this.getRepositoryStructure(projectConfig),
+      PROJECT_SPECIFIC_GUIDANCE: '' // Remove this placeholder for now
     };
 
     let result = content;
