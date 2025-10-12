@@ -49,6 +49,10 @@
 
 - [x] **LANG-TASK-001: Create JavaScript-specific instruction template** - ✅ **COMPLETED** - Created complete JavaScript template with instruction files covering ES6+ modern patterns, Node.js runtime considerations, npm ecosystem best practices, JavaScript testing frameworks guidance, browser compatibility and build tool considerations, and comprehensive template.json configuration with proper CLI integration and project detector support.
 
+## 5. Assistant Expansion
+
+- [x] **AGENT-TASK-001: Multi-Assistant Support Implementation** - ✅ **COMPLETED** - Implemented comprehensive multi-assistant support including Claude Code (CLAUDE.md), Codex/OpenAI (AGENTS.md), and Gemini Code Assist (GEMINI.md) adapters. Created AssistantAdapterService for generating configuration files, updated CLI with new environment (IDE/Terminal) and assistant selection flow, added migration support for existing configurations, and implemented canonical workflow system with shared workflow/core.md source.
+
 ## 5. IDE Integration
 
 - [x] **IDE-TASK-001: IDE Integration Foundation** - ✅ **COMPLETED** - Implemented VS Code settings automatic configuration, Git repository detection and setup, and project type detection logic.

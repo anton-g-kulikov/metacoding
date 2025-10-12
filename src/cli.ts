@@ -1,5 +1,5 @@
-import { Command } from 'commander';
 import chalk from 'chalk';
+import { Command } from 'commander';
 import { InitCommand } from './commands/init';
 import { UpdateCommand } from './commands/update';
 const packageJson = require('../package.json');
@@ -18,15 +18,14 @@ export async function main(): Promise<void> {
     .addHelpText(
       'after',
       `
-${chalk.cyan('Examples:')}
-  ${chalk.dim('$')} metacoding init                    # Initialize metacoding in current directory
-  ${chalk.dim('$')} metacoding init --template react   # Initialize with React template
-  ${chalk.dim('$')} metacoding init --vscode          # Initialize with VS Code + Copilot setup
-  ${chalk.dim('$')} metacoding init --cursor          # Initialize with Cursor IDE setup
-  ${chalk.dim('$')} metacoding update --dry-run        # Validate current metacoding setup
-  ${chalk.dim('$')} metacoding update                  # Update to latest metacoding version
-
-${chalk.cyan('Learn more:')}
+  ${chalk.cyan('Examples:')}
+  ${chalk.dim('$')} metacoding init                              # Interactive setup with prompts
+  ${chalk.dim('$')} metacoding init --template react             # Initialize with React template
+  ${chalk.dim('$')} metacoding init --environment ide --ide vscode --assistants copilot,claude
+  ${chalk.dim('$')} metacoding init --environment terminal --assistants codex,gemini
+  ${chalk.dim('$')} metacoding init --assistants all             # Set up all AI assistants
+  ${chalk.dim('$')} metacoding update --dry-run                  # Validate current metacoding setup
+  ${chalk.dim('$')} metacoding update                            # Update to latest metacoding version${chalk.cyan('Learn more:')}
   Documentation: https://github.com/anton-g-kulikov/metacoding
   Issues: https://github.com/anton-g-kulikov/metacoding/issues
     `
@@ -38,14 +37,20 @@ ${chalk.cyan('Learn more:')}
     .description('Initialize metacoding in the current project')
     .option(
       '-t, --template <type>',
-      'project template (general, react, node, python, typescript)',
+      'project template (general, react, node, python, typescript, javascript)',
       'general'
     )
     .option('-f, --force', 'overwrite existing files without confirmation')
     .option('--skip-vscode', 'skip VS Code settings configuration')
     .option('--skip-git', 'skip Git repository initialization check')
-    .option('--vscode', 'set up VS Code + GitHub Copilot configuration')
-    .option('--cursor', 'set up Cursor IDE configuration')
+    .option('--environment <type>', 'development environment (ide, terminal)')
+    .option('--ide <type>', 'IDE choice (vscode, cursor, intellij)')
+    .option('--assistants <types>', 'AI assistants (copilot,claude,codex,gemini,all)', (value) => 
+      value.split(',').map(v => v.trim() as any)
+    )
+    // Legacy options for backward compatibility
+    .option('--vscode', 'set up VS Code + GitHub Copilot configuration (legacy)')
+    .option('--cursor', 'set up Cursor IDE configuration (legacy)')
     .action(async (options) => {
       try {
         const initCommand = new InitCommand();

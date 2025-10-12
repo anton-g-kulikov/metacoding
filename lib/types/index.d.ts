@@ -6,6 +6,16 @@ export interface InitOptions {
     vscode?: boolean;
     cursor?: boolean;
     ide?: string;
+    environment?: 'ide' | 'terminal';
+    assistants?: AssistantType[];
+    ideChoice?: 'vscode' | 'cursor' | 'intellij';
+}
+export type AssistantType = 'copilot' | 'claude' | 'codex' | 'gemini' | 'all';
+export interface AssistantConfig {
+    type: AssistantType;
+    fileName: string;
+    description: string;
+    instructions: string;
 }
 export interface UpdateOptions {
     template?: string;
@@ -21,7 +31,7 @@ export interface ProjectConfig {
     projectType: string;
     testFramework?: string;
     buildTool?: string;
-    ideChoice?: 'vscode' | 'cursor';
+    ideChoice?: 'vscode' | 'cursor' | 'intellij' | undefined;
 }
 export interface Template {
     name: string;

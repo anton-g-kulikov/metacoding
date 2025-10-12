@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2025-10-12
+
+### Added
+
+- **Multi-Assistant Support**: Expanded support beyond GitHub Copilot to include Claude Code, Codex/OpenAI, and Gemini Code Assist
+
+  - **Claude Code Integration**: Added `CLAUDE.md` configuration file with "project instructions" terminology
+  - **Codex/OpenAI Integration**: Added `AGENTS.md` configuration file with "system message" format
+  - **Gemini Code Assist Integration**: Added `GEMINI.md` configuration file with "style guide" format
+  - **Environment Selection**: New two-tiered selection flow (IDE vs Terminal, then assistant choice)
+  - **IntelliJ IDEA Support**: Added IntelliJ as supported IDE for Gemini Code Assist
+
+- **Canonical Workflow System**: Implemented single source of truth for development workflow
+
+  - **workflow/core.md**: Canonical 7-step development workflow shared across all assistants
+  - **Vocabulary Adaptation**: Same workflow semantics with assistant-specific terminology
+  - **Template Integration**: All assistant adapters reference canonical workflow content
+
+- **AssistantAdapterService**: New service for multi-assistant configuration management
+
+  - **File Generation**: Creates appropriate configuration files based on user selections
+  - **Variable Substitution**: Replaces placeholders with project-specific values (name, tech stack, environment)
+  - **Migration Detection**: Identifies existing assistant configurations for migration
+  - **Workflow Injection**: Injects canonical workflow content into all assistant configs
+
+- **Enhanced CLI Options**: New command-line flags for flexible setup
+
+  - `--environment <ide|terminal>`: Specify IDE or Terminal environment
+  - `--ide <vscode|cursor|intellij>`: Select IDE for IDE environment
+  - `--assistants <copilot|claude|codex|gemini|all>`: Choose which assistants to configure
+  - Backward compatibility maintained with legacy `--vscode` and `--cursor` flags
+
+- **JavaScript Template**: Added comprehensive JavaScript template with ES6+ patterns (6 total templates now)
+
+### Changed
+
+- **CLI Flow Enhancement**: Redesigned init command with environment-based assistant selection
+- **Template System**: Enhanced to support multi-assistant file generation
+- **System Documentation**: Updated comprehensive system documentation to reflect multi-assistant architecture
+- **Package Structure**: Added templates/assistants/ directory and workflow/ directory
+
+### Technical
+
+- Added assistant adapter templates in `templates/assistants/` directory
+- Implemented AssistantAdapterService with comprehensive file generation logic
+- Updated InitCommand with getEnvironmentChoice(), getIdeChoice(), getAssistantChoices() methods
+- Enhanced TypeScript types with AssistantType, AssistantConfig interfaces
+- Comprehensive test coverage: 253 test cases (218 passing, 35 requiring migration to new system)
+
+### Documentation
+
+- Updated system documentation with Multi-Assistant Support Architecture section
+- Enhanced README with multi-assistant setup instructions
+- Added canonical workflow documentation in workflow/core.md
+- Updated package distribution documentation
+
 ## [1.4.3] - 2025-06-26
 
 ### Fixed

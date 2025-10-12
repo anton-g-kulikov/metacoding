@@ -3,9 +3,11 @@
 [![Version](https://img.shields.io/npm/v/metacoding.svg)](https://www.npmjs.com/package/metacoding)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Copilot](https://img.shields.io/badge/GitHub%20Copilot-Compatible-brightgreen.svg)](https://github.com/features/copilot)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Compatible-brightgreen.svg)](https://claude.ai/)
 [![Cursor IDE](https://img.shields.io/badge/Cursor%20IDE-Compatible-brightgreen.svg)](https://www.cursor.com/)
+[![Gemini](https://img.shields.io/badge/Gemini%20Code%20Assist-Compatible-brightgreen.svg)](https://cloud.google.com/gemini)
 
-Transform your development experience with AI-guided coding standards, structured workflows, and quality practices that help you build better software from day one. Works with both GitHub Copilot in VS Code and Cursor IDE.
+Transform your development experience with AI-guided coding standards, structured workflows, and quality practices that help you build better software from day one. Works with **GitHub Copilot**, **Claude Code**, **Codex/OpenAI**, **Gemini Code Assist**, and **Cursor IDE**.
 
 ## Table of Contents
 
@@ -19,16 +21,17 @@ Transform your development experience with AI-guided coding standards, structure
 
 ## 🎯 What is `metacoding`?
 
-`metacoding` is a **guided development methodology** that uses AI assistant custom instruction capabilities to help developers at any level follow established best practices. Works seamlessly with GitHub Copilot in VS Code and Cursor IDE. Instead of just getting code suggestions, you get:
+`metacoding` is a **guided development methodology** that uses AI assistant custom instruction capabilities to help developers at any level follow established best practices. Works seamlessly with **GitHub Copilot** (VS Code), **Claude Code** (Terminal/IDE), **Codex/OpenAI** (Terminal), **Gemini Code Assist** (VS Code/IntelliJ), and **Cursor IDE**. Instead of just getting code suggestions, you get:
 
 - **Structured workflows** that guide you through proven development practices
 - **Quality standards** that help you avoid common mistakes
 - **Test-driven development** that's encouraged and guided step-by-step
 - **Documentation guidance** that keeps your projects maintainable
+- **Multi-assistant support** with a single canonical workflow adapted for each AI assistant
 
 ## 💬 How to Use `metacoding` with AI Assistants
 
-`metacoding` transforms AI assistants (GitHub Copilot or Cursor IDE) into autonomous development partners that execute structured workflows. You specify what you want built, and your AI assistant independently follows a disciplined 7-step process that ensures quality, maintainability, and thorough testing. Your role is to provide clear requirements, validate results, and approve each stage before proceeding.
+`metacoding` transforms AI assistants (GitHub Copilot, Claude Code, Codex/OpenAI, Gemini Code Assist, or Cursor IDE) into autonomous development partners that execute structured workflows. You specify what you want built, and your AI assistant independently follows a disciplined 7-step process that ensures quality, maintainability, and thorough testing. Your role is to provide clear requirements, validate results, and approve each stage before proceeding.
 
 ### The `metacoding` 7-Step Development Workflow
 
@@ -164,18 +167,19 @@ The `metacoding` workflow transforms chaotic development into a structured, qual
 
 Before installing `metacoding`, choose your AI development setup:
 
-#### Option A: VS Code + GitHub Copilot
+#### Supported AI Assistants
 
-1. **Visual Studio Code** installed ([download here](https://code.visualstudio.com/))
-2. **GitHub Copilot extension** installed and configured in VS Code
-3. **Active GitHub Copilot subscription** ([get one here](https://github.com/features/copilot))
-4. **Node.js** (version 16 or higher) for the CLI tool
+- **GitHub Copilot** (VS Code) - Uses `.github/copilot-instructions.md`
+- **Claude Code** (Terminal or IDE) - Uses `CLAUDE.md` 
+- **Codex/OpenAI** (Terminal) - Uses `AGENTS.md`
+- **Gemini Code Assist** (VS Code/IntelliJ) - Uses `GEMINI.md`
+- **Cursor IDE** - Uses `.cursor/rules/*.mdc` files
 
-#### Option B: Cursor IDE
+#### General Requirements
 
-1. **Cursor IDE** installed ([download here](https://www.cursor.com/))
-2. **Active Cursor Pro subscription** for advanced AI features (recommended)
-3. **Node.js** (version 16 or higher) for the CLI tool
+1. **Node.js** (version 16 or higher) for the CLI tool
+2. **Your chosen AI assistant** configured and ready to use
+3. **Git repository** (recommended but not required)
 
 ### Quick Setup (Recommended)
 
@@ -190,23 +194,30 @@ The easiest way to get started with `metacoding` is using our npm package:
 
 **Basic usage:**
 
-- `metacoding init` - Interactive setup with AI assistant and template selection
-- `metacoding init --template react` - Use React template with interactive AI setup
-- `metacoding init --template node` - Use Node.js template with interactive AI setup
-- `metacoding init --template javascript` - Use JavaScript template with interactive AI setup
-- `metacoding init --template python` - Use Python template with interactive AI setup
+- `metacoding init` - Interactive setup with environment, IDE, and assistant selection
+- `metacoding init --template react` - Use React template with interactive setup
+- `metacoding init --template node` - Use Node.js template with interactive setup
+- `metacoding init --template javascript` - Use JavaScript template with interactive setup
+- `metacoding init --template python` - Use Python template with interactive setup
 - `metacoding init --force` - Overwrite existing files
 
-**Direct AI setup:**
+**Multi-assistant setup (new in v1.5.0):**
 
-- `metacoding init --vscode` - Set up for VS Code + GitHub Copilot
-- `metacoding init --cursor` - Set up for Cursor IDE
+- `metacoding init --environment ide --ide vscode --assistants copilot` - VS Code with GitHub Copilot only
+- `metacoding init --environment ide --ide vscode --assistants all` - VS Code with all compatible assistants
+- `metacoding init --environment terminal --assistants claude` - Terminal setup for Claude Code
+- `metacoding init --environment terminal --assistants all` - Terminal with Claude, Codex, and Gemini
+- `metacoding init --environment ide --ide intellij --assistants gemini` - IntelliJ with Gemini Code Assist
+
+**Legacy direct setup (backward compatible):**
+
+- `metacoding init --vscode` - Set up for VS Code + GitHub Copilot (legacy flag)
+- `metacoding init --cursor` - Set up for Cursor IDE (legacy flag)
 - `metacoding init --cursor --template react` - Cursor setup with React template
-- `metacoding init --cursor --template javascript` - Cursor setup with JavaScript template
 
 #### Post-Installation Configuration
 
-**For VS Code + GitHub Copilot:**
+**For GitHub Copilot (VS Code):**
 The CLI automatically configures VS Code settings for custom instructions. If you need to configure manually, add these settings to your VS Code settings.json:
 
 ```json
@@ -216,12 +227,28 @@ The CLI automatically configures VS Code settings for custom instructions. If yo
 }
 ```
 
+**For Claude Code:**
+Use the generated `CLAUDE.md` file as project instructions. In your terminal, run:
+```bash
+claude --project-instructions CLAUDE.md
+```
+
+**For Codex/OpenAI:**
+Configure your OpenAI client to use `AGENTS.md` as the system message:
+```bash
+# Example with OpenAI CLI
+openai api chat.completions.create --system-file AGENTS.md
+```
+
+**For Gemini Code Assist:**
+Gemini Code Assist in VS Code/IntelliJ automatically discovers and uses `GEMINI.md` as a style guide. No additional configuration needed!
+
 **For Cursor IDE:**
-No additional configuration needed! Cursor automatically detects and uses `workflow.cursorrules` and `.cursor/rules/*.mdc` files.
+No additional configuration needed! Cursor automatically detects and uses `.cursor/rules/*.mdc` files.
 
 ### File Structure by AI Setup
 
-**VS Code + GitHub Copilot setup:**
+**GitHub Copilot setup (VS Code):**
 
 ```
 my-awesome-project/
@@ -232,13 +259,49 @@ my-awesome-project/
 │       ├── release.instructions.md
 │       ├── docs-update.instructions.md
 │       └── code-review.instructions.md
+├── _meta/
+│   └── project-task-list.md
+└── test/
+    └── test-documentation.md
+```
+
+**Claude Code setup:**
+
+```
+my-awesome-project/
+├── CLAUDE.md                    # Project instructions for Claude Code
+├── _meta/
+│   └── project-task-list.md
+└── test/
+    └── test-documentation.md
+```
+
+**Codex/OpenAI setup:**
+
+```
+my-awesome-project/
+├── AGENTS.md                    # System message for Codex/OpenAI
+├── _meta/
+│   └── project-task-list.md
+└── test/
+    └── test-documentation.md
+```
+
+**Gemini Code Assist setup:**
+
+```
+my-awesome-project/
+├── GEMINI.md                    # Style guide for Gemini Code Assist
+├── _meta/
+│   └── project-task-list.md
+└── test/
+    └── test-documentation.md
 ```
 
 **Cursor IDE setup:**
 
 ```
 my-awesome-project/
-
 ├── .cursor/
 │   └── rules/
 │       ├── workflow.mdc
@@ -246,11 +309,34 @@ my-awesome-project/
 │       ├── release.mdc
 │       ├── docs-update.mdc
 │       └── code-review.mdc
+├── _meta/
+│   └── project-task-list.md
+└── test/
+    └── test-documentation.md
+```
+
+**Multi-assistant setup (all assistants):**
+
+```
+my-awesome-project/
+├── .github/
+│   ├── copilot-instructions.md
+│   └── instructions/
+│       └── [instruction files]
+├── CLAUDE.md
+├── AGENTS.md
+├── GEMINI.md
+├── _meta/
+│   └── project-task-list.md
+└── test/
+    └── test-documentation.md
+```
+│       └── code-review.mdc
 ```
 
 ### Test Your Setup
 
-#### For VS Code + GitHub Copilot:
+#### For GitHub Copilot (VS Code):
 
 1. **Restart VS Code** to ensure all settings are applied
 2. **Create a new file** in your project (e.g., `test.js` or `main.py`)
@@ -259,8 +345,42 @@ my-awesome-project/
    - Type "GitHub Copilot: Open Chat"
    - Press Enter
 4. **Test the setup:**
-   - In GitHub Copilot, ask: "What is the development workflow for this project?"
+   - Ask: "What is the development workflow for this project?"
    - Copilot should reference your custom instructions and provide project-specific guidance!
+
+#### For Claude Code:
+
+1. **Run Claude with project instructions:**
+   ```bash
+   claude --project-instructions CLAUDE.md
+   ```
+2. **Test the setup:**
+   - Ask: "What is the development workflow for this project?"
+   - Claude should reference the canonical 7-step workflow from your CLAUDE.md file!
+
+#### For Codex/OpenAI:
+
+1. **Configure your OpenAI client** to use AGENTS.md as system message
+2. **Test the setup:**
+   - Ask: "What is the development workflow for this project?"
+   - The assistant should follow the structured workflow from your AGENTS.md file!
+
+#### For Gemini Code Assist:
+
+1. **Open your project** in VS Code or IntelliJ
+2. **Gemini automatically discovers** GEMINI.md as a style guide
+3. **Test the setup:**
+   - Ask: "What is the development workflow for this project?"
+   - Gemini should reference your configuration rules from GEMINI.md!
+
+#### For Cursor IDE:
+
+1. **Open your project** in Cursor IDE
+2. **Cursor automatically detects** .cursor/rules/*.mdc files
+3. **Test the setup:**
+   - Open Cursor Chat (Cmd/Ctrl + L)
+   - Ask: "What is the development workflow for this project?"
+   - Cursor should reference your workflow rules!
 
 #### For Cursor IDE:
 
@@ -284,20 +404,25 @@ Initialize metacoding in your current project:
 
 **Interactive setup:**
 
-- `metacoding init` - Interactive setup with AI assistant and template selection
-- `metacoding init --template react` - Initialize with React template (interactive AI setup)
-- `metacoding init --template node` - Initialize with Node.js template (interactive AI setup)
-- `metacoding init --template javascript` - Initialize with JavaScript template (interactive AI setup)
-- `metacoding init --template python` - Initialize with Python template (interactive AI setup)
+- `metacoding init` - Interactive setup with environment, IDE, and assistant selection
+- `metacoding init --template react` - Initialize with React template (interactive setup)
+- `metacoding init --template node` - Initialize with Node.js template (interactive setup)
+- `metacoding init --template javascript` - Initialize with JavaScript template (interactive setup)
+- `metacoding init --template python` - Initialize with Python template (interactive setup)
 - `metacoding init --force` - Overwrite existing files without confirmation
 
-**Direct AI setup:**
+**Multi-assistant setup (v1.5.0+):**
 
-- `metacoding init --vscode` - Set up for VS Code + GitHub Copilot
-- `metacoding init --cursor` - Set up for Cursor IDE
-- `metacoding init --vscode --template react` - VS Code setup with React template
-- `metacoding init --cursor --template javascript` - Cursor setup with JavaScript template
-- `metacoding init --cursor --template python` - Cursor setup with Python template
+- `metacoding init --environment ide --ide vscode --assistants all` - VS Code with all compatible assistants
+- `metacoding init --environment terminal --assistants claude` - Terminal setup for Claude Code
+- `metacoding init --environment ide --ide intellij --assistants gemini` - IntelliJ with Gemini Code Assist
+
+**Legacy direct setup (backward compatible):**
+
+- `metacoding init --vscode` - Set up for VS Code + GitHub Copilot (legacy flag)
+- `metacoding init --cursor` - Set up for Cursor IDE (legacy flag)
+- `metacoding init --vscode --template react` - VS Code setup with React template (legacy)
+- `metacoding init --cursor --template javascript` - Cursor setup with JavaScript template (legacy)
 
 ### `metacoding update`
 
@@ -320,14 +445,24 @@ Update your `metacoding` setup to the latest version:
 **Q: Do I need to be an experienced developer?**
 A: No! `metacoding` provides guidance and structure to help developers at any level adopt proven practices and improve their skills.
 
-**Q: Should I choose VS Code + GitHub Copilot or Cursor IDE?**
-A: Both work great! Choose based on your preference:
+**Q: Which AI assistant should I choose?**
+A: Choose based on your workflow and preferences:
 
-- **VS Code + GitHub Copilot**: Best if you already use VS Code and have GitHub Copilot
+- **GitHub Copilot**: Best if you use VS Code and want deep IDE integration
+- **Claude Code**: Great for terminal-based workflows and complex reasoning
+- **Codex/OpenAI**: Flexible for custom integrations and API usage
+- **Gemini Code Assist**: Excellent for Google Cloud developers using VS Code/IntelliJ
 - **Cursor IDE**: Best for AI-first development with built-in AI features
+- **Multiple assistants**: You can configure multiple assistants in one project!
 
 **Q: What if I don't have an AI assistant subscription?**
-A: You'll need either an active GitHub Copilot subscription (for VS Code) or Cursor Pro (for advanced Cursor features). Students can get GitHub Copilot free through GitHub Education.
+A: You'll need access to at least one of the supported AI assistants. Many offer free tiers or trials:
+
+- GitHub Copilot: Free for students through GitHub Education
+- Claude Code: Available with Claude Pro subscription
+- OpenAI Codex: Available through OpenAI API
+- Gemini Code Assist: Available for Google Cloud users
+- Cursor IDE: Free tier available, Pro subscription for advanced features
 
 **Q: Can I switch between VS Code and Cursor later?**
 A: Yes! Run `metacoding init --vscode` or `metacoding init --cursor` to switch your setup. The CLI will install the appropriate files for your chosen AI assistant.

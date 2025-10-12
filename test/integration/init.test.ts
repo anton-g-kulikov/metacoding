@@ -1,5 +1,6 @@
 import { InitCommand } from '../../src/commands/init';
 import { FileSystemService } from '../../src/services/filesystem';
+import { AssistantType } from '../../src/types';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
@@ -32,12 +33,16 @@ describe('InitCommand Integration', () => {
     const initCommand = new InitCommand();
     const fileSystem = new FileSystemService();
 
-    // Mock the interactive prompts by creating a version that skips them
+    // Mock the interactive prompts by providing all required options
+    const assistants: AssistantType[] = ['copilot'];
     const options = {
       template: 'general',
       force: true,
       skipVscode: true,
       skipGit: true,
+      environment: 'ide' as const,
+      ideChoice: 'vscode' as const,
+      assistants,
     };
 
     // Execute the command

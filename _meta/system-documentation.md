@@ -2,18 +2,20 @@
 
 ## Project Overview
 
-**metacoding** is a guided development methodology that leverages GitHub Copilot's custom instruction capabilities to provide structured development guidance for developers at any experience level. The project has evolved from a manual setup process to a comprehensive npm package with CLI tooling.
+**metacoding** is a guided development methodology that provides structured development guidance for developers at any experience level through multiple AI coding assistants. The project has evolved from a manual setup process to a comprehensive npm package with CLI tooling that supports GitHub Copilot, Claude Code, Codex/OpenAI, and Gemini Code Assist.
 
 ### Mission Statement
 
-Transform development workflows by providing AI-guided coding standards, structured quality practices, and proven best practices that help developers build better software through step-by-step guidance.
+Transform development workflows by providing AI-guided coding standards, structured quality practices, and proven best practices that help developers build better software through step-by-step guidance across multiple AI assistant platforms.
 
 ### Key Value Propositions
 
-- **Guided Development Experience**: GitHub Copilot becomes a knowledgeable development guide
+- **Multi-Assistant Support**: Works with GitHub Copilot, Claude Code, Codex/OpenAI, and Gemini Code Assist
+- **Guided Development Experience**: AI assistants become knowledgeable development guides
 - **Quality Standards Guidance**: Helps avoid common mistakes through structured workflows
 - **Test-Driven Development**: Encourages and guides TDD practices step-by-step
 - **Documentation Guidance**: Built-in standards that help keep projects maintainable
+- **Canonical Workflow**: Single source of truth for development process shared across all assistants
 
 ## Architecture Overview
 
@@ -23,36 +25,50 @@ Transform development workflows by providing AI-guided coding standards, structu
 metacoding/
 ├── CLI Tool (Node.js/TypeScript)
 │   ├── Commands (init, update)
-│   ├── Template System (5 templates)
-│   ├── VS Code + GitHub Copilot Integration
-│   ├── Cursor IDE Integration
+│   ├── Template System (6 templates)
+│   ├── Multi-Assistant Support (Copilot, Claude Code, Codex, Gemini)
+│   ├── IDE Integration (VS Code, Cursor, IntelliJ)
 │   └── Project Detection
 ├── Template Library
 │   ├── templates/general/files/
 │   │   ├── copilot-instructions.md.template
 │   │   └── *.instructions.md (source templates)
+│   ├── templates/assistants/
+│   │   ├── CLAUDE.md (Claude Code adapter template)
+│   │   ├── AGENTS.md (Codex/OpenAI adapter template)
+│   │   └── GEMINI.md (Gemini Code Assist adapter template)
 │   ├── TypeScript Template (shared component)
 │   ├── React Template
 │   ├── Node.js Template
-│   └── Python Template
+│   ├── Python Template
+│   └── JavaScript Template
+├── Canonical Workflow System
+│   └── workflow/core.md (single source of truth for 7-step workflow)
 ├── Generated User Structure
-│   ├── VS Code Setup (.github/ + .vscode/settings.json)
+│   ├── GitHub Copilot Setup (.github/ + .vscode/settings.json)
 │   │   ├── copilot-instructions.md (generated from template)
 │   │   └── instructions/
 │   │       ├── test-runner.instructions.md
 │   │       ├── release.instructions.md
 │   │       ├── docs-update.instructions.md
 │   │       └── code-review.instructions.md
-│   └── Cursor IDE Setup (workflow.cursorrules + .cursor/rules/)
-│       ├── workflow.cursorrules (generated from copilot-instructions.md)
+│   ├── Claude Code Setup (IDE or Terminal)
+│   │   └── CLAUDE.md (project instructions format)
+│   ├── Codex/OpenAI Setup (Terminal)
+│   │   └── AGENTS.md (system message format)
+│   ├── Gemini Code Assist Setup (IDE)
+│   │   └── GEMINI.md (style guide format)
+│   └── Cursor IDE Setup (.cursor/rules/)
 │       └── .cursor/rules/
+│           ├── workflow.mdc
 │           ├── test-runner.mdc
 │           ├── release.mdc
 │           ├── docs-update.mdc
 │           └── code-review.mdc
 └── Documentation & Testing
     ├── Comprehensive README
-    └── Migration Guides
+    ├── Migration Guides
+    └── 253 Test Cases
 ```
 
 ### Technical Stack
@@ -71,13 +87,19 @@ metacoding/
 ### Data Flow
 
 1. **User Invocation**: `metacoding init` command execution
-2. **IDE Choice**: User selects between VS Code + GitHub Copilot or Cursor IDE
-3. **Project Detection**: Analyze current directory structure and git status
-4. **Template Selection**: Choose appropriate template based on project type
-5. **Interactive Configuration**: Gather user preferences and project details
-6. **File Generation**: Create instruction files with customized content
-7. **IDE Integration**: Configure selected IDE (VS Code settings or Cursor rules)
-8. **Validation**: Verify setup completeness and provide next steps
+2. **Environment Choice**: User selects IDE or Terminal environment
+3. **IDE/Assistant Selection**:
+   - IDE environment: Choose IDE (VS Code, Cursor, IntelliJ) and assistants (Copilot, Claude Code, Codex, Gemini, or All)
+   - Terminal environment: Choose assistants (Claude Code, Codex, Gemini, or All)
+4. **Project Detection**: Analyze current directory structure and git status
+5. **Template Selection**: Choose appropriate template based on project type
+6. **Interactive Configuration**: Gather user preferences and project details
+7. **File Generation**:
+   - Create assistant configuration files (CLAUDE.md, AGENTS.md, GEMINI.md, copilot-instructions.md)
+   - Generate instruction files with customized content
+   - Populate files with canonical workflow from workflow/core.md
+8. **IDE Integration**: Configure selected IDE (VS Code settings or Cursor rules)
+9. **Validation**: Verify setup completeness and provide next steps
 
 ### CLI Command Implementation
 
@@ -85,9 +107,11 @@ metacoding/
 
 - **`metacoding init`**: Interactive project setup with:
 
-  - AI assistant choice (VS Code + GitHub Copilot or Cursor IDE)
+  - Environment choice (IDE or Terminal)
+  - Assistant selection (GitHub Copilot, Claude Code, Codex/OpenAI, Gemini Code Assist, or All)
+  - IDE selection for IDE environment (VS Code, Cursor, IntelliJ)
   - Project configuration prompts
-  - Template selection (general, react, node, python, typescript)
+  - Template selection (general, react, node, python, typescript, javascript)
   - Automatic project type detection
   - IDE-specific settings configuration
   - Git repository validation
@@ -121,8 +145,8 @@ The project follows its own metacoding methodology:
 ### Test Architecture
 
 - **Framework**: Jest v29.7.0 with ts-jest for TypeScript support
-- **Test Types**: Unit tests, integration tests, template validation tests
-- **Coverage**: 159 test cases covering core functionality
+- **Test Types**: Unit tests, integration tests, template validation tests, assistant adapter tests
+- **Coverage**: 253 test cases covering core functionality, CLI commands, services, and multi-assistant support
 - **Structure**: Tests organized in `/test/unit/` and `/test/integration/` directories
 - **Fixtures**: Temporary directories for safe file system testing
 
@@ -141,15 +165,17 @@ The project follows its own metacoding methodology:
 
 - **`metacoding init`**: Interactive project setup
 
-  - AI assistant choice (VS Code + GitHub Copilot or Cursor IDE)
+  - Environment choice (IDE or Terminal)
+  - Assistant selection (GitHub Copilot, Claude Code, Codex/OpenAI, Gemini Code Assist, or All)
+  - IDE selection for IDE environment (VS Code, Cursor, IntelliJ)
   - Project configuration prompts
-  - Template selection (general, react, node, python, typescript)
+  - Template selection (general, react, node, python, typescript, javascript)
   - Automatic project type detection
   - IDE-specific settings configuration
   - Git repository validation
   - File generation with variable substitution
   - Progress indicators and user feedback
-  - **Options**: `--template <type>`, `--force`, `--skip-vscode`, `--skip-git`, `--vscode`, `--cursor`
+  - **Options**: `--template <type>`, `--environment <ide|terminal>`, `--ide <vscode|cursor|intellij>`, `--assistants <copilot|claude|codex|gemini|all>`, `--force`, `--skip-vscode`, `--skip-git`, `--vscode` (legacy), `--cursor` (legacy)
 
 - **`metacoding --help`**: Comprehensive help system with examples
 - **`metacoding --version`**: Version display from package.json
@@ -183,11 +209,12 @@ The project follows its own metacoding methodology:
 
 ### Current Package Statistics
 
-- **Latest Version**: 1.1.4 (published June 23, 2025)
-- **Package Size**: ~107 KB compressed, ~418 KB unpacked
-- **File Count**: 72 files in distribution package
+- **Latest Version**: 1.4.3 (published June 2025)
+- **Package Size**: ~134 KB compressed, ~537 KB unpacked
+- **File Count**: Includes CLI, services, templates, and assistant adapters
 - **NPM URL**: https://www.npmjs.com/package/metacoding
-- **Global Installation**: `npm install -g metacoding@1.1.4`
+- **Global Installation**: `npm install -g metacoding@1.4.3`
+- **Key Features**: Multi-assistant support (Copilot, Claude Code, Codex, Gemini), 6 project templates, IDE integration (VS Code, Cursor, IntelliJ), canonical workflow system
 
 ### Package Structure
 
@@ -198,12 +225,97 @@ metacoding/
 │   ├── cli.js                # Main CLI logic
 │   ├── commands/             # Command implementations
 │   ├── services/             # Core services
+│   │   ├── assistant-adapter.js  # Multi-assistant support
+│   │   ├── template-manager.js   # Template system
+│   │   ├── vscode.js            # VS Code integration
+│   │   └── cursor.js            # Cursor IDE integration
 │   └── types/                # Type definitions
 ├── templates/                # Template files
-└── package.json              # Package configuration
+│   ├── general/             # Universal template
+│   ├── react/               # React template
+│   ├── node/                # Node.js template
+│   ├── python/              # Python template
+│   ├── typescript/          # TypeScript shared component
+│   ├── javascript/          # JavaScript template
+│   └── assistants/          # Assistant adapter templates
+│       ├── CLAUDE.md        # Claude Code adapter
+│       ├── AGENTS.md        # Codex/OpenAI adapter
+│       └── GEMINI.md        # Gemini Code Assist adapter
+├── workflow/                # Canonical workflow
+│   └── core.md             # Single source of truth for workflow
+└── package.json            # Package configuration
 ```
 
 ## Integration Points
+
+### Multi-Assistant Support Architecture
+
+**metacoding** implements a comprehensive adapter architecture to support multiple AI coding assistants, each with its own configuration format and terminology.
+
+#### Supported Assistants
+
+- **GitHub Copilot**: VS Code extension using `.github/copilot-instructions.md`
+- **Claude Code**: Terminal or IDE using `CLAUDE.md` with "project instructions" terminology
+- **Codex/OpenAI**: Terminal using `AGENTS.md` with "system message" terminology
+- **Gemini Code Assist**: VS Code/IntelliJ extension using `GEMINI.md` with "style guide" terminology
+
+#### Canonical Workflow System
+
+All assistant adapters share a single source of truth for the 7-step development workflow:
+
+- **Source**: `workflow/core.md` contains the canonical workflow documentation
+- **Substitution**: Each assistant adapter template includes `{{WORKFLOW_CONTENT}}` placeholder
+- **Vocabulary Adaptation**: Same workflow semantics, terminology adapted for each assistant:
+  - GitHub Copilot: Uses standard "instructions" language
+  - Claude Code: Uses "project instructions" and "configuration" language
+  - Codex/OpenAI: Uses "system message" and "instruction" language
+  - Gemini Code Assist: Uses "style rule" and "configuration rule" language
+
+#### Assistant Adapter Templates
+
+Located in `templates/assistants/`:
+
+- **CLAUDE.md**: Claude Code configuration with project instructions format
+- **AGENTS.md**: Codex/OpenAI configuration with system message format
+- **GEMINI.md**: Gemini Code Assist configuration with style guide format
+
+Each template includes:
+
+- Assistant-specific terminology and structure
+- Variable placeholders (PROJECT_NAME, TECH_STACK, ENVIRONMENT, PROJECT_TYPE)
+- Canonical workflow content with vocabulary adaptation
+- Setup instructions and common commands
+- Validation reminders
+
+#### Assistant Adapter Service
+
+The `AssistantAdapterService` handles all assistant configuration generation:
+
+- **File Generation**: Creates appropriate configuration files based on user selections
+- **Variable Substitution**: Replaces placeholders with project-specific values
+- **Workflow Integration**: Injects canonical workflow content from workflow/core.md
+- **Migration Detection**: Identifies existing assistant configurations for migration
+
+#### CLI Integration
+
+The init command implements a two-tiered selection flow:
+
+1. **Environment Selection**:
+
+   - IDE: Full IDE setup with VS Code, Cursor, or IntelliJ
+   - Terminal: Terminal-based assistants only (Claude Code, Codex, Gemini)
+
+2. **Assistant Selection** (based on environment):
+   - IDE + VS Code: All assistants (Copilot, Claude Code, Codex, Gemini, or All)
+   - IDE + Cursor: Cursor rules only (legacy support)
+   - IDE + IntelliJ: Gemini Code Assist + optional others
+   - Terminal: Claude Code, Codex, Gemini, or All
+
+#### Backward Compatibility
+
+- Legacy `--vscode` and `--cursor` flags still supported
+- Existing Copilot setups continue to work
+- Migration detection prompts for updating old configurations
 
 ### GitHub Copilot Integration
 
@@ -313,14 +425,30 @@ metacoding/
 - **React Template**: Frontend-specific with React, hooks, and component patterns
 - **Node.js Template**: Backend-specific with API, database, and server patterns
 - **Python Template**: Python-specific with Django/Flask/FastAPI patterns
+- **JavaScript Template**: Modern JavaScript with ES6+ patterns and npm ecosystem
 
 ### Template Architecture
 
 Each template contains:
 
 - `template.json`: Configuration and metadata
-- `copilot-instructions.md.template`: Main instruction file with variable substitution
+- `copilot-instructions.md.template`: Main instruction file with variable substitution (for GitHub Copilot)
 - Instruction files: `test-runner.instructions.md`, `release.instructions.md`, `docs-update.instructions.md`, `code-review.instructions.md`
+- Language-specific instruction files (e.g., `react.coding.instructions.md`, `typescript.testing.instructions.md`)
+
+### Multi-Assistant Template Processing
+
+When generating files for multiple assistants:
+
+1. **Template Selection**: User selects project template (general, react, node, python, typescript, javascript)
+2. **Assistant Selection**: User selects which assistants to configure (Copilot, Claude, Codex, Gemini, or All)
+3. **File Generation**: System generates appropriate configuration files:
+   - GitHub Copilot: `.github/copilot-instructions.md` + instruction files
+   - Claude Code: `CLAUDE.md` with project-specific content
+   - Codex/OpenAI: `AGENTS.md` with system message format
+   - Gemini Code Assist: `GEMINI.md` with style guide format
+4. **Workflow Injection**: Canonical workflow from `workflow/core.md` injected into all assistant configs
+5. **Variable Substitution**: Project-specific values (name, tech stack, environment) substituted in all files
 
 ## Instruction File Architecture
 
@@ -426,10 +554,40 @@ The architecture includes comprehensive testing to ensure:
 3. **Completeness**: Cover all aspects of features
 4. **Consistency**: Follow established documentation patterns
 
+## Recent Enhancements
+
+### Multi-Assistant Support (v1.4.x)
+
+- **Expanded Assistant Coverage**: Added support for Claude Code, Codex/OpenAI, and Gemini Code Assist alongside GitHub Copilot
+- **Canonical Workflow System**: Implemented single source of truth workflow in `workflow/core.md` shared across all assistant adapters
+- **Adapter Architecture**: Created specialized configuration templates for each assistant with vocabulary adaptation
+- **CLI Enhancement**: New environment and assistant selection flow with `--environment`, `--ide`, and `--assistants` flags
+- **Migration Support**: Automatic detection of existing configurations with migration prompts
+- **AssistantAdapterService**: New service for generating and managing multi-assistant configurations
+
+### IDE Integration Improvements
+
+- **IntelliJ Support**: Added IntelliJ IDEA as supported IDE choice for Gemini Code Assist
+- **Cursor IDE Modernization**: Updated Cursor rules file structure to modern `.cursor/rules/*.mdc` format
+- **VS Code Settings**: Enhanced VS Code settings configuration for GitHub Copilot
+
+### Template System Enhancements
+
+- **JavaScript Template**: Added comprehensive JavaScript template with ES6+ patterns
+- **Template Composition**: Improved TypeScript instruction sharing across React and Node.js templates
+- **Six Total Templates**: general, react, node, python, typescript (shared), javascript
+
+### Testing and Quality
+
+- **Comprehensive Test Coverage**: 253 test cases covering all functionality
+- **Assistant Adapter Tests**: New test suites for multi-assistant file generation
+- **Integration Tests**: End-to-end tests for all CLI workflows
+- **Jest Linting**: Resolved all ESLint issues in test files
+
 ---
 
-**Last Updated**: June 2025
-**Document Version**: 1.2
+**Last Updated**: October 2025
+**Document Version**: 2.0
 **Review Schedule**: Monthly or with major releases
 
 ## Related Documentation

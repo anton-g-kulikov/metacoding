@@ -1,13 +1,15 @@
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import ora from 'ora';
-import { InitOptions, ProjectConfig } from '../types';
-import { TemplateManager } from '../services/template-manager';
-import { FileSystemService } from '../services/filesystem';
-import { VSCodeService } from '../services/vscode';
+import path from 'path';
+import { AssistantAdapterService } from '../services/assistant-adapter';
 import { CursorService } from '../services/cursor';
-import { ProjectDetector } from '../services/project-detector';
+import { FileSystemService } from '../services/filesystem';
 import { GitIgnoreManager } from '../services/gitignore-manager';
+import { ProjectDetector } from '../services/project-detector';
+import { TemplateManager } from '../services/template-manager';
+import { VSCodeService } from '../services/vscode';
+import { AssistantType, InitOptions, ProjectConfig } from '../types';
 
 /**
  * Handles the 'init' command for setting up metacoding in a project
@@ -19,6 +21,7 @@ export class InitCommand {
   private cursorService: CursorService;
   private projectDetector: ProjectDetector;
   private gitIgnoreManager: GitIgnoreManager;
+  private assistantAdapterService: AssistantAdapterService;
 
   constructor() {
     this.templateManager = new TemplateManager();
@@ -30,6 +33,7 @@ export class InitCommand {
     );
     this.projectDetector = new ProjectDetector();
     this.gitIgnoreManager = new GitIgnoreManager();
+    this.assistantAdapterService = new AssistantAdapterService();
   }
 
   /**
@@ -38,42 +42,55 @@ export class InitCommand {
   async execute(options: InitOptions): Promise<void> {
     console.log(chalk.cyan.bold('🚀 Welcome to metacoding Setup!\n'));
 
-    // Validate IDE options
-    const ideChoice = await this.validateAndGetIdeChoice(options);
-
     // Detect current project context
     const projectInfo = await this.projectDetector.detectProject();
 
-    // Check if metacoding is already set up
-    if ((await this.fileSystem.isMetaCodingSetup()) && !options.force) {
-      const { proceed } = await inquirer.prompt([
+    // Check for existing assistant configurations
+    const existingAssistants = await this.assistantAdapterService.detectExistingAssistants(process.cwd());
+    if (existingAssistants.length > 0 && !options.force) {
+      console.log(chalk.yellow(`\nDetected existing assistant configurations: ${existingAssistants.join(', ')}`));
+      
+      const { migrationChoice } = await inquirer.prompt([
         {
-          type: 'confirm',
-          name: 'proceed',
-          message:
-            'metacoding is already set up in this directory. Do you want to reconfigure it?',
-          default: false,
-        },
+          type: 'list',
+          name: 'migrationChoice',
+          message: 'How would you like to proceed?',
+          choices: [
+            { name: 'Overwrite existing configurations', value: 'overwrite' },
+            { name: 'Keep existing and add new ones', value: 'add' },
+            { name: 'Cancel setup', value: 'cancel' }
+          ]
+        }
       ]);
 
-      if (!proceed) {
+      if (migrationChoice === 'cancel') {
         console.log(chalk.yellow('Setup cancelled.'));
         return;
       }
+
+      if (migrationChoice === 'overwrite') {
+        options.force = true;
+      }
     }
+
+    // Get environment and assistant choices
+    const environmentChoice = await this.getEnvironmentChoice(options);
+    const ideChoice = environmentChoice === 'ide' ? await this.getIdeChoice(options) : undefined;
+    const assistantChoices = await this.getAssistantChoices(options, environmentChoice);
 
     // Get project configuration
     const config = await this.getProjectConfiguration(
       options,
       projectInfo,
+      environmentChoice,
       ideChoice
     );
 
-    // Set up the project
-    await this.setupProject(config, options, ideChoice);
+    // Set up the project with assistant configurations
+    await this.setupProjectWithAssistants(config, assistantChoices, options);
 
     console.log(chalk.green.bold('\n✅ metacoding setup complete!\n'));
-    this.displayNextSteps(ideChoice);
+    this.displayNextSteps(assistantChoices, environmentChoice, ideChoice);
   }
 
   /**
@@ -82,7 +99,8 @@ export class InitCommand {
   private async getProjectConfiguration(
     options: InitOptions,
     projectInfo: any,
-    ideChoice: 'vscode' | 'cursor'
+    environmentChoice: 'ide' | 'terminal',
+    ideChoice?: 'vscode' | 'cursor' | 'intellij'
   ): Promise<ProjectConfig> {
     // For testing or force mode, use defaults
     if (options.force && process.env.NODE_ENV === 'test') {
@@ -93,7 +111,7 @@ export class InitCommand {
         projectType: options.template,
         testFramework: 'Jest',
         buildTool: 'TypeScript Compiler',
-        ideChoice,
+        ideChoice: ideChoice || (environmentChoice === 'ide' ? 'vscode' : undefined),
       };
     }
 
@@ -342,37 +360,288 @@ export class InitCommand {
   }
 
   /**
+   * Get environment choice from user or options
+   */
+  private async getEnvironmentChoice(options: InitOptions): Promise<'ide' | 'terminal'> {
+    // Handle legacy options
+    if (options.vscode || options.cursor) {
+      return 'ide';
+    }
+
+    if (options.environment) {
+      return options.environment;
+    }
+
+    // For testing or force mode, use defaults
+    if (options.force && process.env.NODE_ENV === 'test') {
+      return 'ide'; // Default for tests
+    }
+
+    const { environment } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'environment',
+        message: 'What development environment will you primarily use?',
+        choices: [
+          { name: 'IDE (VS Code, Cursor, IntelliJ)', value: 'ide' },
+          { name: 'Terminal/CLI', value: 'terminal' }
+        ],
+        default: 'ide'
+      }
+    ]);
+
+    return environment;
+  }
+
+  /**
+   * Get IDE choice from user or options
+   */
+  private async getIdeChoice(options: InitOptions): Promise<'vscode' | 'cursor' | 'intellij' | undefined> {
+    // Handle legacy options
+    if (options.vscode) return 'vscode';
+    if (options.cursor) return 'cursor';
+
+    if (options.ide) {
+      return options.ide as 'vscode' | 'cursor' | 'intellij';
+    }
+
+    // For testing or force mode, use defaults
+    if (options.force && process.env.NODE_ENV === 'test') {
+      return 'vscode'; // Default for tests
+    }
+
+    const { ideChoice } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'ideChoice',
+        message: 'Which IDE will you use?',
+        choices: [
+          { name: 'VS Code', value: 'vscode' },
+          { name: 'Cursor', value: 'cursor' },
+          { name: 'IntelliJ IDEA', value: 'intellij' }
+        ],
+        default: 'vscode'
+      }
+    ]);
+
+    return ideChoice;
+  }
+
+  /**
+   * Get assistant choices from user or options
+   */
+  private async getAssistantChoices(
+    options: InitOptions, 
+    environmentChoice: 'ide' | 'terminal'
+  ): Promise<AssistantType[]> {
+    if (options.assistants && options.assistants.length > 0) {
+      return options.assistants;
+    }
+
+    // Handle legacy options
+    if (options.vscode || options.cursor) {
+      return ['copilot'];
+    }
+
+    // For testing or force mode, use defaults
+    if (options.force && process.env.NODE_ENV === 'test') {
+      return ['copilot']; // Default for tests
+    }
+
+    const availableAssistants = this.assistantAdapterService.getAvailableAssistants();
+    const choices = availableAssistants.map(assistant => ({
+      name: assistant.description,
+      value: assistant.type
+    }));
+
+    choices.push({ name: 'All of the above', value: 'all' as AssistantType });
+
+    const { assistants } = await inquirer.prompt([
+      {
+        type: 'checkbox',
+        name: 'assistants',
+        message: `Which AI assistants will you use in your ${environmentChoice} environment?`,
+        choices,
+        default: environmentChoice === 'ide' ? ['copilot'] : ['codex'],
+        validate: (input: AssistantType[]) => {
+          if (input.length === 0) {
+            return 'Please select at least one assistant';
+          }
+          return true;
+        }
+      }
+    ]);
+
+    return assistants;
+  }
+
+  /**
+   * Set up project with assistant configurations
+   */
+  private async setupProjectWithAssistants(
+    config: ProjectConfig,
+    assistantChoices: AssistantType[],
+    options: InitOptions
+  ): Promise<void> {
+    const spinner = ora('Setting up metacoding files...').start();
+
+    try {
+      // Generate assistant configuration files
+      spinner.text = 'Generating assistant configuration files...';
+      const generatedFiles = await this.assistantAdapterService.generateAssistantFiles(
+        assistantChoices,
+        config,
+        process.cwd()
+      );
+
+      spinner.text = `Generated ${generatedFiles.length} assistant configuration files`;
+
+      // Update .gitignore with AI assistant exclusion patterns
+      spinner.text = 'Updating .gitignore...';
+      await this.gitIgnoreManager.updateGitIgnore(process.cwd());
+
+      // Set up meta directory and documentation
+      spinner.text = 'Setting up project documentation...';
+      await this.fileSystem.ensureDirectoryExists('_meta');
+      
+      // Create project task list if it doesn't exist
+      const taskListPath = path.join(process.cwd(), '_meta', 'project-task-list.md');
+      if (!(await this.fileSystem.fileExists(taskListPath))) {
+        const taskListContent = this.generateInitialTaskList(config);
+        await this.fileSystem.writeFile(taskListPath, taskListContent);
+      }
+
+      // Set up test directory and documentation
+      await this.fileSystem.ensureDirectoryExists('test');
+      const testDocPath = path.join(process.cwd(), 'test', 'test-documentation.md');
+      if (!(await this.fileSystem.fileExists(testDocPath))) {
+        const testDocContent = this.generateInitialTestDoc(config);
+        await this.fileSystem.writeFile(testDocPath, testDocContent);
+      }
+
+      // Configure IDE-specific settings if IDE environment
+      if (config.ideChoice) {
+        if (config.ideChoice === 'vscode' && !options.skipVscode) {
+          spinner.text = 'Configuring VS Code settings...';
+          await this.vscodeService.updateSettings({
+            'typescript.preferences.includePackageJsonAutoImports': 'auto',
+            'editor.formatOnSave': true,
+            'editor.codeActionsOnSave': {
+              'source.fixAll.eslint': true
+            }
+          });
+        }
+      }
+
+      spinner.succeed('Setup complete!');
+    } catch (error) {
+      spinner.fail('Setup failed');
+      throw error;
+    }
+  }
+
+  /**
+   * Generate initial task list content
+   */
+  private generateInitialTaskList(config: ProjectConfig): string {
+    return `# ${config.name} Project Task List
+
+## Current Tasks
+
+- [ ] **SETUP-TASK-001: Initial project setup** - 🟡 **IN PROGRESS** - Setting up metacoding development workflow and assistant configurations
+
+## Task Status Legend
+
+- 🟡 **IN PROGRESS** - Currently being worked on
+- ✅ **COMPLETED** - Task finished and verified
+- ❌ **BLOCKED** - Task cannot proceed due to dependency or issue
+- ⏸️ **ON HOLD** - Task paused for specific reason
+- 📋 **NOT STARTED** - Task identified but not yet begun
+
+## Notes
+
+This task list follows the 7-step development workflow. All tasks must be documented here before implementation begins.
+`;
+  }
+
+  /**
+   * Generate initial test documentation content
+   */
+  private generateInitialTestDoc(config: ProjectConfig): string {
+    return `# ${config.name} Test Documentation
+
+## Test Framework Configuration
+
+**Framework**: ${config.testFramework || 'Not specified'}
+**Test Command**: \`npm test\`
+
+## Test Cases
+
+### SETUP-TEST-001: Verify project setup
+- **Status**: 📋 NOT STARTED
+- **Description**: Verify that metacoding setup is working correctly
+- **Expected**: All configuration files are present and valid
+- **Test File**: \`test/setup.test.js\`
+
+## Test Coverage Goals
+
+- Unit Tests: 80%+ coverage for critical functionality
+- Integration Tests: Key workflow paths
+- End-to-end Tests: User scenarios
+
+## Notes
+
+All test cases must be documented here before test implementation begins, following the TDD approach of the 7-step workflow.
+`;
+  }
+
+  /**
    * Display next steps to the user
    */
-  private displayNextSteps(ideChoice: 'vscode' | 'cursor'): void {
+  private displayNextSteps(
+    assistantChoices: AssistantType[], 
+    environmentChoice: 'ide' | 'terminal',
+    ideChoice?: 'vscode' | 'cursor' | 'intellij'
+  ): void {
     console.log(chalk.cyan('Next steps:'));
 
-    if (ideChoice === 'vscode') {
-      console.log(chalk.dim('1.'), 'Restart VS Code to apply settings');
-      console.log(chalk.dim('2.'), 'Open GitHub Copilot Chat');
-      console.log(
-        chalk.dim('3.'),
-        'Ask: "What is the development workflow for this project?"'
-      );
-      console.log(
-        chalk.dim('4.'),
-        'Start coding with guided workflow support!'
-      );
-    } else if (ideChoice === 'cursor') {
-      console.log(chalk.dim('1.'), 'Open your project in Cursor IDE');
-      console.log(
-        chalk.dim('2.'),
-        'Check that .cursor/rules/workflow.mdc is loaded'
-      );
-      console.log(
-        chalk.dim('3.'),
-        'Ask Cursor: "What is the development workflow for this project?"'
-      );
-      console.log(
-        chalk.dim('4.'),
-        'Start coding with guided workflow support!'
-      );
+    let step = 1;
+
+    if (environmentChoice === 'ide' && ideChoice) {
+      switch (ideChoice) {
+        case 'vscode':
+          console.log(chalk.dim(`${step++}.`), 'Restart VS Code to apply settings');
+          break;
+        case 'cursor':
+          console.log(chalk.dim(`${step++}.`), 'Open your project in Cursor IDE');
+          break;
+        case 'intellij':
+          console.log(chalk.dim(`${step++}.`), 'Open your project in IntelliJ IDEA');
+          break;
+      }
     }
+
+    // Display assistant-specific instructions
+    if (assistantChoices.includes('copilot') || assistantChoices.includes('all')) {
+      console.log(chalk.dim(`${step++}.`), 'GitHub Copilot: Open Copilot Chat and check .github/copilot-instructions.md is loaded');
+    }
+
+    if (assistantChoices.includes('claude') || assistantChoices.includes('all')) {
+      console.log(chalk.dim(`${step++}.`), 'Claude Code: Run `claude` in terminal, it will auto-load CLAUDE.md');
+    }
+
+    if (assistantChoices.includes('codex') || assistantChoices.includes('all')) {
+      console.log(chalk.dim(`${step++}.`), 'Codex/OpenAI: Configure your agent to use AGENTS.md as system message');
+    }
+
+    if (assistantChoices.includes('gemini') || assistantChoices.includes('all')) {
+      console.log(chalk.dim(`${step++}.`), 'Gemini Code Assist: GEMINI.md will be auto-discovered in VS Code/IntelliJ');
+    }
+
+    console.log(chalk.dim(`${step++}.`), chalk.bold('Test your setup by asking any assistant:'));
+    console.log('     ', chalk.italic('"What is the development workflow for this project?"'));
+    
+    console.log(chalk.dim(`${step++}.`), 'Start coding with guided workflow support!');
 
     console.log('');
     console.log(
