@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2025-10-12
+
+### Changed
+
+- Removed 26 obsolete Cursor integration tests (17 e2e + 9 integration tests)
+- Improved test organization and reduced test suite maintenance burden
+- All tests now reflect new multi-assistant architecture from v1.5.0
+
+### Technical Notes
+
+- Test suite reduced from 260 to 234 tests (all passing at 100%)
+- Removed legacy `.cursor/rules/` directory structure tests
+- AssistantAdapterService behavior fully validated in remaining test suites
+
 ## [1.5.0] - 2025-10-12
 
 ### Added
