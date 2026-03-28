@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-03-28
+
+### Fixed
+
+- Removed the last legacy `assistant-adapter` service that was still compiled during `prepublishOnly`
+- Restored a clean 2.x build surface so `npm run build` and `npm publish` no longer pull in obsolete multi-assistant types
+
 ## [2.0.0] - 2026-03-28
 
 ### Added

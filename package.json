@@ -1,6 +1,6 @@
 {
   "name": "metacoding",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Cross-agent workflow skill for modern coding agents with gated planning, testing, verification, and handoff defaults",
   "main": "lib/cli.js",
   "types": "lib/cli.d.ts",
