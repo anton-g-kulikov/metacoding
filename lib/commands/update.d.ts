@@ -1,16 +1,16 @@
 import { UpdateOptions } from '../types';
 export declare class UpdateCommand {
-    private templateManager;
-    private backupService;
-    private conflictService;
-    private vscodeService;
-    private projectDetector;
+    private readonly skillManager;
+    private readonly backupService;
+    private readonly conflictService;
+    private readonly projectDetector;
     constructor();
     execute(options: UpdateOptions): Promise<void>;
-    private detectCurrentTemplate;
-    private getProjectConfig;
-    private getExistingMetacodingFiles;
     private validateSetup;
-    private displayUpdateSummary;
+    private getDefaultTestFramework;
+    private getDefaultBuildTool;
+    private getTargetVendors;
+    private getRequiredFilesForVendor;
+    private normalizeVendor;
 }
 //# sourceMappingURL=update.d.ts.map

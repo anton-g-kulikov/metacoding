@@ -2,26 +2,14 @@
  * TypeScript type definitions for metacoding CLI
  */
 
+export type AgentVendor = 'codex' | 'claude-code' | 'antigravity';
+export type AgentVendorOption = AgentVendor | 'all';
+
 export interface InitOptions {
   template: string;
   force?: boolean;
-  skipVscode?: boolean;
   skipGit?: boolean;
-  vscode?: boolean;
-  cursor?: boolean;
-  ide?: string;
-  environment?: 'ide' | 'terminal';
-  assistants?: AssistantType[];
-  ideChoice?: 'vscode' | 'cursor' | 'intellij';
-}
-
-export type AssistantType = 'copilot' | 'claude' | 'codex' | 'gemini' | 'all';
-
-export interface AssistantConfig {
-  type: AssistantType;
-  fileName: string;
-  description: string;
-  instructions: string;
+  vendor?: AgentVendorOption;
 }
 
 export interface UpdateOptions {
@@ -30,6 +18,7 @@ export interface UpdateOptions {
   force?: boolean;
   dryRun?: boolean;
   strict?: boolean;
+  vendor?: AgentVendorOption;
 }
 
 export interface ProjectConfig {
@@ -39,7 +28,7 @@ export interface ProjectConfig {
   projectType: string;
   testFramework?: string;
   buildTool?: string;
-  ideChoice?: 'vscode' | 'cursor' | 'intellij' | undefined;
+  vendor: AgentVendor;
 }
 
 export interface Template {

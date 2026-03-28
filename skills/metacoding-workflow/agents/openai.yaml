@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metacoding Workflow"
+  short_description: "Enforce a gated delivery workflow for coding agents"
+  default_prompt: "Use $metacoding-workflow to ground in the repo, capture scope, define test intent before code, implement one bounded task, verify the result, update affected docs/status artifacts, and close with a VCS handoff or completion confirmation."

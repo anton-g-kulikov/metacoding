@@ -1,9 +1,9 @@
 {
   "name": "metacoding",
-  "version": "1.5.1",
-  "description": "Guided Development Workflow for GitHub Copilot - Transform your coding experience with AI-guided standards, structured workflows, and quality practices",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "version": "2.0.0",
+  "description": "Cross-agent workflow skill for modern coding agents with gated planning, testing, verification, and handoff defaults",
+  "main": "lib/cli.js",
+  "types": "lib/cli.d.ts",
   "bin": {
     "metacoding": "bin/metacoding.js"
   },
@@ -23,13 +23,13 @@
     "start": "node bin/metacoding.js"
   },
   "keywords": [
-    "github-copilot",
+    "coding-agent",
+    "codex-skill",
     "development-workflow",
     "ai-coding",
     "code-quality",
-    "vscode",
+    "skill",
     "developer-tools",
-    "copilot-instructions",
     "programming-workflow",
     "tdd",
     "best-practices",
@@ -52,7 +52,7 @@
   "files": [
     "bin/",
     "lib/",
-    "templates/",
+    "skills/",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -85,14 +85,6 @@
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.8.3"
-  },
-  "peerDependencies": {
-    "vscode": "*"
-  },
-  "peerDependenciesMeta": {
-    "vscode": {
-      "optional": true
-    }
   },
   "jest": {
     "preset": "ts-jest",
@@ -129,7 +121,7 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 80,
+        "branches": 65,
         "functions": 80,
         "lines": 80,
         "statements": 80

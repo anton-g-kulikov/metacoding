@@ -30,7 +30,7 @@
 - [ ] Breaking changes documented (if any)
 - [ ] README.md updated for new features (if applicable)
 - [ ] **README.md synchronization verified** - GitHub and npm versions match
-- [ ] **Version badges in README.md updated** to reflect new version
+- [ ] **README badges / package metadata reviewed** (or confirmed dynamic and still correct)
 - [ ] **CLI examples in README.md tested** and working correctly
 - **Notes**: [Add notes about version change, features, and documentation updates]
 
@@ -40,6 +40,7 @@
 - [ ] Package size reasonable (Current size: **[SIZE]** KB)
 - [ ] All intended files included, test files excluded
 - [ ] Version references updated across documentation
+- [ ] CLI smoke test passes in a throwaway project
 - **Notes**: [Add notes about package validation and contents]
 
 ## 📦 **PUBLICATION WORKFLOW**
@@ -48,7 +49,8 @@
 
 ```bash
 npm run prepublishOnly  # Must pass: lint + test + build
-npm pack               # Review package contents
+env npm_config_cache=/tmp/metacoding-npm-cache npm pack --dry-run
+# If local npm cache permissions are clean, plain `npm pack --dry-run` is fine too.
 ```
 
 ### Phase 2: Version Management

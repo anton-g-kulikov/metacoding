@@ -9,14 +9,19 @@ export class FileSystemService {
    * Check if metacoding is already set up in the current directory
    */
   async isMetaCodingSetup(): Promise<boolean> {
-    const githubDir = '.github';
-    const copilotInstructions = path.join(githubDir, 'copilot-instructions.md');
-    const instructionsDir = path.join(githubDir, 'instructions');
+    const knownEntryPoints = [
+      path.join('.codex', 'skills', 'metacoding-workflow', 'SKILL.md'),
+      path.join('.claude', 'agents', 'metacoding-workflow.md'),
+      path.join('.agents', 'skills', 'metacoding-workflow', 'SKILL.md'),
+    ];
 
-    return (
-      (await fs.pathExists(copilotInstructions)) &&
-      (await fs.pathExists(instructionsDir))
-    );
+    for (const entry of knownEntryPoints) {
+      if (await fs.pathExists(entry)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**

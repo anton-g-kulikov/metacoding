@@ -12,11 +12,11 @@ export class GitIgnoreManager {
   static getAIAssistantPatterns(): string[] {
     return [
       '# metacoding: AI coding assistant exclusions',
-      '.github/copilot-instructions.md',
-      '.github/instructions/',
-      '.vscode/copilot-instructions.md',
-      '.idea/copilot-instructions.md',
-      '.cursor/',
+      '.codex/skills/metacoding-workflow/',
+      '.claude/agents/metacoding-workflow.md',
+      '.claude/metacoding-workflow/',
+      '.agents/skills/metacoding-workflow/',
+      '.backup/',
     ];
   }
 

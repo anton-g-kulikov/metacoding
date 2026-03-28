@@ -1,13 +1,14 @@
 export declare class ProjectDetector {
-    detectProject(): Promise<any>;
+    detectProject(): Promise<{
+        name: string;
+        type: string;
+        hasGit: boolean;
+        techStack: string[];
+    }>;
     private detectProjectType;
-    private hasReactIndicators;
-    private hasNodeIndicators;
-    private hasJavaScriptIndicators;
-    private hasPythonIndicators;
-    private hasGitRepository;
-    private hasVSCodeConfiguration;
-    private hasPackageJson;
     private detectTechStack;
+    private collectDependencies;
+    private readPackageJson;
+    private hasAnyFile;
 }
 //# sourceMappingURL=project-detector.d.ts.map

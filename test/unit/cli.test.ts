@@ -1,95 +1,85 @@
-import { execSync } from 'child_process';
-import * as path from 'path';
-import { describe, test, expect } from '@jest/globals';
+import { InitCommand } from '../../src/commands/init';
+import { UpdateCommand } from '../../src/commands/update';
+import { Command } from 'commander';
+import { main } from '../../src/cli';
 
-describe('CLI Commands', () => {
-  const cliPath = path.join(__dirname, '../../bin/metacoding.js');
+describe('CLI', () => {
+  let exitSpy: jest.SpyInstance;
+  let logSpy: jest.SpyInstance;
+  const originalArgv = process.argv;
 
-  describe('CLI-UNIT-001: help command', () => {
-    test('CLI-UNIT-001: should display help when --help flag is used', () => {
-      const output = execSync(`node ${cliPath} --help`, { encoding: 'utf8' });
-
-      expect(output).toContain('Usage: metacoding');
-      expect(output).toContain('init');
-      expect(output).toContain('update');
-      expect(output).toContain('Options:');
-    });
-
-    test('CLI-UNIT-002: should display help when help command is used', () => {
-      const output = execSync(`node ${cliPath} help`, { encoding: 'utf8' });
-
-      expect(output).toContain('Usage: metacoding');
-      expect(output).toContain('Commands:');
-    });
+  beforeEach(() => {
+    exitSpy = jest
+      .spyOn(process, 'exit')
+      .mockImplementation((() => undefined) as never);
+    logSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
   });
 
-  describe('CLI-UNIT-003: version command', () => {
-    test('CLI-UNIT-003: should display version when --version flag is used', () => {
-      const output = execSync(`node ${cliPath} --version`, {
-        encoding: 'utf8',
-      });
-
-      expect(output).toMatch(/\d+\.\d+\.\d+/); // Should match semantic version pattern
-    });
-
-    test('CLI-UNIT-004: should display version when --version flag is used', () => {
-      const output = execSync(`node ${cliPath} --version`, {
-        encoding: 'utf8',
-      });
-
-      expect(output).toMatch(/\d+\.\d+\.\d+/);
-    });
+  afterEach(() => {
+    process.argv = originalArgv;
+    exitSpy.mockRestore();
+    logSpy.mockRestore();
+    jest.restoreAllMocks();
   });
 
-  describe('CLI-UNIT-005: invalid commands', () => {
-    test('CLI-UNIT-005: should show error for invalid command', () => {
-      try {
-        execSync(`node ${cliPath} invalid-command`, {
-          encoding: 'utf8',
-          stdio: 'pipe',
-        });
-        throw new Error('Should have thrown an error');
-      } catch (error: any) {
-        expect(error.status).not.toBe(0);
-        expect(error.stderr || error.stdout).toContain('unknown command');
-      }
-    });
+  test('dispatches init command', async () => {
+    const initSpy = jest
+      .spyOn(InitCommand.prototype, 'execute')
+      .mockResolvedValue(undefined);
 
-    test('CLI-UNIT-006: should show help suggestion for invalid command', () => {
-      try {
-        execSync(`node ${cliPath} unknown`, {
-          encoding: 'utf8',
-          stdio: 'pipe',
-        });
-        throw new Error('Should have thrown an error');
-      } catch (error: any) {
-        const output = error.stderr || error.stdout || '';
-        expect(output).toContain('unknown command');
-      }
-    });
+    process.argv = ['node', 'metacoding', 'init', '--template', 'react'];
+    await main();
+
+    expect(initSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ template: 'react' })
+    );
   });
 
-  describe('CLI-UNIT-007: command availability', () => {
-    test('CLI-UNIT-007: should list init command as available', () => {
-      const output = execSync(`node ${cliPath} --help`, { encoding: 'utf8' });
+  test('dispatches update command', async () => {
+    const updateSpy = jest
+      .spyOn(UpdateCommand.prototype, 'execute')
+      .mockResolvedValue(undefined);
 
-      expect(output).toContain('init');
-      expect(output).toMatch(/init.*metacoding/i);
-    });
+    process.argv = ['node', 'metacoding', 'update', '--dry-run'];
+    await main();
 
-    test('CLI-UNIT-008: should list update command with validation option', () => {
-      const output = execSync(`node ${cliPath} update --help`, {
-        encoding: 'utf8',
-      });
+    expect(updateSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ dryRun: true })
+    );
+  });
 
-      expect(output).toContain('--dry-run');
-      expect(output).toMatch(/dry.*run.*validate/i);
-    });
+  test('reports init failures and exits with code 1', async () => {
+    jest
+      .spyOn(InitCommand.prototype, 'execute')
+      .mockRejectedValue(new Error('boom'));
 
-    test('CLI-UNIT-009: should list update command as available', () => {
-      const output = execSync(`node ${cliPath} --help`, { encoding: 'utf8' });
+    process.argv = ['node', 'metacoding', 'init'];
+    await main();
 
-      expect(output).toContain('update');
-    });
+    expect(logSpy).toHaveBeenCalled();
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
+  test('reports update failures and exits with code 1', async () => {
+    jest
+      .spyOn(UpdateCommand.prototype, 'execute')
+      .mockRejectedValue(new Error('boom'));
+
+    process.argv = ['node', 'metacoding', 'update'];
+    await main();
+
+    expect(logSpy).toHaveBeenCalled();
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
+  test('shows help when no command is provided', async () => {
+    const helpSpy = jest
+      .spyOn(Command.prototype, 'help')
+      .mockImplementation((() => undefined) as never);
+
+    process.argv = ['node', 'metacoding'];
+    await main();
+
+    expect(helpSpy).toHaveBeenCalled();
   });
 });

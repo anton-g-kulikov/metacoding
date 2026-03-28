@@ -1,110 +1,73 @@
-import { FileSystemService } from '../../src/services/filesystem';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+import { FileSystemService } from '../../src/services/filesystem';
+import { createTempWorkspace } from './test-utils';
 
 describe('FileSystemService', () => {
-  let service: FileSystemService;
-  let testDir: string;
-  let originalCwd: string;
+  test('reads, writes, copies, and detects the installed skill layout', async () => {
+    const workspace = await createTempWorkspace('metacoding-filesystem');
+    const service = new FileSystemService();
+    const originalCwd = process.cwd();
 
-  beforeEach(async () => {
-    service = new FileSystemService();
-    originalCwd = process.cwd();
-    testDir = path.join(__dirname, '../../tmp-unit-test-' + Date.now());
-    await fs.ensureDir(testDir);
-    process.chdir(testDir);
-  });
+    process.chdir(workspace);
 
-  afterEach(async () => {
+    await service.writeFile(
+      '.codex/skills/metacoding-workflow/SKILL.md',
+      'skill content'
+    );
+    await service.writeFile(
+      '.codex/skills/metacoding-workflow/agents/openai.yaml',
+      'interface: {}'
+    );
+    await service.copyFile(
+      '.codex/skills/metacoding-workflow/SKILL.md',
+      '.codex/skills/metacoding-workflow/SKILL.copy.md'
+    );
+
+    expect(await service.isMetaCodingSetup()).toBe(true);
+    expect(
+      await service.readFile('.codex/skills/metacoding-workflow/SKILL.copy.md')
+    ).toBe('skill content');
+    expect(
+      await service.listFiles('.codex/skills/metacoding-workflow')
+    ).toEqual(
+      expect.arrayContaining(['SKILL.copy.md', 'SKILL.md', 'agents'])
+    );
+
+    const backupPath = await service.backupFile(
+      '.codex/skills/metacoding-workflow/SKILL.md'
+    );
+
+    expect(await fs.pathExists(path.join(workspace, backupPath))).toBe(true);
     process.chdir(originalCwd);
-    await fs.remove(testDir);
   });
 
-  describe('isMetaCodingSetup', () => {
-    test('CORE-UNIT-001: should return false when no metacoding files exist', async () => {
-      const result = await service.isMetaCodingSetup();
-      expect(result).toBe(false);
-    });
+  test('returns false when the workflow skill is not installed', async () => {
+    const workspace = await createTempWorkspace('metacoding-filesystem-empty');
+    const service = new FileSystemService();
+    const originalCwd = process.cwd();
 
-    test('CORE-UNIT-002: should return true when all required files exist', async () => {
-      await fs.ensureDir('.github/instructions');
-      await fs.writeFile('.github/copilot-instructions.md', 'test');
-
-      const result = await service.isMetaCodingSetup();
-      expect(result).toBe(true);
-    });
-
-    test('CORE-UNIT-003: should return false when only partial setup exists', async () => {
-      await fs.ensureDir('.github');
-      await fs.writeFile('.github/copilot-instructions.md', 'test');
-
-      const result = await service.isMetaCodingSetup();
-      expect(result).toBe(false);
-    });
+    process.chdir(workspace);
+    expect(await service.isMetaCodingSetup()).toBe(false);
+    process.chdir(originalCwd);
   });
 
-  describe('ensureDirectoryExists', () => {
-    test('CORE-UNIT-004: should create directory if it does not exist', async () => {
-      const dirPath = 'test/nested/directory';
+  test('detects Claude Code and Antigravity installations', async () => {
+    const workspace = await createTempWorkspace('metacoding-filesystem-vendors');
+    const service = new FileSystemService();
+    const originalCwd = process.cwd();
 
-      expect(await fs.pathExists(dirPath)).toBe(false);
+    process.chdir(workspace);
 
-      await service.ensureDirectoryExists(dirPath);
+    await fs.ensureDir('.claude/agents');
+    await fs.writeFile('.claude/agents/metacoding-workflow.md', 'agent', 'utf8');
+    expect(await service.isMetaCodingSetup()).toBe(true);
 
-      expect(await fs.pathExists(dirPath)).toBe(true);
-    });
+    await fs.remove('.claude');
+    await fs.ensureDir('.agents/skills/metacoding-workflow');
+    await fs.writeFile('.agents/skills/metacoding-workflow/SKILL.md', 'skill', 'utf8');
+    expect(await service.isMetaCodingSetup()).toBe(true);
 
-    test('CORE-UNIT-005: should not fail if directory already exists', async () => {
-      const dirPath = 'existing-dir';
-      await fs.ensureDir(dirPath);
-
-      await expect(
-        service.ensureDirectoryExists(dirPath)
-      ).resolves.not.toThrow();
-    });
-  });
-
-  describe('writeFile and readFile', () => {
-    test('CORE-UNIT-006: should write and read file content correctly', async () => {
-      const filePath = 'test-file.txt';
-      const content = 'Hello, World!';
-
-      await service.writeFile(filePath, content);
-      const readContent = await service.readFile(filePath);
-
-      expect(readContent).toBe(content);
-    });
-
-    test('CORE-UNIT-007: should create directories if they do not exist', async () => {
-      const filePath = 'nested/directory/file.txt';
-      const content = 'Test content';
-
-      await service.writeFile(filePath, content);
-
-      expect(await fs.pathExists('nested/directory')).toBe(true);
-      expect(await service.readFile(filePath)).toBe(content);
-    });
-  });
-
-  describe('fileExists', () => {
-    test('CORE-UNIT-008: should return true for existing file', async () => {
-      await fs.writeFile('existing-file.txt', 'content');
-
-      const result = await service.fileExists('existing-file.txt');
-      expect(result).toBe(true);
-    });
-
-    test('CORE-UNIT-009: should return false for non-existing file', async () => {
-      const result = await service.fileExists('non-existing-file.txt');
-      expect(result).toBe(false);
-    });
-  });
-
-  describe('getCurrentDirectoryName', () => {
-    test('CORE-UNIT-010: should return current directory name', () => {
-      const result = service.getCurrentDirectoryName();
-      expect(result).toBe(path.basename(testDir));
-    });
+    process.chdir(originalCwd);
   });
 });

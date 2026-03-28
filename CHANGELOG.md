@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-03-28
+
+### Added
+
+- Vendor-specific workflow skill installs for Codex, Claude Code, and Antigravity
+- `--vendor all` support for mixed-agent team repositories
+- Shared workflow skill references for repository organization, mandatory TDD, and MECE documentation
+- Release-prep checklist entry for the 2.0.0 migration
+
+### Changed
+
+- Reframed `metacoding` from editor instruction-file generation to a cross-agent workflow skill package
+- `metacoding init` now installs vendor-specific skill layouts instead of `.github` or `.cursor` instruction files
+- `metacoding update` now syncs installed vendor skill bundles instead of regenerating IDE-specific outputs
+- Project context generation now hard-links workflow and repository-organization references
+- Package publish surface now ships `skills/` instead of `templates/`
+- Package entrypoints now point to `lib/cli.js` and `lib/cli.d.ts`
+
+### Removed
+
+- Cursor, VS Code, and template-manager installation paths from the active product
+- Legacy editor-specific generation tests and services
+- Obsolete optional `vscode` peer dependency metadata
+
+### Breaking Changes
+
+- This release replaces the previous Copilot/Cursor instruction-file product with vendor-specific workflow skills
+- `metacoding init --vscode`, `metacoding init --cursor`, and the previous `.github` / `.cursor` generation model are no longer supported
+- Consumers relying on the old package `main`/`types` entrypoints should treat v2 as a breaking upgrade and use the CLI surface
+
+### Migration
+
+- Reinstall repositories with `metacoding init --vendor <vendor>` or `metacoding init --vendor all`
+- Treat workspace skill directories as the new source of repo-local agent guidance:
+  - `.codex/skills/metacoding-workflow/`
+  - `.claude/agents/metacoding-workflow.md` and `.claude/metacoding-workflow/`
+  - `.agents/skills/metacoding-workflow/`
+
 ## [1.5.1] - 2025-10-12
 
 ### Changed

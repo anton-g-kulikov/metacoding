@@ -10,25 +10,22 @@ export class BackupService {
   private readonly backupBaseDir = '.backup';
 
   /**
-   * Create a full backup of the .github directory
+   * Create a full backup of the provided paths.
    */
-  async createBackup(): Promise<BackupResult> {
+  async createBackup(targets: string[] = ['.codex/skills/metacoding-workflow']): Promise<BackupResult> {
     const timestamp = this.generateTimestamp();
     const backupPath = path.join(this.backupBaseDir, timestamp);
-    const githubDir = '.github';
 
     // Ensure backup directory exists
     await fs.ensureDir(backupPath);
 
     const filesBackedUp: string[] = [];
 
-    if (await fs.pathExists(githubDir)) {
-      // Copy entire .github directory
-      await fs.copy(githubDir, path.join(backupPath, githubDir));
-
-      // List all files that were backed up
-      const allFiles = await this.listAllFiles(githubDir);
-      filesBackedUp.push(...allFiles);
+    for (const target of targets) {
+      if (await fs.pathExists(target)) {
+        await fs.copy(target, path.join(backupPath, target));
+        filesBackedUp.push(...(await this.listAllFiles(target)));
+      }
     }
 
     return {
@@ -58,6 +55,11 @@ export class BackupService {
 
     if (!(await fs.pathExists(dirPath))) {
       return files;
+    }
+
+    const stat = await fs.stat(dirPath);
+    if (stat.isFile()) {
+      return [dirPath];
     }
 
     const items = await fs.readdir(dirPath);
