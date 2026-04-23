@@ -191,4 +191,3 @@ npm run build
 ## License
 
 MIT
-For Antigravity, the CLI currently installs the documented workspace-scoped variant under `.agents/skills/`. It does not yet install the global variant under `~/.gemini/antigravity/skills/`.
