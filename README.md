@@ -77,6 +77,54 @@ The installed skill preserves the original `metacoding` workflow intent:
 6. Update docs or status artifacts that materially changed.
 7. Close with a VCS handoff or completion confirmation.
 
+## Enforced Workflow
+
+The `metacoding-workflow` skill applies a strict operating contract for development tasks. It does not only provide prompts; it enforces an execution order and completion gates:
+
+1. Repository grounding before planning.
+2. Scope capture with success criteria and non-goals.
+3. Mandatory TDD sequence.
+4. Single-task execution with scope control.
+5. Verification through targeted checks.
+6. MECE artifact updates.
+7. Explicit closure with handoff or VCS action.
+
+### Mandatory TDD Sequence
+
+For testable changes, the enforced order is:
+
+1. Define and document test intent before implementation.
+2. Write or identify a failing test first.
+3. Implement the minimum production code to pass.
+4. Refactor only after the failing-to-passing loop is complete.
+
+### Scope and Task-Switching Rules
+
+The skill keeps work bounded to one active task:
+
+- Unrelated requests are queued for later.
+- Related blockers are treated as subtasks only when required to finish the active task.
+- Opportunistic refactors and mixed-scope edits are rejected during active implementation.
+
+### Documentation Ownership Rules
+
+The workflow follows MECE documentation ownership to avoid duplication:
+
+- System documentation stays evergreen and factual.
+- Task/status artifacts track temporal progress.
+- Test artifacts focus on test intent and result status.
+- Only the artifact that owns a concept is updated.
+
+### Completion Criteria
+
+A task is considered complete only when all of the following are true:
+
+- Implemented behavior matches the agreed scope.
+- Mandatory TDD was followed, or an explicit exception was recorded.
+- Relevant checks were run, or an explicit limitation was recorded.
+- Changed artifacts were updated, or a conscious deferral was documented.
+- The handoff includes outcome, verification status, and remaining risks.
+
 ## CLI
 
 ### Install
