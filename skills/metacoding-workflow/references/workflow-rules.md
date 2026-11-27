@@ -11,6 +11,7 @@
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Shape the task: interview the user and capture task scope.
    - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.
+   - When the solution adds a module or changes an interface, design that part with the `metacoding-design` skill before the scope summary is sent.
    - Close with the scope summary: goal, success criteria, in and out of scope, solution, decisions, terms, assumptions, test intent, and the tickets the solution is sliced into.
    - Wait for the user to confirm the scope summary before changing any file.
    - Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.
@@ -19,6 +20,7 @@
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
    - Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.
+   - Use the `metacoding-design` skill when the interface to test through is unclear or does not exist yet, and when restructuring once the behaviors are green.
    - For a bug whose cause is unknown, use the `metacoding-debug` skill for this step.
    - Keep to the confirmed scope: no unrelated features, cleanup, or opportunistic refactors.
    - Add blocking related work as a subtask; defer unrelated work.

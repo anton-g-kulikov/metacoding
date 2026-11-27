@@ -9,11 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Four companion skills, installed next to `metacoding-workflow` and usable on their own:
+- Companion skills, installed next to `metacoding-workflow` and usable on their own:
   - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like and on test doubles
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards, with a fixed list of code smells for what those standards leave open
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix, and masks credentials and personal data in what it captures
+  - `metacoding-design`: code-design guidance with four terms (module, interface, depth, seam) and seven rules on deep modules, small interfaces and where a seam belongs. The workflow uses it when a solution adds a module or changes an interface, when the interface to test through is unclear or missing, and when code is restructured after its tests are green
 - `metacoding-onboard`, a skill run once per repo. It looks for where the repo keeps its tracker, specs, glossary and decision records, asks one round of numbered questions with a recommended place for each, and writes the answers to a project map at `.metacoding/project.md` once the user confirms. It records the places and creates none of them. With the user's yes, it adds a one-line pointer to the project map in an instruction file the repo already has, such as `CLAUDE.md` or `AGENTS.md`
 - The workflow reads the project map while grounding, and `metacoding-shape` reads it before its first round. Where it names a place for the tracker, the specs, the glossary or the decision records, that place is used, and created there when a task first needs it. A place it has no line for falls back to the repo's own place, or to the `/_meta` default
 - In a repo with no project map, the workflow says in one line that `metacoding-onboard` can record the places, then carries on
@@ -31,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `metacoding-workflow` is now an orchestrator: it keeps the step order, grounding, verification, artifact rules and close-out, and calls the companion skills for the shape, build, debug and review steps
-- `metacoding init` and `metacoding update` install and sync all six skills; `update` adds the skills an existing install lacks
+- `metacoding init` and `metacoding update` install and sync every packaged skill; `update` adds the skills an existing install lacks
 - The `.gitignore` section now uses `metacoding-*/` patterns per agent so it covers every skill
 - **Claude Code now installs as a skill** at `.claude/skills/metacoding-workflow/` instead of a subagent at `.claude/agents/metacoding-workflow.md` with a support bundle in `.claude/metacoding-workflow/`. A subagent cannot question the user directly, which blocked the scope interview
 - `metacoding update` migrates the old Claude Code layout: it backs up the subagent files, installs the skill, removes the old files, and adds the new path to an existing metacoding `.gitignore` section

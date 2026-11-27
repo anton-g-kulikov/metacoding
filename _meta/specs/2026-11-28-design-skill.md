@@ -23,6 +23,7 @@ Give the metacoding skills code-design guidance, so an agent that designs or cha
 - `test/unit/skill-content.test.ts`, `test/unit/skill-manager.test.ts`, `test/unit/update-command.test.ts`.
 - README, CHANGELOG, `_meta/api-design.md`, `_meta/system-documentation.md`.
 - This task's records: this spec, and `_meta/backlog.md`.
+- Added on 2026-11-28, in ticket 1: a "Code Design" section in the README, next to the sections the other companion skills have, and the line of `_meta/backlog.md` that counted the skills.
 
 ## Out of scope
 
@@ -57,6 +58,14 @@ Run alone, the skill works on a module or area the user names, and asks when the
 
 The workflow skill gets one sentence in step 2 and one in step 3, in both files that describe the steps. The review gets two lines in its smell list.
 
+Changed on 2026-11-28, found in the review of ticket 1:
+
+- **Seam** is defined as a place where what sits behind an interface can be swapped without editing its callers; a test puts a stand-in there. The first definition made every interface a seam, which contradicted rule 4: a rule that says to add no seam needs a seam to be something a module can lack. Rule 5 now says that callers and tests meet a module at its interface.
+- Rule 4 lists network, clock, randomness and third-party services, the same list as `metacoding-tdd`, which prefers a real temporary directory to a stand-in for the file system.
+- Rule 6 applies to a dependency that sits behind a seam. Applied to every dependency it would create the seams rule 4 forbids.
+- The rule texts say a little more than the one-line rules above, and it is kept because each rule needs it to hold in use: depth is judged at the interface; a module that fails the deletion test is merged into its caller or into the module it passes calls to; a seam is real when two things do sit behind it; the two or three interfaces of rule 7 differ in kind.
+- The build moment is stated in full, as the interview agreed it: when the interface to test through is unclear or missing, and when restructuring once the behaviors are green.
+
 ## Decisions made
 
 - The guidance is a new companion skill, `metacoding-design`. A reference file of the workflow skill is out of reach when a companion runs alone, and paragraphs in three skills would state the same rules three times.
@@ -85,7 +94,7 @@ One content test per term, rule, example pair and pointer, each written first an
 
 Changed on 2026-11-28, before the build: the ticket "The workflow says when to use it" is folded into ticket 1. An existing installer test requires the workflow rules to name every skill in the installer's list, so the skill cannot be installed in one ticket and named by the workflow in a later one. The scope is unchanged; the tickets after it are renumbered.
 
-- [ ] **1. The design skill, installed, listed, and named by the workflow**
+- [x] **1. The design skill, installed, listed, and named by the workflow**
   - Success criteria: the first, second and fourth success criteria above. The skill is in the skill tables and folder trees of the docs and in the CHANGELOG, and the system documentation states who names other skills.
   - Test intent: the skill is installed for all three agents, with `agents/openai.yaml` for Codex. It states each term with its words to avoid, each of the seven rules, and both examples for rules 1, 4 and 6. Step 2 and step 3 name `metacoding-design` and its condition, in both the workflow skill and its workflow rules.
   - Blocked by: none.

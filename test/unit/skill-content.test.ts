@@ -1738,3 +1738,218 @@ describe('installed skill content: getting started', () => {
     expect(prompt).toContain('then tell me how to start a task');
   });
 });
+
+describe('installed skill content: the design skill', () => {
+  const designSection = async (from: string, to: string) => {
+    const { read } = await installFor('codex');
+    const design = read('metacoding-design/SKILL.md');
+
+    expect(design).toContain(from);
+    expect(design).toContain(to);
+    expect(design.indexOf(to)).toBeGreaterThan(design.indexOf(from));
+    return design.slice(design.indexOf(from), design.indexOf(to));
+  };
+
+  test('the design skill has Codex metadata with a name and a prompt', async () => {
+    const { read } = await installFor('codex');
+    const metadata = read('metacoding-design/agents/openai.yaml');
+
+    expect(metadata).toContain('display_name: "Metacoding Design"');
+    expect(metadata).toContain(
+      'short_description: "Design code by module depth, interfaces, and seams"'
+    );
+    expect(metadata).toContain('default_prompt: "Use $metacoding-design to ');
+  });
+
+  test('design defines its four terms with the words to avoid', async () => {
+    const terms = await designSection('## Terms', '## Rules');
+
+    expect(terms).toContain(
+      '**Module**: anything with an interface and code behind it, such as a function, a class, a package, or a service. Avoid: component, unit.'
+    );
+    expect(terms).toContain(
+      '**Interface**: everything a caller must know to use a module: names and types, the order of calls, errors, config. Avoid: API, signature.'
+    );
+    expect(terms).toContain(
+      '**Depth**: how much behavior sits behind the interface, compared with how much a caller must know. A module is deep or shallow. Avoid: size.'
+    );
+    expect(terms).toContain(
+      '**Seam**: a place where what sits behind an interface can be swapped without editing its callers. A test puts a stand-in there. Avoid: boundary, layer.'
+    );
+  });
+
+  test('design prefers a deep module and shows a deep and a shallow one', async () => {
+    const rule = await designSection(
+      '### 1. Prefer a deep module',
+      '### 2. Keep the whole interface small'
+    );
+
+    expect(rule).toContain('A deep module puts a lot of behavior behind a small interface.');
+    expect(rule).toContain(
+      "A shallow module's caller must know nearly as much as it would take to write the code behind it; a module that only passes calls on is the plainest case."
+    );
+    expect(rule).toContain(
+      'Depth is judged at the interface: a deep module can be built from small parts inside, as long as callers do not see them.'
+    );
+    expect(rule).toContain(
+      'Good: one call. The caller knows nothing about discounts, tax, or rounding.'
+    );
+    expect(rule).toContain('total = price_of(cart)');
+    expect(rule).toContain(
+      'Bad: the caller must know every step and the order they go in. The module hides nothing.'
+    );
+    expect(rule).toContain('tax = pricing.tax_on(subtotal - discount)');
+    expect(rule.indexOf('Bad: ')).toBeGreaterThan(rule.indexOf('Good: '));
+  });
+
+  test('design counts everything a caller must know as the interface', async () => {
+    const rule = await designSection(
+      '### 2. Keep the whole interface small',
+      '### 3. Apply the deletion test'
+    );
+
+    expect(rule).toContain(
+      'Judge an interface by everything in it, not only by its names and types.'
+    );
+    expect(rule).toContain(
+      'A required order of calls, an error the caller must handle, a config value that must be set first: a caller must know each of these.'
+    );
+    expect(rule).toContain(
+      'Count all of it when you judge how small the interface is, and move what you can behind it.'
+    );
+  });
+
+  test('design applies the deletion test to a module in doubt', async () => {
+    const rule = await designSection(
+      '### 3. Apply the deletion test',
+      '### 4. Put a seam only where something varies'
+    );
+
+    expect(rule).toContain('When you doubt that a module earns its place, imagine it gone.');
+    expect(rule).toContain('If its complexity reappears in every caller, it earns its place.');
+    expect(rule).toContain(
+      'If nothing gets harder, it does not: merge it into its caller or into the module it passes calls to.'
+    );
+  });
+
+  test('design puts a seam only where something varies, with a good and a bad one', async () => {
+    const rule = await designSection(
+      '### 4. Put a seam only where something varies',
+      '### 5. Test through the interface'
+    );
+
+    expect(rule).toContain(
+      'Put a seam where something really varies or sits outside your control: network, clock, randomness, third-party services.'
+    );
+    expect(rule).toContain('Add none for a single implementation that nothing replaces.');
+    expect(rule).toContain(
+      'A seam is real when two things do sit behind it, such as the real service and the stand-in a test uses.'
+    );
+    expect(rule).toContain(
+      'Good: the payment provider is outside your control, so it sits behind a seam, and a test puts a stand-in there.'
+    );
+    expect(rule).toContain('receipt = checkout(cart, payments)');
+    expect(rule).toContain(
+      'Bad: a seam with one implementation that nothing replaces. A reader follows one more hop and gains nothing.'
+    );
+    expect(rule).toContain('class DefaultReportFormatter is a ReportFormatter');
+    expect(rule.indexOf('Bad: ')).toBeGreaterThan(rule.indexOf('Good: '));
+  });
+
+  test('design tests through the interface and reads the wish to test past it as a sign', async () => {
+    const rule = await designSection(
+      '### 5. Test through the interface',
+      '### 6. Pass dependencies in, and return results'
+    );
+
+    expect(rule).toContain(
+      'A test that goes through the interface keeps passing when the code behind it is rewritten.'
+    );
+    expect(rule).toContain('Callers and tests meet a module at its interface.');
+    expect(rule).toContain(
+      'When you want to test past the interface, at a private step or an inner helper, the module has the wrong shape: either that step deserves an interface of its own, or the interface does not return enough for a test to check the behavior.'
+    );
+  });
+
+  test('design passes dependencies in and returns results, with a good and a bad example', async () => {
+    const rule = await designSection(
+      '### 6. Pass dependencies in, and return results',
+      '### 7. Design a lasting interface more than once'
+    );
+
+    expect(rule).toContain(
+      'When a dependency sits behind a seam, the module that uses it must be handed it.'
+    );
+    expect(rule).toContain('Take the dependency as an argument.');
+    expect(rule).toContain(
+      'Return the result to the caller instead of changing something out of sight'
+    );
+    expect(rule).toContain('Good: the clock comes in, and the date comes back.');
+    expect(rule).toContain('expires_on = expiry_date(order, clock)');
+    expect(rule).toContain(
+      'Bad: the clock is created inside, and the result is written where the caller cannot see it.'
+    );
+    expect(rule).toContain('now = SystemClock().now()');
+    expect(rule.indexOf('Bad: ')).toBeGreaterThan(rule.indexOf('Good: '));
+  });
+
+  test('design sketches a lasting interface more than once and puts the choice to the user', async () => {
+    const { read } = await installFor('codex');
+    const design = read('metacoding-design/SKILL.md');
+    const rule = design.slice(
+      design.indexOf('### 7. Design a lasting interface more than once')
+    );
+
+    expect(design).toContain('### 7. Design a lasting interface more than once');
+    expect(rule).toContain('sketch two or three different interfaces before choosing');
+    expect(rule).not.toContain('API');
+    expect(rule).toContain(
+      'When the host agent supports subagents, you may give each one to its own subagent.'
+    );
+    expect(rule).toContain(
+      'Put the choice to the user with your recommendation and what each one costs.'
+    );
+  });
+
+  test('the workflow skill lists the design skill and leaves when to use it to the workflow rules', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const steps = skill.slice(
+      skill.indexOf('## Steps'),
+      skill.indexOf('## Rules Between Steps')
+    );
+
+    expect(skill).toContain('## Steps');
+    expect(skill).toContain('## Rules Between Steps');
+    expect(skill).toContain(
+      'Companion skills own the method of single steps, or of one part of a step, and each also works on its own:'
+    );
+    expect(skill).toContain(
+      '| `metacoding-design` | Decides the shape of code: module depth, interfaces, and seams |'
+    );
+    expect(steps).not.toContain('metacoding-design');
+  });
+
+  test('the workflow rules name the design skill in the shape and build steps', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const shapeStep = rules.slice(
+      rules.indexOf('2. Shape the task'),
+      rules.indexOf('3. Build test-first.')
+    );
+    const buildStep = rules.slice(
+      rules.indexOf('3. Build test-first.'),
+      rules.indexOf('4. Verify.')
+    );
+
+    expect(rules).toContain('2. Shape the task');
+    expect(rules).toContain('3. Build test-first.');
+    expect(rules).toContain('4. Verify.');
+    expect(shapeStep).toContain(
+      'When the solution adds a module or changes an interface, design that part with the `metacoding-design` skill before the scope summary is sent.'
+    );
+    expect(buildStep).toContain(
+      'Use the `metacoding-design` skill when the interface to test through is unclear or does not exist yet, and when restructuring once the behaviors are green.'
+    );
+  });
+});

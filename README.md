@@ -16,7 +16,7 @@ Running `metacoding init` asks which coding agent you use:
 You can also pass `--vendor codex`, `--vendor claude-code`, or `--vendor antigravity`.
 For mixed-agent teams, you can use `--vendor all` to install all workspace-scoped variants.
 
-It installs six skills into that agent's skills folder:
+It installs these skills into that agent's skills folder:
 
 ```text
 Codex:       .codex/skills/
@@ -26,11 +26,12 @@ Antigravity: .agents/skills/
 
 | Skill | Role |
 | --- | --- |
-| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls `metacoding-shape`, `metacoding-tdd`, `metacoding-review` and `metacoding-debug` at the right step |
+| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug` and `metacoding-design` at the right step |
 | `metacoding-shape` | Settles open decisions with you and ends in a confirmed scope summary |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-review` | Checks the finished change against the agreed scope and the repo's standards |
 | `metacoding-debug` | Finds the cause of a bug, starting from a command that reproduces it |
+| `metacoding-design` | Decides the shape of code: module depth, interfaces, and seams |
 | `metacoding-onboard` | Run once per repo. Records where the repo keeps its tracker, specs, glossary and decision records in a project map, `.metacoding/project.md` |
 
 Each companion skill also works on its own, so you can ask for only an interview, only a review, or only a diagnosis.
@@ -62,6 +63,9 @@ For Codex, the project install looks like:
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 ├── metacoding-debug/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+├── metacoding-design/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 └── metacoding-onboard/
@@ -132,6 +136,17 @@ Before closing, `metacoding-review` checks the diff on two separate axes:
 Where the agent supports subagents, each axis is reviewed in a fresh context that sees only the diff and what that axis compares it with.
 
 For the last ticket of a task with several, the scope axis runs once more on the whole change against the spec, because tickets can each pass while the task's goal is still missed. The spec is then marked done.
+
+### Code Design
+
+`metacoding-design` decides the shape of code. The workflow uses it in two places: while shaping, when the solution adds a module or changes an interface, and while building, when the interface to test through is unclear or the code is restructured after the tests are green.
+
+- It uses four terms with fixed meanings: module, interface, depth, and seam.
+- It prefers a deep module, one with a lot of behavior behind a small interface, and counts everything a caller must know as the interface.
+- It puts a seam, a place where one part can be swapped for another, only where something varies or is outside your control, and it tests through the interface.
+- For an interface that will be hard to change, it sketches two or three shapes and puts the choice to you with a recommendation.
+
+Three of its seven rules come with a good and a bad example. The examples are pseudocode, and the rules name no language.
 
 ### Debugging
 
