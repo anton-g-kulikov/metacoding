@@ -6,6 +6,7 @@ import YAML from 'yaml';
 import { AgentVendor, AgentVendorOption, UpdateOptions } from '../types';
 import { BackupService } from '../services/backup';
 import { ConflictResolutionService } from '../services/conflict-resolution';
+import { GitIgnoreManager } from '../services/gitignore-manager';
 import { ProjectDetector } from '../services/project-detector';
 import { SkillManager } from '../services/skill-manager';
 
@@ -17,12 +18,14 @@ export class UpdateCommand {
   private readonly backupService: BackupService;
   private readonly conflictService: ConflictResolutionService;
   private readonly projectDetector: ProjectDetector;
+  private readonly gitIgnoreManager: GitIgnoreManager;
 
   constructor() {
     this.skillManager = new SkillManager();
     this.backupService = new BackupService();
     this.conflictService = new ConflictResolutionService();
     this.projectDetector = new ProjectDetector();
+    this.gitIgnoreManager = new GitIgnoreManager();
   }
 
   async execute(options: UpdateOptions): Promise<void> {
@@ -117,6 +120,10 @@ export class UpdateCommand {
       }
 
       writeSpinner.succeed(`Updated ${vendor} skill files (${vendorFilesUpdated} files)`);
+
+      if (vendor === 'claude-code') {
+        await this.migrateLegacyClaudeInstall(options);
+      }
     }
 
     await this.backupService.cleanupOldBackups();
@@ -124,6 +131,36 @@ export class UpdateCommand {
     console.log(
       chalk.green.bold(
         `\nmetacoding workflow skill is up to date (${filesUpdated} files synced).\n`
+      )
+    );
+  }
+
+  /**
+   * Remove the 2.0.x Claude Code subagent layout once the skill is in place.
+   * The legacy files are only deleted when this run backed them up.
+   */
+  private async migrateLegacyClaudeInstall(options: UpdateOptions): Promise<void> {
+    if (!(await this.skillManager.hasLegacyClaudeInstall())) {
+      return;
+    }
+
+    await this.gitIgnoreManager.addMissingPatterns(process.cwd());
+
+    if (options.backup === false) {
+      console.log(
+        chalk.yellow(
+          'Legacy Claude Code subagent files were kept because backups are disabled. ' +
+            'Remove .claude/agents/metacoding-workflow.md and .claude/metacoding-workflow/ ' +
+            'so Claude Code uses the skill instead of the old subagent.'
+        )
+      );
+      return;
+    }
+
+    const removed = await this.skillManager.removeLegacyClaudeInstall();
+    console.log(
+      chalk.green(
+        `Migrated Claude Code from the legacy subagent layout to a skill (removed ${removed.join(', ')}).`
       )
     );
   }
@@ -141,6 +178,16 @@ export class UpdateCommand {
     const targetVendors = this.getTargetVendors(installedVendors, options.vendor);
 
     for (const vendor of targetVendors) {
+      if (
+        vendor === 'claude-code' &&
+        (await this.skillManager.needsClaudeMigration())
+      ) {
+        throw new Error(
+          'Validation failed: the Claude Code install uses the legacy subagent layout. ' +
+            'Run "metacoding update" to migrate it to a skill.'
+        );
+      }
+
       const requiredFiles = this.getRequiredFilesForVendor(vendor);
       let missingFiles = 0;
 
@@ -239,13 +286,12 @@ export class UpdateCommand {
 
     if (vendor === 'claude-code') {
       return [
-        '.claude/agents/metacoding-workflow.md',
-        '.claude/metacoding-workflow/SKILL.md',
-        '.claude/metacoding-workflow/references/workflow-rules.md',
-        '.claude/metacoding-workflow/references/interview.md',
-        '.claude/metacoding-workflow/references/platform-adaptation.md',
-        '.claude/metacoding-workflow/references/project-context.md',
-        '.claude/metacoding-workflow/assets/templates/task-entry.md',
+        '.claude/skills/metacoding-workflow/SKILL.md',
+        '.claude/skills/metacoding-workflow/references/workflow-rules.md',
+        '.claude/skills/metacoding-workflow/references/interview.md',
+        '.claude/skills/metacoding-workflow/references/platform-adaptation.md',
+        '.claude/skills/metacoding-workflow/references/project-context.md',
+        '.claude/skills/metacoding-workflow/assets/templates/task-entry.md',
       ];
     }
 

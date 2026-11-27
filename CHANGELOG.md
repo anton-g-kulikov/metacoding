@@ -13,8 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Claude Code now installs as a skill** at `.claude/skills/metacoding-workflow/` instead of a subagent at `.claude/agents/metacoding-workflow.md` with a support bundle in `.claude/metacoding-workflow/`. A subagent cannot question the user directly, which blocked the scope interview
+- `metacoding update` migrates the old Claude Code layout: it backs up the subagent files, installs the skill, removes the old files, and adds the new path to an existing metacoding `.gitignore` section
+- `metacoding update --dry-run` fails with a migration hint when only the old Claude Code layout is present
+- `metacoding init` fills in exclusion patterns that an existing metacoding `.gitignore` section lacks
 - The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
 - `metacoding update --dry-run` treats `references/interview.md` as a required file
+
+### Removed
+
+- `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
 
 ## [2.0.1] - 2026-03-28
 

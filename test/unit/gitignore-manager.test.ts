@@ -20,6 +20,39 @@ describe('GitIgnoreManager', () => {
     expect(GitIgnoreManager.createTemplateContent()).toContain('.backup/');
   });
 
+  test('adds patterns that an existing metacoding section is missing', async () => {
+    const workspace = await createTempWorkspace('metacoding-gitignore-missing');
+    const manager = new GitIgnoreManager();
+    const gitignorePath = path.join(workspace, '.gitignore');
+
+    await fs.writeFile(
+      gitignorePath,
+      '# metacoding: AI coding assistant exclusions\n.codex/skills/metacoding-workflow/\n',
+      'utf8'
+    );
+    await manager.updateGitIgnore(workspace);
+    await manager.updateGitIgnore(workspace);
+
+    const gitignore = await fs.readFile(gitignorePath, 'utf8');
+
+    expect(gitignore.match(/# metacoding:/g)).toHaveLength(1);
+    expect(gitignore.match(/^\.codex\/skills\/metacoding-workflow\/$/gm)).toHaveLength(1);
+    expect(
+      gitignore.match(/^\.claude\/skills\/metacoding-workflow\/$/gm)
+    ).toHaveLength(1);
+  });
+
+  test('leaves a gitignore without a metacoding section alone when only filling gaps', async () => {
+    const workspace = await createTempWorkspace('metacoding-gitignore-optout');
+    const manager = new GitIgnoreManager();
+    const gitignorePath = path.join(workspace, '.gitignore');
+
+    await fs.writeFile(gitignorePath, 'node_modules/\n', 'utf8');
+    await manager.addMissingPatterns(workspace);
+
+    expect(await fs.readFile(gitignorePath, 'utf8')).toBe('node_modules/\n');
+  });
+
   test('detects whether the metacoding section is present', async () => {
     const workspace = await createTempWorkspace('metacoding-gitignore-detect');
     const manager = new GitIgnoreManager();

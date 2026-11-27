@@ -62,6 +62,18 @@ export class InitCommand {
 
     console.log(chalk.green.bold('\nmetacoding skill installed.\n'));
     this.displayNextSteps(vendorChoice);
+
+    if (
+      vendors.includes('claude-code') &&
+      (await this.skillManager.hasLegacyClaudeInstall())
+    ) {
+      console.log(
+        chalk.yellow(
+          'Legacy Claude Code subagent files are still present. ' +
+            'Run "metacoding update" to back them up and remove them.\n'
+        )
+      );
+    }
   }
 
   private async getProjectConfiguration(
@@ -231,7 +243,7 @@ export class InitCommand {
     console.log(chalk.cyan('Installed entrypoint:'));
     if (vendor === 'all') {
       console.log(chalk.dim('-'), '.codex/skills/metacoding-workflow/SKILL.md');
-      console.log(chalk.dim('-'), '.claude/agents/metacoding-workflow.md');
+      console.log(chalk.dim('-'), '.claude/skills/metacoding-workflow/SKILL.md');
       console.log(chalk.dim('-'), '.agents/skills/metacoding-workflow/SKILL.md');
       return;
     }
@@ -239,7 +251,7 @@ export class InitCommand {
     if (vendor === 'codex') {
       console.log(chalk.dim('-'), '.codex/skills/metacoding-workflow/SKILL.md');
     } else if (vendor === 'claude-code') {
-      console.log(chalk.dim('-'), '.claude/agents/metacoding-workflow.md');
+      console.log(chalk.dim('-'), '.claude/skills/metacoding-workflow/SKILL.md');
     } else {
       console.log(chalk.dim('-'), '.agents/skills/metacoding-workflow/SKILL.md');
     }

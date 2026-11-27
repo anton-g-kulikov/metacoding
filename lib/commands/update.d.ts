@@ -4,8 +4,10 @@ export declare class UpdateCommand {
     private readonly backupService;
     private readonly conflictService;
     private readonly projectDetector;
+    private readonly gitIgnoreManager;
     constructor();
     execute(options: UpdateOptions): Promise<void>;
+    private migrateLegacyClaudeInstall;
     private validateSetup;
     private getDefaultTestFramework;
     private getDefaultBuildTool;

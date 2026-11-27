@@ -21,7 +21,7 @@ export async function main(): Promise<void> {
 ${chalk.cyan('Examples:')}
   ${chalk.dim('$')} metacoding init                    # Install the workflow skill in the current project
   ${chalk.dim('$')} metacoding init --template react   # Install with React-oriented project context
-  ${chalk.dim('$')} metacoding init --vendor claude-code  # Install the Claude Code subagent variant
+  ${chalk.dim('$')} metacoding init --vendor claude-code  # Install the Claude Code skill variant
   ${chalk.dim('$')} metacoding init --vendor all       # Install all supported workspace variants
   ${chalk.dim('$')} metacoding update --dry-run        # Validate the installed skill package
   ${chalk.dim('$')} metacoding update                  # Sync the installed skill to the packaged version

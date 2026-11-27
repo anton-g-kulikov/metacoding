@@ -20,7 +20,7 @@ The installed entrypoint depends on that choice:
 
 ```text
 Codex:       .codex/skills/metacoding-workflow/SKILL.md
-Claude Code: .claude/agents/metacoding-workflow.md
+Claude Code: .claude/skills/metacoding-workflow/SKILL.md
 Antigravity: .agents/skills/metacoding-workflow/SKILL.md
 ```
 
@@ -180,7 +180,7 @@ metacoding update --force
 
 ## Using the Skill
 
-After installation, point your coding agent at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill/subagent for the next task.
+After installation, point your coding agent at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`.
 
 The skill will:
 
@@ -191,7 +191,15 @@ The skill will:
 - fall back to bundled templates when the repo lacks workflow artifacts
 - produce a commit-ready handoff when git actions are unavailable or out of scope
 
-## Migration Note
+## Migration Notes
+
+### Claude Code: subagent to skill
+
+Versions up to 2.0.1 installed the Claude Code variant as a subagent (`.claude/agents/metacoding-workflow.md` plus `.claude/metacoding-workflow/`). A subagent reports back to the main conversation and cannot question you directly, so the scope interview could not run as intended. The variant is now a regular skill under `.claude/skills/metacoding-workflow/`, which runs in the main conversation.
+
+Run `metacoding update` in a project with the old layout to migrate it. The update backs up the old files to `.backup/`, installs the skill, and removes the subagent files.
+
+### Editor instruction files
 
 This package no longer treats GitHub Copilot or Cursor instruction files as the primary product. The canonical content lives under `skills/metacoding-workflow/`, and the CLI now renders vendor-specific installs for Codex, Claude Code, or Antigravity from that shared bundle.
 

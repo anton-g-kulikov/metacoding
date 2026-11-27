@@ -86,15 +86,15 @@ describe('SkillManager', () => {
     });
 
     expect(
-      claudeFiles.some(
-        (file) => file.path === '.claude/agents/metacoding-workflow.md'
-      )
-    ).toBe(true);
-    expect(
       claudeFiles.find(
-        (file) => file.path === '.claude/agents/metacoding-workflow.md'
+        (file) => file.path === '.claude/skills/metacoding-workflow/SKILL.md'
       )?.content
     ).toContain('references/repository-organization.md');
+    expect(
+      claudeFiles.every((file) =>
+        file.path.startsWith('.claude/skills/metacoding-workflow/')
+      )
+    ).toBe(true);
     expect(
       antigravityFiles.some(
         (file) => file.path.endsWith('.agents/skills/metacoding-workflow/SKILL.md')
@@ -126,8 +126,8 @@ describe('SkillManager', () => {
       },
       {
         vendor: 'claude-code' as const,
-        root: '.claude/metacoding-workflow',
-        entry: '.claude/agents/metacoding-workflow.md',
+        root: '.claude/skills/metacoding-workflow',
+        entry: '.claude/skills/metacoding-workflow/SKILL.md',
       },
       {
         vendor: 'antigravity' as const,

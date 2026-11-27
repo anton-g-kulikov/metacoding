@@ -66,7 +66,7 @@ describe('UpdateCommand', () => {
 
     const agentPath = path.join(
       workspace,
-      '.claude/agents/metacoding-workflow.md'
+      '.claude/skills/metacoding-workflow/SKILL.md'
     );
     await fs.writeFile(agentPath, 'local edit', 'utf8');
 
@@ -108,7 +108,7 @@ describe('UpdateCommand', () => {
       'utf8'
     );
     await fs.writeFile(
-      path.join(workspace, '.claude/agents/metacoding-workflow.md'),
+      path.join(workspace, '.claude/skills/metacoding-workflow/SKILL.md'),
       'claude edit',
       'utf8'
     );
@@ -132,7 +132,7 @@ describe('UpdateCommand', () => {
     ).toContain('name: metacoding-workflow');
     expect(
       await fs.readFile(
-        path.join(workspace, '.claude/agents/metacoding-workflow.md'),
+        path.join(workspace, '.claude/skills/metacoding-workflow/SKILL.md'),
         'utf8'
       )
     ).toContain('name: metacoding-workflow');
@@ -142,5 +142,95 @@ describe('UpdateCommand', () => {
         'utf8'
       )
     ).toContain('name: metacoding-workflow');
+  });
+
+  test('migrates a legacy Claude Code subagent install to the skill layout', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-legacy');
+    process.chdir(workspace);
+
+    const legacyAgent = path.join(
+      workspace,
+      '.claude/agents/metacoding-workflow.md'
+    );
+    const legacyBundle = path.join(workspace, '.claude/metacoding-workflow');
+    const otherAgent = path.join(workspace, '.claude/agents/other-agent.md');
+    await fs.outputFile(legacyAgent, 'legacy agent with local edit', 'utf8');
+    await fs.outputFile(
+      path.join(legacyBundle, 'references/workflow-rules.md'),
+      'legacy rules',
+      'utf8'
+    );
+    await fs.outputFile(otherAgent, 'unrelated agent', 'utf8');
+    await fs.writeFile(
+      path.join(workspace, '.gitignore'),
+      '# metacoding: AI coding assistant exclusions\n.claude/agents/metacoding-workflow.md\n',
+      'utf8'
+    );
+
+    const update = new UpdateCommand();
+    await expect(update.execute({ dryRun: true })).rejects.toThrow(
+      'legacy subagent layout'
+    );
+
+    await update.execute({});
+
+    expect(
+      await fs.readFile(
+        path.join(workspace, '.claude/skills/metacoding-workflow/SKILL.md'),
+        'utf8'
+      )
+    ).toContain('name: metacoding-workflow');
+    expect(
+      await fs.pathExists(
+        path.join(
+          workspace,
+          '.claude/skills/metacoding-workflow/references/interview.md'
+        )
+      )
+    ).toBe(true);
+    expect(await fs.pathExists(legacyAgent)).toBe(false);
+    expect(await fs.pathExists(legacyBundle)).toBe(false);
+    expect(await fs.readFile(otherAgent, 'utf8')).toBe('unrelated agent');
+
+    const [backupName] = await fs.readdir(path.join(workspace, '.backup'));
+    expect(
+      await fs.readFile(
+        path.join(
+          workspace,
+          '.backup',
+          backupName as string,
+          '.claude/agents/metacoding-workflow.md'
+        ),
+        'utf8'
+      )
+    ).toBe('legacy agent with local edit');
+    expect(
+      await fs.readFile(path.join(workspace, '.gitignore'), 'utf8')
+    ).toContain('.claude/skills/metacoding-workflow/');
+
+    await expect(
+      update.execute({ dryRun: true, strict: true })
+    ).resolves.toBeUndefined();
+  });
+
+  test('keeps legacy Claude Code files when backups are disabled', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-legacy-nobackup');
+    process.chdir(workspace);
+
+    const legacyAgent = path.join(
+      workspace,
+      '.claude/agents/metacoding-workflow.md'
+    );
+    await fs.outputFile(legacyAgent, 'legacy agent', 'utf8');
+
+    const update = new UpdateCommand();
+    await update.execute({ backup: false });
+
+    expect(
+      await fs.pathExists(
+        path.join(workspace, '.claude/skills/metacoding-workflow/SKILL.md')
+      )
+    ).toBe(true);
+    expect(await fs.readFile(legacyAgent, 'utf8')).toBe('legacy agent');
   });
 });

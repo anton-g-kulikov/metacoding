@@ -64,6 +64,11 @@ describe('FileSystemService', () => {
     expect(await service.isMetaCodingSetup()).toBe(true);
 
     await fs.remove('.claude');
+    await fs.ensureDir('.claude/skills/metacoding-workflow');
+    await fs.writeFile('.claude/skills/metacoding-workflow/SKILL.md', 'skill', 'utf8');
+    expect(await service.isMetaCodingSetup()).toBe(true);
+
+    await fs.remove('.claude');
     await fs.ensureDir('.agents/skills/metacoding-workflow');
     await fs.writeFile('.agents/skills/metacoding-workflow/SKILL.md', 'skill', 'utf8');
     expect(await service.isMetaCodingSetup()).toBe(true);

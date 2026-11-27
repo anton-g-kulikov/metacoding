@@ -16,10 +16,14 @@ export class SkillManager {
     __dirname,
     '../../skills/metacoding-workflow'
   );
-  private readonly claudeAgentTemplatePath = path.join(
-    __dirname,
-    '../../skills/vendor-templates/claude-agent.md.template'
-  );
+  /**
+   * Paths written by the 2.0.x Claude Code install, which shipped a subagent
+   * plus a support bundle instead of a skill.
+   */
+  private readonly legacyClaudePaths = [
+    path.join('.claude', 'agents', 'metacoding-workflow.md'),
+    path.join('.claude', 'metacoding-workflow'),
+  ];
   private readonly vendorDefinitions: Record<AgentVendor, VendorInstallDefinition> = {
     codex: {
       vendor: 'codex',
@@ -28,8 +32,8 @@ export class SkillManager {
     },
     'claude-code': {
       vendor: 'claude-code',
-      root: path.join('.claude', 'metacoding-workflow'),
-      entryFiles: [path.join('..', 'agents', 'metacoding-workflow.md')],
+      root: path.join('.claude', 'skills', 'metacoding-workflow'),
+      entryFiles: ['SKILL.md'],
     },
     antigravity: {
       vendor: 'antigravity',
@@ -47,12 +51,55 @@ export class SkillManager {
     const installed: AgentVendor[] = [];
 
     for (const vendor of Object.keys(this.vendorDefinitions) as AgentVendor[]) {
-      if (await this.hasVendorInstall(vendor)) {
+      if (
+        (await this.hasVendorInstall(vendor)) ||
+        (vendor === 'claude-code' && (await this.hasLegacyClaudeInstall()))
+      ) {
         installed.push(vendor);
       }
     }
 
     return installed;
+  }
+
+  /**
+   * True when the 2.0.x Claude Code subagent layout is still on disk.
+   */
+  async hasLegacyClaudeInstall(): Promise<boolean> {
+    for (const legacyPath of this.legacyClaudePaths) {
+      if (await fs.pathExists(legacyPath)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * True when Claude Code has the legacy layout but not the skill layout.
+   */
+  async needsClaudeMigration(): Promise<boolean> {
+    return (
+      (await this.hasLegacyClaudeInstall()) &&
+      !(await this.hasVendorInstall('claude-code'))
+    );
+  }
+
+  /**
+   * Remove the legacy Claude Code subagent and its support bundle.
+   * Returns the paths that were removed.
+   */
+  async removeLegacyClaudeInstall(): Promise<string[]> {
+    const removed: string[] = [];
+
+    for (const legacyPath of this.legacyClaudePaths) {
+      if (await fs.pathExists(legacyPath)) {
+        await fs.remove(legacyPath);
+        removed.push(legacyPath);
+      }
+    }
+
+    return removed;
   }
 
   getInstallDirectory(vendor: AgentVendor): string {
@@ -61,10 +108,7 @@ export class SkillManager {
 
   getBackupTargets(vendor: AgentVendor): string[] {
     if (vendor === 'claude-code') {
-      return [
-        path.join('.claude', 'agents', 'metacoding-workflow.md'),
-        this.vendorDefinitions[vendor].root,
-      ];
+      return [this.vendorDefinitions[vendor].root, ...this.legacyClaudePaths];
     }
 
     return [this.vendorDefinitions[vendor].root];
@@ -87,35 +131,18 @@ export class SkillManager {
     const root = this.getInstallDirectory(config.vendor);
     const supportFiles = await this.readCoreSupportFiles(root, config.vendor);
     const projectContext = await this.renderProjectContext(config);
-    const files = [
+
+    return [
       ...supportFiles,
       {
         path: path.join(root, 'references/project-context.md'),
         content: projectContext,
       },
     ];
-
-    if (config.vendor === 'claude-code') {
-      files.push({
-        path: path.join('.claude', 'agents', 'metacoding-workflow.md'),
-        content: await this.renderClaudeAgentFile(),
-      });
-    }
-
-    return files;
   }
 
   async getInstalledFiles(vendor: AgentVendor): Promise<string[]> {
-    const files = await this.listFilesRecursively(this.getInstallDirectory(vendor));
-
-    if (vendor === 'claude-code') {
-      const agentPath = path.join('.claude', 'agents', 'metacoding-workflow.md');
-      if (await fs.pathExists(agentPath)) {
-        files.push(agentPath);
-      }
-    }
-
-    return files.sort();
+    return this.listFilesRecursively(this.getInstallDirectory(vendor));
   }
 
   private async hasVendorInstall(vendor: AgentVendor): Promise<boolean> {
@@ -154,10 +181,6 @@ export class SkillManager {
     }
 
     return files;
-  }
-
-  private async renderClaudeAgentFile(): Promise<string> {
-    return fs.readFile(this.claudeAgentTemplatePath, 'utf8');
   }
 
   private async listFilesRecursively(root: string): Promise<string[]> {
