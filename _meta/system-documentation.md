@@ -41,12 +41,7 @@ skills/
 │   ├── references/
 │   │   ├── workflow-rules.md
 │   │   ├── repository-organization.md
-│   │   ├── platform-adaptation.md
-│   │   ├── typescript.md
-│   │   ├── javascript.md
-│   │   ├── node.md
-│   │   ├── react.md
-│   │   └── python.md
+│   │   └── platform-adaptation.md
 │   └── assets/templates/
 │       ├── task-entry.md
 │       ├── repeated-task-checklist.md
@@ -84,7 +79,7 @@ The installed workflow skill always adds:
 <skills folder>/metacoding-workflow/references/project-context.md
 ```
 
-That file is generated per project and points the agent to the right language references.
+That file is generated per project from the answers given at `init`.
 
 ## Core Services
 

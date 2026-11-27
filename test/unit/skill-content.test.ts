@@ -1,4 +1,5 @@
-import { SkillManager } from '../../src/services/skill-manager';
+import YAML from 'yaml';
+import { METACODING_SKILLS, SkillManager } from '../../src/services/skill-manager';
 import { AgentVendor } from '../../src/types';
 
 const skillsDirs: Record<AgentVendor, string> = {
@@ -7,12 +8,12 @@ const skillsDirs: Record<AgentVendor, string> = {
   antigravity: '.agents/skills',
 };
 
-async function installFor(vendor: AgentVendor) {
+async function installFor(vendor: AgentVendor, projectType = 'typescript') {
   const files = await new SkillManager().generateInstallationFiles({
     name: 'demo-app',
     description: 'Demo application',
     techStack: ['TypeScript'],
-    projectType: 'typescript',
+    projectType,
     vendor,
   });
   const read = (relativePath: string): string => {
@@ -26,6 +27,17 @@ async function installFor(vendor: AgentVendor) {
   };
 
   return { files, read };
+}
+
+/** The parsed frontmatter of a SKILL.md, after checking that the block is there. */
+function frontmatterOf(skillFile: string): Record<string, unknown> {
+  const opening = '---\n';
+  const end = skillFile.indexOf('\n---\n', opening.length);
+
+  expect(skillFile.startsWith(opening)).toBe(true);
+  expect(end).toBeGreaterThan(-1);
+  // An agent that cannot parse the block loads the skill with no description.
+  return YAML.parse(skillFile.slice(opening.length, end));
 }
 
 describe('installed skill content: durable artifacts', () => {
@@ -105,6 +117,41 @@ describe('installed skill content: durable artifacts', () => {
           .map((file) => file.path)
       ).toEqual([]);
     }
+  });
+
+  test('no vendor install ships or mentions a language reference', async () => {
+    const languages = ['typescript', 'javascript', 'node', 'react', 'python'];
+
+    for (const vendor of Object.keys(skillsDirs) as AgentVendor[]) {
+      // Each language is also a project type, which used to pick the references.
+      for (const projectType of ['general', ...languages]) {
+        const { files } = await installFor(vendor, projectType);
+
+        for (const language of languages) {
+          const languageFile = `references/${language}.md`;
+
+          expect(
+            files.filter((file) => file.path.endsWith(languageFile)).map((file) => file.path)
+          ).toEqual([]);
+          expect(
+            files
+              .filter((file) => file.content.includes(languageFile))
+              .map((file) => file.path)
+          ).toEqual([]);
+        }
+      }
+    }
+  });
+
+  test('the project context lists each reference once, with no recommended section', async () => {
+    const { read } = await installFor('codex');
+    const context = read('metacoding-workflow/references/project-context.md');
+
+    expect(context).toContain('## Required References');
+    expect(context).not.toContain('## Recommended References');
+    expect(context).not.toContain('{{');
+    expect(context.split('`references/workflow-rules.md`')).toHaveLength(2);
+    expect(context.split('`references/repository-organization.md`')).toHaveLength(2);
   });
 
   test('the task entry template carries the scope summary fields', async () => {
@@ -272,8 +319,6 @@ describe('installed skill content: durable artifacts', () => {
       'Amend a decision record the build proved wrong, as the `metacoding-shape` skill describes'
     );
     expect(artifacts).not.toContain('Write each decision marked');
-    expect(skill).toContain('glossary');
-    expect(skill).toContain('amend any decision record the build proved wrong');
     expect(skill).not.toContain('write the decision records the scope summary marked');
     expect(skill).not.toContain('bootstrap');
   });
@@ -457,7 +502,6 @@ describe('installed skill content: the spec', () => {
   test('the workflow leaves the records and the spec to the shape skill', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
-    const skill = read('metacoding-workflow/SKILL.md');
     const shaping = rules.slice(
       rules.indexOf('2. Shape the task'),
       rules.indexOf('3. Build test-first.')
@@ -469,9 +513,6 @@ describe('installed skill content: the spec', () => {
       'Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.'
     );
     expect(shaping).toContain('For a task that needs none');
-    expect(skill).toContain(
-      'the skill then writes the settled terms, the marked decision records, and a spec when the task needs one'
-    );
   });
 });
 
@@ -589,7 +630,6 @@ describe('installed skill content: building ticket by ticket', () => {
   test('grounding looks for a spec in progress', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
-    const skill = read('metacoding-workflow/SKILL.md');
     const grounding = rules.slice(
       rules.indexOf('1. Ground in the repository.'),
       rules.indexOf('2. Shape the task')
@@ -603,7 +643,6 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(grounding).toContain(
       'When the request continues that task, resume it as the Tickets section describes.'
     );
-    expect(skill).toContain('and any spec still in progress');
   });
 
   test('an unfinished task resumes from its spec at the first ticket not done', async () => {
@@ -1136,5 +1175,99 @@ describe('installed skill content: skill refinements', () => {
     expect(between).toContain(
       'An unrelated request is queued, or the task is paused, as the user decides and as Scope Control in `references/workflow-rules.md` describes'
     );
+  });
+});
+
+describe('installed skill content: prompt upkeep', () => {
+  test('the workflow skill lists the steps as an index and leaves what they require to the workflow rules', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const steps = skill.slice(
+      skill.indexOf('## Steps'),
+      skill.indexOf('## Rules Between Steps')
+    );
+
+    expect(skill).toContain('## Steps');
+    expect(skill).toContain('## Rules Between Steps');
+    expect(rules).toContain('## Operating Sequence');
+    expect(steps).toContain(
+      [
+        'The steps, in order. What each one requires is in the Operating Sequence of `references/workflow-rules.md`.',
+        '',
+        '1. Ground in the repo.',
+        '2. Shape, with `metacoding-shape`.',
+        '3. Build test-first, with `metacoding-tdd` or `metacoding-debug`.',
+        '4. Verify.',
+        '5. Review, with `metacoding-review`.',
+        '6. Update artifacts.',
+        '7. Close.',
+        '',
+      ].join('\n')
+    );
+    for (const detail of [
+      'Look up facts yourself',
+      'and any spec still in progress',
+      'Changing files starts only after',
+      'the skill then writes the settled terms',
+      'a failing test before each piece of production code',
+      'a bug whose cause is unknown',
+      'it ends in a regression test and a fix',
+      'Run the smallest relevant checks first',
+      'Confirm the behavior a user would observe',
+      'act on what it finds',
+      'Update the one document that owns each concept',
+      'amend any decision record the build proved wrong',
+      'commit-ready handoff',
+    ]) {
+      expect(steps).not.toContain(detail);
+    }
+  });
+
+  test('the workflow rules keep what the old step summaries said about artifacts and closing', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const artifacts = rules.slice(
+      rules.indexOf('6. Update artifacts'),
+      rules.indexOf('7. Close the loop.')
+    );
+    const closing = rules.slice(
+      rules.indexOf('7. Close the loop.'),
+      rules.indexOf('## Tickets')
+    );
+
+    for (const marker of ['6. Update artifacts', '7. Close the loop.', '## Tickets']) {
+      expect(rules).toContain(marker);
+    }
+    expect(artifacts).toContain(
+      'Update the one artifact that owns the concept instead of duplicating the same information, as `references/repository-organization.md` describes.'
+    );
+    expect(closing).toContain('Either way, state explicitly that the work is complete.');
+  });
+
+  test('every skill has frontmatter that parses, with its name and a description, for every vendor', async () => {
+    for (const vendor of Object.keys(skillsDirs) as AgentVendor[]) {
+      const { read } = await installFor(vendor);
+
+      for (const skill of METACODING_SKILLS) {
+        const frontmatter = frontmatterOf(read(`${skill}/SKILL.md`));
+
+        expect(frontmatter.name).toBe(skill);
+        expect(typeof frontmatter.description).toBe('string');
+        expect(frontmatter.description).not.toBe('');
+      }
+    }
+  });
+
+  test('the workflow skill applies only when the request asks for it or for gated execution', async () => {
+    const { read } = await installFor('codex');
+    const { description } = frontmatterOf(read('metacoding-workflow/SKILL.md'));
+
+    expect(description).toContain(
+      'Use only when the request asks for the metacoding workflow, or for strict, gated execution of a task.'
+    );
+    for (const broadTrigger of ['feature work', 'bug fixes', 'refactors', 'reviews']) {
+      expect(description).not.toContain(broadTrigger);
+    }
   });
 });

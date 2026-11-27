@@ -11,10 +11,6 @@ Most items come from a comparison of these skills with Matt Pocock's skills, mad
    - Tickets are a linear list: no blocking edges, no sizing rule, no expand-then-contract rule for a wide refactor. The spec has no step that agrees test seams with the user and no rule that keeps file paths and code out of it.
    - `metacoding-shape` does four jobs (interview, solution, tickets, spec), so it cannot run as a plain interview.
 3. **Distribution.** There is no plugin manifest, and the workflow skill reads `references/project-context.md`, which only the CLI generates, so a plain skill install would break. `update` also reads that file back; see the decision record of 2026-11-27. Depends on where onboarding puts the project facts.
-4. **Prompt upkeep.**
-   - The seven steps are described in both `metacoding-workflow/SKILL.md` and `references/workflow-rules.md`.
-   - The five language references are seven generic lines each.
-   - All five skills can be invoked by the model, and the workflow skill's description matches any feature work.
 
 ## Later
 

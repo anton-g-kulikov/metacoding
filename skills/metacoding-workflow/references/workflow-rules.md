@@ -28,13 +28,14 @@
    - Act on its findings as the skill describes: it says which are fixed and which go to the user. Then rerun the checks from step 4.
 6. Update artifacts using MECE documentation rules.
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
-   - Update the one artifact that owns the concept instead of duplicating the same information.
+   - Update the one artifact that owns the concept instead of duplicating the same information, as `references/repository-organization.md` describes.
    - Amend a decision record the build proved wrong, as the `metacoding-shape` skill describes.
    - Handle specs, tickets, and test records as `references/repository-organization.md` describes.
    - Keep system docs evergreen and free of task status.
 7. Close the loop.
    - If VCS work is in scope, produce or perform a clean commit-ready summary.
    - If VCS work is out of scope, provide a concise handoff with verification status and remaining risks.
+   - Either way, state explicitly that the work is complete.
 
 ## Tickets
 

@@ -31,9 +31,6 @@ describe('SkillManager', () => {
     ).toBe(true);
     expect(
       files.find((file) => file.path.endsWith('references/project-context.md'))?.content
-    ).toContain('references/react.md');
-    expect(
-      files.find((file) => file.path.endsWith('references/project-context.md'))?.content
     ).toContain('references/repository-organization.md');
 
     await manager.installSkill({
@@ -229,9 +226,9 @@ describe('SkillManager', () => {
     };
 
     expectInOrder(workflowSkill, [
-      '4. **Verify.**',
-      '5. **Review.** Use `metacoding-review`',
-      '6. **Update artifacts.**',
+      '4. Verify.',
+      '5. Review, with `metacoding-review`.',
+      '6. Update artifacts.',
     ]);
     expectInOrder(workflowRules, [
       '4. Verify.',

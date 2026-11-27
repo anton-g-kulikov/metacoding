@@ -501,6 +501,11 @@ describe('UpdateCommand', () => {
         'metacoding-interview/agents/openai.yaml',
         'metacoding-workflow/references/interview.md',
         'metacoding-workflow/assets/templates/test-plan.md',
+        'metacoding-workflow/references/typescript.md',
+        'metacoding-workflow/references/javascript.md',
+        'metacoding-workflow/references/node.md',
+        'metacoding-workflow/references/react.md',
+        'metacoding-workflow/references/python.md',
       ];
       for (const file of retired) {
         await fs.outputFile(path.join(workspace, skillsDir, file), `retired ${file}`, 'utf8');
@@ -667,8 +672,6 @@ describe('UpdateCommand', () => {
     expect(context).toContain('- Project type: react\n');
     expect(context).toContain('- Default test framework: Jest + React Testing Library\n');
     expect(context).toContain('- Default build tool: Vite\n');
-    expect(context).toContain('`references/react.md`');
-    expect(context).not.toContain('`references/python.md`');
   });
 
   test('falls back to detection when the project context is missing', async () => {

@@ -59,6 +59,11 @@ export class SkillManager {
     path.join('metacoding-interview', 'agents', 'openai.yaml'),
     path.join(WORKFLOW_SKILL, 'references', 'interview.md'),
     path.join(WORKFLOW_SKILL, 'assets', 'templates', 'test-plan.md'),
+    path.join(WORKFLOW_SKILL, 'references', 'typescript.md'),
+    path.join(WORKFLOW_SKILL, 'references', 'javascript.md'),
+    path.join(WORKFLOW_SKILL, 'references', 'node.md'),
+    path.join(WORKFLOW_SKILL, 'references', 'react.md'),
+    path.join(WORKFLOW_SKILL, 'references', 'python.md'),
   ];
   private readonly vendorDefinitions: Record<AgentVendor, VendorInstallDefinition> = {
     codex: {
@@ -414,7 +419,6 @@ export class SkillManager {
       'assets/templates/project-context.md'
     );
     const template = await fs.readFile(templatePath, 'utf8');
-    const recommendedReferences = this.getRecommendedReferences(config);
 
     const variables = {
       PROJECT_NAME: config.name,
@@ -424,7 +428,6 @@ export class SkillManager {
       TEST_FRAMEWORK:
         config.testFramework || this.getDefaultTestFramework(config.projectType),
       BUILD_TOOL: config.buildTool || this.getDefaultBuildTool(config.projectType),
-      RECOMMENDED_REFERENCES: recommendedReferences.join('\n'),
       AGENT_VENDOR: config.vendor,
     };
 
@@ -432,39 +435,5 @@ export class SkillManager {
       // A function keeps `$` sequences in a value from being read as patterns.
       return content.replace(new RegExp(`{{${key}}}`, 'g'), () => value);
     }, template);
-  }
-
-  private getRecommendedReferences(config: ProjectConfig): string[] {
-    const references = [
-      '- `references/workflow-rules.md` for the gated task flow',
-      '- `references/repository-organization.md` for repository structure and MECE documentation ownership',
-      '- `references/platform-adaptation.md` for fallback behavior when repo artifacts or git are missing',
-    ];
-
-    if (config.projectType === 'typescript') {
-      references.push(
-        '- `references/typescript.md` for shared TypeScript coding, testing, and documentation guidance'
-      );
-    } else if (config.projectType === 'react') {
-      references.push(
-        '- `references/typescript.md` for shared TypeScript guidance',
-        '- `references/react.md` for component, testing, and UI workflow guidance'
-      );
-    } else if (config.projectType === 'node') {
-      references.push(
-        '- `references/typescript.md` for shared TypeScript guidance',
-        '- `references/node.md` for service, API, and backend workflow guidance'
-      );
-    } else if (config.projectType === 'javascript') {
-      references.push(
-        '- `references/javascript.md` for JavaScript coding, testing, and documentation guidance'
-      );
-    } else if (config.projectType === 'python') {
-      references.push(
-        '- `references/python.md` for Python coding, testing, and documentation guidance'
-      );
-    }
-
-    return references;
   }
 }
