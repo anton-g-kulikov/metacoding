@@ -1,9 +1,0 @@
-{
-  "name": "general",
-  "description": "General purpose metacoding template for any project type",
-  "prompts": [],
-  "vscodeSettings": {
-    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-    "chat.promptFiles": true
-  }
-}

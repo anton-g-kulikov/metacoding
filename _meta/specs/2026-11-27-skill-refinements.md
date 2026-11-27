@@ -1,6 +1,6 @@
 # Spec: Skill refinements
 
-- Status: in progress
+- Status: done
 
 ## Goal
 
@@ -22,6 +22,12 @@ Close the five small gaps the comparison with Matt Pocock's skills found in the 
 - README, CHANGELOG, `_meta/system-documentation.md`.
 - This task's records: this spec, and the backlog with this group removed.
 - Added on 2026-11-27, in ticket 4: the one line of `skills/metacoding-workflow/SKILL.md` that said to queue unrelated requests, so that it agrees with Scope Control.
+- Added on 2026-11-27, found in the ticket reviews and kept because each success criterion needs them to hold in use:
+  - tdd: check calls only when the call itself is the behavior.
+  - debug: replay the raw capture from outside the repo; replace each secret with a made-up value of the same shape and rerun to confirm the masked version still fails; never print a secret in a temporary log line; a file the user supplied is not deleted.
+  - review: the smell list is named as an input of the standards reviewer; a smell that breaks the agreed scope is a scope finding; the wording "fix what it finds" became "act on what it finds" in the review skill, its Codex prompt, the workflow skill and the workflow rules.
+  - Scope Control: a queued request is recorded; the one-ticket case is stated; a switch at once sets the unfinished work aside and notes what is left.
+- Added on 2026-11-27, in ticket 5: the `.gitignore` rule that only served `templates/`.
 
 ## Out of scope
 
@@ -71,6 +77,6 @@ One content test per new rule, written first and seen failing. The tickets list 
 - [x] **4. Switching tasks in Scope Control**
   - Success criteria: the fourth success criterion above.
   - Test intent: the section no longer says "Reject task switching"; it states the new instruction and points to the resume rule.
-- [ ] **5. Remove the legacy folders**
+- [x] **5. Remove the legacy folders**
   - Success criteria: the fifth success criterion above.
   - Test intent: no new test. Checked by the full suite, the build, and the file list of `npm pack --dry-run` before and after.

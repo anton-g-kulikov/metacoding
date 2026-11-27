@@ -142,7 +142,7 @@ For a bug with an unknown cause, `metacoding-debug` replaces the build step. It 
 
 The skill keeps work bounded to one active task:
 
-- When you ask for something unrelated mid-task, the workflow says what is unfinished and you decide: queue the request, or pause the task at a ticket boundary and switch.
+- When you ask for something unrelated mid-task, the workflow says what is unfinished and you decide: queue the request, or pause the task at a ticket boundary and switch. If you want the switch at once, it sets the unfinished work aside and notes what is left.
 - Related blockers are treated as subtasks only when required to finish the active task.
 - Opportunistic refactors and mixed-scope edits are rejected during active implementation.
 

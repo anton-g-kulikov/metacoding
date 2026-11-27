@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metacoding update --dry-run` fails with a migration hint when only the old Claude Code layout is present
 - `metacoding init` and `metacoding update` fill in exclusion patterns that an existing metacoding `.gitignore` section lacks
 - The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
-- The workflow no longer refuses to switch tasks. When the user asks for something unrelated mid-task, it says what is unfinished and the user decides: queue the request, or pause the task at a ticket boundary and switch
+- The workflow no longer refuses to switch tasks. When the user asks for something unrelated mid-task, it says what is unfinished and the user decides: queue the request, or pause the task at a ticket boundary and switch. For a switch at once, it sets the unfinished work aside and notes what is left
 - `metacoding update --dry-run` requires each companion skill's `SKILL.md` and, for Codex, checks the `agents/openai.yaml` of every skill instead of the workflow skill's alone, and names a file that is not valid YAML
 - `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns for the user to add. It used to check only for the section header
 - `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
 - The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
 - The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
+- The legacy `templates/` and `workflow/` folders from the 1.x instruction-file generator, which the package does not ship
 
 ### Fixed
 

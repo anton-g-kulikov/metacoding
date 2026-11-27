@@ -109,5 +109,4 @@ That file is generated per project and points the agent to the right language re
 ## Migration Notes
 
 - `.github/copilot-instructions.md` and Cursor rule generation are no longer part of the active product.
-- The old `templates/` directory is retained only as historical migration input, not as the packaged distribution surface.
 - npm publishing now ships `skills/` instead of `templates/`.

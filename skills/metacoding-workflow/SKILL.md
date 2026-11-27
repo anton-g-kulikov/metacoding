@@ -35,7 +35,7 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 2. **Shape.** Use `metacoding-shape`. Changing files starts only after the user confirms its scope summary; the skill then writes the settled terms, the marked decision records, and a spec when the task needs one.
 3. **Build test-first.** Use `metacoding-tdd`: mandatory TDD, a failing test before each piece of production code. When the task is a bug whose cause is unknown, use `metacoding-debug` for this step; it ends in a regression test and a fix.
 4. **Verify.** Run the smallest relevant checks first, then broader checks when justified. Confirm the behavior a user would observe, beyond a clean compile.
-5. **Review.** Use `metacoding-review` on the diff, and fix what it finds.
+5. **Review.** Use `metacoding-review` on the diff, and act on what it finds.
 6. **Update artifacts.** Update the one document that owns each concept that changed, and amend any decision record the build proved wrong, following `references/repository-organization.md`.
 7. **Close.** Finish with a commit, a commit-ready handoff, or an explicit completion confirmation, as `references/workflow-rules.md` describes.
 

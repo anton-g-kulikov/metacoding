@@ -25,7 +25,7 @@
    - Confirm observable behavior, not just compiler success.
 5. Review.
    - Use the `metacoding-review` skill on the diff: one pass against the agreed scope, one against the repo's standards. For a task with more than one ticket, the agreed scope is the ticket, as the skill describes.
-   - Fix its findings and rerun the checks from step 4.
+   - Act on its findings as the skill describes: it says which are fixed and which go to the user. Then rerun the checks from step 4.
 6. Update artifacts using MECE documentation rules.
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
    - Update the one artifact that owns the concept instead of duplicating the same information.
