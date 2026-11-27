@@ -81,3 +81,37 @@
 - Wait for the onboarding task to decide where a repo records its project facts.
 
 **Why.** Only the CLI writes the file, so a plugin install pointed the agent at a file that was not there. Everything in it is a fact the agent can find in the repo. Removing it would undo the decision of 2026-11-27 above and change what every CLI install has on disk, for a question the onboarding task is still to settle. Making the file optional unblocks the plugin and leaves that question open: whatever place onboarding picks changes one line of the skill.
+
+## 2026-11-28: A frozen task spec and a living feature spec
+
+**Decision.** There are two kinds of spec. A task spec is the record of one shaped task, at `/_meta/specs/tasks/<date>-<slug>.md`, frozen once the task is done. A feature spec is the living document of one feature area, at `/_meta/specs/<area>.md`: how the area works today, and its user stories grouped by role with Given/When/Then scenarios. A ticket's scenarios are written into the feature spec when the ticket is done, in the ticket's commit.
+
+**Alternatives.**
+
+- Put the stories into the task spec only, and keep no living document.
+- Write the feature spec when the scope summary is confirmed, before anything is built.
+- File the living documents by role, or next to the code.
+
+**Why.** A task spec is frozen, so stories kept only there go stale with the next task that changes the behavior, and a reader has to replay every task record in date order to learn what a feature does now. The task spec is still needed for the tickets, the scope lists and resuming, so it stays. Writing the feature spec per ticket means it states only what is built and has a test; written on confirmation, it would describe behavior that does not exist yet, and an abandoned task would leave it wrong. A story belongs to one feature area while a role cuts across all of them, so the files are per area and the roles are headings. The cost is that a scenario's text exists twice: as agreed, in the task spec, and as it is now, in the feature spec.
+
+## 2026-11-28: A scenario is tied to its test by an ID in the test's name
+
+**Decision.** Each scenario has an ID made of its feature area's prefix and a number, such as `UPDATE-3`. The test that proves it carries the ID in its name, or in a comment or tag where a name cannot hold it. No spec lists a test's path. The review reports a scenario as unproven when a search finds no test with its ID.
+
+**Alternatives.**
+
+- List the test file and test name next to each scenario in the spec.
+- Make the scenarios executable feature files, run by a Gherkin runner.
+
+**Why.** An ID survives renamed and moved files, and a text search finds it in any language. A path in a document goes stale on the first rename, and nothing fails when it does. Executable feature files are the stronger link, but they need a runner and step definitions per language, which most repos do not have and the skills cannot install; a repo that already runs feature files keeps them. The cost is that the link is only as good as the discipline of naming tests, so the TDD and review skills both carry the rule.
+
+## 2026-11-28: The interview and the spec writing are two skills
+
+**Decision.** `metacoding-shape` runs the interview and ends in a list of decisions, terms and assumptions. A new skill, `metacoding-spec`, turns settled decisions into the scope summary, gets it confirmed, and owns every written record and its default place: glossary terms, decision records, task specs and feature specs. Workflow step 2 stays one step that uses the two in order.
+
+**Alternatives.**
+
+- Keep one skill and add a rule that it stops after the decisions when the user only asked to be questioned.
+- Make step 2 two workflow steps and renumber the rest.
+
+**Why.** One skill did four jobs, so it could not be used as a plain interview, and the stories, feature specs and ticket rules roughly double the spec-writing text. Split, each skill has one job and the record rules have one home. A stop-early rule would have been a smaller change, but it leaves the interview skill carrying rules it does not use in that mode. Step 2 stays one step because the user still confirms once, and renumbering would change every rule that names steps 3 to 7. The cost is a sixth installed skill, and that the entry of 2026-11-27 on decision records now describes the spec skill where it says "shape".
