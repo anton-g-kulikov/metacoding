@@ -21,6 +21,7 @@ Close the five small gaps the comparison with Matt Pocock's skills found in the 
 - Deleting `templates/` and `workflow/`.
 - README, CHANGELOG, `_meta/system-documentation.md`.
 - This task's records: this spec, and the backlog with this group removed.
+- Added on 2026-11-27, in ticket 4: the one line of `skills/metacoding-workflow/SKILL.md` that said to queue unrelated requests, so that it agrees with Scope Control.
 
 ## Out of scope
 
@@ -67,7 +68,7 @@ One content test per new rule, written first and seen failing. The tickets list 
 - [x] **3. Code smells in metacoding-review**
   - Success criteria: the third success criterion above.
   - Test intent: the standards axis lists the smells; it says the repo's own standards win; "After the report" sends smells to the user as follow-ups.
-- [ ] **4. Switching tasks in Scope Control**
+- [x] **4. Switching tasks in Scope Control**
   - Success criteria: the fourth success criterion above.
   - Test intent: the section no longer says "Reject task switching"; it states the new instruction and points to the resume rule.
 - [ ] **5. Remove the legacy folders**

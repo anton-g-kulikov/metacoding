@@ -43,7 +43,7 @@ Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets
 
 ## Rules Between Steps
 
-- Work one bounded task at a time. Queue unrelated requests for later; take on a related blocker only as a subtask the active task needs.
+- Work one bounded task at a time. An unrelated request is queued, or the task is paused, as the user decides and as Scope Control in `references/workflow-rules.md` describes; take on a related blocker only as a subtask the active task needs.
 - Skip TDD only when the user accepts the exception, and record the reason.
 - If git actions are unavailable or out of scope, stop at a clean handoff.
 - Work with the artifacts the repo has. `references/platform-adaptation.md` says what to do when one is missing.

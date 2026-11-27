@@ -59,8 +59,11 @@ A session can end before a task's last ticket is done. When grounding finds a sp
 
 ## Scope Control
 
-- Reject task switching during active implementation.
-- Queue unrelated requests for later.
+- When the user asks for something unrelated during a task, say what is unfinished in the active ticket, then do what they decide: queue the request for later, or pause the task and switch.
+- Record a queued request where the repo tracks work. Where it tracks work nowhere, name it in the report that closes the ticket.
+- Pause at a ticket boundary: finish the active ticket first. In a one-ticket task, that is the whole task.
+- When the user wants the switch at once, set the unfinished work aside so it stays out of the new task's changes, such as on a branch or in a stash. Note what is done and what is left where the tickets are tracked, and leave the ticket not marked done.
+- A paused task with a spec continues as the Resuming a task section describes.
 - Accept a related blocker only if the active task cannot complete without it.
 
 ## Repeated Tasks

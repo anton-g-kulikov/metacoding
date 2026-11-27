@@ -96,7 +96,7 @@ The `metacoding-workflow` skill applies a strict operating contract for developm
 6. MECE artifact updates.
 7. Explicit closure with handoff or VCS action.
 
-The task stays bounded throughout: one active task, built one ticket at a time, with unrelated requests queued.
+The task stays bounded throughout: one active task, built one ticket at a time.
 
 ### Shaping
 
@@ -142,7 +142,7 @@ For a bug with an unknown cause, `metacoding-debug` replaces the build step. It 
 
 The skill keeps work bounded to one active task:
 
-- Unrelated requests are queued for later.
+- When you ask for something unrelated mid-task, the workflow says what is unfinished and you decide: queue the request, or pause the task at a ticket boundary and switch.
 - Related blockers are treated as subtasks only when required to finish the active task.
 - Opportunistic refactors and mixed-scope edits are rejected during active implementation.
 

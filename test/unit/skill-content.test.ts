@@ -1042,4 +1042,99 @@ describe('installed skill content: skill refinements', () => {
       '- Put each smell, and anything else, to the user as a follow-up. A follow-up is fixed only when the user asks.'
     );
   });
+
+  test('the workflow no longer refuses to switch tasks', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(rules).not.toContain('Reject task switching');
+    expect(scopeControl).toContain(
+      'When the user asks for something unrelated during a task, say what is unfinished in the active ticket, then do what they decide: queue the request for later, or pause the task and switch.'
+    );
+  });
+
+  test('a queued request is recorded so it is not lost', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(scopeControl).toContain(
+      'Record a queued request where the repo tracks work. Where it tracks work nowhere, name it in the report that closes the ticket.'
+    );
+  });
+
+  test('a task pauses at a ticket boundary', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(scopeControl).toContain(
+      'Pause at a ticket boundary: finish the active ticket first. In a one-ticket task, that is the whole task.'
+    );
+  });
+
+  test('a switch at once sets the unfinished work aside and notes what is left', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(scopeControl).toContain(
+      "When the user wants the switch at once, set the unfinished work aside so it stays out of the new task's changes, such as on a branch or in a stash."
+    );
+    expect(scopeControl).toContain(
+      'Note what is done and what is left where the tickets are tracked, and leave the ticket not marked done.'
+    );
+  });
+
+  test('a paused task continues by the resume rule', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(rules).toContain('### Resuming a task');
+    expect(scopeControl).toContain(
+      'A paused task with a spec continues as the Resuming a task section describes.'
+    );
+  });
+
+  test('the workflow skill leaves queue or pause to the user', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const between = skill.slice(
+      skill.indexOf('## Rules Between Steps'),
+      skill.indexOf('## Bundled Templates')
+    );
+
+    expect(skill).toContain('## Rules Between Steps');
+    expect(skill).toContain('## Bundled Templates');
+    expect(between).toContain(
+      'An unrelated request is queued, or the task is paused, as the user decides and as Scope Control in `references/workflow-rules.md` describes'
+    );
+  });
 });
