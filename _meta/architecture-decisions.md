@@ -58,3 +58,26 @@
 - Write the rule into the installed metacoding skills.
 
 **Why.** The skills are installed for three agents, and each agent loads a different instruction file on its own, so a rule in one of them reaches one agent. `metacoding-review` already reads the repo's contributor and style docs, so a rule in one file under `/_meta` is enforced for all three with no new wiring. An instruction file is also loaded into every session, where each added rule costs attention whether or not the task touches it; a standards file is read when a change is reviewed. The installed skills are git-ignored and `update` treats a local edit as a conflict, so a rule written there is neither shared nor safe. The cost is that an agent building a change does not see the rule unless it reads the standards while grounding; the review is where it is enforced.
+
+## 2026-11-28: The repo root is the plugin for all three agents
+
+**Decision.** Claude Code, Codex and Antigravity each install the skills as a plugin from the root of this repo. Each agent has its own manifest there, all of them read the one `skills/` folder, and every manifest carries the version of `package.json`.
+
+**Alternatives.**
+
+- A separate repo that holds only the plugin.
+- A plugin folder generated from `skills/` by a build step.
+- A plugin for Claude Code alone.
+
+**Why.** All three plugin formats pick up a `skills/` folder at the plugin root, which this repo already has, so the skills keep one home and need no copy that can go stale. A separate repo or a generated folder would add a sync step for the same content. The skills are vendor-neutral, and each further agent costs one small manifest. The costs: an install copies the whole repo, about 1 MB, and not the skills alone; the version now lives in several files, which a test keeps equal; and once users install from this repo's address, moving the plugin breaks their updates.
+
+## 2026-11-28: project-context.md is optional for the workflow skill
+
+**Decision.** The workflow skill reads `references/project-context.md` when the file exists and looks the same facts up in the repo when it does not. The CLI keeps writing the file, and `update` keeps reading it back.
+
+**Alternatives.**
+
+- Remove the file everywhere: `init` stops asking its questions and `update` stops reading it back.
+- Wait for the onboarding task to decide where a repo records its project facts.
+
+**Why.** Only the CLI writes the file, so a plugin install pointed the agent at a file that was not there. Everything in it is a fact the agent can find in the repo. Removing it would undo the decision of 2026-11-27 above and change what every CLI install has on disk, for a question the onboarding task is still to settle. Making the file optional unblocks the plugin and leaves that question open: whatever place onboarding picks changes one line of the skill.
