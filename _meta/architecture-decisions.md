@@ -47,3 +47,14 @@
 **Why.** The skills are installed for three agents. Claude Code loads `CLAUDE.md` on its own and Codex loads `AGENTS.md`, so a section in either file reaches only some of them, while every agent can read a file by path. A file of its own also needs no merging into a file the user owns, and it can be written by the agent alone, so it works for an install that never ran the CLI. The installed `project-context.md` is ignored by git, exists once per agent, and is rewritten by `update`, so answers kept there would not reach a teammate or a fresh clone. The path cannot be under `/_meta`, because a repo that keeps its docs elsewhere has no such folder, and this file is where a session learns that. The cost is that a session running no metacoding skill does not know the file exists; the one-line pointer is there for that case.
 
 **Amended 2026-11-28.** The decision left out a limit that was agreed with it: the pointer line goes only into an instruction file the repo already has. Onboarding creates no such file, so a repo without one, like this one, has the project map and no pointer.
+
+## 2026-11-28: A new rule from a retro defaults to /_meta/coding-standards.md
+
+**Decision.** When `metacoding-retro` proposes a new rule and the repo has no file that holds its standards, the rule goes to `/_meta/coding-standards.md`, which the retro proposes creating. A repo that already keeps its standards somewhere, an agent instruction file included, keeps using that place.
+
+**Alternatives.**
+
+- Write the rule to an agent instruction file at the root, `AGENTS.md` or `CLAUDE.md`, and create the file when it is missing.
+- Write the rule into the installed metacoding skills.
+
+**Why.** The skills are installed for three agents, and each agent loads a different instruction file on its own, so a rule in one of them reaches one agent. `metacoding-review` already reads the repo's contributor and style docs, so a rule in one file under `/_meta` is enforced for all three with no new wiring. An instruction file is also loaded into every session, where each added rule costs attention whether or not the task touches it; a standards file is read when a change is reviewed. The installed skills are git-ignored and `update` treats a local edit as a conflict, so a rule written there is neither shared nor safe. The cost is that an agent building a change does not see the rule unless it reads the standards while grounding; the review is where it is enforced.
