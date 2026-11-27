@@ -53,7 +53,6 @@ For Codex, the project install looks like:
 │   │   └── python.md
 │   └── assets/templates/
 │       ├── task-entry.md
-│       ├── test-plan.md
 │       ├── repeated-task-checklist.md
 │       ├── changelog-entry.md
 │       └── project-context.md
@@ -80,7 +79,7 @@ The workflow skill runs these steps in order:
 3. Build test-first (`metacoding-tdd`, or `metacoding-debug` for a bug with an unknown cause).
 4. Verify with tests and direct checks.
 5. Review the diff against the scope and the repo's standards (`metacoding-review`).
-6. Update docs or status artifacts that materially changed.
+6. Update the docs that materially changed, and write the decision records the scope summary marked.
 7. Close with a VCS handoff or completion confirmation.
 
 ## Enforced Workflow
@@ -145,9 +144,14 @@ The skill keeps work bounded to one active task:
 The workflow follows MECE documentation ownership to avoid duplication:
 
 - System documentation stays evergreen and factual.
-- Task/status artifacts track temporal progress.
-- Test artifacts focus on test intent and result status.
 - Only the artifact that owns a concept is updated.
+
+It keeps two documents that make the next session better informed:
+
+- **Glossary** (`/_meta/glossary.md`): the project's own terms, one line each. The agent reads it while grounding, and the interview adds a term when its meaning is settled.
+- **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, so confirming the summary approves writing them.
+
+It does not create a task list or a test documentation file. Task status and test intent live in the confirmed scope summary, the issue or pull request, the tests, and version control. A repo that already keeps either file gets it updated as before.
 
 ### Completion Criteria
 
@@ -211,7 +215,8 @@ The skill will:
 - keep work scoped to one bounded task
 - build test-first, one behavior at a time
 - review the diff against the agreed scope before closing
-- fall back to bundled templates when the repo lacks workflow artifacts
+- read the project glossary and decision records, and keep them current
+- work with the task and test records the repo already has, without creating new ones
 - produce a commit-ready handoff when git actions are unavailable or out of scope
 
 ## Migration Notes

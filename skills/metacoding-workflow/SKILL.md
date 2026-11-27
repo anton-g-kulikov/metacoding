@@ -31,12 +31,12 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 
 ## Steps
 
-1. **Ground in the repo.** Read the code, config, tests, and docs the task touches. Look up facts yourself, so the user is asked only for decisions.
+1. **Ground in the repo.** Read the code, config, tests, and docs the task touches, including the glossary and decision records when the repo has them. Look up facts yourself, so the user is asked only for decisions.
 2. **Interview.** Use `metacoding-interview`. Changing files starts only after the user confirms its scope summary.
 3. **Build test-first.** Use `metacoding-tdd`: mandatory TDD, a failing test before each piece of production code. When the task is a bug whose cause is unknown, use `metacoding-debug` for this step; it ends in a regression test and a fix.
 4. **Verify.** Run the smallest relevant checks first, then broader checks when justified. Confirm the behavior a user would observe, beyond a clean compile.
 5. **Review.** Use `metacoding-review` on the diff, and fix what it finds.
-6. **Update artifacts.** Update the one document that owns each concept that changed, following the MECE rules in `references/repository-organization.md`.
+6. **Update artifacts.** Update the one document that owns each concept that changed, and write the decision records the scope summary marked, following `references/repository-organization.md`.
 7. **Close.** Finish with a commit, a commit-ready handoff, or an explicit completion confirmation, as `references/workflow-rules.md` describes.
 
 ## Rules Between Steps
@@ -44,15 +44,12 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 - Work one bounded task at a time. Queue unrelated requests for later; take on a related blocker only as a subtask the active task needs.
 - Skip TDD only when the user accepts the exception, and record the reason.
 - If git actions are unavailable or out of scope, stop at a clean handoff.
-- If repo artifacts are missing, bootstrap them from `assets/templates/` before implementation or propose them.
+- Work with the artifacts the repo has. `references/platform-adaptation.md` says what to do when one is missing.
 
 ## Bundled Templates
 
-Use these templates when the repo does not already provide an equivalent artifact:
-
-- `assets/templates/task-entry.md`
-- `assets/templates/test-plan.md`
-- `assets/templates/repeated-task-checklist.md`
-- `assets/templates/changelog-entry.md`
+- `assets/templates/task-entry.md`: the shape of a task record, for a repo that already tracks work in files or a user who asks for one
+- `assets/templates/repeated-task-checklist.md`: for a recurring multi-step procedure the repo has no checklist for
+- `assets/templates/changelog-entry.md`: for a repo that keeps a changelog
 
 Keep the workflow strict, but adapt the exact artifact shape to the repository you are working in.

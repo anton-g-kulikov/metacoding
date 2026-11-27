@@ -15,8 +15,8 @@ Prefer a structure equivalent to:
 
 ```text
 /src        # application and library source code
-/test       # automated tests, fixtures, and test documentation
-/_meta      # system, architecture, API, and project-management docs
+/test       # automated tests and fixtures
+/_meta      # system, architecture, and API docs, the glossary, and decision records
 ```
 
 Within source and tests:
@@ -43,23 +43,48 @@ Each durable concept should have one primary home.
   - integration patterns
   - interface decisions
 - `/_meta/architecture-decisions.md`
-  - architectural tradeoffs and rationale
-- `/_meta/project-task-list.md`
-  - active tasks
-  - roadmap items
-  - status tracking and temporal planning
-- `/test/test-documentation.md`
-  - documented test cases
-  - test strategy
-  - coverage intent and scenario tracking
+  - architectural trade-offs and rationale
+- `/_meta/glossary.md`
+  - the project's own terms and what they mean
 
 Rules:
 
-- Do not duplicate the same policy or status across multiple documents.
+- Keep each policy or fact in one document.
 - Keep system documentation evergreen and free of task-status noise.
-- Keep project-management documents temporal and status-oriented.
-- Keep test intent in test documentation, not scattered through unrelated docs.
 - Update exactly the artifact whose responsibility changed.
+
+## Task and Test Records
+
+Task status and test intent live where the work happens: the confirmed scope summary, the issue or pull request, the tests themselves, and version control history.
+
+- If the repo already keeps a task list or a test documentation file, keep updating it as part of the task.
+- Create neither in a repo that lacks one.
+
+## Decision Records
+
+`/_meta/architecture-decisions.md` holds the decisions a future reader would otherwise question. Record a decision only when all three are true:
+
+1. **Hard to reverse.** Changing course later would cost real work.
+2. **Surprising without context.** Someone reading the code would wonder why it was done this way.
+3. **A real trade-off.** There were workable alternatives, and this one was chosen for stated reasons.
+
+A decision reaches this file through the scope summary: the interview marks it `[record]`, the user confirms the summary, and the entry is written once the work is done. Give each entry a date, the decision, the alternatives considered, and why this one won.
+
+Create the file with the first such entry. If the repo already keeps decision records somewhere else, use that place.
+
+## Glossary
+
+`/_meta/glossary.md` holds the project's own terms, one line each: the term, what it means in this project, and the words to avoid for it.
+
+```text
+**Order**: a customer's confirmed purchase. Avoid: cart, basket.
+```
+
+- Read it while grounding, and use its terms in code, tests, docs, and questions to the user.
+- Add or correct a term at the moment its meaning is settled.
+- Keep it to meanings. Implementation detail belongs in the system documentation.
+- If the repo already keeps a glossary somewhere else, use that one.
+- If the repo has no glossary, propose the file to the user before creating it.
 
 ## Temporary File Management
 
@@ -81,4 +106,4 @@ Rules:
 
 - Repository organization is not optional polish. Validate it during repo grounding.
 - If a requested change would create documentation overlap or structural drift, correct the organization as part of the task or record the follow-up explicitly.
-- Mandatory TDD depends on this structure: test documentation belongs under `/test`, project status belongs under `/_meta`, and implementation belongs under source directories.
+- Mandatory TDD depends on this structure: tests belong under the test tree and implementation under source directories.

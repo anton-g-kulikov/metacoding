@@ -4,15 +4,16 @@
 
 1. Ground in the repository.
    - Read the relevant code, config, tests, docs, and `references/repository-organization.md` first.
+   - Read the glossary and the decision records when the repo has them, and use the glossary's terms.
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Interview the user and capture task scope.
    - Use the `metacoding-interview` skill: ask the open decisions in numbered rounds, each with a recommended answer.
    - Close with the scope summary: goal, success criteria, in and out of scope, decisions, assumptions, test intent.
    - Wait for the user to confirm the scope summary before changing any file.
-   - Record the confirmed scope in the repo's task artifact, or adapt `assets/templates/task-entry.md`.
+   - Record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
-   - Record the test intent in an existing repo test artifact; otherwise adapt `assets/templates/test-plan.md`.
+   - Take the test intent from the confirmed scope summary.
    - For a bug whose cause is unknown, use the `metacoding-debug` skill for this step.
    - Keep to the confirmed scope: no unrelated features, cleanup, or opportunistic refactors.
    - Add blocking related work as a subtask; defer unrelated work.
@@ -25,7 +26,9 @@
 6. Update artifacts using MECE documentation rules.
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
    - Update the one artifact that owns the concept instead of duplicating the same information.
-   - Keep system docs evergreen, task docs temporal, and test docs focused on test intent and status.
+   - Write each decision marked `[record]` in the confirmed scope summary to `/_meta/architecture-decisions.md`, or to the place the repo already keeps its decision records.
+   - Handle the repo's existing task and test records as `references/repository-organization.md` describes.
+   - Keep system docs evergreen and free of task status.
 7. Close the loop.
    - If VCS work is in scope, produce or perform a clean commit-ready summary.
    - If VCS work is out of scope, provide a concise handoff with verification status and remaining risks.

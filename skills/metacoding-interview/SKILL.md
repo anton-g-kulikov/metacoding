@@ -29,6 +29,14 @@ Hold a question for a later round when its wording would change with another ans
 
 When you cannot reach the user directly, for example when running as a subagent, return the round as your result and stop there. Continue when the answers are sent back.
 
+## Terms
+
+Read the project's glossary before the first round, when it has one, and use its terms in your questions.
+
+When an answer settles what a project term means, record it in the glossary straight away: the term, its meaning in this project, and the words to avoid for it. The default place is `/_meta/glossary.md`; use the repo's own glossary if it keeps one elsewhere, and propose the file to the user if it has none. The glossary is the one file the interview writes before the scope summary is confirmed.
+
+When the user's wording conflicts with the glossary, or one word is doing two jobs, raise it as a decision.
+
 ## Question format
 
 Number each question and give your recommended answer with a one-line reason. Phrase the question so that "yes" accepts the recommendation. The user can then answer a whole round in one line, such as "1 yes, 2 yes, 3 the second option".
@@ -73,6 +81,8 @@ Decisions made:
 Assumptions:
 Test intent:
 ```
+
+Under "Decisions made", put `[record]` in front of each decision that is hard to reverse, surprising without context, and a real trade-off between workable alternatives. Confirming the summary also approves writing those as decision records once the work is done.
 
 Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the test intent seeds test-first work, and a later review checks the result against it.
 

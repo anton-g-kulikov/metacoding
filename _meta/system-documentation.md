@@ -48,7 +48,6 @@ skills/
 │   │   └── python.md
 │   └── assets/templates/
 │       ├── task-entry.md
-│       ├── test-plan.md
 │       ├── repeated-task-checklist.md
 │       ├── changelog-entry.md
 │       └── project-context.md
