@@ -76,9 +76,10 @@ Each success criterion that a test can prove gets one, written first and seen fa
 - [x] **1. The workflow skill works without `project-context.md`**
   - Success criteria: "Start Here" tells the agent to read the file when it exists and to look the facts up otherwise. The skill says how a companion skill is named in a plugin install. The system documentation and the changelog say so too.
   - Test intent: a content test pins both new sentences under their headings and fails on the text as it was.
-- [ ] **2. Claude Code plugin**
+- [x] **2. Claude Code plugin**
   - Success criteria: the manifest and the marketplace file exist and pass `claude plugin validate --strict`. The manifest's version equals the one in `package.json`. The folders under `skills/` match the CLI's skill list, and each skill's `name` matches its folder. The README leads with the Claude Code plugin install.
   - Test intent: a new manifest test file proves the name, the version match, the marketplace entry, the skill-list match and the name-to-folder match.
+  - Changed on 2026-11-28, found in the review of this ticket: `test/unit/skill-manager.test.ts` already proves that the folders under `skills/` are the CLI's skill list, so the new file does not repeat it.
 - [ ] **3. Codex and Antigravity plugin forms**
   - Success criteria: the Codex manifest and marketplace file and the Antigravity manifest exist in the documented shapes, with the same name, version and description as the Claude Code manifest. The README gives both installs and says they are untried. The Claude Code validation still passes with the root `plugin.json` present.
   - Test intent: the manifest tests extend to all three manifests and both marketplace files.

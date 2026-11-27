@@ -2,9 +2,9 @@
 
 ## Overview
 
-`metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files.
+`metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files. The same skills can also be installed as a plugin, without the CLI; see Plugin Install below.
 
-The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug`, `metacoding-design`, and `metacoding-retro` are its companions and also work on their own. The workflow skill says at which step each companion is used. No companion calls another, and none points at a file that only the workflow skill ships. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it. In a plugin install, an agent lists each skill with the plugin's prefix, such as `metacoding:metacoding-shape`.
+The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug`, `metacoding-design`, and `metacoding-retro` are its companions and also work on their own. The workflow skill says at which step each companion is used. No companion calls another, and none points at a file that only the workflow skill ships. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it.
 
 ## Runtime Flow
 
@@ -89,6 +89,28 @@ A CLI install always adds this file to the workflow skill:
 ```
 
 That file is generated per project from the answers given at `init`. The workflow skill reads it when it exists. Without it, the skill finds the project's type, tech stack, and test and build commands in the repo, so the skills also work in a plugin install.
+
+## Plugin Install
+
+The repo root is also a Claude Code plugin, so Claude Code can install the skills from this repository without the CLI. It reads the `skills/` folder at the plugin root. The manifest does not list the skills, so every folder under `skills/` ships. Claude Code lists each skill with the plugin's prefix, such as `metacoding:metacoding-shape`.
+
+```text
+.claude-plugin/
+├── plugin.json        # Claude Code plugin manifest
+└── marketplace.json   # makes the repo its own marketplace; its one entry points at the repo root
+```
+
+The plugin manifest carries the version of `package.json`, and a test fails when the two differ. A plugin install is updated when that version changes, not on every commit.
+
+Check a manifest change with:
+
+```bash
+claude plugin validate --strict .
+claude plugin validate --strict .claude-plugin/plugin.json
+claude --plugin-dir . plugin details metacoding
+```
+
+The first checks the marketplace file, the second the plugin manifest, and the third lists the skills Claude Code finds.
 
 ## Core Services
 

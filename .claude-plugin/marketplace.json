@@ -1,0 +1,13 @@
+{
+  "name": "metacoding",
+  "description": "The metacoding workflow skills for coding agents.",
+  "owner": {
+    "name": "Anton Kulikov"
+  },
+  "plugins": [
+    {
+      "name": "metacoding",
+      "source": "./"
+    }
+  ]
+}
