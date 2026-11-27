@@ -4,7 +4,7 @@
 
 `metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files.
 
-The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug`, and `metacoding-design` are its companions and also work on their own. The workflow skill says at which step each companion is used. No companion calls another, and none points at a file that only the workflow skill ships. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it.
+The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug`, `metacoding-design`, and `metacoding-retro` are its companions and also work on their own. The workflow skill says at which step each companion is used. No companion calls another, and none points at a file that only the workflow skill ships. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it.
 
 ## Runtime Flow
 
@@ -60,6 +60,9 @@ skills/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 ├── metacoding-design/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+├── metacoding-retro/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 └── metacoding-onboard/

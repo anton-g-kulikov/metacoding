@@ -17,6 +17,7 @@ export const METACODING_SKILLS = [
   'metacoding-review',
   'metacoding-debug',
   'metacoding-design',
+  'metacoding-retro',
   'metacoding-onboard',
 ] as const;
 

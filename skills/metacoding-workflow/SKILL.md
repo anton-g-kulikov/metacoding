@@ -5,7 +5,7 @@ description: Run one task through the full metacoding workflow, from repo ground
 
 # Metacoding Workflow
 
-This skill takes one task from request to handoff. It owns the order of the steps and the rules that hold between them. Companion skills own the method of single steps, or of one part of a step, and each also works on its own:
+This skill takes one task from request to handoff. It owns the order of the steps and the rules that hold between them. Companion skills own the method of single steps, of one part of a step, or of the retro that follows the last ticket, and each also works on its own:
 
 | Skill | What it does |
 | --- | --- |
@@ -14,6 +14,7 @@ This skill takes one task from request to handoff. It owns the order of the step
 | `metacoding-debug` | Finds the cause of a bug from a command that reproduces it |
 | `metacoding-review` | Checks the finished change against the scope and the repo's standards |
 | `metacoding-design` | Decides the shape of code: module depth, interfaces, and seams |
+| `metacoding-retro` | Looks back at the finished task and proposes lasting changes for its mistakes |
 
 One more skill, `metacoding-onboard`, is run once per repo instead of once per task. It records where the repo keeps its tracker, specs, glossary, and decision records in the project map, `.metacoding/project.md`.
 

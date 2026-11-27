@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metacoding Retro"
+  short_description: "Turn a task's mistakes into lasting changes"
+  default_prompt: "Use $metacoding-retro to look back at the task we just finished, find the mistakes that cost rework and would happen again, and propose one lasting change for each, such as a check, a rule, or a doc fix, for me to approve."

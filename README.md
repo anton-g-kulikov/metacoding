@@ -26,15 +26,16 @@ Antigravity: .agents/skills/
 
 | Skill | Role |
 | --- | --- |
-| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug` and `metacoding-design` at the right step |
+| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug` and `metacoding-design` at the right step, and `metacoding-retro` after the last ticket |
 | `metacoding-shape` | Settles open decisions with you and ends in a confirmed scope summary |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-review` | Checks the finished change against the agreed scope and the repo's standards |
 | `metacoding-debug` | Finds the cause of a bug, starting from a command that reproduces it |
 | `metacoding-design` | Decides the shape of code: module depth, interfaces, and seams |
+| `metacoding-retro` | Looks back at a finished task and proposes lasting changes for its mistakes |
 | `metacoding-onboard` | Run once per repo. Records where the repo keeps its tracker, specs, glossary and decision records in a project map, `.metacoding/project.md` |
 
-Each companion skill also works on its own, so you can ask for only an interview, only a review, or only a diagnosis.
+Each companion skill also works on its own, so you can ask for only an interview, only a review, only a diagnosis, or only a retro.
 
 For Codex, the project install looks like:
 
@@ -66,6 +67,9 @@ For Codex, the project install looks like:
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 ├── metacoding-design/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+├── metacoding-retro/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 └── metacoding-onboard/
@@ -154,6 +158,19 @@ You can also run it on its own, on a module or an area you name. For new code it
 
 For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test. It keeps a raw capture from a real system out of the repo, and masks credentials and personal data in whatever it shows, writes into the repo, or commits.
 
+### Retro
+
+After the last ticket of a task is closed, or whenever you ask, `metacoding-retro` turns the task's mistakes into lasting changes:
+
+- It collects the mistakes from what is on record: review findings that had to be fixed, your corrections, changes to the scope made mid-build, amended decision records, and checks that failed for a foreseeable reason.
+- A mistake becomes a lesson only when it cost rework or was caught late, would likely happen again in another task, and has a concrete change that would stop it. Most tasks have none or one.
+- For each lesson it says why nothing stopped the mistake and proposes one change, the first that fits: an automated check, a fix to an existing rule or doc, a new rule, a glossary term or decision record, or a checklist step.
+- A rule goes where the repo already keeps its standards. When it keeps them nowhere, the retro proposes creating `/_meta/coding-standards.md`.
+- It never edits an installed metacoding skill, because git ignores those folders by default and `metacoding update` reports a local edit as a conflict. When a skill itself is at fault, it drafts an issue for you to file.
+- It sends the lessons as one numbered list with "do" or "skip" recommended for each, and changes nothing until you answer. An approved text edit is made at once; a small check is built at once and seen failing on the original mistake; anything larger is queued as its own task. When it commits, each applied lesson gets its own commit.
+
+It keeps no log: the changes, with their commit messages, are the record.
+
 ### Onboarding
 
 `metacoding-onboard` is run once per repo, not once per task. It records where the repo keeps its tracker, specs, glossary and decision records, so that later sessions read the answer instead of working it out again:
@@ -201,6 +218,7 @@ A task is considered complete only when all of the following are true:
 - Changed artifacts were updated, or a conscious deferral was documented.
 - Every ticket is closed and, when the task has a spec, the spec is marked done.
 - The handoff includes outcome, verification status, and remaining risks.
+- After the last ticket is closed, the retro has run and its lessons, if any, have been put to you.
 
 ## CLI
 
@@ -256,6 +274,7 @@ The workflow skill will:
 - build test-first, one behavior at a time
 - build a task with several tickets one ticket at a time, and wait for your go between tickets
 - review the diff against the agreed scope before closing
+- look back at the task after its last ticket, and propose lasting changes for its mistakes
 - read the project glossary and decision records, and keep them current
 - write a spec for a task with more than one ticket or a decision marked `[record]`
 - produce a commit-ready handoff when git actions are unavailable or out of scope

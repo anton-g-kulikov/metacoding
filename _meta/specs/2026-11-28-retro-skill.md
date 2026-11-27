@@ -25,6 +25,12 @@ Give metacoding a way to turn a task's mistakes into lasting changes, so the sam
 - Tests: `test/unit/skill-content.test.ts`, `test/unit/update-command.test.ts`, and `test/unit/skill-manager.test.ts` if it needs it.
 - README, CHANGELOG, `_meta/api-design.md`, `_meta/system-documentation.md`.
 - This task's records: this spec, the glossary, one decision record, and the backlog with "Retro" removed.
+- Added on 2026-11-28, found while building and reviewing ticket 1 and kept because the skill needs them to hold in use:
+  - The retro skill: expect few lessons; read the repo's existing checks before proposing one; how to word a rule; where a glossary term or a decision record goes; the most costly mistake first; when to recommend "skip"; continue when a subagent's answers are sent back; one commit per applied lesson when commits are in scope; a closing report.
+  - The never-edit rule holds even when a repo commits its installed metacoding skills.
+  - The workflow rules: a one-ticket task's retro follows the close of that ticket, and the retro's changes are not part of the task's spec.
+  - README: a "Retro" section, a line in "Completion Criteria", and a bullet in the list of what the skill will do.
+  - CHANGELOG: the retro in the line on what the orchestrator calls.
 
 ## Out of scope
 
@@ -51,7 +57,7 @@ The workflow calls the skill from the Tickets section of the workflow rules, onc
 
 ## Decisions made
 
-- A sixth companion skill named `metacoding-retro`.
+- A sixth skill, the fifth companion, named `metacoding-retro`.
 - It runs on request, and from the workflow once per task after the last ticket.
 - It looks only for mistakes that cost rework or were caught late.
 - A lesson must pass the three-part bar.
@@ -82,7 +88,7 @@ One content test per rule, written first and seen failing, each tied to its head
 
 ## Tickets
 
-- [ ] **1. The retro skill, installed and called by the workflow**
+- [x] **1. The retro skill, installed and called by the workflow**
   - Success criteria: the first, second, third and fifth success criteria above.
   - Test intent: `update` adds the skill to an install that lacks it and reports the right count of missing files per vendor; the skill text states each of the seven parts under its own heading; it does not point at `references/` or `assets/`; the Codex metadata has a display name and a default prompt; the Tickets section says to run the retro once after the last ticket, and the Completion Standard names it.
 - [ ] **2. A home for standards in the layout**
