@@ -20,3 +20,14 @@
 - Write the records in the artifact step, once the work is done. This was the rule until this decision.
 
 **Why.** The decision is made when the user confirms it, and the build should follow a decision that is already on record, together with the spec that refers to it. Writing afterwards avoids recording a decision that did not survive the build, but an amended entry tells a future reader more than a missing one.
+
+## 2026-11-27: Update reads the init answers back from project-context.md
+
+**Decision.** `metacoding update` takes the project name, description, tech stack and project type from the installed `references/project-context.md` of each vendor, and falls back to project detection for a value it cannot find. The labels of those four lines are a format that `update` depends on.
+
+**Alternatives.**
+
+- Rebuild the file from detection and fixed defaults on every update. This was the behavior until this decision.
+- Have `init` write the answers to a separate config file that `update` reads.
+
+**Why.** Rebuilding from detection replaced what the user entered and reported the file as locally edited on every update. A config file would be the cleaner store, but installs made before it existed have only `project-context.md`, so they would need a migration that reads that file anyway. Reading it directly fixes every existing install with no new file. The cost is that renaming one of the four labels in the template now needs a reader for the old label.
