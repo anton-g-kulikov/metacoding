@@ -28,6 +28,11 @@ A coding agent records once where a repo keeps its tracker, specs, glossary and 
 - Tests: the content tests, and the unit tests for the skill manager, `update` and `init`.
 - Docs: README, CHANGELOG, `_meta/api-design.md`, `_meta/system-documentation.md`.
 - This task's records: this spec, one decision record, two glossary terms, the backlog with this item removed, and this repo's `.metacoding/project.md`.
+- Added on 2026-11-28, found in the review of ticket 1 and kept because the success criteria need them to hold in use:
+  - The skill takes the default places and the question format from `metacoding-shape` instead of stating them again, so each keeps one home.
+  - The skill says the project map is committed when the user has commits made, and otherwise tells them it is waiting.
+  - The pointer question is part of step 2, the instruction file is part of what step 1 looks for, and a re-run offers the pointer when the instruction file lacks it.
+  - README gets an Onboarding section next to the sections of the other skills.
 
 ## Out of scope
 
@@ -90,7 +95,7 @@ One content test per rule in the skill text, written first and seen failing, wit
 
 ## Tickets
 
-- [ ] **1. The onboard skill writes the project map**
+- [x] **1. The onboard skill writes the project map**
   - Success criteria: criteria 1 to 6, and criterion 8.
   - Test intent: the skill is in the skill list and in every agent's install; `update --dry-run` fails without its `SKILL.md`; the skill text states the path, the four lines, look then ask then write on confirmation, the empty-folder defaults, the re-run, that it creates nothing, and the pointer with its two limits; the workflow rules give the one-line pointer to the skill when a repo has no project map.
 - [ ] **2. The skills use the places the project map names**

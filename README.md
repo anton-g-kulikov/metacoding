@@ -16,7 +16,7 @@ Running `metacoding init` asks which coding agent you use:
 You can also pass `--vendor codex`, `--vendor claude-code`, or `--vendor antigravity`.
 For mixed-agent teams, you can use `--vendor all` to install all workspace-scoped variants.
 
-It installs five skills into that agent's skills folder:
+It installs six skills into that agent's skills folder:
 
 ```text
 Codex:       .codex/skills/
@@ -26,11 +26,12 @@ Antigravity: .agents/skills/
 
 | Skill | Role |
 | --- | --- |
-| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls the other four at the right step |
+| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls `metacoding-shape`, `metacoding-tdd`, `metacoding-review` and `metacoding-debug` at the right step |
 | `metacoding-shape` | Settles open decisions with you and ends in a confirmed scope summary |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-review` | Checks the finished change against the agreed scope and the repo's standards |
 | `metacoding-debug` | Finds the cause of a bug, starting from a command that reproduces it |
+| `metacoding-onboard` | Run once per repo. Records where the repo keeps its tracker, specs, glossary and decision records in a project map, `.metacoding/project.md` |
 
 Each companion skill also works on its own, so you can ask for only an interview, only a review, or only a diagnosis.
 
@@ -60,7 +61,10 @@ For Codex, the project install looks like:
 ├── metacoding-review/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
-└── metacoding-debug/
+├── metacoding-debug/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+└── metacoding-onboard/
     ├── SKILL.md
     └── agents/openai.yaml
 ```
@@ -132,6 +136,18 @@ For the last ticket of a task with several, the scope axis runs once more on the
 ### Debugging
 
 For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test. It keeps a raw capture from a real system out of the repo, and masks credentials and personal data in whatever it shows, writes into the repo, or commits.
+
+### Onboarding
+
+`metacoding-onboard` is run once per repo, not once per task. It records where the repo keeps its tracker, specs, glossary and decision records, so that later sessions read the answer instead of working it out again:
+
+- It looks at what the repo already has, then asks you one round of numbered questions with a recommended place for each.
+- Once you confirm, it writes the answers to the project map, `.metacoding/project.md`, a file you commit with the repo.
+- It records the places and creates none of them. A glossary or a specs folder that does not exist yet is created when a task first needs it.
+- If you agree, it adds one line that points to the project map in the instruction file your agent loads at every start, such as `CLAUDE.md` or `AGENTS.md`. It adds the line only to a file the repo already has.
+- Run it again when a place moves: it shows the current project map and asks what changed.
+
+In a repo with no project map, the workflow says so in one line and carries on.
 
 ### Scope and Task-Switching Rules
 

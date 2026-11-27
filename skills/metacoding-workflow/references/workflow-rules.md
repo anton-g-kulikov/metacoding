@@ -6,6 +6,7 @@
    - Read the relevant code, config, tests, docs, and `references/repository-organization.md` first.
    - Read the glossary and the decision records when the repo has them, and use the glossary's terms.
    - Look for a spec whose status is in progress, where `references/repository-organization.md` says specs go. When the request continues that task, resume it as the Tickets section describes.
+   - When the repo has no project map, `.metacoding/project.md`, tell the user in one line that the `metacoding-onboard` skill can record where the repo keeps its tracker, specs, glossary, and decision records, then carry on with the task.
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Shape the task: interview the user and capture task scope.
    - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.

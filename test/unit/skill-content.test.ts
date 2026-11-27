@@ -40,6 +40,18 @@ function frontmatterOf(skillFile: string): Record<string, unknown> {
   return YAML.parse(skillFile.slice(opening.length, end));
 }
 
+/** A document from one heading up to the next; fails when either heading is missing. */
+function sectionOf(document: string, heading: string, nextHeading?: string): string {
+  expect(document).toContain(heading);
+  if (nextHeading) {
+    expect(document).toContain(nextHeading);
+  }
+  return document.slice(
+    document.indexOf(heading),
+    nextHeading ? document.indexOf(nextHeading) : undefined
+  );
+}
+
 describe('installed skill content: durable artifacts', () => {
   test('the layout reference prescribes a glossary under /_meta', async () => {
     const { read } = await installFor('codex');
@@ -1269,5 +1281,254 @@ describe('installed skill content: prompt upkeep', () => {
     for (const broadTrigger of ['feature work', 'bug fixes', 'refactors', 'reviews']) {
       expect(description).not.toContain(broadTrigger);
     }
+  });
+});
+
+describe('installed skill content: onboarding', () => {
+  test('onboarding ends in a project map that saves later sessions the search', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const intro = sectionOf(onboard, '# Onboard', '## The project map');
+
+    expect(intro).toContain('Run this once per repo, and again when one of the places moves.');
+    expect(intro).toContain('so that no later session has to work the places out again');
+  });
+
+  test('the project map is one committed file at the same path in every repo', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## The project map', '## 1. Look');
+
+    expect(section).toContain(
+      'The project map is the file `.metacoding/project.md`, at the same path in every repo.'
+    );
+    expect(section).toContain('It is committed with the repo');
+  });
+
+  test('the project map holds four labelled lines with paths from the repo root', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## The project map', '## 1. Look');
+
+    expect(section).toContain('# Project map\n');
+    expect(section).toContain(
+      '- Tracker: <GitHub issues, a file path, or none: the checklist in each spec>\n' +
+        '- Specs: <folder>\n' +
+        '- Glossary: <file>\n' +
+        '- Decision records: <file or folder>\n'
+    );
+    expect(section).toContain(
+      'Keep the four labels as they are, so that a reader finds a place by its label.'
+    );
+    expect(section).toContain('Write each path from the repo root, starting with `/`.');
+  });
+
+  test('onboarding looks at what the repo has before it asks', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 1. Look', '## 2. Ask');
+
+    expect(section).toContain('Find out what the repo already has before asking anything.');
+    for (const place of ['Tracker:', 'Specs:', 'Glossary:', 'Decision records:']) {
+      expect(section).toContain(`- ${place}`);
+    }
+    expect(section).toContain(
+      '- Instruction file: the file your agent loads at the start of every session, such as `CLAUDE.md` or `AGENTS.md`'
+    );
+  });
+
+  test('onboarding notes when a place was last changed', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 1. Look', '## 2. Ask');
+
+    expect(section).toContain(
+      'For each place, note whether you found it and when it last changed.'
+    );
+    expect(section).toContain('may no longer be in use');
+  });
+
+  test('onboarding asks one round of numbered questions with a recommended place each', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 2. Ask', '### The pointer');
+
+    expect(section).toContain(
+      'Put the places to the user in one round of numbered questions, each with a recommended place and a one-line reason.'
+    );
+    expect(section).toContain('Recommend what you found.');
+  });
+
+  test('the question format stays with the shape skill', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 2. Ask', '### The pointer');
+
+    expect(section).toContain('Use the question format of the `metacoding-shape` skill');
+    expect(onboard).not.toContain('Recommended: <');
+  });
+
+  test('two competing candidates for a place go to the user with a recommendation', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 2. Ask', '### The pointer');
+
+    expect(section).toContain(
+      "name both and recommend one: which of them is kept current is the user's decision"
+    );
+  });
+
+  test('onboarding recommends the defaults of the shape skill for what the repo lacks', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 2. Ask', '### The pointer');
+
+    expect(section).toContain(
+      'For a place the repo does not have, recommend the default: the place the `metacoding-shape` skill uses in a repo that has none.'
+    );
+    expect(section).toContain('`../metacoding-shape/SKILL.md`');
+    expect(section).toContain(
+      'In an empty folder all four recommendations are the defaults, and the user can confirm the round in one line.'
+    );
+    // The default places have their home in the shape skill.
+    expect(onboard).not.toContain('/_meta/');
+  });
+
+  test('onboarding offers a one-line pointer in the instruction file the agent loads', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '### The pointer', '## 3. Write');
+
+    expect(section).toContain(
+      'one line in the instruction file your agent loads at the start of every session'
+    );
+    expect(section).toContain(
+      "This repo's tracker, specs, glossary, and decision records are listed in `.metacoding/project.md`."
+    );
+    expect(section).toContain(
+      'Offer it as the last question of the round, after the four places.'
+    );
+    expect(section).toContain(
+      'The line gives the path and nothing else: the places themselves stay in the project map alone.'
+    );
+  });
+
+  test('a repo with no instruction file gets no pointer and no new file', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '### The pointer', '## 3. Write');
+
+    expect(section).toContain(
+      'When the repo has no such file, say so instead of asking, and create none.'
+    );
+  });
+
+  test('a pointer that is already there is left alone', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '### The pointer', '## 3. Write');
+
+    expect(section).toContain(
+      'When the file already has the line, leave it as it is and skip the question.'
+    );
+  });
+
+  test('onboarding writes the project map only after the user confirms', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+
+    expect(section).toContain(
+      'Write the project map only after the user has confirmed the round. Nothing is written before that.'
+    );
+  });
+
+  test('onboarding records the places and creates none of them', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+
+    expect(section).toContain('Record the places and create none of them.');
+    expect(section).toContain('is created later, when a task first needs it');
+  });
+
+  test('the pointer is added only on a yes, to a file the repo already has', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+
+    expect(section).toContain(
+      'Add the pointer only when the user said yes to it, and only to a file the repo already has.'
+    );
+  });
+
+  test('the project map is committed, or the user is told it is waiting', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+
+    expect(section).toContain(
+      'Commit it when the user has you make commits; otherwise tell them the file is waiting to be committed.'
+    );
+  });
+
+  test('run again, onboarding shows the current project map and asks what changed', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## Running it again');
+
+    expect(section).toContain('When the repo already has a project map, read it first');
+    expect(section).toContain('Show the user the current project map');
+    expect(section).toContain('ask what changed');
+    expect(section).toContain(
+      'Rewrite the file only after they confirm, and change only the lines they changed.'
+    );
+  });
+
+  test('run again, a recorded place that is missing is named but is not an error', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## Running it again');
+
+    expect(section).toContain('name each line whose place you could not find');
+    expect(section).toContain('A place that is recorded but not created yet is not an error.');
+  });
+
+  test('run again, onboarding offers the pointer when the instruction file lacks it', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## Running it again');
+
+    expect(section).toContain('Offer the pointer again when the instruction file lacks it.');
+  });
+
+  test('the workflow points to onboarding when the repo has no project map', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const grounding = sectionOf(rules, '1. Ground in the repository.', '2. Shape the task');
+
+    expect(grounding).toContain(
+      'When the repo has no project map, `.metacoding/project.md`, tell the user in one line that the `metacoding-onboard` skill can record where the repo keeps its tracker, specs, glossary, and decision records, then carry on with the task.'
+    );
+  });
+
+  test('the workflow skill names onboarding as run once per repo', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const intro = sectionOf(skill, '# Metacoding Workflow', '## Start Here');
+
+    expect(intro).toContain(
+      'One more skill, `metacoding-onboard`, is run once per repo instead of once per task'
+    );
+    expect(intro).toContain('the project map, `.metacoding/project.md`');
+  });
+
+  test('the Codex prompt for onboarding asks one round and writes on confirmation', async () => {
+    const { read } = await installFor('codex');
+    const prompt = read('metacoding-onboard/agents/openai.yaml');
+
+    expect(prompt).toContain('$metacoding-onboard');
+    expect(prompt).toContain('one round of numbered questions with a recommended place for each');
+    expect(prompt).toContain('write the project map once I confirm');
   });
 });

@@ -40,7 +40,7 @@ describe('InitCommand', () => {
     );
 
     expect(gitignore).toContain('.codex/skills/metacoding-*/');
-    for (const skill of ['workflow', 'shape', 'tdd', 'review', 'debug']) {
+    for (const skill of ['workflow', 'shape', 'tdd', 'review', 'debug', 'onboard']) {
       expect(
         await fs.pathExists(
           path.join(workspace, `.codex/skills/metacoding-${skill}/SKILL.md`)

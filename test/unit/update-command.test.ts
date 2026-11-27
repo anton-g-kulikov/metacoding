@@ -223,6 +223,7 @@ describe('UpdateCommand', () => {
     'metacoding-tdd',
     'metacoding-review',
     'metacoding-debug',
+    'metacoding-onboard',
   ];
 
   test.each(vendorSkillsDirs)(
@@ -243,7 +244,7 @@ describe('UpdateCommand', () => {
 
       const update = new UpdateCommand();
       // Codex also needs each companion's agents/openai.yaml.
-      const missingFiles = vendor === 'codex' ? 8 : 4;
+      const missingFiles = companionSkills.length * (vendor === 'codex' ? 2 : 1);
       await expect(update.execute({ dryRun: true })).rejects.toThrow(
         `${missingFiles} required ${vendor} skill files are missing`
       );
