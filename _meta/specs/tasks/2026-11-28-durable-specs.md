@@ -277,6 +277,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - The three done specs move to `_meta/specs/tasks/` in ticket 3. Only their relative links change.
 - Existing content tests keep their names. They are re-pointed where text moves to the new skill.
   - Changed on 2026-11-28, in ticket 1: eight existing tests were renamed, because their names said the shape skill does what the spec skill now does. No test was given an ID it did not have.
+  - Changed on 2026-11-28, in ticket 2: one more existing test was renamed, because its name said tickets carry criteria and test intent where they now name the scenarios they deliver.
 - README and CHANGELOG are updated in each ticket, under "Unreleased". The version stays 2.0.1.
 - A new scenario takes the number one above the highest in its feature spec and in any task spec in progress.
 - The onboarding branch says to take the default places from `metacoding-shape`. After this branch they live in `metacoding-spec`, so whichever merges second re-points them.
@@ -287,7 +288,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - [x] **1. Shape interviews, spec writes**
   - Delivers: SHAPE-1, SHAPE-2, SPEC-1, FLOW-1, INSTALL-1
   - Blocked by: none
-- [ ] **2. Stories in the scope summary**
+- [x] **2. Stories in the scope summary**
   - Delivers: SHAPE-3, SPEC-2, SPEC-3, SPEC-4
   - Blocked by: 1
 - [ ] **3. Task specs and feature specs**

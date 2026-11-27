@@ -11,9 +11,9 @@
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Shape the task: interview the user and capture task scope.
    - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.
-   - Then use the `metacoding-spec` skill: describe the solution and slice it into tickets.
+   - Then use the `metacoding-spec` skill: write the behavior as stories, describe the solution, and slice it into tickets.
    - When the solution adds a module or changes an interface, design that part with the `metacoding-design` skill before the scope summary is sent.
-   - Close with the scope summary: goal, success criteria, in and out of scope, solution, decisions, terms, assumptions, test intent, and the tickets the solution is sliced into.
+   - Close with the scope summary: goal, in and out of scope, solution, stories, decisions, terms, assumptions, and the tickets the solution is sliced into. A task without stories has success criteria and test intent where the stories are.
    - Wait for the user to confirm the scope summary before changing any file.
    - Once the summary is confirmed, the `metacoding-spec` skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.
    - For a task that needs none, record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.

@@ -5,7 +5,7 @@ description: Turn a task's settled decisions into a scope summary with the solut
 
 # Spec
 
-Turn a task's settled decisions into an agreed scope before changing any code, test, or doc: describe the solution, slice it into tickets, and get the user to confirm the scope summary. Then write the records.
+Turn a task's settled decisions into an agreed scope before changing any code, test, or doc: write the behavior as stories, describe the solution, slice it into tickets, and get the user to confirm the scope summary. Then write the records.
 
 ## Start from settled decisions
 
@@ -21,6 +21,32 @@ Where the project map names a place, use that place wherever this skill reads or
 
 The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map.
 
+## Stories
+
+Describe a task that adds or changes behavior a role can observe as stories, whatever its size. A role is a kind of user. Use the role's name from the glossary, or from the terms settled for this task.
+
+Group the stories by role, and within a role by feature area: a part of the product a user would name, such as a command or a screen. Write each story as one sentence, followed by its scenarios:
+
+```text
+<Role>
+
+<Feature area>: <story title>
+As a <role>, I want <what>, so that <why>.
+
+Scenario: <ID> <title>
+  Given <the starting state>
+  When <what the role does>
+  Then <what the role can observe>
+```
+
+- A scenario is one case of the story: the happy path, an error, an edge. Its "Then" names something the role can observe, so that a test can check it. When a scenario needs more than one Given, When, or Then, start each further line with "And".
+- Give each scenario an ID: the prefix of its feature area, a hyphen, and a number, such as `UPDATE-4`. The prefix is a short name for the area in capitals. Use the one the area's scenarios already carry in the repo's specs, and choose one for a new area.
+- A new scenario takes the number one above the highest its area has used, counting a spec that is still in progress.
+- List the scenarios the task adds or changes, and leave the area's other scenarios out. A scenario the task changes keeps its ID: write "(changed)" after its title.
+- The scenarios stand in place of success criteria and test intent: they are what the task must deliver and what its tests must prove.
+
+A task that changes no behavior a role can observe, such as a refactor, tooling, or docs, has no stories. Give it success criteria and test intent instead.
+
 ## Solution and tickets
 
 Describe the solution: the approach, and each public interface, data shape, or file layout that changes. Say what a builder needs to start, and leave the code out.
@@ -28,7 +54,7 @@ Describe the solution: the approach, and each public interface, data shape, or f
 Then slice the solution into tickets. A ticket is one piece that can be built, verified, reviewed, and committed on its own.
 
 - Make each ticket a vertical slice: it goes through every layer it needs and ends in something a user or caller can observe. A piece that only adds one layer, such as a database schema with nothing that reads it, belongs in the ticket that uses it.
-- Give each ticket its own success criteria and test intent.
+- Give each ticket the scenarios it delivers.
 - Order the tickets so that each builds on the ones before it.
 - A small task is one ticket. Add a ticket only when the piece can be finished and checked by itself.
 
@@ -44,24 +70,25 @@ The scope is agreed when both are true:
 ```text
 Scope summary
 Goal:
-Success criteria:
 In scope:
 Out of scope:
 Solution:
+Stories:
 Decisions made:
 Terms:
 Assumptions:
-Test intent:
 Tickets:
 ```
 
-Under "Tickets", number the tickets in build order and give each a title, its success criteria, and its test intent. For a one-ticket task, give the title alone: the fields above already describe it.
+Under "Stories", give the stories as the Stories section describes. A task without stories has "Success criteria:" and "Test intent:" where "Stories:" is.
+
+Under "Tickets", number the tickets in build order and give each a title and the IDs of the scenarios it delivers. In a task without stories, give each its success criteria and its test intent. For a one-ticket task, give the title alone: the fields above already describe it.
 
 Under "Decisions made", put `[record]` in front of each decision that is hard to reverse, surprising without context, and a real trade-off between workable alternatives. Confirming the summary also approves writing those as decision records.
 
 Under "Terms", list each term that was settled, with its meaning and the words to avoid. When the repo has no glossary yet, propose creating one there, by default at `/_meta/glossary.md`: confirming the summary approves it.
 
-Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the tickets are built one at a time, each ticket's test intent seeds its test-first work, and reviews check each ticket and then the whole change against the summary.
+Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the tickets are built one at a time, each ticket's scenarios, or its test intent, seed its test-first work, and reviews check each ticket and then the whole change against the summary.
 
 When the user told you to proceed without questions, send the scope summary with every unasked decision listed under Assumptions, then continue. That instruction stands in for the confirmation.
 
@@ -91,13 +118,13 @@ Put the spec where the repo already keeps specs or documents of that kind. When 
 
 ## Goal
 
-## Success criteria
-
 ## In scope
 
 ## Out of scope
 
 ## Solution
+
+## Stories
 
 ## Decisions made
 
@@ -105,16 +132,15 @@ Put the spec where the repo already keeps specs or documents of that kind. When 
 
 ## Assumptions
 
-## Test intent
-
 ## Tickets
 
 - [ ] 1. <title>
-  - Success criteria:
-  - Test intent:
+  - Delivers:
 ```
 
 A one-ticket spec lists its ticket by title alone.
+
+The spec of a task without stories has `## Success criteria` and `## Test intent` where `## Stories` is, and each of its tickets gives its success criteria and test intent where "Delivers" is.
 
 When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the spec. Otherwise the checklist in the spec is the tracker: tick a ticket when it is done.
 

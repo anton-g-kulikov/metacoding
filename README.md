@@ -175,8 +175,9 @@ Before any file changes, `metacoding-shape` interviews you about the task:
 Then `metacoding-spec` turns the settled decisions into the agreed scope:
 
 - It starts from what is already settled and does not ask it again.
-- It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, with its own success criteria and test intent. A small task stays one ticket.
-- It closes with a scope summary (goal, success criteria, in and out of scope, solution, decisions, terms, assumptions, test intent, tickets) and waits for your confirmation.
+- It writes the behavior as user stories, grouped by role: one "As a …, I want …, so that …" sentence per story, with Given/When/Then scenarios. Each scenario has an ID made of its feature area's prefix and a number, such as `UPDATE-4`. A task that changes nothing a role can observe, such as a refactor, gets success criteria and test intent instead.
+- It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, and names the scenarios it delivers. A small task stays one ticket.
+- It closes with a scope summary (goal, in and out of scope, solution, stories, decisions, terms, assumptions, tickets) and waits for your confirmation.
 - Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a spec; a smaller task gets none.
 - While a spec is in progress, a change to what it agreed is put to you as a decision and written into the spec, with its date, before it is built.
 

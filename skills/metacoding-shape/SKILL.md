@@ -39,6 +39,8 @@ Read the project's glossary before the first round, when it has one, and use its
 
 When an answer settles what a project term means, note the term, its meaning in this project, and the words to avoid for it, and list it under Terms in the decisions summary. The `metacoding-spec` skill writes them to the glossary once its scope summary is confirmed.
 
+A role is a term too: the kind of user a behavior is for. When an answer names who a behavior is for and the glossary has no such role, note it and list it under Terms, like any other term.
+
 When the user's wording conflicts with the glossary, or one word is doing two jobs, raise it as a decision.
 
 ## Question format

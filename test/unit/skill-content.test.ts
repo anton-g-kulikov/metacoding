@@ -56,6 +56,13 @@ function sectionOf(document: string, heading: string, nextHeading?: string): str
   );
 }
 
+/** The fenced block that starts with the given opening. Fails when there is none. */
+function codeBlock(doc: string, opening: string): string {
+  const start = doc.indexOf(opening);
+  expect(start).toBeGreaterThan(-1);
+  return doc.slice(start, doc.indexOf('```', start + 3));
+}
+
 describe('installed skill content: durable artifacts', () => {
   test('the layout reference prescribes a glossary under /_meta', async () => {
     const { read } = await installFor('codex');
@@ -177,14 +184,13 @@ describe('installed skill content: durable artifacts', () => {
     const spec = read('metacoding-spec/SKILL.md');
     const summaryFields = [
       'Goal:',
-      'Success criteria:',
       'In scope:',
       'Out of scope:',
       'Solution:',
+      'Stories:',
       'Decisions made:',
       'Terms:',
       'Assumptions:',
-      'Test intent:',
       'Tickets:',
     ];
 
@@ -192,6 +198,11 @@ describe('installed skill content: durable artifacts', () => {
       expect(spec).toContain(`\n${field}`);
       expect(template).toContain(`- ${field}`);
     }
+    expect(template).toContain('- Success criteria:');
+    expect(template).toContain('- Test intent:');
+    expect(template).toContain(
+      'Give the stories, or the success criteria and test intent when the task has no stories.'
+    );
   });
 
   test('settled terms are listed in both summaries and written only after confirmation', async () => {
@@ -396,7 +407,7 @@ describe('installed skill content: solution and tickets', () => {
     expect(spec).toContain('## The scope summary');
     expect(section).toContain('built, verified, reviewed, and committed on its own');
     expect(section).toContain('vertical slice');
-    expect(section).toContain('its own success criteria and test intent');
+    expect(section).toContain('Give each ticket the scenarios it delivers.');
     expect(section).toContain('each builds on the ones before it');
   });
 
@@ -414,14 +425,17 @@ describe('installed skill content: solution and tickets', () => {
     expect(spec).toContain('how it is sliced into tickets');
   });
 
-  test('the scope summary lists tickets in build order with their criteria and test intent', async () => {
+  test('the scope summary lists tickets in build order with what each delivers', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
     const summarySection = spec.slice(spec.indexOf('## The scope summary'));
 
     expect(spec).toContain('## The scope summary');
     expect(summarySection).toContain('number the tickets in build order');
-    expect(summarySection).toContain('a title, its success criteria, and its test intent');
+    expect(summarySection).toContain('a title and the IDs of the scenarios it delivers');
+    expect(summarySection).toContain(
+      'In a task without stories, give each its success criteria and its test intent.'
+    );
     expect(summarySection).toContain('For a one-ticket task, give the title alone');
   });
 
@@ -483,19 +497,18 @@ describe('installed skill content: the spec', () => {
     expect(format).toContain('- Status: in progress');
     for (const heading of [
       '## Goal',
-      '## Success criteria',
       '## In scope',
       '## Out of scope',
       '## Solution',
+      '## Stories',
       '## Decisions made',
       '## Terms',
       '## Assumptions',
-      '## Test intent',
       '## Tickets',
     ]) {
       expect(format).toContain(`\n${heading}\n`);
     }
-    expect(format).toContain('- [ ] 1. <title>\n  - Success criteria:\n  - Test intent:');
+    expect(format).toContain('- [ ] 1. <title>\n  - Delivers:');
     expect(section).toContain('A one-ticket spec lists its ticket by title alone.');
   });
 
@@ -797,7 +810,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(spec).toContain('## The scope summary');
     expect(spec).toContain('## Records written on confirmation');
     expect(summarySection).toContain(
-      "the tickets are built one at a time, each ticket's test intent seeds its test-first work, and reviews check each ticket and then the whole change against the summary."
+      "the tickets are built one at a time, each ticket's scenarios, or its test intent, seed its test-first work, and reviews check each ticket and then the whole change against the summary."
     );
   });
 
@@ -2476,6 +2489,168 @@ describe('installed skill content: shape and spec are two skills', () => {
     expect(rules).toContain('3. Build test-first.');
     expect(shaping).toContain(
       'Wait for the user to confirm the scope summary before changing any file.'
+    );
+  });
+});
+
+describe('installed skill content: stories in the scope summary', () => {
+  const storiesOf = (spec: string) =>
+    sectionOf(spec, '## Stories', '## Solution and tickets');
+  const summarySectionOf = (spec: string) =>
+    sectionOf(spec, '## The scope summary', '## Records written on confirmation');
+  const specFormatOf = (spec: string) =>
+    codeBlock(sectionOf(spec, '## The spec'), '```text\n# Spec:');
+
+  test('SHAPE-3: shape settles a role as a term', async () => {
+    const { read } = await installFor('codex');
+    const terms = sectionOf(
+      read('metacoding-shape/SKILL.md'),
+      '## Terms',
+      '## Question format'
+    );
+
+    expect(terms).toContain('A role is a term too: the kind of user a behavior is for.');
+    expect(terms).toContain(
+      'When an answer names who a behavior is for and the glossary has no such role, note it and list it under Terms, like any other term.'
+    );
+  });
+
+  test('SPEC-2: the scope summary lists stories grouped by role, each with Given/When/Then scenarios', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const stories = storiesOf(spec);
+    const summarySection = summarySectionOf(spec);
+
+    expect(codeBlock(summarySection, '```text\nScope summary\n')).toContain('\nStories:\n');
+    expect(summarySection).toContain(
+      'Under "Stories", give the stories as the Stories section describes.'
+    );
+    expect(stories).toContain(
+      'Group the stories by role, and within a role by feature area: a part of the product a user would name'
+    );
+    expect(stories).toContain(
+      '<Role>\n\n<Feature area>: <story title>\nAs a <role>, I want <what>, so that <why>.'
+    );
+    expect(stories).toContain(
+      'Scenario: <ID> <title>\n  Given <the starting state>\n  When <what the role does>\n  Then <what the role can observe>'
+    );
+    expect(stories).toContain(
+      'When a scenario needs more than one Given, When, or Then, start each further line with "And".'
+    );
+  });
+
+  test('SPEC-2: a task that changes behavior a role can observe has stories, whatever its size', async () => {
+    const { read } = await installFor('codex');
+    const stories = storiesOf(read('metacoding-spec/SKILL.md'));
+
+    expect(stories).toContain(
+      'Describe a task that adds or changes behavior a role can observe as stories, whatever its size.'
+    );
+    expect(stories).toContain(
+      "Use the role's name from the glossary, or from the terms settled for this task."
+    );
+  });
+
+  test('SPEC-2: scenarios stand in place of success criteria and test intent', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const format = specFormatOf(spec);
+
+    expect(storiesOf(spec)).toContain(
+      'The scenarios stand in place of success criteria and test intent: they are what the task must deliver and what its tests must prove.'
+    );
+    for (const block of [
+      codeBlock(summarySectionOf(spec), '```text\nScope summary\n'),
+      format,
+    ]) {
+      expect(block).not.toContain('Success criteria');
+      expect(block).not.toContain('Test intent');
+    }
+    expect(format).toContain('\n## Stories\n');
+  });
+
+  test('SPEC-2: each ticket names the scenarios it delivers', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+
+    expect(sectionOf(spec, '## Solution and tickets', '## The scope summary')).toContain(
+      'Give each ticket the scenarios it delivers.'
+    );
+    expect(summarySectionOf(spec)).toContain(
+      'give each a title and the IDs of the scenarios it delivers'
+    );
+    expect(specFormatOf(spec)).toContain('- [ ] 1. <title>\n  - Delivers:');
+  });
+
+  test('SPEC-2: the workflow rules and the task entry template name the stories', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const template = read('metacoding-workflow/assets/templates/task-entry.md');
+    const shaping = sectionOf(rules, '2. Shape the task', '3. Build test-first.');
+
+    expect(shaping).toContain(
+      'Close with the scope summary: goal, in and out of scope, solution, stories, decisions, terms, assumptions, and the tickets the solution is sliced into.'
+    );
+    expect(shaping).toContain('write the behavior as stories');
+    expect(template).toContain('- Stories:');
+  });
+
+  test('SPEC-3: a task without stories keeps success criteria and test intent', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const summarySection = summarySectionOf(spec);
+
+    expect(storiesOf(spec)).toContain(
+      'A task that changes no behavior a role can observe, such as a refactor, tooling, or docs, has no stories. Give it success criteria and test intent instead.'
+    );
+    expect(summarySection).toContain(
+      'A task without stories has "Success criteria:" and "Test intent:" where "Stories:" is.'
+    );
+    expect(summarySection).toContain(
+      'In a task without stories, give each its success criteria and its test intent.'
+    );
+    expect(sectionOf(spec, '## The spec')).toContain(
+      'The spec of a task without stories has `## Success criteria` and `## Test intent` where `## Stories` is, and each of its tickets gives its success criteria and test intent where "Delivers" is.'
+    );
+  });
+
+  test('SPEC-3: the workflow rules and the task entry template keep the two fields for a task without stories', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const template = read('metacoding-workflow/assets/templates/task-entry.md');
+
+    expect(sectionOf(rules, '2. Shape the task', '3. Build test-first.')).toContain(
+      'A task without stories has success criteria and test intent where the stories are.'
+    );
+    expect(template).toContain(
+      'Give the stories, or the success criteria and test intent when the task has no stories.'
+    );
+  });
+
+  test('SPEC-4: each scenario has an ID made of its area prefix and a number', async () => {
+    const { read } = await installFor('codex');
+    const stories = storiesOf(read('metacoding-spec/SKILL.md'));
+
+    expect(stories).toContain(
+      'Give each scenario an ID: the prefix of its feature area, a hyphen, and a number, such as `UPDATE-4`.'
+    );
+    expect(stories).toContain(
+      "The prefix is a short name for the area in capitals. Use the one the area's scenarios already carry in the repo's specs, and choose one for a new area."
+    );
+    expect(stories).toContain(
+      'A new scenario takes the number one above the highest its area has used, counting a spec that is still in progress.'
+    );
+  });
+
+  test('SPEC-4: a changed scenario keeps its ID', async () => {
+    const { read } = await installFor('codex');
+    const stories = storiesOf(read('metacoding-spec/SKILL.md'));
+
+    expect(stories).toContain(
+      'A scenario the task changes keeps its ID: write "(changed)" after its title.'
+    );
+    expect(stories).toContain(
+      "List the scenarios the task adds or changes, and leave the area's other scenarios out."
     );
   });
 });

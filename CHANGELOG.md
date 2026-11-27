@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Companion skills, installed next to `metacoding-workflow` and usable on their own:
   - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a summary of the decisions, terms and assumptions. It writes no file, so it can be used as a plain interview
-  - `metacoding-spec`: turns the settled decisions into a scope summary, gets it confirmed, and writes the records. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
+  - `metacoding-spec`: turns the settled decisions into a scope summary, gets it confirmed, and writes the records. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like and on test doubles
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards, with a fixed list of code smells for what those standards leave open, two of them about the shape of the code: a function or module that only passes calls on, and an interface or abstract type with one implementation that nothing swaps for another
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix, and masks credentials and personal data in what it captures
@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metacoding-onboard` closes by telling the user how to work from here: what it wrote, how to start a task, and what each installed metacoding skill is for, taken from each skill's own description
 - The "Next steps" that `metacoding init` prints say to run `metacoding-onboard` first, before any task
 - A default home for a repo's coding standards at `/_meta/coding-standards.md`: the rules that no automated check enforces. `metacoding-retro` proposes the file with the first new rule when the repo keeps its standards nowhere, and a retro can also add a glossary term or a decision record
+- User stories in the scope summary: `metacoding-spec` writes behavior a role can observe as stories grouped by role, each with Given/When/Then scenarios, in place of success criteria and test intent. Each scenario has an ID made of its feature area's prefix and a number, and each ticket names the scenarios it delivers. A task without such behavior keeps success criteria and test intent. A role is settled in the interview like any other term
 - A review step in the workflow, between verification and artifact updates
 - Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the spec
 - Resuming a task: grounding looks for a spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the spec as the agreed scope
@@ -52,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI help and messages say "skills" where they said "workflow skill"
 - The default project description for a new install is "A project using the metacoding skills"
 - Installs skip `.DS_Store` files
-- `task-entry.md` now carries the scope summary fields
+- `task-entry.md` now carries the scope summary fields, including the stories
 - The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
 - The workflow skill reads `references/project-context.md` only when it exists. Without the file, it finds the project's type, tech stack, and test and build commands in the repo, so the skills work in a plugin install
 - The workflow skill says that a companion skill's name carries the plugin's prefix in a plugin install, such as `metacoding:metacoding-shape`
