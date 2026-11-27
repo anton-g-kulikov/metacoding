@@ -64,7 +64,7 @@ One content test per new rule, written first and seen failing. The tickets list 
 - [x] **2. Secrets in metacoding-debug**
   - Success criteria: the second success criterion above.
   - Test intent: phase 1 states the masking rule and names credentials and personal data; the clean-up phase says raw captures are deleted.
-- [ ] **3. Code smells in metacoding-review**
+- [x] **3. Code smells in metacoding-review**
   - Success criteria: the third success criterion above.
   - Test intent: the standards axis lists the smells; it says the repo's own standards win; "After the report" sends smells to the user as follow-ups.
 - [ ] **4. Switching tasks in Scope Control**

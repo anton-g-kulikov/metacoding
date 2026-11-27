@@ -5,7 +5,7 @@ description: Review a finished change against the agreed scope and the repo's ow
 
 # Review
 
-Review the diff of the change on two separate axes, then fix what the review finds.
+Review the diff of the change on two separate axes, then act on what the review finds.
 
 ## What to review
 
@@ -15,7 +15,7 @@ Review the diff of the change on two separate axes, then fix what the review fin
 
 ## Who reviews
 
-The author of a change reads it with the author's assumptions. When the host agent supports subagents, give each axis to a subagent with a fresh context that receives only the diff and that axis's inputs, and run the two in parallel. When it does not, review the diff yourself, top to bottom, one axis at a time.
+The author of a change reads it with the author's assumptions. When the host agent supports subagents, give each axis to a subagent with a fresh context that receives only the diff and that axis's inputs, and run the two in parallel. The list of code smells below is one of the standards axis's inputs. When it does not, review the diff yourself, top to bottom, one axis at a time.
 
 ## The two axes
 
@@ -31,8 +31,22 @@ The author of a change reads it with the author's assumptions. When the host age
 - A break with a documented rule. Cite the file and the rule.
 - A departure from how neighboring code solves the same thing.
 - Leftovers: debug output, commented-out code, temporary files, stale docs for behavior that changed.
+- A code smell from the list below, where the repo's documented rules and neighboring code say nothing. Where they say something, they win.
 
 Skip anything the repo's linter or formatter already enforces.
+
+Code smells, looked for in the diff:
+
+- Logic duplicated that an existing helper already covers.
+- A function or module that does more than one job.
+- A name that does not say what the thing is or does.
+- An error swallowed, or silently replaced by a default.
+- Dead code: an unused parameter, branch, or export.
+- A magic value repeated instead of named once.
+- Input taken at a boundary (user, file, network) without a check.
+- A test that asserts how the code works instead of what it does.
+
+A smell that also breaks the agreed scope is a scope finding, and is handled as one.
 
 ## After the last ticket
 
@@ -40,12 +54,12 @@ When the change is the last ticket of a task with several, run the scope axis on
 
 ## Report
 
-List findings under `Scope` and `Standards`, each with the file, the line, and one sentence on what is wrong. Keep the two lists separate, so a clean result on one axis cannot hide problems on the other. Write "No findings" under an axis that has none.
+List findings under `Scope` and `Standards`, each with the file, the line, and one sentence on what is wrong. Keep the two lists separate, so a clean result on one axis cannot hide problems on the other. Mark a finding from the smell list as a smell. Write "No findings" under an axis that has none.
 
 ## After the report
 
 - Fix every Missing, Wrong, and Unproven finding, and every break with a documented rule. Run the tests again.
 - For each Extra finding, either remove it or ask the user whether to keep it.
-- Put anything else to the user as a follow-up.
+- Put each smell, and anything else, to the user as a follow-up. A follow-up is fixed only when the user asks.
 
 The review is done when each finding is fixed, accepted by the user, or listed as a follow-up.

@@ -946,4 +946,100 @@ describe('installed skill content: skill refinements', () => {
       '- Raw captures you made are deleted. A file the user supplied stays theirs.'
     );
   });
+
+  test('the standards axis of review checks a fixed list of code smells in the diff', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const standards = review.slice(
+      review.indexOf('**Standards.**'),
+      review.indexOf('## After the last ticket')
+    );
+
+    expect(review).toContain('**Standards.**');
+    expect(review).toContain('## After the last ticket');
+    const smells = [
+      'Logic duplicated that an existing helper already covers.',
+      'A function or module that does more than one job.',
+      'A name that does not say what the thing is or does.',
+      'An error swallowed, or silently replaced by a default.',
+      'Dead code: an unused parameter, branch, or export.',
+      'A magic value repeated instead of named once.',
+      'Input taken at a boundary (user, file, network) without a check.',
+      'A test that asserts how the code works instead of what it does.',
+    ];
+
+    expect(standards).toContain('Code smells, looked for in the diff:');
+    for (const smell of smells) {
+      expect(standards).toContain(`- ${smell}\n`);
+    }
+  });
+
+  test("review lets the repo's own standards win over the smell list", async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const standards = review.slice(
+      review.indexOf('**Standards.**'),
+      review.indexOf('## After the last ticket')
+    );
+
+    expect(review).toContain('**Standards.**');
+    expect(review).toContain('## After the last ticket');
+    expect(standards).toContain(
+      "A code smell from the list below, where the repo's documented rules and neighboring code say nothing. Where they say something, they win."
+    );
+  });
+
+  test('a smell that breaks the agreed scope is handled as a scope finding', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const standards = review.slice(
+      review.indexOf('**Standards.**'),
+      review.indexOf('## After the last ticket')
+    );
+
+    expect(review).toContain('**Standards.**');
+    expect(review).toContain('## After the last ticket');
+    expect(standards).toContain(
+      'A smell that also breaks the agreed scope is a scope finding, and is handled as one.'
+    );
+  });
+
+  test('the standards reviewer receives the smell list', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const who = review.slice(
+      review.indexOf('## Who reviews'),
+      review.indexOf('## The two axes')
+    );
+
+    expect(review).toContain('## Who reviews');
+    expect(review).toContain('## The two axes');
+    expect(who).toContain(
+      "The list of code smells below is one of the standards axis's inputs."
+    );
+  });
+
+  test('review marks smells in its report', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const report = review.slice(
+      review.indexOf('## Report'),
+      review.indexOf('## After the report')
+    );
+
+    expect(review).toContain('## Report');
+    expect(review).toContain('## After the report');
+    expect(report).toContain('Mark a finding from the smell list as a smell.');
+  });
+
+  test('review puts smells to the user as follow-ups and fixes them only when asked', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const after = review.slice(review.indexOf('## After the report'));
+
+    expect(review).toContain('## After the report');
+    expect(after).toContain(
+      '- Put each smell, and anything else, to the user as a follow-up. A follow-up is fixed only when the user asks.'
+    );
+  });
 });

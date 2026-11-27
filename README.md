@@ -128,7 +128,7 @@ Tests go through public interfaces, and expected values come from a source other
 Before closing, `metacoding-review` checks the diff on two separate axes:
 
 - **Scope:** anything missing, extra, wrong, or unproven compared with the agreed scope: the ticket's success criteria and test intent, or the scope summary of a one-ticket task.
-- **Standards:** breaks with the repo's documented rules, departures from neighboring code, and leftovers such as debug output.
+- **Standards:** breaks with the repo's documented rules, departures from neighboring code, and leftovers such as debug output. Where the repo's own standards say nothing, it also checks a fixed list of code smells, and reports those to you as follow-ups instead of fixing them.
 
 Where the agent supports subagents, each axis is reviewed in a fresh context that sees only the diff and what that axis compares it with.
 
