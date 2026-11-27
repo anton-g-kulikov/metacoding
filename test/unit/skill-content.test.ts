@@ -1,0 +1,1140 @@
+import { SkillManager } from '../../src/services/skill-manager';
+import { AgentVendor } from '../../src/types';
+
+const skillsDirs: Record<AgentVendor, string> = {
+  codex: '.codex/skills',
+  'claude-code': '.claude/skills',
+  antigravity: '.agents/skills',
+};
+
+async function installFor(vendor: AgentVendor) {
+  const files = await new SkillManager().generateInstallationFiles({
+    name: 'demo-app',
+    description: 'Demo application',
+    techStack: ['TypeScript'],
+    projectType: 'typescript',
+    vendor,
+  });
+  const read = (relativePath: string): string => {
+    const file = files.find(
+      (candidate) => candidate.path === `${skillsDirs[vendor]}/${relativePath}`
+    );
+    if (!file) {
+      throw new Error(`Not installed: ${relativePath}`);
+    }
+    return file.content;
+  };
+
+  return { files, read };
+}
+
+describe('installed skill content: durable artifacts', () => {
+  test('the layout reference prescribes a glossary under /_meta', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+
+    expect(layout).toContain('`/_meta/glossary.md`');
+    expect(layout).toContain('## Glossary');
+  });
+
+  test('the layout reference says where specs and tickets go, and keeps no separate test document', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const prescribed = layout.slice(
+      layout.indexOf('## MECE Documentation Architecture'),
+      layout.indexOf('## Specs, Tickets, and Test Records')
+    );
+    const records = layout.slice(
+      layout.indexOf('## Specs, Tickets, and Test Records'),
+      layout.indexOf('## Decision Records')
+    );
+
+    expect(layout).toContain('## MECE Documentation Architecture');
+    expect(layout).toContain('## Specs, Tickets, and Test Records');
+    expect(layout).toContain('## Decision Records');
+    expect(prescribed).toContain('`/_meta/specs/`');
+    expect(prescribed).not.toContain('project-task-list.md');
+    expect(prescribed).not.toContain('test-documentation.md');
+    expect(records).toContain('`metacoding-shape` skill decides which tasks need a spec');
+    expect(records).toContain('where the repo already keeps specs');
+    expect(records).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(records).toContain("go to the repo's tracker when it keeps one current");
+    expect(records).toContain('checklist in the spec');
+    expect(records).toContain('do not create one');
+    expect(layout).not.toContain('Create neither');
+    expect(layout).not.toContain('test documentation belongs under `/test`');
+  });
+
+  test('a repo without a tracker keeps the tickets as a checklist in the spec', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const section = adaptation.slice(
+      adaptation.indexOf('## Missing Task Tracking'),
+      adaptation.indexOf('## Missing Test Documentation')
+    );
+
+    expect(adaptation).toContain('## Missing Task Tracking');
+    expect(adaptation).toContain('## Missing Test Documentation');
+    expect(section).toContain('checklist in the spec');
+    expect(section).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(section).toContain('needs no spec');
+    expect(section).toContain('the confirmed scope summary in the conversation is the record');
+  });
+
+  test('the layout reference sets a three-part bar for decision records', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const section = layout.slice(layout.indexOf('## Decision Records'));
+
+    expect(layout).toContain('## Decision Records');
+    expect(section).toContain('`/_meta/architecture-decisions.md`');
+    expect(section).toContain('all three');
+    expect(section).toContain('Hard to reverse');
+    expect(section).toContain('Surprising without context');
+    expect(section).toContain('A real trade-off');
+  });
+
+  test('no vendor install ships or mentions the test-plan template', async () => {
+    for (const vendor of Object.keys(skillsDirs) as AgentVendor[]) {
+      const { files } = await installFor(vendor);
+
+      expect(files.filter((file) => file.path.endsWith('test-plan.md'))).toEqual([]);
+      expect(
+        files
+          .filter((file) => file.content.includes('test-plan'))
+          .map((file) => file.path)
+      ).toEqual([]);
+    }
+  });
+
+  test('the task entry template carries the scope summary fields', async () => {
+    const { read } = await installFor('codex');
+    const template = read('metacoding-workflow/assets/templates/task-entry.md');
+    const interview = read('metacoding-shape/SKILL.md');
+    const summaryFields = [
+      'Goal:',
+      'Success criteria:',
+      'In scope:',
+      'Out of scope:',
+      'Solution:',
+      'Decisions made:',
+      'Terms:',
+      'Assumptions:',
+      'Test intent:',
+      'Tickets:',
+    ];
+
+    for (const field of summaryFields) {
+      expect(interview).toContain(`\n${field}`);
+      expect(template).toContain(`- ${field}`);
+    }
+  });
+
+  test('shape lists settled terms in the scope summary and writes nothing before confirmation', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const terms = shape.slice(
+      shape.indexOf('## Terms'),
+      shape.indexOf('## Question format')
+    );
+    const summaryStart = shape.indexOf('```text\nScope summary\n');
+    const summary = shape.slice(summaryStart, shape.indexOf('```', summaryStart + 3));
+
+    expect(shape).toContain('## Terms');
+    expect(shape).toContain('## Question format');
+    expect(summaryStart).toBeGreaterThan(-1);
+    expect(terms).toContain('list it under Terms in the scope summary');
+    expect(terms).toContain('Nothing is written to the glossary until the summary is confirmed');
+    expect(summary).toContain('\nTerms:\n');
+    expect(shape).toContain(
+      'propose creating one there, by default at `/_meta/glossary.md`: confirming the summary approves it'
+    );
+    expect(shape).not.toContain('straight away');
+    expect(shape).not.toContain('before the scope summary is confirmed');
+  });
+
+  test('shape marks the decisions to record against a three-part bar', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+
+    const closing = shape.slice(
+      shape.indexOf('## Closing the interview'),
+      shape.indexOf('## Records written on confirmation')
+    );
+
+    expect(shape).toContain('## Closing the interview');
+    expect(shape).toContain('## Records written on confirmation');
+    expect(closing).toContain('put `[record]` in front of each decision');
+    expect(closing).toContain(
+      'hard to reverse, surprising without context, and a real trade-off'
+    );
+    expect(closing).toContain(
+      'Confirming the summary also approves writing those as decision records.'
+    );
+  });
+
+  test('shape writes the terms and the marked decisions once the summary is confirmed', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const records = shape.slice(
+      shape.indexOf('## Records written on confirmation'),
+      shape.indexOf('## The spec')
+    );
+
+    expect(shape).toContain('## Records written on confirmation');
+    expect(shape).toContain('## The spec');
+    expect(records).toContain('Once the scope summary is confirmed');
+    expect(records).toContain('before any other file changes');
+    expect(records).toContain('`/_meta/glossary.md`');
+    expect(records).toContain("use the repo's own glossary if it keeps one elsewhere");
+    expect(records).toContain('`/_meta/architecture-decisions.md`');
+    expect(records).toContain("use the repo's own place if it keeps decision records elsewhere");
+    expect(records).toContain('the date, the decision, the alternatives considered, and why this one won');
+    expect(records).toContain(
+      'amend the entry: keep its original text and add what changed and why'
+    );
+    expect(records).toContain('**The spec.** Write it when the task needs one');
+    expect(shape).not.toContain('once the work is done');
+  });
+
+  test('an instruction to proceed without questions stands in for the confirmation', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+
+    expect(shape).toContain(
+      'then continue. That instruction stands in for the confirmation.'
+    );
+  });
+
+  test('the layout reference says records and terms are written on confirmation', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const decisions = layout.slice(
+      layout.indexOf('## Decision Records'),
+      layout.indexOf('## Glossary')
+    );
+    const glossary = layout.slice(
+      layout.indexOf('## Glossary'),
+      layout.indexOf('## Temporary File Management')
+    );
+
+    expect(layout).toContain('## Decision Records');
+    expect(layout).toContain('## Glossary');
+    expect(layout).toContain('## Temporary File Management');
+    expect(decisions).toContain('writes the entry once the user confirms the summary');
+    expect(decisions).toContain('holds the entry format and how to amend an entry');
+    expect(decisions).not.toContain('once the work is done');
+    expect(glossary).toContain('once the scope summary that lists it is confirmed');
+    expect(glossary).not.toContain('at the moment its meaning is settled');
+    expect(glossary).toContain('follow `references/platform-adaptation.md`');
+  });
+
+  test('a repo without a glossary gets one proposed in the scope summary', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const section = adaptation.slice(
+      adaptation.indexOf('## Missing Glossary or Decision Records'),
+      adaptation.indexOf('## Missing Git Context')
+    );
+
+    expect(adaptation).toContain('## Missing Glossary or Decision Records');
+    expect(adaptation).toContain('## Missing Git Context');
+    expect(section).toContain('propose `/_meta/glossary.md` in the scope summary');
+    expect(section).toContain('once the summary is confirmed');
+  });
+
+  test('the workflow reads the glossary while grounding and amends decision records at the end', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const stepMarkers = [
+      '1. Ground in the repository.',
+      '2. Shape the task',
+      '3. Build test-first.',
+      '6. Update artifacts',
+      '7. Close the loop.',
+    ];
+    const grounding = rules.slice(
+      rules.indexOf('1. Ground in the repository.'),
+      rules.indexOf('2. Shape the task')
+    );
+    const artifacts = rules.slice(
+      rules.indexOf('6. Update artifacts'),
+      rules.indexOf('7. Close the loop.')
+    );
+
+    for (const marker of stepMarkers) {
+      expect(rules).toContain(marker);
+    }
+    expect(grounding).toContain('glossary');
+    expect(grounding).toContain('decision records');
+    expect(artifacts).toContain(
+      'Amend a decision record the build proved wrong, as the `metacoding-shape` skill describes'
+    );
+    expect(artifacts).not.toContain('Write each decision marked');
+    expect(skill).toContain('glossary');
+    expect(skill).toContain('amend any decision record the build proved wrong');
+    expect(skill).not.toContain('write the decision records the scope summary marked');
+    expect(skill).not.toContain('bootstrap');
+  });
+});
+
+describe('installed skill content: solution and tickets', () => {
+  test('the scope summary states the solution and the tickets', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const summaryStart = shape.indexOf('```text\nScope summary\n');
+    const summary = shape.slice(summaryStart, shape.indexOf('```', summaryStart + 3));
+
+    expect(summaryStart).toBeGreaterThan(-1);
+    expect(summary).toContain('\nSolution:\n');
+    expect(summary).toContain('\nTickets:\n');
+  });
+
+  test('the workflow rules name the solution, the terms, and the tickets in the scope summary', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const summaryLine = rules
+      .split('\n')
+      .find((line) => line.includes('Close with the scope summary'));
+
+    expect(summaryLine).toContain('solution');
+    expect(summaryLine).toContain('terms');
+    expect(summaryLine).toContain('tickets');
+  });
+
+  test('the solution names the approach and what changes', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(
+      shape.indexOf('## Solution and tickets'),
+      shape.indexOf('## Closing the interview')
+    );
+
+    expect(shape).toContain('## Solution and tickets');
+    expect(shape).toContain('## Closing the interview');
+    expect(section).toContain('the approach');
+    expect(section).toContain('public interface');
+  });
+
+  test('shape slices the solution into tickets that are vertical slices', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(
+      shape.indexOf('## Solution and tickets'),
+      shape.indexOf('## Closing the interview')
+    );
+
+    expect(shape).toContain('## Solution and tickets');
+    expect(shape).toContain('## Closing the interview');
+    expect(section).toContain('built, verified, reviewed, and committed on its own');
+    expect(section).toContain('vertical slice');
+    expect(section).toContain('its own success criteria and test intent');
+    expect(section).toContain('each builds on the ones before it');
+  });
+
+  test('an open choice of how to slice goes to the user as a decision', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(
+      shape.indexOf('## Solution and tickets'),
+      shape.indexOf('## Closing the interview')
+    );
+
+    expect(shape).toContain('## Solution and tickets');
+    expect(shape).toContain('## Closing the interview');
+    expect(section).toContain('put the cut to the user as a decision');
+    expect(shape).toContain('how it is sliced into tickets');
+  });
+
+  test('the scope summary lists tickets in build order with their criteria and test intent', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const closing = shape.slice(shape.indexOf('## Closing the interview'));
+
+    expect(shape).toContain('## Closing the interview');
+    expect(closing).toContain('number the tickets in build order');
+    expect(closing).toContain('a title, its success criteria, and its test intent');
+    expect(closing).toContain('For a one-ticket task, give the title alone');
+  });
+
+  test('a small task stays one ticket', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+
+    expect(shape).toContain('A small task is one ticket');
+  });
+});
+
+describe('installed skill content: the spec', () => {
+  test('shape writes a spec after confirmation for more than one ticket or a marked decision', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('Write a spec when either is true');
+    expect(section).toContain('The summary has more than one ticket.');
+    expect(section).toContain('The summary has a decision marked `[record]`.');
+    expect(shape).toContain('# Shape');
+    expect(shape.slice(0, shape.indexOf('# Shape'))).toContain(
+      'a spec when the task has more than one ticket or a decision to record'
+    );
+  });
+
+  test('a one-ticket task with no marked decision gets no spec', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('needs no spec');
+    expect(section).toContain('where the repo already tracks work');
+    expect(section).toContain('the summary in the conversation is the record');
+  });
+
+  test("the spec goes to the repo's own place or /_meta/specs", async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('where the repo already keeps specs');
+    expect(section).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(section).toContain('`YYYY-MM-DD`');
+  });
+
+  test('the spec holds a status, the scope summary fields, and the tickets', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+    const formatStart = section.indexOf('```text\n# Spec:');
+    const format = section.slice(formatStart, section.indexOf('```', formatStart + 3));
+
+    expect(shape).toContain('## The spec');
+    expect(formatStart).toBeGreaterThan(-1);
+    expect(format).toContain('- Status: in progress');
+    for (const heading of [
+      '## Goal',
+      '## Success criteria',
+      '## In scope',
+      '## Out of scope',
+      '## Solution',
+      '## Decisions made',
+      '## Terms',
+      '## Assumptions',
+      '## Test intent',
+      '## Tickets',
+    ]) {
+      expect(format).toContain(`\n${heading}\n`);
+    }
+    expect(format).toContain('- [ ] 1. <title>\n  - Success criteria:\n  - Test intent:');
+    expect(section).toContain('A one-ticket spec lists its ticket by title alone.');
+  });
+
+  test("tickets go to the repo's tracker when it keeps one current, otherwise the spec is the tracker", async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('When the repo keeps a tracker current');
+    expect(section).toContain('create the tickets there and link each one from the spec');
+    expect(section).toContain('the checklist in the spec is the tracker');
+  });
+
+  test('a finished spec is marked done and stays in place unchanged', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain("set the spec's status to done");
+    expect(section).toContain('leave the spec in place and unchanged');
+    expect(section).toContain("belong in the repo's system documentation");
+  });
+
+  test('the workflow leaves the records and the spec to the shape skill', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const shaping = rules.slice(
+      rules.indexOf('2. Shape the task'),
+      rules.indexOf('3. Build test-first.')
+    );
+
+    expect(rules).toContain('2. Shape the task');
+    expect(rules).toContain('3. Build test-first.');
+    expect(shaping).toContain(
+      'Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.'
+    );
+    expect(shaping).toContain('For a task that needs none');
+    expect(skill).toContain(
+      'the skill then writes the settled terms, the marked decision records, and a spec when the task needs one'
+    );
+  });
+});
+
+describe('installed skill content: building ticket by ticket', () => {
+  test('the workflow skill points to the ticket loop and its pause', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const steps = skill.slice(
+      skill.indexOf('## Steps'),
+      skill.indexOf('## Rules Between Steps')
+    );
+
+    expect(skill).toContain('## Steps');
+    expect(skill).toContain('## Rules Between Steps');
+    expect(steps).toContain(
+      "Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets, as the Tickets section of `references/workflow-rules.md` describes."
+    );
+  });
+
+  test('the workflow rules repeat steps 3 to 7 for each ticket in order', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain(
+      'repeats steps 3 to 7 for each ticket, in the order of the scope summary'
+    );
+    expect(tickets).toContain('Build, verify, and review one ticket before starting the next.');
+  });
+
+  test('a ticket is marked done in the artifact step, and the spec with the last ticket', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain('In step 6, mark the ticket done where the tickets are tracked');
+    expect(tickets).toContain("is part of the ticket's commit");
+    expect(tickets).toContain(
+      'With the last ticket, mark the spec done, as the `metacoding-shape` skill describes.'
+    );
+  });
+
+  test('each ticket closes on its own and the workflow waits before the next', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain(
+      'Close each ticket on its own in step 7: commit it or hand it off, and report what was done.'
+    );
+    expect(tickets).toContain(
+      "After every ticket but the last, wait for the user's go before starting the next one."
+    );
+  });
+
+  test('the last ticket also gets the whole change reviewed against the spec', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain(
+      'In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the spec.'
+    );
+  });
+
+  test('a one-ticket task runs the sequence once against the scope summary', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+    const build = rules.slice(
+      rules.indexOf('3. Build test-first.'),
+      rules.indexOf('4. Verify.')
+    );
+
+    for (const marker of [
+      '## Tickets',
+      '## Scope Control',
+      '3. Build test-first.',
+      '4. Verify.',
+    ]) {
+      expect(rules).toContain(marker);
+    }
+    expect(tickets).toContain(
+      'A one-ticket task runs the sequence once, against the scope summary.'
+    );
+    expect(tickets).toContain('When it has a spec, step 6 marks its ticket and the spec done');
+    expect(build).toContain(
+      'Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.'
+    );
+  });
+
+  test('grounding looks for a spec in progress', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const grounding = rules.slice(
+      rules.indexOf('1. Ground in the repository.'),
+      rules.indexOf('2. Shape the task')
+    );
+
+    expect(rules).toContain('1. Ground in the repository.');
+    expect(rules).toContain('2. Shape the task');
+    expect(grounding).toContain(
+      'Look for a spec whose status is in progress, where `references/repository-organization.md` says specs go.'
+    );
+    expect(grounding).toContain(
+      'When the request continues that task, resume it as the Tickets section describes.'
+    );
+    expect(skill).toContain('and any spec still in progress');
+  });
+
+  test('an unfinished task resumes from its spec at the first ticket not done', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const resuming = rules.slice(
+      rules.indexOf('### Resuming a task'),
+      rules.indexOf('## Scope Control')
+    );
+    const steps = skill.slice(
+      skill.indexOf('## Steps'),
+      skill.indexOf('## Rules Between Steps')
+    );
+
+    for (const marker of ['## Tickets', '### Resuming a task', '## Scope Control']) {
+      expect(rules).toContain(marker);
+    }
+    expect(skill).toContain('## Steps');
+    expect(skill).toContain('## Rules Between Steps');
+    expect(rules.indexOf('### Resuming a task')).toBeGreaterThan(rules.indexOf('## Tickets'));
+    expect(resuming).toContain('The spec is the agreed scope. Skip step 2.');
+    expect(resuming).toContain(
+      'Start at the first ticket that is not marked done where the tickets are tracked, and follow the rules above from there, including the wait before each next ticket.'
+    );
+    expect(steps).toContain(
+      'When the request continues a task that an earlier session left unfinished, the task resumes from its spec at the first ticket not yet done, as the same section describes.'
+    );
+  });
+
+  test('the workflow asks which task to resume when it cannot tell', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const resuming = rules.slice(
+      rules.indexOf('### Resuming a task'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('### Resuming a task');
+    expect(rules).toContain('## Scope Control');
+    expect(resuming).toContain(
+      'Ask the user which task to work on when more than one spec is in progress, or when you cannot tell whether the request belongs to the spec.'
+    );
+  });
+
+  test('the workflow rules review a ticket as the agreed scope', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const review = rules.slice(
+      rules.indexOf('5. Review.'),
+      rules.indexOf('6. Update artifacts')
+    );
+
+    expect(rules).toContain('5. Review.');
+    expect(rules).toContain('6. Update artifacts');
+    expect(review).toContain(
+      'For a task with more than one ticket, the agreed scope is the ticket, as the skill describes.'
+    );
+  });
+
+  test('the completion standard requires closed tickets and a spec marked done', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const completion = rules.slice(rules.indexOf('## Completion Standard'));
+
+    expect(rules).toContain('## Completion Standard');
+    expect(completion).toContain(
+      'every ticket is closed and, when the task has a spec, the spec is marked done'
+    );
+  });
+
+  test('TDD starts from the test intent of the ticket being built', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const before = tdd.slice(
+      tdd.indexOf('## Before the first loop'),
+      tdd.indexOf('## The loop')
+    );
+
+    expect(tdd).toContain('## Before the first loop');
+    expect(tdd).toContain('## The loop');
+    expect(before).toContain(
+      'Start from the test intent of the ticket you are building, when the task has more than one ticket; otherwise from the test intent of the confirmed scope summary, when one exists.'
+    );
+  });
+
+  test('review checks a ticket against its own criteria and the task scope lists', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const what = review.slice(
+      review.indexOf('## What to review'),
+      review.indexOf('## Who reviews')
+    );
+
+    expect(review).toContain('## What to review');
+    expect(review).toContain('## Who reviews');
+    expect(what).toContain(
+      "that ticket's success criteria and test intent, read together with the task's in-scope and out-of-scope lists"
+    );
+  });
+
+  test('review checks the whole change against the spec with the last ticket', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const finalPass = review.slice(
+      review.indexOf('## After the last ticket'),
+      review.indexOf('## Report')
+    );
+
+    expect(review).toContain('## After the last ticket');
+    expect(review).toContain('## Report');
+    expect(finalPass).toContain(
+      "run the scope axis once more after the ticket's own review and before the task is closed"
+    );
+    expect(finalPass).toContain("Pin the diff from the commit before the task's first ticket");
+    expect(finalPass).toContain(
+      "Compare the whole change with the task's spec or scope summary: its goal, its success criteria, and its in-scope and out-of-scope lists."
+    );
+    expect(finalPass).toContain("Tickets can each pass while the task's goal is still missed.");
+  });
+
+  test('shape says the tickets are built and reviewed one at a time', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const closing = shape.slice(
+      shape.indexOf('## Closing the interview'),
+      shape.indexOf('## Records written on confirmation')
+    );
+
+    expect(shape).toContain('## Closing the interview');
+    expect(shape).toContain('## Records written on confirmation');
+    expect(closing).toContain(
+      "the tickets are built one at a time, each ticket's test intent seeds its test-first work, and reviews check each ticket and then the whole change against the summary."
+    );
+  });
+
+  test('a ticket in the spec checklist is ticked when it is done', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain(
+      'the checklist in the spec is the tracker: tick a ticket when it is done.'
+    );
+  });
+
+  test('a change to a spec in progress is confirmed and written into the spec first', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+    const resuming = rules.slice(
+      rules.indexOf('### Resuming a task'),
+      rules.indexOf('## Scope Control')
+    );
+
+    for (const marker of ['### Resuming a task', '## Scope Control']) {
+      expect(rules).toContain(marker);
+    }
+    expect(shape).toContain('## The spec');
+    expect(section).toContain(
+      'While the spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the spec with its date before building it.'
+    );
+    expect(resuming).toContain(
+      'When the request changes what the spec agreed, settle the change first, as the `metacoding-shape` skill describes for a spec in progress.'
+    );
+  });
+
+  test('the records shape writes are committed on their own before the build', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const shaping = rules.slice(
+      rules.indexOf('2. Shape the task'),
+      rules.indexOf('3. Build test-first.')
+    );
+
+    expect(rules).toContain('2. Shape the task');
+    expect(rules).toContain('3. Build test-first.');
+    expect(shaping).toContain(
+      "When VCS work is in scope, commit the records the skill wrote on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way."
+    );
+  });
+
+  test('the Codex prompt for the workflow resumes a task whose spec is in progress', async () => {
+    const { read } = await installFor('codex');
+    const prompt = read('metacoding-workflow/agents/openai.yaml');
+
+    expect(prompt).toContain(
+      'resume a task whose spec is still in progress or interview me on the open decisions and confirm the scope summary'
+    );
+  });
+
+  test('the Codex prompt for the workflow builds one ticket at a time and waits', async () => {
+    const { read } = await installFor('codex');
+    const prompt = read('metacoding-workflow/agents/openai.yaml');
+
+    expect(prompt).toContain('one ticket at a time');
+    expect(prompt).toContain('wait for my go before the next');
+  });
+});
+
+describe('installed skill content: skill refinements', () => {
+  test('TDD has a test doubles section that keeps the rule on what to replace', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    expect(tdd).toContain('## What a good test looks like');
+    expect(tdd.indexOf('## Test doubles')).toBeGreaterThan(
+      tdd.indexOf('## What a good test looks like')
+    );
+    expect(tdd).toContain(
+      'It replaces only what sits outside your control: network, clock, randomness, third-party services.'
+    );
+    expect(section).toContain('replace only what sits outside your control');
+  });
+
+  test('TDD prefers a real or in-memory stand-in over a mock that checks calls', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    expect(section).toContain(
+      'Prefer a real or in-memory stand-in to a mock that checks which calls were made'
+    );
+    expect(section).toContain('Check calls only when the call itself is the behavior');
+  });
+
+  test("TDD never replaces the code under test or the codebase's own modules", async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    expect(section).toContain(
+      'Never replace the code under test or another module of this codebase.'
+    );
+  });
+
+  test('TDD shows a good and a bad example of a test double', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    const good = section.slice(section.indexOf('Good:'), section.indexOf('Bad:'));
+    const bad = section.slice(section.indexOf('Bad:'));
+
+    expect(section).toContain('Good:');
+    expect(section).toContain('Bad:');
+    expect(good).toContain(
+      'Good: the double is a clock, which is outside your control, and the test checks the result.'
+    );
+    expect(good).toContain('clock = FixedClock("2026-01-01")');
+    expect(good).toContain('assert order.expires_on == "2026-01-08"');
+    expect(bad).toContain(
+      'Bad: the double replaces a module of this codebase, and the test checks a call.'
+    );
+    expect(bad).toContain('pricing = mock(pricing_module)');
+    expect(bad).toContain('assert pricing.calculate was called once');
+  });
+
+  test('debug masks credentials and personal data in what it shows, writes, or commits', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const reproduce = debug.slice(
+      debug.indexOf('## 1. Reproduce with one command'),
+      debug.indexOf('## 2. Minimize')
+    );
+
+    expect(debug).toContain('## 1. Reproduce with one command');
+    expect(debug).toContain('## 2. Minimize');
+    expect(reproduce).toContain(
+      'credentials (tokens, passwords, keys, cookies) and personal data (names, emails, addresses, account numbers)'
+    );
+    expect(reproduce).toContain(
+      "Mask the secrets in everything you show the user, write into the repo, or commit: the command's input, a fixture, a log excerpt, the regression test."
+    );
+    expect(reproduce).toContain(
+      'Replace each secret with a made-up value of the same shape, then rerun the command to check that the masked version still fails.'
+    );
+  });
+
+  test('debug keeps the raw capture outside the repo', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const reproduce = debug.slice(
+      debug.indexOf('## 1. Reproduce with one command'),
+      debug.indexOf('## 2. Minimize')
+    );
+
+    expect(debug).toContain('## 1. Reproduce with one command');
+    expect(debug).toContain('## 2. Minimize');
+    expect(reproduce).toContain(
+      'Keep the raw capture outside the repo, and replay it from there.'
+    );
+  });
+
+  test('debug never prints a secret in a temporary log line', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const testing = debug.slice(
+      debug.indexOf('## 4. Test one hypothesis at a time'),
+      debug.indexOf('## 5. Fix with a regression test')
+    );
+
+    expect(debug).toContain('## 4. Test one hypothesis at a time');
+    expect(debug).toContain('## 5. Fix with a regression test');
+    expect(testing).toContain(
+      'Never print a credential or personal data in a log line: removing the line later does not remove what it already wrote.'
+    );
+  });
+
+  test('debug deletes the raw captures it made when it cleans up', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const cleanUp = debug.slice(debug.indexOf('## 6. Clean up'));
+
+    expect(debug).toContain('## 6. Clean up');
+    expect(cleanUp).toContain(
+      '- Raw captures you made are deleted. A file the user supplied stays theirs.'
+    );
+  });
+
+  test('the standards axis of review checks a fixed list of code smells in the diff', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const standards = review.slice(
+      review.indexOf('**Standards.**'),
+      review.indexOf('## After the last ticket')
+    );
+
+    expect(review).toContain('**Standards.**');
+    expect(review).toContain('## After the last ticket');
+    const smells = [
+      'Logic duplicated that an existing helper already covers.',
+      'A function or module that does more than one job.',
+      'A name that does not say what the thing is or does.',
+      'An error swallowed, or silently replaced by a default.',
+      'Dead code: an unused parameter, branch, or export.',
+      'A magic value repeated instead of named once.',
+      'Input taken at a boundary (user, file, network) without a check.',
+      'A test that asserts how the code works instead of what it does.',
+    ];
+
+    expect(standards).toContain('Code smells, looked for in the diff:');
+    for (const smell of smells) {
+      expect(standards).toContain(`- ${smell}\n`);
+    }
+  });
+
+  test("review lets the repo's own standards win over the smell list", async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const standards = review.slice(
+      review.indexOf('**Standards.**'),
+      review.indexOf('## After the last ticket')
+    );
+
+    expect(review).toContain('**Standards.**');
+    expect(review).toContain('## After the last ticket');
+    expect(standards).toContain(
+      "A code smell from the list below, where the repo's documented rules and neighboring code say nothing. Where they say something, they win."
+    );
+  });
+
+  test('a smell that breaks the agreed scope is handled as a scope finding', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const standards = review.slice(
+      review.indexOf('**Standards.**'),
+      review.indexOf('## After the last ticket')
+    );
+
+    expect(review).toContain('**Standards.**');
+    expect(review).toContain('## After the last ticket');
+    expect(standards).toContain(
+      'A smell that also breaks the agreed scope is a scope finding, and is handled as one.'
+    );
+  });
+
+  test('the standards reviewer receives the smell list', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const who = review.slice(
+      review.indexOf('## Who reviews'),
+      review.indexOf('## The two axes')
+    );
+
+    expect(review).toContain('## Who reviews');
+    expect(review).toContain('## The two axes');
+    expect(who).toContain(
+      "The list of code smells below is one of the standards axis's inputs."
+    );
+  });
+
+  test('review marks smells in its report', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const report = review.slice(
+      review.indexOf('## Report'),
+      review.indexOf('## After the report')
+    );
+
+    expect(review).toContain('## Report');
+    expect(review).toContain('## After the report');
+    expect(report).toContain('Mark a finding from the smell list as a smell.');
+  });
+
+  test('review puts smells to the user as follow-ups and fixes them only when asked', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const after = review.slice(review.indexOf('## After the report'));
+
+    expect(review).toContain('## After the report');
+    expect(after).toContain(
+      '- Put each smell, and anything else, to the user as a follow-up. A follow-up is fixed only when the user asks.'
+    );
+  });
+
+  test('the workflow no longer refuses to switch tasks', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(rules).not.toContain('Reject task switching');
+    expect(scopeControl).toContain(
+      'When the user asks for something unrelated during a task, say what is unfinished in the active ticket, then do what they decide: queue the request for later, or pause the task and switch.'
+    );
+  });
+
+  test('a queued request is recorded so it is not lost', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(scopeControl).toContain(
+      'Record a queued request where the repo tracks work. Where it tracks work nowhere, name it in the report that closes the ticket.'
+    );
+  });
+
+  test('a task pauses at a ticket boundary', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(scopeControl).toContain(
+      'Pause at a ticket boundary: finish the active ticket first. In a one-ticket task, that is the whole task.'
+    );
+  });
+
+  test('a switch at once sets the unfinished work aside and notes what is left', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(scopeControl).toContain(
+      "When the user wants the switch at once, set the unfinished work aside so it stays out of the new task's changes, such as on a branch or in a stash."
+    );
+    expect(scopeControl).toContain(
+      'Note what is done and what is left where the tickets are tracked, and leave the ticket not marked done.'
+    );
+  });
+
+  test('a paused task continues by the resume rule', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const scopeControl = rules.slice(
+      rules.indexOf('## Scope Control'),
+      rules.indexOf('## Repeated Tasks')
+    );
+
+    expect(rules).toContain('## Scope Control');
+    expect(rules).toContain('## Repeated Tasks');
+    expect(rules).toContain('### Resuming a task');
+    expect(scopeControl).toContain(
+      'A paused task with a spec continues as the Resuming a task section describes.'
+    );
+  });
+
+  test('the workflow skill leaves queue or pause to the user', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const between = skill.slice(
+      skill.indexOf('## Rules Between Steps'),
+      skill.indexOf('## Bundled Templates')
+    );
+
+    expect(skill).toContain('## Rules Between Steps');
+    expect(skill).toContain('## Bundled Templates');
+    expect(between).toContain(
+      'An unrelated request is queued, or the task is paused, as the user decides and as Scope Control in `references/workflow-rules.md` describes'
+    );
+  });
+});

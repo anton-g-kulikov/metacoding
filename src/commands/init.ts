@@ -10,7 +10,7 @@ import {
 import { FileSystemService } from '../services/filesystem';
 import { GitIgnoreManager } from '../services/gitignore-manager';
 import { ProjectDetector } from '../services/project-detector';
-import { SkillManager } from '../services/skill-manager';
+import { DEFAULT_PROJECT_DESCRIPTION, SkillManager } from '../services/skill-manager';
 
 /**
  * Handles skill installation for the current project.
@@ -29,7 +29,7 @@ export class InitCommand {
   }
 
   async execute(options: InitOptions): Promise<void> {
-    console.log(chalk.cyan.bold('metacoding skill setup\n'));
+    console.log(chalk.cyan.bold('metacoding skills setup\n'));
 
     const projectInfo = await this.projectDetector.detectProject();
     const vendorChoice = await this.getVendorChoice(options);
@@ -41,7 +41,7 @@ export class InitCommand {
           type: 'confirm',
           name: 'proceed',
           message:
-            'The metacoding workflow skill is already installed here. Reinstall it?',
+            'The metacoding skills are already installed here. Reinstall them?',
           default: false,
         },
       ]);
@@ -60,8 +60,20 @@ export class InitCommand {
     );
     await this.setupProject(vendors.map((vendor) => ({ ...baseConfig, vendor })));
 
-    console.log(chalk.green.bold('\nmetacoding skill installed.\n'));
+    console.log(chalk.green.bold('\nmetacoding skills installed.\n'));
     this.displayNextSteps(vendorChoice);
+
+    if (
+      vendors.includes('claude-code') &&
+      (await this.skillManager.hasLegacyClaudeInstall())
+    ) {
+      console.log(
+        chalk.yellow(
+          'Legacy Claude Code subagent files are still present. ' +
+            'Run "metacoding update" to back them up and remove them.\n'
+        )
+      );
+    }
   }
 
   private async getProjectConfiguration(
@@ -72,15 +84,15 @@ export class InitCommand {
     if (options.force && process.env.NODE_ENV === 'test') {
       return {
         name: projectInfo.name || 'test-project',
-        description: 'A project using the metacoding workflow skill',
+        description: DEFAULT_PROJECT_DESCRIPTION,
         techStack: projectInfo.techStack.length
           ? projectInfo.techStack
           : ['TypeScript'],
         projectType: options.template || projectInfo.type || 'general',
-        testFramework: this.getDefaultTestFramework(
+        testFramework: this.skillManager.getDefaultTestFramework(
           options.template || projectInfo.type || 'general'
         ),
-        buildTool: this.getDefaultBuildTool(
+        buildTool: this.skillManager.getDefaultBuildTool(
           options.template || projectInfo.type || 'general'
         ),
         vendor,
@@ -99,7 +111,7 @@ export class InitCommand {
         type: 'input',
         name: 'description',
         message: 'Project description:',
-        default: 'A project using the metacoding workflow skill',
+        default: DEFAULT_PROJECT_DESCRIPTION,
       },
       {
         type: 'list',
@@ -133,14 +145,14 @@ export class InitCommand {
       description: answers.description,
       techStack: answers.techStack,
       projectType: answers.projectType,
-      testFramework: this.getDefaultTestFramework(answers.projectType),
-      buildTool: this.getDefaultBuildTool(answers.projectType),
+      testFramework: this.skillManager.getDefaultTestFramework(answers.projectType),
+      buildTool: this.skillManager.getDefaultBuildTool(answers.projectType),
       vendor,
     };
   }
 
   private async setupProject(configs: ProjectConfig[]): Promise<void> {
-    const spinner = ora('Installing metacoding workflow skill...').start();
+    const spinner = ora('Installing metacoding skills...').start();
 
     try {
       let installedFiles = 0;
@@ -154,34 +166,10 @@ export class InitCommand {
 
       await this.gitIgnoreManager.updateGitIgnore(process.cwd());
 
-      spinner.succeed('Workflow skill installed successfully');
+      spinner.succeed('Skills installed successfully');
     } catch (error) {
-      spinner.fail('Failed to install metacoding skill');
+      spinner.fail('Failed to install metacoding skills');
       throw error;
-    }
-  }
-
-  private getDefaultTestFramework(projectType: string): string {
-    switch (projectType) {
-      case 'react':
-        return 'Jest + React Testing Library';
-      case 'python':
-        return 'Pytest';
-      default:
-        return 'Use the repository default';
-    }
-  }
-
-  private getDefaultBuildTool(projectType: string): string {
-    switch (projectType) {
-      case 'react':
-        return 'Vite';
-      case 'node':
-        return 'Node.js toolchain';
-      case 'python':
-        return 'Poetry or the repository default';
-      default:
-        return 'Use the repository default';
     }
   }
 
@@ -231,7 +219,7 @@ export class InitCommand {
     console.log(chalk.cyan('Installed entrypoint:'));
     if (vendor === 'all') {
       console.log(chalk.dim('-'), '.codex/skills/metacoding-workflow/SKILL.md');
-      console.log(chalk.dim('-'), '.claude/agents/metacoding-workflow.md');
+      console.log(chalk.dim('-'), '.claude/skills/metacoding-workflow/SKILL.md');
       console.log(chalk.dim('-'), '.agents/skills/metacoding-workflow/SKILL.md');
       return;
     }
@@ -239,7 +227,7 @@ export class InitCommand {
     if (vendor === 'codex') {
       console.log(chalk.dim('-'), '.codex/skills/metacoding-workflow/SKILL.md');
     } else if (vendor === 'claude-code') {
-      console.log(chalk.dim('-'), '.claude/agents/metacoding-workflow.md');
+      console.log(chalk.dim('-'), '.claude/skills/metacoding-workflow/SKILL.md');
     } else {
       console.log(chalk.dim('-'), '.agents/skills/metacoding-workflow/SKILL.md');
     }

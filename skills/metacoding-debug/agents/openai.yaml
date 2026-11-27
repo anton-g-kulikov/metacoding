@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metacoding Debug"
+  short_description: "Reproduce first, then find the cause"
+  default_prompt: "Use $metacoding-debug to build one command that reproduces this bug, minimize it, test ranked hypotheses one at a time, and fix it with a regression test."

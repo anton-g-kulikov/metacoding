@@ -8,8 +8,6 @@ export declare class InitCommand {
     execute(options: InitOptions): Promise<void>;
     private getProjectConfiguration;
     private setupProject;
-    private getDefaultTestFramework;
-    private getDefaultBuildTool;
     private displayNextSteps;
     private getVendorChoice;
     private displayNextStepsForVendor;

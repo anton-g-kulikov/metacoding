@@ -12,7 +12,7 @@ export class BackupService {
   /**
    * Create a full backup of the provided paths.
    */
-  async createBackup(targets: string[] = ['.codex/skills/metacoding-workflow']): Promise<BackupResult> {
+  async createBackup(targets: string[]): Promise<BackupResult> {
     const timestamp = this.generateTimestamp();
     const backupPath = path.join(this.backupBaseDir, timestamp);
 

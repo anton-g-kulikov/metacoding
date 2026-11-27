@@ -11,6 +11,8 @@ export class FileSystemService {
   async isMetaCodingSetup(): Promise<boolean> {
     const knownEntryPoints = [
       path.join('.codex', 'skills', 'metacoding-workflow', 'SKILL.md'),
+      path.join('.claude', 'skills', 'metacoding-workflow', 'SKILL.md'),
+      // Legacy 2.0.x Claude Code subagent layout.
       path.join('.claude', 'agents', 'metacoding-workflow.md'),
       path.join('.agents', 'skills', 'metacoding-workflow', 'SKILL.md'),
     ];

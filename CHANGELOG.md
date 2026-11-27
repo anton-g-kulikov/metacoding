@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Four companion skills, installed next to `metacoding-workflow` and usable on their own:
+  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
+  - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like and on test doubles
+  - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards, with a fixed list of code smells for what those standards leave open
+  - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix, and masks credentials and personal data in what it captures
+- A review step in the workflow, between verification and artifact updates
+- Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the spec
+- Resuming a task: grounding looks for a spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the spec as the agreed scope
+- A change to a spec in progress is confirmed by the user and written into the spec, with its date, before it is built
+- The records that shaping writes (glossary terms, decision records, the spec) are committed on their own before the build, when VCS work is in scope. So is a confirmed change to a spec in progress
+- A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
+- A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
+- Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
+
+### Changed
+
+- `metacoding-workflow` is now an orchestrator: it keeps the step order, grounding, verification, artifact rules and close-out, and calls the companion skills for the shape, build, debug and review steps
+- `metacoding init` and `metacoding update` install and sync all five skills; `update` adds the companion skills to an existing install
+- The `.gitignore` section now uses `metacoding-*/` patterns per agent so it covers every skill
+- **Claude Code now installs as a skill** at `.claude/skills/metacoding-workflow/` instead of a subagent at `.claude/agents/metacoding-workflow.md` with a support bundle in `.claude/metacoding-workflow/`. A subagent cannot question the user directly, which blocked the scope interview
+- `metacoding update` migrates the old Claude Code layout: it backs up the subagent files, installs the skill, removes the old files, and adds the new path to an existing metacoding `.gitignore` section
+- `metacoding update --dry-run` fails with a migration hint when only the old Claude Code layout is present
+- `metacoding init` and `metacoding update` fill in exclusion patterns that an existing metacoding `.gitignore` section lacks
+- The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
+- The workflow no longer refuses to switch tasks. When the user asks for something unrelated mid-task, it says what is unfinished and the user decides: queue the request, or pause the task at a ticket boundary and switch. For a switch at once, it sets the unfinished work aside and notes what is left
+- `metacoding update --dry-run` requires each companion skill's `SKILL.md` and, for Codex, checks the `agents/openai.yaml` of every skill instead of the workflow skill's alone, and names a file that is not valid YAML
+- `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns for the user to add. It used to check only for the section header
+- `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
+- CLI help and messages say "skills" where they said "workflow skill"
+- The default project description for a new install is "A project using the metacoding skills"
+- Installs skip `.DS_Store` files
+- `task-entry.md` now carries the scope summary fields
+- The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
+
+### Removed
+
+- `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
+- The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
+- The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
+- The legacy `templates/` and `workflow/` folders from the 1.x instruction-file generator, which the package does not ship
+
+### Fixed
+
+- `metacoding update` keeps the project name, description, tech stack and project type entered at `init`. It used to rebuild `project-context.md` from detected defaults, which replaced those answers and reported the file as locally edited on every update
+- `metacoding update` no longer reports an untouched `node` install as locally edited; `init` and `update` disagreed about its default build tool
+
 ## [2.0.1] - 2026-03-28
 
 ### Fixed

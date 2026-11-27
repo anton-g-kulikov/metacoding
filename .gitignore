@@ -41,7 +41,6 @@ test/**/*.d.ts.map
 **/.copilot/
 **/copilot-workspace.json
 **/copilot-instructions.md
-!templates/**/copilot-instructions.md
 
 # Build and distribution files
 node_modules/
@@ -55,3 +54,7 @@ coverage/
 .vscode/copilot-instructions.md
 .idea/copilot-instructions.md
 .cursor/
+.codex/skills/metacoding-*/
+.claude/skills/metacoding-*/
+.agents/skills/metacoding-*/
+.backup/

@@ -12,10 +12,9 @@ export class GitIgnoreManager {
   static getAIAssistantPatterns(): string[] {
     return [
       '# metacoding: AI coding assistant exclusions',
-      '.codex/skills/metacoding-workflow/',
-      '.claude/agents/metacoding-workflow.md',
-      '.claude/metacoding-workflow/',
-      '.agents/skills/metacoding-workflow/',
+      '.codex/skills/metacoding-*/',
+      '.claude/skills/metacoding-*/',
+      '.agents/skills/metacoding-*/',
       '.backup/',
     ];
   }
@@ -42,7 +41,8 @@ export class GitIgnoreManager {
       const hasMetacodingSection = existingContent.includes('# metacoding:');
 
       if (hasMetacodingSection) {
-        // Skip if our patterns are already present
+        // Keep the existing section and only fill in patterns it lacks
+        await this.addMissingPatterns(projectPath);
         return;
       }
 
@@ -74,6 +74,51 @@ export class GitIgnoreManager {
         `Failed to update .gitignore: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
+  }
+
+  /**
+   * Append exclusion patterns that an existing metacoding section lacks.
+   * Does nothing when the file has no metacoding section, so a project that
+   * chose to commit its skill files keeps that choice.
+   */
+  async addMissingPatterns(projectPath: string): Promise<void> {
+    const gitignorePath = path.join(projectPath, '.gitignore');
+
+    if (!(await fs.pathExists(gitignorePath))) {
+      return;
+    }
+
+    const existingContent = await fs.readFile(gitignorePath, 'utf8');
+    if (!existingContent.includes('# metacoding:')) {
+      return;
+    }
+
+    const missing = await this.getMissingPatterns(projectPath);
+
+    if (missing.length === 0) {
+      return;
+    }
+
+    const separator = existingContent.endsWith('\n') ? '' : '\n';
+    await fs.appendFile(gitignorePath, separator + missing.join('\n') + '\n');
+  }
+
+  /**
+   * List the exclusion patterns that .gitignore lacks: all of them when the
+   * file does not exist.
+   */
+  async getMissingPatterns(projectPath: string): Promise<string[]> {
+    const gitignorePath = path.join(projectPath, '.gitignore');
+    const content = (await fs.pathExists(gitignorePath))
+      ? await fs.readFile(gitignorePath, 'utf8')
+      : '';
+    const existingLines = new Set(
+      content.split(/\r?\n/).map((line) => line.trim())
+    );
+
+    return GitIgnoreManager.getAIAssistantPatterns().filter(
+      (pattern) => !pattern.startsWith('#') && !existingLines.has(pattern)
+    );
   }
 
   /**

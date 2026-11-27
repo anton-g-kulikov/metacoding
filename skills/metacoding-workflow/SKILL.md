@@ -1,11 +1,20 @@
 ---
 name: metacoding-workflow
-description: Enforce the metacoding workflow for modern coding agents. Use this skill for feature work, bug fixes, refactors, or reviews that require strict workflow execution, mandatory TDD, MECE documentation structure, single-task focus, verification, and a clean VCS handoff or completion confirmation.
+description: Run a task through the full metacoding workflow, from repo grounding and a scope interview through mandatory TDD, verification, review, and MECE doc updates to a clean handoff. Use this skill for feature work, bug fixes, refactors, or reviews where the user wants strict, gated execution with single-task focus rather than ad hoc coding.
 ---
 
 # Metacoding Workflow
 
-Use this skill when the user wants disciplined execution rather than ad hoc coding.
+This skill takes one task from request to handoff. It owns the order of the steps and the rules that hold between them. Four companion skills own the method of single steps, and each also works on its own:
+
+| Skill | What it does |
+| --- | --- |
+| `metacoding-shape` | Settles open decisions with the user and ends in a confirmed scope summary |
+| `metacoding-tdd` | Builds the change test-first, one behavior at a time |
+| `metacoding-debug` | Finds the cause of a bug from a command that reproduces it |
+| `metacoding-review` | Checks the finished change against the scope and the repo's standards |
+
+Load a companion skill by name with your agent's skill mechanism. If your agent cannot load skills by name, read `../<skill-name>/SKILL.md`, which is installed next to this skill's folder.
 
 ## Start Here
 
@@ -20,33 +29,29 @@ Use this skill when the user wants disciplined execution rather than ad hoc codi
    - `references/react.md`
    - `references/python.md`
 
-## Core Rules
+## Steps
 
-1. Ground in the repo before asking clarifying questions.
-2. Capture scope, success criteria, and constraints before changing code.
-3. Enforce mandatory TDD: document test intent, write or identify failing tests first, then implement production code.
-4. Work one bounded task at a time.
-5. Verify changes with tests and direct checks.
-6. Maintain MECE documentation: update the correct artifact without duplicating the same concept across multiple docs.
-7. Close with a commit-ready handoff, an actual VCS action, or an explicit completion confirmation.
+1. **Ground in the repo.** Read the code, config, tests, and docs the task touches, including the glossary and decision records when the repo has them, and any spec still in progress. Look up facts yourself, so the user is asked only for decisions.
+2. **Shape.** Use `metacoding-shape`. Changing files starts only after the user confirms its scope summary; the skill then writes the settled terms, the marked decision records, and a spec when the task needs one.
+3. **Build test-first.** Use `metacoding-tdd`: mandatory TDD, a failing test before each piece of production code. When the task is a bug whose cause is unknown, use `metacoding-debug` for this step; it ends in a regression test and a fix.
+4. **Verify.** Run the smallest relevant checks first, then broader checks when justified. Confirm the behavior a user would observe, beyond a clean compile.
+5. **Review.** Use `metacoding-review` on the diff, and act on what it finds.
+6. **Update artifacts.** Update the one document that owns each concept that changed, and amend any decision record the build proved wrong, following `references/repository-organization.md`.
+7. **Close.** Finish with a commit, a commit-ready handoff, or an explicit completion confirmation, as `references/workflow-rules.md` describes.
 
-## Enforcement
+Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets, as the Tickets section of `references/workflow-rules.md` describes. When the request continues a task that an earlier session left unfinished, the task resumes from its spec at the first ticket not yet done, as the same section describes.
 
-- Do not skip directly to coding when repo inspection can reduce uncertainty.
-- Do not bypass TDD unless the user explicitly accepts the exception and the reason is recorded.
-- Do not switch to unrelated work mid-task. Queue it for later.
-- If a new blocker is required to finish the active task, treat it as a subtask.
-- If git actions are unavailable or out of scope, stop at a clean handoff instead of forcing a commit.
-- If repo artifacts are missing, bootstrap them from `assets/templates/` before implementation or explicitly propose them.
-- Keep repository organization and documentation structure aligned with `references/repository-organization.md`.
+## Rules Between Steps
+
+- Work one bounded task at a time. An unrelated request is queued, or the task is paused, as the user decides and as Scope Control in `references/workflow-rules.md` describes; take on a related blocker only as a subtask the active task needs.
+- Skip TDD only when the user accepts the exception, and record the reason.
+- If git actions are unavailable or out of scope, stop at a clean handoff.
+- Work with the artifacts the repo has. `references/platform-adaptation.md` says what to do when one is missing.
 
 ## Bundled Templates
 
-Use these templates when the repo does not already provide an equivalent artifact:
-
-- `assets/templates/task-entry.md`
-- `assets/templates/test-plan.md`
-- `assets/templates/repeated-task-checklist.md`
-- `assets/templates/changelog-entry.md`
+- `assets/templates/task-entry.md`: the shape of a task record, for a repo that already tracks work in files or a user who asks for one
+- `assets/templates/repeated-task-checklist.md`: for a recurring multi-step procedure the repo has no checklist for
+- `assets/templates/changelog-entry.md`: for a repo that keeps a changelog
 
 Keep the workflow strict, but adapt the exact artifact shape to the repository you are working in.

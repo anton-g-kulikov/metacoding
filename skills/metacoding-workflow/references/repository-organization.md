@@ -15,8 +15,8 @@ Prefer a structure equivalent to:
 
 ```text
 /src        # application and library source code
-/test       # automated tests, fixtures, and test documentation
-/_meta      # system, architecture, API, and project-management docs
+/test       # automated tests and fixtures
+/_meta      # system, architecture, and API docs, the glossary, decision records, and specs
 ```
 
 Within source and tests:
@@ -43,23 +43,51 @@ Each durable concept should have one primary home.
   - integration patterns
   - interface decisions
 - `/_meta/architecture-decisions.md`
-  - architectural tradeoffs and rationale
-- `/_meta/project-task-list.md`
-  - active tasks
-  - roadmap items
-  - status tracking and temporal planning
-- `/test/test-documentation.md`
-  - documented test cases
-  - test strategy
-  - coverage intent and scenario tracking
+  - architectural trade-offs and rationale
+- `/_meta/glossary.md`
+  - the project's own terms and what they mean
+- `/_meta/specs/`
+  - one file per task that needs a spec: its confirmed scope summary and its tickets
 
 Rules:
 
-- Do not duplicate the same policy or status across multiple documents.
+- Keep each policy or fact in one document.
 - Keep system documentation evergreen and free of task-status noise.
-- Keep project-management documents temporal and status-oriented.
-- Keep test intent in test documentation, not scattered through unrelated docs.
 - Update exactly the artifact whose responsibility changed.
+
+## Specs, Tickets, and Test Records
+
+The `metacoding-shape` skill decides which tasks need a spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
+
+- A spec goes where the repo already keeps specs. When it has no such place, it goes to `/_meta/specs/<date>-<slug>.md`.
+- The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the spec.
+- Test intent lives in the scope summary, the spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
+
+## Decision Records
+
+`/_meta/architecture-decisions.md` holds the decisions a future reader would otherwise question. Record a decision only when all three are true:
+
+1. **Hard to reverse.** Changing course later would cost real work.
+2. **Surprising without context.** Someone reading the code would wonder why it was done this way.
+3. **A real trade-off.** There were workable alternatives, and this one was chosen for stated reasons.
+
+A decision reaches this file through the scope summary: the `metacoding-shape` skill marks it `[record]` and writes the entry once the user confirms the summary, before the build starts. The skill holds the entry format and how to amend an entry.
+
+Create the file with the first such entry. If the repo already keeps decision records somewhere else, use that place.
+
+## Glossary
+
+`/_meta/glossary.md` holds the project's own terms, one line each: the term, what it means in this project, and the words to avoid for it.
+
+```text
+**Order**: a customer's confirmed purchase. Avoid: cart, basket.
+```
+
+- Read it while grounding, and use its terms in code, tests, docs, and questions to the user.
+- Add or correct a term once the scope summary that lists it is confirmed.
+- Keep it to meanings. Implementation detail belongs in the system documentation.
+- If the repo already keeps a glossary somewhere else, use that one.
+- If the repo has no glossary, follow `references/platform-adaptation.md`.
 
 ## Temporary File Management
 
@@ -81,4 +109,4 @@ Rules:
 
 - Repository organization is not optional polish. Validate it during repo grounding.
 - If a requested change would create documentation overlap or structural drift, correct the organization as part of the task or record the follow-up explicitly.
-- Mandatory TDD depends on this structure: test documentation belongs under `/test`, project status belongs under `/_meta`, and implementation belongs under source directories.
+- Mandatory TDD depends on this structure: tests belong under the test tree and implementation under source directories.

@@ -23,6 +23,12 @@ export interface ProjectConfig {
     buildTool?: string;
     vendor: AgentVendor;
 }
+export interface InstalledProjectContext {
+    name: string | undefined;
+    description: string | undefined;
+    projectType: string | undefined;
+    techStack: string[] | undefined;
+}
 export interface Template {
     name: string;
     description: string;

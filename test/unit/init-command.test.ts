@@ -39,8 +39,16 @@ describe('InitCommand', () => {
       'utf8'
     );
 
-    expect(gitignore).toContain('.codex/skills/metacoding-workflow/');
+    expect(gitignore).toContain('.codex/skills/metacoding-*/');
+    for (const skill of ['workflow', 'shape', 'tdd', 'review', 'debug']) {
+      expect(
+        await fs.pathExists(
+          path.join(workspace, `.codex/skills/metacoding-${skill}/SKILL.md`)
+        )
+      ).toBe(true);
+    }
     expect(projectContext).toContain('Project type: react');
+    expect(projectContext).toContain('- Description: A project using the metacoding skills\n');
     expect(projectContext).toContain('Agent vendor: codex');
     expect(projectContext).toContain('React, TypeScript');
     expect(projectContext).toContain('references/repository-organization.md');
@@ -75,7 +83,7 @@ describe('InitCommand', () => {
     const workspace = await createTempWorkspace('metacoding-init-interactive');
     process.chdir(workspace);
 
-    jest
+    const promptSpy = jest
       .spyOn(inquirer, 'prompt')
       .mockResolvedValueOnce({ vendor: 'claude-code' } as never)
       .mockResolvedValueOnce({
@@ -89,14 +97,22 @@ describe('InitCommand', () => {
     await command.execute({ template: 'general' });
 
     const projectContext = await fs.readFile(
-      path.join(workspace, '.claude/metacoding-workflow/references/project-context.md'),
+      path.join(workspace, '.claude/skills/metacoding-workflow/references/project-context.md'),
       'utf8'
     );
     const agentEntry = await fs.readFile(
-      path.join(workspace, '.claude/agents/metacoding-workflow.md'),
+      path.join(workspace, '.claude/skills/metacoding-workflow/SKILL.md'),
       'utf8'
     );
 
+    expect(promptSpy).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'description',
+          default: 'A project using the metacoding skills',
+        }),
+      ])
+    );
     expect(projectContext).toContain('Project name: interactive-app');
     expect(projectContext).toContain('Project type: python');
     expect(projectContext).toContain('Agent vendor: claude-code');
@@ -140,12 +156,42 @@ describe('InitCommand', () => {
     ).toBe(true);
     expect(
       await fs.pathExists(
-        path.join(workspace, '.claude/agents/metacoding-workflow.md')
+        path.join(workspace, '.claude/skills/metacoding-workflow/SKILL.md')
       )
     ).toBe(true);
     expect(
       await fs.pathExists(
         path.join(workspace, '.agents/skills/metacoding-workflow/SKILL.md')
+      )
+    ).toBe(true);
+  });
+
+  test('points at update when legacy Claude Code subagent files remain', async () => {
+    const workspace = await createTempWorkspace('metacoding-init-legacy');
+    process.chdir(workspace);
+
+    const legacyAgent = path.join(
+      workspace,
+      '.claude/agents/metacoding-workflow.md'
+    );
+    await fs.outputFile(legacyAgent, 'legacy agent', 'utf8');
+
+    const command = new InitCommand();
+    await command.execute({
+      template: 'typescript',
+      vendor: 'claude-code',
+      force: true,
+    });
+
+    expect(
+      await fs.pathExists(
+        path.join(workspace, '.claude/skills/metacoding-workflow/SKILL.md')
+      )
+    ).toBe(true);
+    expect(await fs.readFile(legacyAgent, 'utf8')).toBe('legacy agent');
+    expect(
+      logSpy.mock.calls.some((call) =>
+        String(call[0]).includes('Run "metacoding update"')
       )
     ).toBe(true);
   });

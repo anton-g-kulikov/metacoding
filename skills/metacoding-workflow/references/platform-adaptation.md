@@ -2,17 +2,28 @@
 
 ## Missing Task Tracking
 
-If the repo does not have a task list or status document:
+If the repo has no tracker, such as issues or a task list it keeps current:
 
-- create or propose a lightweight task entry using `assets/templates/task-entry.md`
-- keep it local to the repo’s conventions instead of forcing a fixed filename
+- the tickets of a spec are a checklist in the spec, which goes to `/_meta/specs/<date>-<slug>.md` unless the repo keeps specs elsewhere
+- for a task that needs no spec, the confirmed scope summary in the conversation is the record
+- write a task entry in the shape of `assets/templates/task-entry.md` only when the user asks for a durable one, in the place they name
 
 ## Missing Test Documentation
 
 If the repo does not track test intent in docs:
 
-- capture expected behavior in the implementation plan, PR notes, or a repo-appropriate test artifact
-- adapt `assets/templates/test-plan.md` when a durable artifact is useful
+- the test intent in the confirmed scope summary, and in the spec when the task has one, is the record, together with the tests themselves
+- leave it there; a separate test document is kept only where the repo already has one
+
+## Missing Glossary or Decision Records
+
+If the repo has no glossary:
+
+- propose `/_meta/glossary.md` in the scope summary that lists the first settled term, and create it once the summary is confirmed
+
+If the repo has no decision records:
+
+- create `/_meta/architecture-decisions.md` with the first decision the user confirmed as `[record]`
 
 ## Missing Git Context
 
