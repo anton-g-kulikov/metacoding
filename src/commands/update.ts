@@ -126,6 +126,9 @@ export class UpdateCommand {
       }
     }
 
+    // Older installs ignored a single skill folder; cover the ones added since.
+    await this.gitIgnoreManager.addMissingPatterns(process.cwd());
+
     await this.backupService.cleanupOldBackups();
 
     console.log(
@@ -143,8 +146,6 @@ export class UpdateCommand {
     if (!(await this.skillManager.hasLegacyClaudeInstall())) {
       return;
     }
-
-    await this.gitIgnoreManager.addMissingPatterns(process.cwd());
 
     if (options.backup === false) {
       console.log(
@@ -272,36 +273,20 @@ export class UpdateCommand {
   }
 
   private getRequiredFilesForVendor(vendor: AgentVendor): string[] {
-    if (vendor === 'codex') {
-      return [
-        '.codex/skills/metacoding-workflow/SKILL.md',
-        '.codex/skills/metacoding-workflow/agents/openai.yaml',
-        '.codex/skills/metacoding-workflow/references/workflow-rules.md',
-        '.codex/skills/metacoding-workflow/references/interview.md',
-        '.codex/skills/metacoding-workflow/references/platform-adaptation.md',
-        '.codex/skills/metacoding-workflow/references/project-context.md',
-        '.codex/skills/metacoding-workflow/assets/templates/task-entry.md',
-      ];
-    }
-
-    if (vendor === 'claude-code') {
-      return [
-        '.claude/skills/metacoding-workflow/SKILL.md',
-        '.claude/skills/metacoding-workflow/references/workflow-rules.md',
-        '.claude/skills/metacoding-workflow/references/interview.md',
-        '.claude/skills/metacoding-workflow/references/platform-adaptation.md',
-        '.claude/skills/metacoding-workflow/references/project-context.md',
-        '.claude/skills/metacoding-workflow/assets/templates/task-entry.md',
-      ];
-    }
+    const workflowDir = this.skillManager.getInstallDirectory(vendor);
+    const companionDirs = this.skillManager.getSkillDirectories(vendor).slice(1);
+    const workflowFiles = [
+      'SKILL.md',
+      ...(vendor === 'codex' ? ['agents/openai.yaml'] : []),
+      'references/workflow-rules.md',
+      'references/platform-adaptation.md',
+      'references/project-context.md',
+      'assets/templates/task-entry.md',
+    ];
 
     return [
-      '.agents/skills/metacoding-workflow/SKILL.md',
-      '.agents/skills/metacoding-workflow/references/workflow-rules.md',
-      '.agents/skills/metacoding-workflow/references/interview.md',
-      '.agents/skills/metacoding-workflow/references/platform-adaptation.md',
-      '.agents/skills/metacoding-workflow/references/project-context.md',
-      '.agents/skills/metacoding-workflow/assets/templates/task-entry.md',
+      ...workflowFiles.map((file) => path.join(workflowDir, file)),
+      ...companionDirs.map((directory) => path.join(directory, 'SKILL.md')),
     ];
   }
 

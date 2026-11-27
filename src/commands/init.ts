@@ -207,7 +207,11 @@ export class InitCommand {
     console.log(chalk.dim('2.'), 'Ask your agent to use the metacoding workflow for the next task.');
     console.log(
       chalk.dim('3.'),
-      'Let the skill drive scope capture, test intent, implementation, verification, and close-out.'
+      'Let the skill drive the interview, test-first build, verification, review, and close-out.'
+    );
+    console.log(
+      chalk.dim('4.'),
+      'Use metacoding-interview, metacoding-tdd, metacoding-review, or metacoding-debug on their own when you need one step.'
     );
     console.log('');
   }

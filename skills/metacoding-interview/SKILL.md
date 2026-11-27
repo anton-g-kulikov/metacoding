@@ -1,6 +1,11 @@
+---
+name: metacoding-interview
+description: Interview the user about a task before any change, in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary. Use when a request leaves decisions open, when the user asks to be questioned or to clarify scope first, or when the metacoding workflow reaches its interview step.
+---
+
 # Interview
 
-Run this interview after grounding in the repository and before changing any code, test, or doc. Its goal is a shared understanding of the task: every question that shapes the work is either looked up by you or settled by the user.
+Run this interview after reading the relevant parts of the repository and before changing any code, test, or doc. Its goal is a shared understanding of the task: every question that shapes the work is either looked up by you or settled by the user.
 
 ## Facts and decisions
 
@@ -69,7 +74,7 @@ Assumptions:
 Test intent:
 ```
 
-Changing files starts after that confirmation. The confirmed summary is the agreed scope that the completion standard in `references/workflow-rules.md` checks against. It also fills the task entry from `assets/templates/task-entry.md`, and its test intent seeds the TDD step.
+Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the test intent seeds test-first work, and a later review checks the result against it.
 
 Two shortcuts:
 

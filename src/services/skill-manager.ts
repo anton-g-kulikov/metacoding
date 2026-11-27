@@ -2,9 +2,24 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { AgentVendor, ProjectConfig } from '../types';
 
+/**
+ * Skills shipped in the package. The workflow skill is the orchestrator and
+ * the entrypoint that marks a vendor install; the others are its companions.
+ */
+export const WORKFLOW_SKILL = 'metacoding-workflow';
+export const METACODING_SKILLS = [
+  WORKFLOW_SKILL,
+  'metacoding-interview',
+  'metacoding-tdd',
+  'metacoding-review',
+  'metacoding-debug',
+] as const;
+
 interface VendorInstallDefinition {
   vendor: AgentVendor;
-  root: string;
+  /** Directory that holds one folder per skill. */
+  skillsDir: string;
+  /** Files, relative to the workflow skill, that mark a vendor install. */
   entryFiles: string[];
 }
 
@@ -12,10 +27,7 @@ interface VendorInstallDefinition {
  * Service for packaging and installing vendor-specific metacoding skills.
  */
 export class SkillManager {
-  private readonly sourceSkillDir = path.join(
-    __dirname,
-    '../../skills/metacoding-workflow'
-  );
+  private readonly sourceSkillsDir = path.join(__dirname, '../../skills');
   /**
    * Paths written by the 2.0.x Claude Code install, which shipped a subagent
    * plus a support bundle instead of a skill.
@@ -27,17 +39,17 @@ export class SkillManager {
   private readonly vendorDefinitions: Record<AgentVendor, VendorInstallDefinition> = {
     codex: {
       vendor: 'codex',
-      root: path.join('.codex', 'skills', 'metacoding-workflow'),
+      skillsDir: path.join('.codex', 'skills'),
       entryFiles: ['SKILL.md', path.join('agents', 'openai.yaml')],
     },
     'claude-code': {
       vendor: 'claude-code',
-      root: path.join('.claude', 'skills', 'metacoding-workflow'),
+      skillsDir: path.join('.claude', 'skills'),
       entryFiles: ['SKILL.md'],
     },
     antigravity: {
       vendor: 'antigravity',
-      root: path.join('.agents', 'skills', 'metacoding-workflow'),
+      skillsDir: path.join('.agents', 'skills'),
       entryFiles: ['SKILL.md'],
     },
   };
@@ -102,16 +114,28 @@ export class SkillManager {
     return removed;
   }
 
+  /**
+   * Install directory of the workflow skill, which holds the project context.
+   */
   getInstallDirectory(vendor: AgentVendor): string {
-    return this.vendorDefinitions[vendor].root;
+    return path.join(this.vendorDefinitions[vendor].skillsDir, WORKFLOW_SKILL);
+  }
+
+  /**
+   * Install directories of every packaged skill, workflow skill first.
+   */
+  getSkillDirectories(vendor: AgentVendor): string[] {
+    return METACODING_SKILLS.map((skill) =>
+      path.join(this.vendorDefinitions[vendor].skillsDir, skill)
+    );
   }
 
   getBackupTargets(vendor: AgentVendor): string[] {
     if (vendor === 'claude-code') {
-      return [this.vendorDefinitions[vendor].root, ...this.legacyClaudePaths];
+      return [...this.getSkillDirectories(vendor), ...this.legacyClaudePaths];
     }
 
-    return [this.vendorDefinitions[vendor].root];
+    return this.getSkillDirectories(vendor);
   }
 
   async installSkill(config: ProjectConfig): Promise<string[]> {
@@ -128,28 +152,46 @@ export class SkillManager {
   async generateInstallationFiles(
     config: ProjectConfig
   ): Promise<Array<{ path: string; content: string }>> {
-    const root = this.getInstallDirectory(config.vendor);
-    const supportFiles = await this.readCoreSupportFiles(root, config.vendor);
-    const projectContext = await this.renderProjectContext(config);
+    const skillsDir = this.vendorDefinitions[config.vendor].skillsDir;
+    const files: Array<{ path: string; content: string }> = [];
 
-    return [
-      ...supportFiles,
-      {
-        path: path.join(root, 'references/project-context.md'),
-        content: projectContext,
-      },
-    ];
+    for (const skill of METACODING_SKILLS) {
+      files.push(
+        ...(await this.readSkillFiles(
+          skill,
+          path.join(skillsDir, skill),
+          config.vendor
+        ))
+      );
+    }
+
+    files.push({
+      path: path.join(
+        this.getInstallDirectory(config.vendor),
+        'references/project-context.md'
+      ),
+      content: await this.renderProjectContext(config),
+    });
+
+    return files;
   }
 
   async getInstalledFiles(vendor: AgentVendor): Promise<string[]> {
-    return this.listFilesRecursively(this.getInstallDirectory(vendor));
+    const files: string[] = [];
+
+    for (const directory of this.getSkillDirectories(vendor)) {
+      files.push(...(await this.listFilesRecursively(directory)));
+    }
+
+    return files;
   }
 
   private async hasVendorInstall(vendor: AgentVendor): Promise<boolean> {
     const definition = this.vendorDefinitions[vendor];
+    const root = this.getInstallDirectory(vendor);
 
     for (const relativeEntry of definition.entryFiles) {
-      const fullPath = path.join(definition.root, relativeEntry);
+      const fullPath = path.join(root, relativeEntry);
       if (!(await fs.pathExists(fullPath))) {
         return false;
       }
@@ -158,15 +200,17 @@ export class SkillManager {
     return true;
   }
 
-  private async readCoreSupportFiles(
+  private async readSkillFiles(
+    skill: string,
     installRoot: string,
     vendor: AgentVendor
   ): Promise<Array<{ path: string; content: string }>> {
-    const relativePaths = await this.listFilesRecursively(this.sourceSkillDir);
+    const sourceDir = path.join(this.sourceSkillsDir, skill);
+    const relativePaths = await this.listFilesRecursively(sourceDir);
     const files: Array<{ path: string; content: string }> = [];
 
     for (const absolutePath of relativePaths) {
-      const relativePath = path.relative(this.sourceSkillDir, absolutePath);
+      const relativePath = path.relative(sourceDir, absolutePath);
 
       // Codex needs its UI metadata; other vendors do not.
       if (vendor !== 'codex' && relativePath.startsWith('agents/')) {
@@ -195,7 +239,7 @@ export class SkillManager {
       const fullPath = path.join(root, entry.name);
       if (entry.isDirectory()) {
         files.push(...(await this.listFilesRecursively(fullPath)));
-      } else {
+      } else if (entry.name !== '.DS_Store') {
         files.push(fullPath);
       }
     }
@@ -205,7 +249,8 @@ export class SkillManager {
 
   private async renderProjectContext(config: ProjectConfig): Promise<string> {
     const templatePath = path.join(
-      this.sourceSkillDir,
+      this.sourceSkillsDir,
+      WORKFLOW_SKILL,
       'assets/templates/project-context.md'
     );
     const template = await fs.readFile(templatePath, 'utf8');
@@ -230,7 +275,6 @@ export class SkillManager {
   private getRecommendedReferences(config: ProjectConfig): string[] {
     const references = [
       '- `references/workflow-rules.md` for the gated task flow',
-      '- `references/interview.md` for the scope interview that runs before any change',
       '- `references/repository-organization.md` for repository structure and MECE documentation ownership',
       '- `references/platform-adaptation.md` for fallback behavior when repo artifacts or git are missing',
     ];

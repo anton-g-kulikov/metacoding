@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metacoding Review"
+  short_description: "Check a change against scope and standards"
+  default_prompt: "Use $metacoding-review to review the current change against the agreed scope and this repo's standards, report the two axes separately, and fix what it finds."

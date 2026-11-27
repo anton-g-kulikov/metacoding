@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metacoding TDD"
+  short_description: "Build test-first, one behavior at a time"
+  default_prompt: "Use $metacoding-tdd to list the behaviors to prove, then build them one at a time with a failing test before each piece of production code."

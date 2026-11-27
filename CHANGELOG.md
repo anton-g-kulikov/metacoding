@@ -9,16 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `references/interview.md`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary
+- Four companion skills, installed next to `metacoding-workflow` and usable on their own:
+  - `metacoding-interview`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary
+  - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like
+  - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards
+  - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix
+- A review step in the workflow, between verification and artifact updates
 
 ### Changed
 
+- `metacoding-workflow` is now an orchestrator: it keeps the step order, grounding, verification, artifact rules and close-out, and calls the companion skills for the interview, build, debug and review steps
+- `metacoding init` and `metacoding update` install and sync all five skills; `update` adds the companion skills to an existing install
+- The `.gitignore` section now uses `metacoding-*/` patterns per agent so it covers every skill
 - **Claude Code now installs as a skill** at `.claude/skills/metacoding-workflow/` instead of a subagent at `.claude/agents/metacoding-workflow.md` with a support bundle in `.claude/metacoding-workflow/`. A subagent cannot question the user directly, which blocked the scope interview
 - `metacoding update` migrates the old Claude Code layout: it backs up the subagent files, installs the skill, removes the old files, and adds the new path to an existing metacoding `.gitignore` section
 - `metacoding update --dry-run` fails with a migration hint when only the old Claude Code layout is present
-- `metacoding init` fills in exclusion patterns that an existing metacoding `.gitignore` section lacks
+- `metacoding init` and `metacoding update` fill in exclusion patterns that an existing metacoding `.gitignore` section lacks
 - The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
-- `metacoding update --dry-run` treats `references/interview.md` as a required file
+- `metacoding update --dry-run` requires each companion skill's `SKILL.md`
+- Installs skip `.DS_Store` files
 
 ### Removed
 

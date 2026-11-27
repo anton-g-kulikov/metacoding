@@ -12,9 +12,9 @@ export class GitIgnoreManager {
   static getAIAssistantPatterns(): string[] {
     return [
       '# metacoding: AI coding assistant exclusions',
-      '.codex/skills/metacoding-workflow/',
-      '.claude/skills/metacoding-workflow/',
-      '.agents/skills/metacoding-workflow/',
+      '.codex/skills/metacoding-*/',
+      '.claude/skills/metacoding-*/',
+      '.agents/skills/metacoding-*/',
       '.backup/',
     ];
   }

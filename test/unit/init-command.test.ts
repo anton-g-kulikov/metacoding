@@ -39,7 +39,14 @@ describe('InitCommand', () => {
       'utf8'
     );
 
-    expect(gitignore).toContain('.codex/skills/metacoding-workflow/');
+    expect(gitignore).toContain('.codex/skills/metacoding-*/');
+    for (const skill of ['workflow', 'interview', 'tdd', 'review', 'debug']) {
+      expect(
+        await fs.pathExists(
+          path.join(workspace, `.codex/skills/metacoding-${skill}/SKILL.md`)
+        )
+      ).toBe(true);
+    }
     expect(projectContext).toContain('Project type: react');
     expect(projectContext).toContain('Agent vendor: codex');
     expect(projectContext).toContain('React, TypeScript');

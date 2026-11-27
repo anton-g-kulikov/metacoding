@@ -3,11 +3,11 @@
 [![Version](https://img.shields.io/npm/v/metacoding.svg)](https://www.npmjs.com/package/metacoding)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-`metacoding` packages a cross-agent workflow skill that enforces disciplined delivery for modern coding agents. Instead of generating editor-specific instruction files, it installs vendor-specific skills for Codex, Claude Code, or Antigravity from one shared workflow bundle.
+`metacoding` packages a cross-agent workflow skill that enforces disciplined delivery for modern coding agents. Instead of generating editor-specific instruction files, it installs vendor-specific skills for Codex, Claude Code, or Antigravity from one shared set of skills.
 
 ## What It Installs
 
-Running `metacoding init` now asks which coding agent you use:
+Running `metacoding init` asks which coding agent you use:
 
 - `Codex`
 - `Claude Code`
@@ -16,66 +16,70 @@ Running `metacoding init` now asks which coding agent you use:
 You can also pass `--vendor codex`, `--vendor claude-code`, or `--vendor antigravity`.
 For mixed-agent teams, you can use `--vendor all` to install all workspace-scoped variants.
 
-The installed entrypoint depends on that choice:
+It installs five skills into that agent's skills folder:
 
 ```text
-Codex:       .codex/skills/metacoding-workflow/SKILL.md
-Claude Code: .claude/skills/metacoding-workflow/SKILL.md
-Antigravity: .agents/skills/metacoding-workflow/SKILL.md
+Codex:       .codex/skills/
+Claude Code: .claude/skills/
+Antigravity: .agents/skills/
 ```
 
-The support bundle is installed alongside the entrypoint. The shared content includes:
+| Skill | Role |
+| --- | --- |
+| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls the other four at the right step |
+| `metacoding-interview` | Settles open decisions with you and ends in a confirmed scope summary |
+| `metacoding-tdd` | Builds the change test-first, one behavior at a time |
+| `metacoding-review` | Checks the finished change against the agreed scope and the repo's standards |
+| `metacoding-debug` | Finds the cause of a bug, starting from a command that reproduces it |
 
-```text
-references/
-  project-context.md
-  workflow-rules.md
-  interview.md
-  platform-adaptation.md
-  typescript.md
-  javascript.md
-  node.md
-  react.md
-  python.md
-assets/templates/
-  task-entry.md
-  test-plan.md
-  repeated-task-checklist.md
-  changelog-entry.md
-  project-context.md
-```
+Each companion skill also works on its own, so you can ask for only an interview, only a review, or only a diagnosis.
 
 For Codex, the project install looks like:
 
 ```text
-.codex/skills/metacoding-workflow/
-├── SKILL.md
-├── agents/openai.yaml
-├── references/
-│   ├── project-context.md
-│   ├── workflow-rules.md
-│   ├── interview.md
-│   ├── platform-adaptation.md
-│   ├── typescript.md
-│   ├── javascript.md
-│   ├── node.md
-│   ├── react.md
-│   └── python.md
-└── assets/templates/
-    ├── task-entry.md
-    ├── test-plan.md
-    ├── repeated-task-checklist.md
-    ├── changelog-entry.md
-    └── project-context.md
+.codex/skills/
+├── metacoding-workflow/
+│   ├── SKILL.md
+│   ├── agents/openai.yaml
+│   ├── references/
+│   │   ├── project-context.md
+│   │   ├── workflow-rules.md
+│   │   ├── repository-organization.md
+│   │   ├── platform-adaptation.md
+│   │   ├── typescript.md
+│   │   ├── javascript.md
+│   │   ├── node.md
+│   │   ├── react.md
+│   │   └── python.md
+│   └── assets/templates/
+│       ├── task-entry.md
+│       ├── test-plan.md
+│       ├── repeated-task-checklist.md
+│       ├── changelog-entry.md
+│       └── project-context.md
+├── metacoding-interview/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+├── metacoding-tdd/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+├── metacoding-review/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+└── metacoding-debug/
+    ├── SKILL.md
+    └── agents/openai.yaml
 ```
 
-The installed skill preserves the original `metacoding` workflow intent:
+Claude Code and Antigravity get the same folders without the Codex-only `agents/openai.yaml` files.
+
+The workflow skill runs these steps in order:
 
 1. Ground in the repo and look up facts before asking questions.
-2. Interview the user on open decisions and confirm scope before changing code.
-3. Define test intent before implementation.
-4. Execute one bounded task at a time.
-5. Verify with tests and direct checks.
+2. Interview the user on open decisions and confirm scope before changing code (`metacoding-interview`).
+3. Build test-first (`metacoding-tdd`, or `metacoding-debug` for a bug with an unknown cause).
+4. Verify with tests and direct checks.
+5. Review the diff against the scope and the repo's standards (`metacoding-review`).
 6. Update docs or status artifacts that materially changed.
 7. Close with a VCS handoff or completion confirmation.
 
@@ -86,10 +90,12 @@ The `metacoding-workflow` skill applies a strict operating contract for developm
 1. Repository grounding before planning.
 2. Scope interview that ends in a confirmed scope summary.
 3. Mandatory TDD sequence.
-4. Single-task execution with scope control.
-5. Verification through targeted checks.
+4. Verification through targeted checks.
+5. Review against scope and standards.
 6. MECE artifact updates.
 7. Explicit closure with handoff or VCS action.
+
+The task stays bounded throughout: one active task, with unrelated requests queued.
 
 ### Scope Interview
 
@@ -104,12 +110,27 @@ If you tell it to proceed without questions, it lists the unasked decisions as a
 
 ### Mandatory TDD Sequence
 
-For testable changes, the enforced order is:
+For testable changes, `metacoding-tdd` enforces this order:
 
-1. Define and document test intent before implementation.
-2. Write or identify a failing test first.
+1. List the behaviors the change must prove, starting from the test intent in the scope summary.
+2. Take one behavior: write its test and watch it fail.
 3. Implement the minimum production code to pass.
-4. Refactor only after the failing-to-passing loop is complete.
+4. Move to the next behavior. Refactor only after the listed behaviors are green.
+
+Tests go through public interfaces, and expected values come from a source other than the code under test.
+
+### Review
+
+Before closing, `metacoding-review` checks the diff on two separate axes:
+
+- **Scope:** anything missing, extra, wrong, or unproven compared with the confirmed scope summary.
+- **Standards:** breaks with the repo's documented rules, departures from neighbouring code, and leftovers such as debug output.
+
+Where the agent supports subagents, each axis is reviewed in a fresh context that sees only the diff and what that axis compares it with.
+
+### Debugging
+
+For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test.
 
 ### Scope and Task-Switching Rules
 
@@ -135,6 +156,7 @@ A task is considered complete only when all of the following are true:
 - Implemented behavior matches the agreed scope.
 - Mandatory TDD was followed, or an explicit exception was recorded.
 - Relevant checks were run, or an explicit limitation was recorded.
+- Review findings were fixed, accepted, or listed as follow-ups.
 - Changed artifacts were updated, or a conscious deferral was documented.
 - The handoff includes outcome, verification status, and remaining risks.
 
@@ -172,22 +194,23 @@ metacoding update --dry-run --strict
 metacoding update --force
 ```
 
-- `update` syncs the installed skill with the packaged version.
+- `update` syncs the installed skills with the packaged version, and adds any packaged skill the install lacks.
 - `update --vendor <vendor>` syncs or validates only one installed vendor variant.
 - `update --vendor all` syncs or validates all installed vendor variants explicitly.
-- `update --dry-run` validates the installed skill without changing files.
-- `update --force` overwrites local edits inside the installed skill directory.
+- `update --dry-run` validates the installed skills without changing files.
+- `update --force` overwrites local edits inside the installed skill directories.
 
 ## Using the Skill
 
-After installation, point your coding agent at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`.
+After installation, point your coding agent at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-interview` or `/metacoding-review` when you want only that step.
 
 The skill will:
 
 - inspect the repo, then interview you on the open decisions with a recommended answer for each
 - wait for you to confirm the scope summary before changing files
 - keep work scoped to one bounded task
-- push test intent ahead of production edits
+- build test-first, one behavior at a time
+- review the diff against the agreed scope before closing
 - fall back to bundled templates when the repo lacks workflow artifacts
 - produce a commit-ready handoff when git actions are unavailable or out of scope
 
@@ -201,7 +224,7 @@ Run `metacoding update` in a project with the old layout to migrate it. The upda
 
 ### Editor instruction files
 
-This package no longer treats GitHub Copilot or Cursor instruction files as the primary product. The canonical content lives under `skills/metacoding-workflow/`, and the CLI now renders vendor-specific installs for Codex, Claude Code, or Antigravity from that shared bundle.
+This package no longer treats GitHub Copilot or Cursor instruction files as the primary product. The canonical content lives under `skills/`, one folder per skill, and the CLI now renders vendor-specific installs for Codex, Claude Code, or Antigravity from those shared skills.
 
 ## Development
 

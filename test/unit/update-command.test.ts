@@ -184,7 +184,7 @@ describe('UpdateCommand', () => {
       await fs.pathExists(
         path.join(
           workspace,
-          '.claude/skills/metacoding-workflow/references/interview.md'
+          '.claude/skills/metacoding-interview/SKILL.md'
         )
       )
     ).toBe(true);
@@ -206,11 +206,169 @@ describe('UpdateCommand', () => {
     ).toBe('legacy agent with local edit');
     expect(
       await fs.readFile(path.join(workspace, '.gitignore'), 'utf8')
-    ).toContain('.claude/skills/metacoding-workflow/');
+    ).toContain('.claude/skills/metacoding-*/');
 
     await expect(
       update.execute({ dryRun: true, strict: true })
     ).resolves.toBeUndefined();
+  });
+
+  const vendorSkillsDirs = [
+    ['codex', '.codex/skills'],
+    ['claude-code', '.claude/skills'],
+    ['antigravity', '.agents/skills'],
+  ] as const;
+  const companionSkills = [
+    'metacoding-interview',
+    'metacoding-tdd',
+    'metacoding-review',
+    'metacoding-debug',
+  ];
+
+  test.each(vendorSkillsDirs)(
+    'adds companion skills to a %s install that only has the workflow skill',
+    async (vendor, skillsDir) => {
+      const workspace = await createTempWorkspace(`metacoding-update-companions-${vendor}`);
+      process.chdir(workspace);
+
+      const init = new InitCommand();
+      await init.execute({ template: 'general', vendor, force: true });
+
+      const companions = companionSkills.map((skill) =>
+        path.join(workspace, skillsDir, skill)
+      );
+      for (const companion of companions) {
+        await fs.remove(companion);
+      }
+
+      const update = new UpdateCommand();
+      await expect(update.execute({ dryRun: true })).rejects.toThrow(
+        `4 required ${vendor} skill files are missing`
+      );
+
+      await update.execute({});
+
+      for (const companion of companions) {
+        expect(await fs.readFile(path.join(companion, 'SKILL.md'), 'utf8')).toContain(
+          `name: ${path.basename(companion)}\n`
+        );
+      }
+      await expect(update.execute({ dryRun: true })).resolves.toBeUndefined();
+    }
+  );
+
+  test.each(companionSkills)(
+    'dry-run fails when only %s is missing',
+    async (skill) => {
+      const workspace = await createTempWorkspace(`metacoding-validate-${skill}`);
+      process.chdir(workspace);
+
+      const init = new InitCommand();
+      await init.execute({ template: 'general', force: true });
+      await fs.remove(path.join(workspace, '.codex/skills', skill, 'SKILL.md'));
+
+      const update = new UpdateCommand();
+      await expect(update.execute({ dryRun: true })).rejects.toThrow(
+        '1 required codex skill files are missing'
+      );
+    }
+  );
+
+  test('force update upgrades an older install with changed workflow files', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-older');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+
+    const skillsDir = path.join(workspace, '.codex/skills');
+    const rulesFile = path.join(
+      skillsDir,
+      'metacoding-workflow/references/workflow-rules.md'
+    );
+    await fs.writeFile(rulesFile, 'rules from an older release', 'utf8');
+    for (const skill of companionSkills) {
+      await fs.remove(path.join(skillsDir, skill));
+    }
+
+    const update = new UpdateCommand();
+    await update.execute({ force: true });
+
+    expect(await fs.readFile(rulesFile, 'utf8')).toContain('`metacoding-review` skill');
+    for (const skill of companionSkills) {
+      expect(await fs.pathExists(path.join(skillsDir, skill, 'SKILL.md'))).toBe(true);
+    }
+    await expect(update.execute({ dryRun: true })).resolves.toBeUndefined();
+  });
+
+  test('backs up every installed skill before syncing', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-backup');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+
+    const update = new UpdateCommand();
+    await update.execute({});
+
+    const [backupName] = await fs.readdir(path.join(workspace, '.backup'));
+    for (const skill of ['metacoding-workflow', ...companionSkills]) {
+      expect(
+        await fs.readFile(
+          path.join(
+            workspace,
+            '.backup',
+            backupName as string,
+            '.codex/skills',
+            skill,
+            'SKILL.md'
+          ),
+          'utf8'
+        )
+      ).toContain(`name: ${skill}\n`);
+    }
+  });
+
+  test('fills in gitignore patterns that an older install section lacks', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-gitignore');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+
+    const gitignorePath = path.join(workspace, '.gitignore');
+    await fs.writeFile(
+      gitignorePath,
+      '# metacoding: AI coding assistant exclusions\n.codex/skills/metacoding-workflow/\n.backup/\n',
+      'utf8'
+    );
+
+    const update = new UpdateCommand();
+    await update.execute({});
+    await update.execute({});
+
+    const gitignore = await fs.readFile(gitignorePath, 'utf8');
+    for (const agentDir of ['.codex', '.claude', '.agents']) {
+      expect(
+        gitignore.split('\n').filter((line) => line === `${agentDir}/skills/metacoding-*/`)
+      ).toHaveLength(1);
+    }
+  });
+
+  test('leaves a gitignore without a metacoding section alone', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-gitignore-optout');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+
+    const gitignorePath = path.join(workspace, '.gitignore');
+    await fs.writeFile(gitignorePath, 'node_modules/\n', 'utf8');
+
+    const update = new UpdateCommand();
+    await update.execute({});
+
+    expect(await fs.readFile(gitignorePath, 'utf8')).toBe('node_modules/\n');
   });
 
   test('keeps legacy Claude Code files when backups are disabled', async () => {
