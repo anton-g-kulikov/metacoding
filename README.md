@@ -139,7 +139,7 @@ For the last ticket of a task with several, the scope axis runs once more on the
 
 ### Code Design
 
-`metacoding-design` decides the shape of code. The workflow uses it in two places: while shaping, when the solution adds a module or changes an interface, and while building, when the interface to test through is unclear or the code is restructured after the tests are green.
+`metacoding-design` decides the shape of code. The workflow uses it in two places: while shaping, when the solution adds a module or changes an interface, and while building, when the interface to test through is unclear or missing, or the code is restructured after the tests are green.
 
 - It uses four terms with fixed meanings: module, interface, depth, and seam.
 - It prefers a deep module, one with a lot of behavior behind a small interface, and counts everything a caller must know as the interface.
@@ -148,7 +148,7 @@ For the last ticket of a task with several, the scope axis runs once more on the
 
 Three of its seven rules come with a good and a bad example. The examples are pseudocode, and the rules name no language.
 
-You can also run it on its own, on a module or an area you name. For new code it proposes the interface and its seams. For existing code it lists numbered candidates for change, each with what is wrong, the proposed change, and what happens to the tests, and says which one it would do first. It changes no file: a proposal you accept, or a candidate you pick, becomes a task of its own, with its scope agreed before any file changes.
+You can also run it on its own, on a module or an area you name. For new code it proposes the interface, and a seam only where one is needed. For existing code it lists numbered candidates for change, each with what is wrong, the proposed change, and what happens to the tests, and says which one it would do first. It changes no file: a proposal you accept, or a candidate you pick, becomes a task of its own, with its scope agreed before any file changes.
 
 ### Debugging
 

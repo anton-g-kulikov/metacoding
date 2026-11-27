@@ -2035,3 +2035,26 @@ describe('installed skill content: the design skill on its own', () => {
     );
   });
 });
+
+describe('installed skill content: design smells in the review', () => {
+  test('the smell list of review has the two design smells, and nothing else handles them', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const list = review.slice(
+      review.indexOf('Code smells, looked for in the diff:'),
+      review.indexOf('A smell that also breaks the agreed scope')
+    );
+    const smells = [
+      'A function or module that only passes calls on, where its callers could call the target directly and nothing would get harder.',
+      'An interface or abstract type with one implementation, which nothing swaps for another, not even a test.',
+    ];
+
+    expect(review).toContain('Code smells, looked for in the diff:');
+    expect(review).toContain('A smell that also breaks the agreed scope');
+    for (const smell of smells) {
+      expect(list).toContain(`- ${smell}\n`);
+      // Stated once, in the list: the follow-up rule for every smell covers it.
+      expect(review.indexOf(smell)).toBe(review.lastIndexOf(smell));
+    }
+  });
+});

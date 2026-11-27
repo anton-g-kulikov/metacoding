@@ -1,6 +1,6 @@
 # Spec: Design skill
 
-- Status: in progress
+- Status: done
 
 ## Goal
 
@@ -72,6 +72,11 @@ Changed on 2026-11-28, found in the review of ticket 2:
 - An accepted proposal for new code becomes a task of its own, like a picked candidate, and the skill says to agree the task's scope with the user before any file changes. Without that, a pick could be read as the go to edit.
 - When existing code has no candidate for change, the skill says so.
 
+Changed on 2026-11-28, found in the review of ticket 3:
+
+- The two smells are worded so that a reviewer can point at them in a diff and a thin wrapper that exists for a reason is not flagged: a function or module that only passes calls on, where its callers could call the target directly and nothing would get harder; and an interface or abstract type with one implementation, which nothing swaps for another, not even a test.
+- The sentence that introduces the companion skills in the workflow skill says they own the method of single steps "or of one part of a step", because the design skill owns no whole step.
+
 ## Decisions made
 
 - The guidance is a new companion skill, `metacoding-design`. A reference file of the workflow skill is out of reach when a companion runs alone, and paragraphs in three skills would state the same rules three times.
@@ -108,7 +113,7 @@ Changed on 2026-11-28, before the build: the ticket "The workflow says when to u
   - Success criteria: the third success criterion above.
   - Test intent: it works on what the user names and asks when nothing is named; new code gets an interface and its seams; existing code gets numbered candidates with a first pick; tests move to the new interface; no file is changed; a picked candidate becomes a task to shape.
   - Blocked by: 1.
-- [ ] **3. Two design smells in the review**
+- [x] **3. Two design smells in the review**
   - Success criteria: the fifth success criterion above.
   - Test intent: the smell list has both lines, and they fall under the existing follow-up rule.
   - Blocked by: none.
