@@ -39,12 +39,12 @@ Options:
 - `--backup`: create a backup before updating
 - `--force`: overwrite local edits in the installed skills
 - `--dry-run`: validate instead of mutating
-- `--strict`: with `--dry-run`, also require every metacoding exclusion pattern in `.gitignore`, and name the ones that are missing
+- `--strict`: with `--dry-run`, also require every metacoding exclusion pattern in `.gitignore`; the error names the missing ones and says to add them
 
 Behavior:
 
 - adds any packaged skill the install lacks
-- rebuilds `references/project-context.md` from the project name, description, tech stack and project type that the installed file holds, and detects only a value it cannot find there. When it migrates the 2.0.x Claude Code layout, it reads them from that layout's `project-context.md`
+- rebuilds `references/project-context.md` from the project name, description, tech stack and project type that the installed file holds. A name, tech stack or project type it cannot find there is detected, and a missing description gets the default. When it migrates the 2.0.x Claude Code layout, it reads them from that layout's `project-context.md`
 - migrates the 2.0.x Claude Code subagent layout to the skill layout, removing the old files once they are backed up
 - removes the files an earlier version installed and this one no longer ships, once they are backed up, and a skill folder they leave empty
 - fills in the patterns an existing metacoding `.gitignore` section lacks

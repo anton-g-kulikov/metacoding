@@ -272,7 +272,8 @@ export class UpdateCommand {
       );
       if (missingPatterns.length > 0) {
         throw new Error(
-          `Validation failed: .gitignore is missing metacoding exclusions: ${missingPatterns.join(', ')}.`
+          `Validation failed: .gitignore is missing metacoding exclusions: ${missingPatterns.join(', ')}. ` +
+            'Add these lines to .gitignore.'
         );
       }
     }

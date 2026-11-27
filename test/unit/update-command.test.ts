@@ -453,6 +453,26 @@ describe('UpdateCommand', () => {
     );
   });
 
+  test('strict dry-run says how to fix a gitignore without a metacoding section', async () => {
+    const workspace = await createTempWorkspace('metacoding-validate-strict-nosection');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+    const gitignorePath = path.join(workspace, '.gitignore');
+    await fs.writeFile(gitignorePath, 'node_modules/\n', 'utf8');
+
+    const update = new UpdateCommand();
+    await update.execute({});
+
+    expect(await fs.readFile(gitignorePath, 'utf8')).toBe('node_modules/\n');
+    await expect(update.execute({ dryRun: true, strict: true })).rejects.toThrow(
+      'Validation failed: .gitignore is missing metacoding exclusions: ' +
+        '.codex/skills/metacoding-*/, .claude/skills/metacoding-*/, ' +
+        '.agents/skills/metacoding-*/, .backup/. Add these lines to .gitignore.'
+    );
+  });
+
   test('strict dry-run fails when there is no gitignore', async () => {
     const workspace = await createTempWorkspace('metacoding-validate-strict-nofile');
     process.chdir(workspace);

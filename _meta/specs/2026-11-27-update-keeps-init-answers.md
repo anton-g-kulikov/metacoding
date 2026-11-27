@@ -1,6 +1,6 @@
 # Spec: Update keeps the init answers
 
-- Status: in progress
+- Status: done
 
 ## Goal
 
@@ -22,6 +22,10 @@
 - Unit tests for the update command, init command and skill manager.
 - README, CHANGELOG, `_meta/api-design.md`, `_meta/system-documentation.md`.
 - This task's own records: this spec and one decision record.
+- Added on 2026-11-27, found in the review of ticket 1 and needed for the first two success criteria:
+  - `update` also reads the answers from the project context of a 2.0.x Claude Code install when it migrates that layout.
+  - `init` and `update` share one set of default test frameworks and build tools per project type, in `src/services/skill-manager.ts`, with the new shared type in `src/types/index.ts`.
+  - A `$` sequence in an answer is written as typed, at `init` too.
 
 ## Out of scope
 
@@ -63,6 +67,6 @@ Every behavior in the success criteria gets a unit test, written first and seen 
 - [x] **1. Update keeps the init answers**
   - Success criteria: the first five success criteria above.
   - Test intent: an install with its own name, description, tech stack and type keeps all four through `update`; an unedited install produces no conflict; `--template` overrides the type and what follows from it; a missing file and a missing line each fall back to detection; a fresh install has the new default description.
-- [ ] **2. The strict error says how to fix it**
+- [x] **2. The strict error says how to fix it**
   - Success criteria: the last two success criteria above.
   - Test intent: the strict error on a `.gitignore` with no metacoding section contains the missing patterns and the instruction; `update` leaves that file unchanged.

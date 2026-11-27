@@ -31,3 +31,5 @@
 - Have `init` write the answers to a separate config file that `update` reads.
 
 **Why.** Rebuilding from detection replaced what the user entered and reported the file as locally edited on every update. A config file would be the cleaner store, but installs made before it existed have only `project-context.md`, so they would need a migration that reads that file anyway. Reading it directly fixes every existing install with no new file. The cost is that renaming one of the four labels in the template now needs a reader for the old label.
+
+**Amended 2026-11-27.** "Every existing install" was too wide. A 2.0.x Claude Code install keeps its project context in `.claude/metacoding-workflow/references/`, not in the skill folder, so `update` also reads that file when it migrates the layout. The labels are the same in both places.

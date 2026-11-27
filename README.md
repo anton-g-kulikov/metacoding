@@ -212,7 +212,7 @@ metacoding update --force
 - `update --vendor <vendor>` syncs or validates only one installed vendor variant.
 - `update --vendor all` syncs or validates all installed vendor variants explicitly.
 - `update --dry-run` validates the installed skills without changing files.
-- `update --dry-run --strict` also fails when `.gitignore` lacks a metacoding exclusion pattern, and names the missing ones.
+- `update --dry-run --strict` also fails when `.gitignore` lacks a metacoding exclusion pattern. The error names the missing patterns for you to add; `update` does not add a metacoding section to a `.gitignore` that has none.
 - `update --force` overwrites local edits inside the installed skill directories.
 
 ## Using the Skill

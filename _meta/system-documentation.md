@@ -21,7 +21,7 @@ The canonical source of truth lives in [`skills/`](../skills), one folder per sk
 1. Validate that the skills are already installed.
 2. Detect installed vendor variants, or target one explicit vendor with `--vendor`.
 3. Optionally back up the installed skill folders into `.backup/<timestamp>/`.
-4. Rebuild the packaged file set. The project name, description, tech stack and project type come from the installed `references/project-context.md` of each vendor, or from the one in the 2.0.x Claude Code bundle when that layout is being migrated; a value it lacks comes from project detection, and `--template` overrides the project type.
+4. Rebuild the packaged file set. The project name, description, tech stack and project type come from the installed `references/project-context.md` of each vendor, or from the one in the 2.0.x Claude Code bundle when that layout is being migrated; a name, tech stack or project type it lacks comes from project detection, a missing description gets the default, and `--template` overrides the project type.
 5. Detect local edits inside the installed skills.
 6. Resolve conflicts interactively or overwrite them with `--force`.
 7. Sync the installed skills to the packaged version, adding any packaged skill the install lacks.

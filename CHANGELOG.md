@@ -34,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metacoding init` and `metacoding update` fill in exclusion patterns that an existing metacoding `.gitignore` section lacks
 - The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
 - `metacoding update --dry-run` requires each companion skill's `SKILL.md` and, for Codex, checks the `agents/openai.yaml` of every skill instead of the workflow skill's alone, and names a file that is not valid YAML
-- `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns. It used to check only for the section header
+- `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns for the user to add. It used to check only for the section header
 - `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
 - CLI help and messages say "skills" where they said "workflow skill"
 - The default project description for a new install is "A project using the metacoding skills"
