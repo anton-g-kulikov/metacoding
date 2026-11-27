@@ -1,6 +1,6 @@
 ---
 name: metacoding-workflow
-description: Run a task through the full metacoding workflow, from repo grounding and a scope interview through mandatory TDD, verification, review, and MECE doc updates to a clean handoff. Use this skill for feature work, bug fixes, or refactors where the user wants strict, gated execution with single-task focus rather than ad hoc coding.
+description: Run a task through the full metacoding workflow, from repo grounding and a scope interview through mandatory TDD, verification, review, and MECE doc updates to a clean handoff. Use this skill for feature work, bug fixes, refactors, or reviews where the user wants strict, gated execution with single-task focus rather than ad hoc coding.
 ---
 
 # Metacoding Workflow
@@ -38,8 +38,6 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 5. **Review.** Use `metacoding-review` on the diff, and fix what it finds.
 6. **Update artifacts.** Update the one document that owns each concept that changed, following the MECE rules in `references/repository-organization.md`.
 7. **Close.** Finish with a commit, a commit-ready handoff, or an explicit completion confirmation, as `references/workflow-rules.md` describes.
-
-Work through the steps in order and continue to the next one without waiting, except where a step waits for the user.
 
 ## Rules Between Steps
 
