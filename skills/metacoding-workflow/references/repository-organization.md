@@ -16,7 +16,7 @@ Prefer a structure equivalent to:
 ```text
 /src        # application and library source code
 /test       # automated tests and fixtures
-/_meta      # system, architecture, and API docs, the glossary, decision records, and specs
+/_meta      # system, architecture, and API docs, the glossary, decision records, coding standards, and specs
 ```
 
 Within source and tests:
@@ -46,6 +46,8 @@ Each durable concept should have one primary home.
   - architectural trade-offs and rationale
 - `/_meta/glossary.md`
   - the project's own terms and what they mean
+- `/_meta/coding-standards.md`
+  - the repo's rules for writing code, tests, and docs that no automated check enforces
 - `/_meta/specs/`
   - one file per task that needs a spec: its confirmed scope summary and its tickets
 
@@ -82,6 +84,8 @@ The `metacoding-shape` skill decides which tasks need a spec, writes it once the
 
 A decision reaches this file through the scope summary: the `metacoding-shape` skill marks it `[record]` and writes the entry once the user confirms the summary, before the build starts. The skill holds the entry format and how to amend an entry.
 
+A retro can add an entry too: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves.
+
 Create the file with the first such entry. If the repo already keeps decision records somewhere else, use that place.
 
 ## Glossary
@@ -93,10 +97,18 @@ Create the file with the first such entry. If the repo already keeps decision re
 ```
 
 - Read it while grounding, and use its terms in code, tests, docs, and questions to the user.
-- Add or correct a term once the scope summary that lists it is confirmed.
+- Add or correct a term once the scope summary that lists it is confirmed, or once the user approves a lesson from a retro that proposes it.
 - Keep it to meanings. Implementation detail belongs in the system documentation.
 - If the repo already keeps a glossary somewhere else, use that one.
 - If the repo has no glossary, follow `references/platform-adaptation.md`.
+
+## Coding Standards
+
+`/_meta/coding-standards.md` holds the repo's rules for writing code, tests, and docs that no automated check enforces.
+
+- A rule reaches this file through a retro: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves. The skill holds the method, and prefers an automated check to a rule.
+- If the repo already keeps its standards somewhere else, use that place.
+- If the repo has no such file, follow `references/platform-adaptation.md`.
 
 ## Temporary File Management
 

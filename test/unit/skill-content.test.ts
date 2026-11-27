@@ -279,12 +279,12 @@ describe('installed skill content: durable artifacts', () => {
     );
     const glossary = layout.slice(
       layout.indexOf('## Glossary'),
-      layout.indexOf('## Temporary File Management')
+      layout.indexOf('## Coding Standards')
     );
 
     expect(layout).toContain('## Decision Records');
     expect(layout).toContain('## Glossary');
-    expect(layout).toContain('## Temporary File Management');
+    expect(layout).toContain('## Coding Standards');
     expect(decisions).toContain('writes the entry once the user confirms the summary');
     expect(decisions).toContain('holds the entry format and how to amend an entry');
     expect(decisions).not.toContain('once the work is done');
@@ -298,11 +298,11 @@ describe('installed skill content: durable artifacts', () => {
     const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
     const section = adaptation.slice(
       adaptation.indexOf('## Missing Glossary or Decision Records'),
-      adaptation.indexOf('## Missing Git Context')
+      adaptation.indexOf('## Missing Coding Standards')
     );
 
     expect(adaptation).toContain('## Missing Glossary or Decision Records');
-    expect(adaptation).toContain('## Missing Git Context');
+    expect(adaptation).toContain('## Missing Coding Standards');
     expect(section).toContain('propose `/_meta/glossary.md` in the scope summary');
     expect(section).toContain('once the summary is confirmed');
   });
@@ -2243,5 +2243,72 @@ describe('installed skill content: the retro', () => {
     expect(standard).toContain(
       '- after the last ticket is closed, the retro has run and its lessons, if any, have been put to the user'
     );
+  });
+});
+
+describe('installed skill content: a home for standards', () => {
+
+  test('the layout reference lists the coding standards among the document homes', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const homes = sectionOf(layout, '## MECE Documentation Architecture', '## Project Map');
+
+    expect(homes).toContain(
+      "- `/_meta/coding-standards.md`\n  - the repo's rules for writing code, tests, and docs that no automated check enforces"
+    );
+  });
+
+  test('the layout reference says how a rule reaches the coding standards', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const section = sectionOf(layout, '## Coding Standards', '## Temporary File Management');
+
+    expect(layout.indexOf('## Coding Standards')).toBeGreaterThan(layout.indexOf('## Glossary'));
+    expect(section).toContain(
+      "`/_meta/coding-standards.md` holds the repo's rules for writing code, tests, and docs that no automated check enforces."
+    );
+    expect(section).toContain(
+      'A rule reaches this file through a retro: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves.'
+    );
+    expect(section).toContain(
+      'The skill holds the method, and prefers an automated check to a rule.'
+    );
+    expect(section).toContain(
+      'If the repo already keeps its standards somewhere else, use that place.'
+    );
+    expect(section).toContain(
+      'If the repo has no such file, follow `references/platform-adaptation.md`.'
+    );
+  });
+
+  test('a retro is a second route for a decision record and a glossary term', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const decisions = sectionOf(layout, '## Decision Records', '## Glossary');
+    const glossary = sectionOf(layout, '## Glossary', '## Coding Standards');
+
+    expect(decisions).toContain(
+      'A retro can add an entry too: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves.'
+    );
+    expect(glossary).toContain(
+      'Add or correct a term once the scope summary that lists it is confirmed, or once the user approves a lesson from a retro that proposes it.'
+    );
+  });
+
+  test('a repo with no standards file gets one proposed with the first rule', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const section = sectionOf(adaptation, '## Missing Coding Standards', '## Missing Git Context');
+
+    expect(adaptation.indexOf('## Missing Coding Standards')).toBeGreaterThan(
+      adaptation.indexOf('## Missing Glossary or Decision Records')
+    );
+    expect(section).toContain(
+      'If the repo has no file that holds its standards, such as a contributor doc, a style doc, or an agent instruction file:'
+    );
+    expect(section).toContain(
+      '- propose `/_meta/coding-standards.md` with the first new rule a retro puts to the user, and create it with the first rule the user approves'
+    );
+    expect(section).toContain('- leave it uncreated until there is a rule to put in it');
   });
 });

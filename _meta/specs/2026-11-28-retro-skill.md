@@ -1,6 +1,6 @@
 # Spec: Retro skill
 
-- Status: in progress
+- Status: done
 
 ## Goal
 
@@ -92,6 +92,6 @@ One content test per rule, written first and seen failing, each tied to its head
 - [x] **1. The retro skill, installed and called by the workflow**
   - Success criteria: the first, second, third and fifth success criteria above.
   - Test intent: `update` adds the skill to an install that lacks it and reports the right count of missing files per vendor; the skill text states each of the seven parts under its own heading; it does not point at `references/` or `assets/`; the Codex metadata has a display name and a default prompt; the Tickets section says to run the retro once after the last ticket, and the Completion Standard names it.
-- [ ] **2. A home for standards in the layout**
+- [x] **2. A home for standards in the layout**
   - Success criteria: the fourth success criterion above.
   - Test intent: the layout reference lists `/_meta/coding-standards.md` among the document homes and says what it holds; the platform-adaptation reference says to propose the file when the repo has no standards file, and to create it once the user approves. Added on 2026-11-28: the layout reference's rules for decision records and for the glossary each name the retro as a second route.

@@ -27,6 +27,13 @@ If the repo has no decision records:
 
 - create `/_meta/architecture-decisions.md` with the first decision the user confirmed as `[record]`
 
+## Missing Coding Standards
+
+If the repo has no file that holds its standards, such as a contributor doc, a style doc, or an agent instruction file:
+
+- propose `/_meta/coding-standards.md` with the first new rule a retro puts to the user, and create it with the first rule the user approves
+- leave it uncreated until there is a rule to put in it
+
 ## Missing Git Context
 
 If git is unavailable, intentionally out of scope, or the user does not want commits:

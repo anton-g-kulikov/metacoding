@@ -199,11 +199,14 @@ The workflow follows MECE documentation ownership to avoid duplication:
 - System documentation stays evergreen and factual.
 - Only the artifact that owns a concept is updated.
 
-It keeps three kinds of document that make the next session better informed:
+It keeps four kinds of document that make the next session better informed:
 
 - **Glossary** (`/_meta/glossary.md`): the project's own terms, one line each. The agent reads it while grounding. A term settled during shaping is listed in the scope summary and written once you confirm it.
 - **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, and they are written once you confirm it, before the build. If the build proves one wrong, the entry is amended.
 - **Specs** (`/_meta/specs/<date>-<slug>.md`): the confirmed scope summary of a task with more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo has a tracker, and a finished spec stays as the record of what was agreed.
+- **Coding standards** (`/_meta/coding-standards.md`): the repo's rules that no automated check enforces. A rule is added when you approve a lesson from a retro.
+
+A retro can also propose a glossary term or a decision record, which is written once you approve it.
 
 These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps specs keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the spec, and the tests. A repo that already keeps one gets it updated as before.
 
