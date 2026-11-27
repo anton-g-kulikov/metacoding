@@ -6,15 +6,15 @@ These fallbacks come after the project map, `.metacoding/project.md`: where it n
 
 If the repo has no tracker, such as issues or a task list it keeps current:
 
-- the tickets of a spec are a checklist in the spec, which goes to `/_meta/specs/<date>-<slug>.md` unless the repo keeps specs elsewhere
-- for a task that needs no spec, the confirmed scope summary in the conversation is the record
+- the tickets of a task spec are a checklist in the task spec, which goes to `/_meta/specs/tasks/<date>-<slug>.md` unless the repo keeps task specs elsewhere
+- for a task that needs no task spec, the confirmed scope summary in the conversation is the record
 - write a task entry in the shape of `assets/templates/task-entry.md` only when the user asks for a durable one, in the place they name
 
 ## Missing Test Documentation
 
 If the repo does not track test intent in docs:
 
-- the test intent in the confirmed scope summary, and in the spec when the task has one, is the record, together with the tests themselves
+- the test intent in the confirmed scope summary, and in the task spec when the task has one, is the record, together with the tests themselves
 - leave it there; a separate test document is kept only where the repo already has one
 
 ## Missing Glossary or Decision Records

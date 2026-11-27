@@ -45,8 +45,8 @@ The metacoding skills can be installed as a plugin in Claude Code, Codex and Ant
 
 ## Decisions made
 
-- The repo root is the plugin for all three agents, with one manifest per agent and the version taken from `package.json`. Recorded in [architecture-decisions.md](../architecture-decisions.md).
-- `project-context.md` is optional for the workflow skill, and the CLI keeps writing it. Recorded in [architecture-decisions.md](../architecture-decisions.md).
+- The repo root is the plugin for all three agents, with one manifest per agent and the version taken from `package.json`. Recorded in [architecture-decisions.md](../../architecture-decisions.md).
+- `project-context.md` is optional for the workflow skill, and the CLI keeps writing it. Recorded in [architecture-decisions.md](../../architecture-decisions.md).
 - This task does not wait for the onboarding task. Whatever place onboarding picks for project facts changes one line of "Start Here".
 - The CLI stays unchanged as the second way to install.
 - The plugin and its marketplace are both named `metacoding`. The skills keep their names, so a plugin install shows them as `metacoding:metacoding-workflow` and so on.

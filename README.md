@@ -147,7 +147,7 @@ The workflow skill runs these steps in order:
 6. Update the docs that materially changed, and amend a decision record the build proved wrong.
 7. Close with a commit or a handoff, and say explicitly that the work is complete.
 
-Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next. When the workflow commits, the records that shaping writes are committed on their own before the first ticket, so a ticket's commit holds only that ticket's work. When a new session is asked to continue a task whose spec is still in progress, it starts at the first ticket not yet done, without shaping the task again.
+Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next. When the workflow commits, the records that shaping writes are committed on their own before the first ticket, so a ticket's commit holds only that ticket's work. When a new session is asked to continue a task with a task spec still in progress, it starts at the first ticket not yet done, without shaping the task again.
 
 ## Enforced Workflow
 
@@ -178,8 +178,8 @@ Then `metacoding-spec` turns the settled decisions into the agreed scope:
 - It writes the behavior as user stories, grouped by role: one "As a …, I want …, so that …" sentence per story, with Given/When/Then scenarios. Each scenario has an ID made of its feature area's prefix and a number, such as `UPDATE-4`. A task that changes nothing a role can observe, such as a refactor, gets success criteria and test intent instead.
 - It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, and names the scenarios it delivers. A small task stays one ticket.
 - It closes with a scope summary (goal, in and out of scope, solution, stories, decisions, terms, assumptions, tickets) and waits for your confirmation.
-- Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a spec; a smaller task gets none.
-- While a spec is in progress, a change to what it agreed is put to you as a decision and written into the spec, with its date, before it is built.
+- Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a task spec; a smaller task gets none.
+- While a task spec is in progress, a change to what it agreed is put to you as a decision and written into the task spec, with its date, before it is built.
 
 If you tell it to proceed without questions, it lists the unasked decisions as assumptions in the scope summary and continues; your instruction counts as the confirmation.
 
@@ -203,7 +203,7 @@ Before closing, `metacoding-review` checks the diff on two separate axes:
 
 Where the agent supports subagents, each axis is reviewed in a fresh context that sees only the diff and what that axis compares it with.
 
-For the last ticket of a task with several, the scope axis runs once more on the whole change against the spec, because tickets can each pass while the task's goal is still missed. The spec is then marked done.
+For the last ticket of a task with several, the scope axis runs once more on the whole change against the task spec, because tickets can each pass while the task's goal is still missed. The task spec is then marked done.
 
 ### Code Design
 
@@ -263,16 +263,17 @@ The workflow follows MECE documentation ownership to avoid duplication:
 - System documentation stays evergreen and factual.
 - Only the artifact that owns a concept is updated.
 
-It keeps four kinds of document that make the next session better informed:
+It keeps five kinds of document that make the next session better informed:
 
 - **Glossary** (`/_meta/glossary.md`): the project's own terms, one line each. The agent reads it while grounding. A term settled during shaping is listed in the scope summary and written once you confirm it.
 - **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, and they are written once you confirm it, before the build. If the build proves one wrong, the entry is amended.
-- **Specs** (`/_meta/specs/<date>-<slug>.md`): the confirmed scope summary of a task with more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo has a tracker, and a finished spec stays as the record of what was agreed.
+- **Task specs** (`/_meta/specs/tasks/<date>-<slug>.md`): the confirmed scope summary of a task with more than one ticket or a decision marked `[record]`. The tickets are a checklist in the task spec unless the repo has a tracker, and a finished task spec stays as the record of what was agreed.
+- **Feature specs** (`/_meta/specs/<area>.md`): the living document of one feature area: how it works today, and its user stories by role with their scenarios. When a ticket is done, its scenarios are written into the feature spec of their area, so it says only what is built and has a test. A feature spec starts with the first task that delivers a scenario in its area; older behavior is not backfilled.
 - **Coding standards** (`/_meta/coding-standards.md`): the repo's rules that no automated check enforces. A rule is added when you approve a lesson from a retro.
 
 A retro can also propose a glossary term or a decision record, which is written once you approve it.
 
-These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps specs keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the spec, and the tests. A repo that already keeps one gets it updated as before.
+These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps documents of either kind keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the task spec, and the tests. A repo that already keeps one gets it updated as before.
 
 ### Completion Criteria
 
@@ -283,7 +284,7 @@ A task is considered complete only when all of the following are true:
 - Relevant checks were run, or an explicit limitation was recorded.
 - Review findings were fixed, accepted, or listed as follow-ups.
 - Changed artifacts were updated, or a conscious deferral was documented.
-- Every ticket is closed and, when the task has a spec, the spec is marked done.
+- Every ticket is closed and, when the task has a task spec, it is marked done.
 - The handoff includes outcome, verification status, and remaining risks.
 - After the last ticket is closed, the retro has run and its lessons, if any, have been put to you.
 
@@ -348,7 +349,7 @@ The workflow skill will:
 - review the diff against the agreed scope before closing
 - look back at the task after its last ticket, and propose lasting changes for its mistakes
 - read the project glossary and decision records, and keep them current
-- write a spec for a task with more than one ticket or a decision marked `[record]`
+- write a task spec for a task with more than one ticket or a decision marked `[record]`
 - produce a commit-ready handoff when git actions are unavailable or out of scope
 
 ## Migration Notes

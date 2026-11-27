@@ -16,7 +16,7 @@ The project map is the file `.metacoding/project.md`, at the same path in every 
 
 Where this repo keeps its records. Written by the `metacoding-onboard` skill; run it again to change a line.
 
-- Tracker: <GitHub issues, a file path, or none: the checklist in each spec>
+- Tracker: <GitHub issues, a file path, or none: the checklist in each task spec>
 - Specs: <folder>
 - Glossary: <file>
 - Decision records: <file or folder>
@@ -24,7 +24,7 @@ Where this repo keeps its records. Written by the `metacoding-onboard` skill; ru
 
 Keep the four labels as they are, so that a reader finds a place by its label. Write each path from the repo root, starting with `/`.
 
-The tracker line says where the repo tracks work: the tickets of a spec go there, and so does a request queued for later. A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each spec.
+The tracker line says where the repo tracks work: the tickets of a task spec go there, and so does a request queued for later. A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each task spec.
 
 ## 1. Look
 

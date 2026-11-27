@@ -25,13 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A default home for a repo's coding standards at `/_meta/coding-standards.md`: the rules that no automated check enforces. `metacoding-retro` proposes the file with the first new rule when the repo keeps its standards nowhere, and a retro can also add a glossary term or a decision record
 - User stories in the scope summary: `metacoding-spec` writes behavior a role can observe as stories grouped by role, each with Given/When/Then scenarios, in place of success criteria and test intent. Each scenario has an ID made of its feature area's prefix and a number, and each ticket names the scenarios it delivers. A task without such behavior keeps success criteria and test intent. A role is settled in the interview like any other term
 - A review step in the workflow, between verification and artifact updates
-- Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the spec
-- Resuming a task: grounding looks for a spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the spec as the agreed scope
-- A change to a spec in progress is confirmed by the user and written into the spec, with its date, before it is built
-- The records that shaping writes (glossary terms, decision records, the spec) are committed on their own before the build, when VCS work is in scope. So is a confirmed change to a spec in progress
+- Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the task spec
+- Resuming a task: grounding looks for a task spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the task spec as the agreed scope
+- A change to a task spec in progress is confirmed by the user and written into the task spec, with its date, before it is built
+- The records that shaping writes (glossary terms, decision records, the task spec) are committed on their own before the build, when VCS work is in scope. So is a confirmed change to a task spec in progress
 - A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
-- Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-spec` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
+- Feature specs at `/_meta/specs/<area>.md`: the living document of one feature area, with an ID prefix, a Solution section that says how the area works today, and its stories by role with their scenarios in `gherkin` blocks. When a ticket is done, its scenarios are written into the feature spec of their area; a changed scenario replaces the old text under its ID, and a removed one leaves with its test. A feature spec starts with the first task that delivers a scenario in its area, with no backfill
+- Task specs at `/_meta/specs/tasks/<date>-<slug>.md`: `metacoding-spec` writes the confirmed scope summary as a task spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the task spec unless the repo already has a tracker
 - A plugin install for Claude Code: the repo is a plugin and its own marketplace, so Claude Code installs the skills from it without the CLI. The plugin has the version of the npm package
 - A plugin install for Codex and for Antigravity, from the same repo and with the same version. Both follow the agents' documentation and are not yet tried on a real install
 
@@ -54,14 +55,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The default project description for a new install is "A project using the metacoding skills"
 - Installs skip `.DS_Store` files
 - `task-entry.md` now carries the scope summary fields, including the stories
-- The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
+- The confirmed scope of a task that needs no task spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
 - The workflow skill reads `references/project-context.md` only when it exists. Without the file, it finds the project's type, tech stack, and test and build commands in the repo, so the skills work in a plugin install
 - The workflow skill says that a companion skill's name carries the plugin's prefix in a plugin install, such as `metacoding:metacoding-shape`
 
 ### Removed
 
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
-- The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
+- The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a task spec instead
 - The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
 - The five language references (`references/typescript.md`, `javascript.md`, `node.md`, `react.md` and `python.md`) and the "Recommended References" section of `project-context.md`. The references restated the workflow rules in general terms, and the section repeated a list the skill already holds. `metacoding update` removes the copies an existing install has
 - The legacy `templates/` and `workflow/` folders from the 1.x instruction-file generator, which the package does not ship

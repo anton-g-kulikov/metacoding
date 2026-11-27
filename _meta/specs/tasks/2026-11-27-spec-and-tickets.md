@@ -39,15 +39,15 @@ Shape ends in a documented solution that is sliced into tickets, so the agreed s
 
 ## Decisions made
 
-- Specs and tickets are created even in a repo that tracks work nowhere. Recorded in [architecture-decisions.md](../architecture-decisions.md).
-- Decision records are written at the end of shape, not after the build. Recorded in [architecture-decisions.md](../architecture-decisions.md).
+- Specs and tickets are created even in a repo that tracks work nowhere. Recorded in [architecture-decisions.md](../../architecture-decisions.md).
+- Decision records are written at the end of shape, not after the build. Recorded in [architecture-decisions.md](../../architecture-decisions.md).
 - The unit is called "ticket"; "slice" stays a verb and the quality bar.
 - Slicing is part of `metacoding-shape`, not a new skill.
 - The workflow pauses between tickets.
 
 ## Terms
 
-Task, shape, spec, and ticket, as defined in [glossary.md](../glossary.md).
+Task, shape, spec, and ticket, as defined in [glossary.md](../../glossary.md).
 
 ## Assumptions
 

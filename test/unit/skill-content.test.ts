@@ -91,17 +91,17 @@ describe('installed skill content: durable artifacts', () => {
     expect(prescribed).toContain('`/_meta/specs/`');
     expect(prescribed).not.toContain('project-task-list.md');
     expect(prescribed).not.toContain('test-documentation.md');
-    expect(records).toContain('`metacoding-spec` skill decides which tasks need a spec');
-    expect(records).toContain('where the repo already keeps specs');
-    expect(records).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(records).toContain('`metacoding-spec` skill decides which tasks need a task spec');
+    expect(records).toContain('where the repo already keeps task specs');
+    expect(records).toContain('`/_meta/specs/tasks/<date>-<slug>.md`');
     expect(records).toContain("go to the repo's tracker when it keeps one current");
-    expect(records).toContain('checklist in the spec');
+    expect(records).toContain('checklist in the task spec');
     expect(records).toContain('do not create one');
     expect(layout).not.toContain('Create neither');
     expect(layout).not.toContain('test documentation belongs under `/test`');
   });
 
-  test('a repo without a tracker keeps the tickets as a checklist in the spec', async () => {
+  test('a repo without a tracker keeps the tickets as a checklist in the task spec', async () => {
     const { read } = await installFor('codex');
     const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
     const section = adaptation.slice(
@@ -111,9 +111,9 @@ describe('installed skill content: durable artifacts', () => {
 
     expect(adaptation).toContain('## Missing Task Tracking');
     expect(adaptation).toContain('## Missing Test Documentation');
-    expect(section).toContain('checklist in the spec');
-    expect(section).toContain('`/_meta/specs/<date>-<slug>.md`');
-    expect(section).toContain('needs no spec');
+    expect(section).toContain('checklist in the task spec');
+    expect(section).toContain('`/_meta/specs/tasks/<date>-<slug>.md`');
+    expect(section).toContain('needs no task spec');
     expect(section).toContain('the confirmed scope summary in the conversation is the record');
   });
 
@@ -258,11 +258,11 @@ describe('installed skill content: durable artifacts', () => {
     const spec = read('metacoding-spec/SKILL.md');
     const records = spec.slice(
       spec.indexOf('## Records written on confirmation'),
-      spec.indexOf('## The spec')
+      spec.indexOf('## The task spec')
     );
 
     expect(spec).toContain('## Records written on confirmation');
-    expect(spec).toContain('## The spec');
+    expect(spec).toContain('## The task spec');
     expect(records).toContain('Once the scope summary is confirmed');
     expect(records).toContain('before any other file changes');
     expect(records).toContain('`/_meta/glossary.md`');
@@ -273,7 +273,7 @@ describe('installed skill content: durable artifacts', () => {
     expect(records).toContain(
       'amend the entry: keep its original text and add what changed and why'
     );
-    expect(records).toContain('**The spec.** Write it when the task needs one');
+    expect(records).toContain('**The task spec.** Write it when the task needs one');
     expect(spec).not.toContain('once the work is done');
   });
 
@@ -447,52 +447,52 @@ describe('installed skill content: solution and tickets', () => {
   });
 });
 
-describe('installed skill content: the spec', () => {
-  test('a spec is written after confirmation for more than one ticket or a marked decision', async () => {
+describe('installed skill content: the task spec', () => {
+  test('a task spec is written after confirmation for more than one ticket or a marked decision', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
 
-    expect(spec).toContain('## The spec');
-    expect(section).toContain('Write a spec when either is true');
+    expect(spec).toContain('## The task spec');
+    expect(section).toContain('Write a task spec when either is true');
     expect(section).toContain('The summary has more than one ticket.');
     expect(section).toContain('The summary has a decision marked `[record]`.');
     expect(spec).toContain('\n# Spec\n');
     expect(spec.slice(0, spec.indexOf('\n# Spec\n'))).toContain(
-      'a spec when the task has more than one ticket or a decision to record'
+      'a task spec when the task has more than one ticket or a decision to record'
     );
   });
 
-  test('a one-ticket task with no marked decision gets no spec', async () => {
+  test('a one-ticket task with no marked decision gets no task spec', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
 
-    expect(spec).toContain('## The spec');
-    expect(section).toContain('needs no spec');
+    expect(spec).toContain('## The task spec');
+    expect(section).toContain('needs no task spec');
     expect(section).toContain('where the repo already tracks work');
     expect(section).toContain('the summary in the conversation is the record');
   });
 
-  test("the spec goes to the repo's own place or /_meta/specs", async () => {
+  test("the task spec goes to the repo's own place or /_meta/specs/tasks", async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
 
-    expect(spec).toContain('## The spec');
-    expect(section).toContain('where the repo already keeps specs');
-    expect(section).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(spec).toContain('## The task spec');
+    expect(section).toContain('where the repo already keeps task specs');
+    expect(section).toContain('`/_meta/specs/tasks/<date>-<slug>.md`');
     expect(section).toContain('`YYYY-MM-DD`');
   });
 
-  test('the spec holds a status, the scope summary fields, and the tickets', async () => {
+  test('the task spec holds a status, the scope summary fields, and the tickets', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
-    const formatStart = section.indexOf('```text\n# Spec:');
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
+    const formatStart = section.indexOf('```text\n# Task spec:');
     const format = section.slice(formatStart, section.indexOf('```', formatStart + 3));
 
-    expect(spec).toContain('## The spec');
+    expect(spec).toContain('## The task spec');
     expect(formatStart).toBeGreaterThan(-1);
     expect(format).toContain('- Status: in progress');
     for (const heading of [
@@ -509,32 +509,32 @@ describe('installed skill content: the spec', () => {
       expect(format).toContain(`\n${heading}\n`);
     }
     expect(format).toContain('- [ ] 1. <title>\n  - Delivers:');
-    expect(section).toContain('A one-ticket spec lists its ticket by title alone.');
+    expect(section).toContain('A one-ticket task spec lists its ticket by title alone.');
   });
 
-  test("tickets go to the repo's tracker when it keeps one current, otherwise the spec is the tracker", async () => {
+  test("tickets go to the repo's tracker when it keeps one current, otherwise the task spec is the tracker", async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
 
-    expect(spec).toContain('## The spec');
+    expect(spec).toContain('## The task spec');
     expect(section).toContain('When the repo keeps a tracker current');
-    expect(section).toContain('create the tickets there and link each one from the spec');
-    expect(section).toContain('the checklist in the spec is the tracker');
+    expect(section).toContain('create the tickets there and link each one from the task spec');
+    expect(section).toContain('the checklist in the task spec is the tracker');
   });
 
-  test('a finished spec is marked done and stays in place unchanged', async () => {
+  test('a finished task spec is marked done and stays in place unchanged', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
 
-    expect(spec).toContain('## The spec');
-    expect(section).toContain("set the spec's status to done");
-    expect(section).toContain('leave the spec in place and unchanged');
+    expect(spec).toContain('## The task spec');
+    expect(section).toContain("set the task spec's status to done");
+    expect(section).toContain('leave the task spec in place and unchanged');
     expect(section).toContain("belong in the repo's system documentation");
   });
 
-  test('the workflow leaves the records and the spec to the spec skill', async () => {
+  test('the workflow leaves the records and the task spec to the spec skill', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const shaping = rules.slice(
@@ -545,7 +545,7 @@ describe('installed skill content: the spec', () => {
     expect(rules).toContain('2. Shape the task');
     expect(rules).toContain('3. Build test-first.');
     expect(shaping).toContain(
-      'Once the summary is confirmed, the `metacoding-spec` skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.'
+      'Once the summary is confirmed, the `metacoding-spec` skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a task spec when the task needs one.'
     );
     expect(shaping).toContain('For a task that needs none');
   });
@@ -583,7 +583,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(tickets).toContain('Build, verify, and review one ticket before starting the next.');
   });
 
-  test('a ticket is marked done in the artifact step, and the spec with the last ticket', async () => {
+  test('a ticket is marked done in the artifact step, and the task spec with the last ticket', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const tickets = rules.slice(
@@ -596,7 +596,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(tickets).toContain('In step 6, mark the ticket done where the tickets are tracked');
     expect(tickets).toContain("is part of the ticket's commit");
     expect(tickets).toContain(
-      'With the last ticket, mark the spec done, as the `metacoding-spec` skill describes.'
+      'With the last ticket, mark the task spec done, as the `metacoding-spec` skill describes.'
     );
   });
 
@@ -618,7 +618,7 @@ describe('installed skill content: building ticket by ticket', () => {
     );
   });
 
-  test('the last ticket also gets the whole change reviewed against the spec', async () => {
+  test('the last ticket also gets the whole change reviewed against the task spec', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const tickets = rules.slice(
@@ -629,7 +629,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(rules).toContain('## Tickets');
     expect(rules).toContain('## Scope Control');
     expect(tickets).toContain(
-      'In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the spec.'
+      'In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the task spec.'
     );
   });
 
@@ -656,13 +656,13 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(tickets).toContain(
       'A one-ticket task runs the sequence once, against the scope summary.'
     );
-    expect(tickets).toContain('When it has a spec, step 6 marks its ticket and the spec done');
+    expect(tickets).toContain('When it has a task spec, step 6 marks its ticket and the task spec done');
     expect(build).toContain(
       'Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.'
     );
   });
 
-  test('grounding looks for a spec in progress', async () => {
+  test('grounding looks for a task spec in progress', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const grounding = rules.slice(
@@ -673,14 +673,14 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(rules).toContain('1. Ground in the repository.');
     expect(rules).toContain('2. Shape the task');
     expect(grounding).toContain(
-      'Look for a spec whose status is in progress, where `references/repository-organization.md` says specs go.'
+      'Look for a task spec whose status is in progress, where `references/repository-organization.md` says task specs go.'
     );
     expect(grounding).toContain(
       'When the request continues that task, resume it as the Tickets section describes.'
     );
   });
 
-  test('an unfinished task resumes from its spec at the first ticket not done', async () => {
+  test('an unfinished task resumes from its task spec at the first ticket not done', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const skill = read('metacoding-workflow/SKILL.md');
@@ -699,12 +699,12 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(skill).toContain('## Steps');
     expect(skill).toContain('## Rules Between Steps');
     expect(rules.indexOf('### Resuming a task')).toBeGreaterThan(rules.indexOf('## Tickets'));
-    expect(resuming).toContain('The spec is the agreed scope. Skip step 2.');
+    expect(resuming).toContain('The task spec is the agreed scope. Skip step 2.');
     expect(resuming).toContain(
       'Start at the first ticket that is not marked done where the tickets are tracked, and follow the rules above from there, including the wait before each next ticket.'
     );
     expect(steps).toContain(
-      'When the request continues a task that an earlier session left unfinished, the task resumes from its spec at the first ticket not yet done, as the same section describes.'
+      'When the request continues a task that an earlier session left unfinished, the task resumes from its task spec at the first ticket not yet done, as the same section describes.'
     );
   });
 
@@ -719,7 +719,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(rules).toContain('### Resuming a task');
     expect(rules).toContain('## Scope Control');
     expect(resuming).toContain(
-      'Ask the user which task to work on when more than one spec is in progress, or when you cannot tell whether the request belongs to the spec.'
+      'Ask the user which task to work on when more than one task spec is in progress, or when you cannot tell whether the request belongs to the task spec.'
     );
   });
 
@@ -738,14 +738,14 @@ describe('installed skill content: building ticket by ticket', () => {
     );
   });
 
-  test('the completion standard requires closed tickets and a spec marked done', async () => {
+  test('the completion standard requires closed tickets and a task spec marked done', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const completion = rules.slice(rules.indexOf('## Completion Standard'));
 
     expect(rules).toContain('## Completion Standard');
     expect(completion).toContain(
-      'every ticket is closed and, when the task has a spec, the spec is marked done'
+      'every ticket is closed and, when the task has a task spec, it is marked done'
     );
   });
 
@@ -779,7 +779,7 @@ describe('installed skill content: building ticket by ticket', () => {
     );
   });
 
-  test('review checks the whole change against the spec with the last ticket', async () => {
+  test('review checks the whole change against the task spec with the last ticket', async () => {
     const { read } = await installFor('codex');
     const review = read('metacoding-review/SKILL.md');
     const finalPass = review.slice(
@@ -794,7 +794,7 @@ describe('installed skill content: building ticket by ticket', () => {
     );
     expect(finalPass).toContain("Pin the diff from the commit before the task's first ticket");
     expect(finalPass).toContain(
-      "Compare the whole change with the task's spec or scope summary: its goal, its success criteria, and its in-scope and out-of-scope lists."
+      "Compare the whole change with the task spec or the scope summary: its goal, its success criteria, and its in-scope and out-of-scope lists."
     );
     expect(finalPass).toContain("Tickets can each pass while the task's goal is still missed.");
   });
@@ -814,22 +814,22 @@ describe('installed skill content: building ticket by ticket', () => {
     );
   });
 
-  test('a ticket in the spec checklist is ticked when it is done', async () => {
+  test('a ticket in the task spec checklist is ticked when it is done', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
 
-    expect(spec).toContain('## The spec');
+    expect(spec).toContain('## The task spec');
     expect(section).toContain(
-      'the checklist in the spec is the tracker: tick a ticket when it is done.'
+      'the checklist in the task spec is the tracker: tick a ticket when it is done.'
     );
   });
 
-  test('a change to a spec in progress is confirmed and written into the spec first', async () => {
+  test('a change to a task spec in progress is confirmed and written into the task spec first', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
-    const section = spec.slice(spec.indexOf('## The spec'));
+    const section = sectionOf(spec, '## The task spec', '## Feature specs');
     const resuming = rules.slice(
       rules.indexOf('### Resuming a task'),
       rules.indexOf('## Scope Control')
@@ -838,12 +838,12 @@ describe('installed skill content: building ticket by ticket', () => {
     for (const marker of ['### Resuming a task', '## Scope Control']) {
       expect(rules).toContain(marker);
     }
-    expect(spec).toContain('## The spec');
+    expect(spec).toContain('## The task spec');
     expect(section).toContain(
-      'While the spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the spec with its date before building it.'
+      'While the task spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the task spec with its date before building it.'
     );
     expect(resuming).toContain(
-      'When the request changes what the spec agreed, settle the change first, as the `metacoding-spec` skill describes for a spec in progress.'
+      'When the request changes what the task spec agreed, settle the change first, as the `metacoding-spec` skill describes for a task spec in progress.'
     );
   });
 
@@ -858,16 +858,16 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(rules).toContain('2. Shape the task');
     expect(rules).toContain('3. Build test-first.');
     expect(shaping).toContain(
-      "When VCS work is in scope, commit those records on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way."
+      "When VCS work is in scope, commit those records on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a task spec in progress is committed the same way."
     );
   });
 
-  test('the Codex prompt for the workflow resumes a task whose spec is in progress', async () => {
+  test('the Codex prompt for the workflow resumes a task whose task spec is in progress', async () => {
     const { read } = await installFor('codex');
     const prompt = read('metacoding-workflow/agents/openai.yaml');
 
     expect(prompt).toContain(
-      'resume a task whose spec is still in progress or interview me on the open decisions and confirm the scope summary'
+      'resume a task with a task spec still in progress or interview me on the open decisions and confirm the scope summary'
     );
   });
 
@@ -1193,7 +1193,7 @@ describe('installed skill content: skill refinements', () => {
     expect(rules).toContain('## Repeated Tasks');
     expect(rules).toContain('### Resuming a task');
     expect(scopeControl).toContain(
-      'A paused task with a spec continues as the Resuming a task section describes.'
+      'A paused task with a task spec continues as the Resuming a task section describes.'
     );
   });
 
@@ -1242,7 +1242,7 @@ describe('installed skill content: prompt upkeep', () => {
     );
     for (const detail of [
       'Look up facts yourself',
-      'and any spec still in progress',
+      'and any task spec still in progress',
       'Changing files starts only after',
       'the skill then writes the settled terms',
       'a failing test before each piece of production code',
@@ -1338,7 +1338,7 @@ describe('installed skill content: onboarding', () => {
 
     expect(section).toContain('# Project map\n');
     expect(section).toContain(
-      '- Tracker: <GitHub issues, a file path, or none: the checklist in each spec>\n' +
+      '- Tracker: <GitHub issues, a file path, or none: the checklist in each task spec>\n' +
         '- Specs: <folder>\n' +
         '- Glossary: <file>\n' +
         '- Decision records: <file or folder>\n'
@@ -1359,10 +1359,10 @@ describe('installed skill content: onboarding', () => {
     const ask = sectionOf(onboard, '## 2. Ask', '### The pointer');
 
     expect(format).toContain(
-      'The tracker line says where the repo tracks work: the tickets of a spec go there, and so does a request queued for later.'
+      'The tracker line says where the repo tracks work: the tickets of a task spec go there, and so does a request queued for later.'
     );
     expect(format).toContain(
-      'A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each spec.'
+      'A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each task spec.'
     );
     expect(ask).toContain('Say in the tracker question what the answer decides.');
   });
@@ -1633,7 +1633,7 @@ describe('installed skill content: using the project map', () => {
 
     expect(section).toContain('The tracker line says where this repo tracks work.');
     expect(section).toContain(
-      'A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the spec.'
+      'A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the task spec.'
     );
   });
 
@@ -1679,7 +1679,7 @@ describe('installed skill content: using the project map', () => {
     );
 
     expect(section).toContain(
-      'Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a spec, or a ticket, and create it there when it does not exist yet.'
+      'Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a task spec, or a ticket, and create it there when it does not exist yet.'
     );
   });
 
@@ -1700,7 +1700,7 @@ describe('installed skill content: using the project map', () => {
 
     expect(section).toContain('The tracker line says where this repo tracks work.');
     expect(section).toContain(
-      'A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the spec is the tracker.'
+      'A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the task spec is the tracker.'
     );
   });
 });
@@ -2110,7 +2110,7 @@ describe('installed skill content: the retro', () => {
     expect(section).toContain('- Decision records amended because the build proved them wrong.');
     expect(section).toContain('- Checks that failed for a reason that could have been foreseen');
     expect(section).toContain(
-      "When the conversation that did the work is gone, read the spec and the task's commits, then ask the user what went wrong."
+      "When the conversation that did the work is gone, read the task spec and the task's commits, then ask the user what went wrong."
     );
     expect(section).toContain(
       'A retro is about mistakes. How fast the work went and what it cost to run are not its subject.'
@@ -2262,7 +2262,7 @@ describe('installed skill content: the retro', () => {
       'After the last ticket is closed, use the `metacoding-retro` skill once for the task.'
     );
     expect(tickets).toContain(
-      "Those changes come after the last ticket and are not part of the task's spec, which stays done."
+      "Those changes come after the last ticket and are not part of the task spec, which stays done."
     );
     expect(tickets).toContain('Its retro follows the close of that one ticket.');
   });
@@ -2392,7 +2392,7 @@ describe('installed skill content: shape and spec are two skills', () => {
     );
   });
 
-  test('SHAPE-1: shape writes no file and holds no spec rules', async () => {
+  test('SHAPE-1: shape writes no file and holds no task spec rules', async () => {
     const { read } = await installFor('codex');
     const shape = read('metacoding-shape/SKILL.md');
     const closing = shape.slice(shape.indexOf('## Closing the interview'));
@@ -2402,7 +2402,7 @@ describe('installed skill content: shape and spec are two skills', () => {
     for (const moved of [
       '## Solution and tickets',
       '## Records written on confirmation',
-      '## The spec',
+      '## The task spec',
       '```text\nScope summary\n',
       '[record]',
     ]) {
@@ -2499,7 +2499,7 @@ describe('installed skill content: stories in the scope summary', () => {
   const summarySectionOf = (spec: string) =>
     sectionOf(spec, '## The scope summary', '## Records written on confirmation');
   const specFormatOf = (spec: string) =>
-    codeBlock(sectionOf(spec, '## The spec'), '```text\n# Spec:');
+    codeBlock(sectionOf(spec, '## The task spec', '## Feature specs'), '```text\n# Task spec:');
 
   test('SHAPE-3: shape settles a role as a term', async () => {
     const { read } = await installFor('codex');
@@ -2609,8 +2609,8 @@ describe('installed skill content: stories in the scope summary', () => {
     expect(summarySection).toContain(
       'In a task without stories, give each its success criteria and its test intent.'
     );
-    expect(sectionOf(spec, '## The spec')).toContain(
-      'The spec of a task without stories has `## Success criteria` and `## Test intent` where `## Stories` is, and each of its tickets gives its success criteria and test intent where "Delivers" is.'
+    expect(sectionOf(spec, '## The task spec', '## Feature specs')).toContain(
+      'The task spec of a task without stories has `## Success criteria` and `## Test intent` where `## Stories` is, and each of its tickets gives its success criteria and test intent where "Delivers" is.'
     );
   });
 
@@ -2635,10 +2635,10 @@ describe('installed skill content: stories in the scope summary', () => {
       'Give each scenario an ID: the prefix of its feature area, a hyphen, and a number, such as `UPDATE-4`.'
     );
     expect(stories).toContain(
-      "The prefix is a short name for the area in capitals. Use the one the area's scenarios already carry in the repo's specs, and choose one for a new area."
+      "The prefix is a short name for the area in capitals. Use the one the area's feature spec states, or the one a task spec still in progress uses for the area, and choose one for an area that has none yet."
     );
     expect(stories).toContain(
-      'A new scenario takes the number one above the highest its area has used, counting a spec that is still in progress.'
+      "A new scenario takes the number one above the highest that the area's feature spec or any task spec holds for that prefix, whether the task spec is in progress or done."
     );
   });
 
@@ -2650,7 +2650,150 @@ describe('installed skill content: stories in the scope summary', () => {
       'A scenario the task changes keeps its ID: write "(changed)" after its title.'
     );
     expect(stories).toContain(
-      "List the scenarios the task adds or changes, and leave the area's other scenarios out."
+      "List the scenarios the task adds, changes, or removes, and leave the area's other scenarios out."
+    );
+  });
+});
+
+describe('installed skill content: task specs and feature specs', () => {
+  const taskSpecOf = (spec: string) =>
+    sectionOf(spec, '## The task spec', '## Feature specs');
+  const featureSpecsOf = (spec: string) => sectionOf(spec, '## Feature specs');
+
+  test('SPEC-5: the task spec goes under tasks/', async () => {
+    const { read, files } = await installFor('codex');
+    const section = taskSpecOf(read('metacoding-spec/SKILL.md'));
+
+    expect(section).toContain(
+      'Put the task spec where the repo already keeps task specs or documents of that kind. When it has no such place, use `/_meta/specs/tasks/<date>-<slug>.md`, with the date as `YYYY-MM-DD`.'
+    );
+    expect(section).toContain('```text\n# Task spec: <title>');
+    // Built from two parts so that a rename across this file cannot rewrite the old place.
+    const oldPlace = ['/_meta/specs/', '<date>-<slug>.md'].join('');
+    expect(
+      files.filter((file) => file.content.includes(oldPlace)).map((file) => file.path)
+    ).toEqual([]);
+  });
+
+  test('SPEC-5: the rules name the task record a task spec', async () => {
+    const { files } = await installFor('codex');
+    const bareSpec =
+      /\b(?:a|the|its|one|no|whose|any|each|this|that|every|finished|one-ticket) spec\b(?! skill)/i;
+    // In the TDD skill, "spec" means any specification an expected value can come from.
+    const swept = files.filter((file) => !file.path.endsWith('metacoding-tdd/SKILL.md'));
+
+    expect(swept.length).toBeGreaterThan(10);
+    for (const file of swept) {
+      const body = file.content.replace(/^---\n[\s\S]*?\n---\n/, '');
+      expect(
+        body
+          .split('\n')
+          .filter((line) => bareSpec.test(line))
+          .map((line) => `${file.path}: ${line}`)
+      ).toEqual([]);
+    }
+  });
+
+  test('SPEC-6: a feature spec has one place and one format', async () => {
+    const { read } = await installFor('codex');
+    const section = featureSpecsOf(read('metacoding-spec/SKILL.md'));
+
+    expect(section).toContain(
+      'Put a feature spec where the repo already keeps documents of that kind. When it has no such place, use `/_meta/specs/<area>.md`. Name the area as the scope summary names it, and write that name in lower case with hyphens for the file.'
+    );
+    const formatStart = section.indexOf('````text\n');
+    const format = section.slice(formatStart, section.indexOf('\n````\n', formatStart));
+
+    expect(formatStart).toBeGreaterThan(-1);
+    for (const part of [
+      '# Feature spec: <area>\n',
+      '- ID prefix: <PREFIX>\n',
+      '\n## Solution\n',
+      '\n## Stories\n',
+      '\n### <Role>\n',
+      '\n#### <story title>\n',
+      'As a <role>, I want <what>, so that <why>.',
+      '```gherkin\nScenario: <ID> <title>\n  Given <the starting state>',
+    ]) {
+      expect(format).toContain(part);
+    }
+  });
+
+  test('SPEC-6: the Solution section says how one area works today', async () => {
+    const { read } = await installFor('codex');
+    const section = featureSpecsOf(read('metacoding-spec/SKILL.md'));
+
+    expect(section).toContain(
+      "The Solution section says how this one area works today. What spans areas, such as structure, internals, and technical guidance, stays in the repo's system documentation."
+    );
+  });
+
+  test('SPEC-6: a repo that keeps its scenarios elsewhere keeps them there', async () => {
+    const { read } = await installFor('codex');
+    const section = featureSpecsOf(read('metacoding-spec/SKILL.md'));
+
+    expect(section).toContain(
+      'When the repo already keeps its scenarios somewhere else, such as feature files that a test runner executes, those are its feature specs. Keep them there, follow their own conventions for names and IDs, and write no second copy.'
+    );
+  });
+
+  test("SPEC-7: a finished ticket's scenarios go into the feature spec of their area", async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = featureSpecsOf(spec);
+
+    expect(section).toContain(
+      "Write a ticket's scenarios into the feature spec of their area when the ticket is done: after its tests pass, and before it is committed or handed off."
+    );
+    expect(section).toContain(
+      'Do this whether or not the task has a task spec. The feature spec then says only what is built and has a test.'
+    );
+    expect(section).toContain(
+      'Add a new scenario to the `gherkin` block of its story. Add a new story, with its sentence and its own block, under its role.'
+    );
+    expect(section).toContain(
+      'Correct the Solution section when the ticket changed how the area works. A ticket that delivers no scenario still does this, when the area has a feature spec.'
+    );
+    expect(sectionOf(spec, '## Records written on confirmation', '## The task spec')).toContain(
+      'No feature spec is written now. Feature specs are written ticket by ticket, as the Feature specs section describes.'
+    );
+  });
+
+  test('SPEC-8: the first task in an area starts its feature spec, with no backfill', async () => {
+    const { read } = await installFor('codex');
+    const section = featureSpecsOf(read('metacoding-spec/SKILL.md'));
+
+    expect(section).toContain(
+      'When the area has no feature spec yet, create it with the stories of this ticket only; later tickets add theirs.'
+    );
+    expect(section).toContain(
+      'Do not write stories for behavior that was there before. Say so after the sentence on what the area is for: the file holds the stories settled since the day it was created.'
+    );
+  });
+
+  test('SPEC-9: a changed scenario is replaced under its ID, and a removed one leaves with its test', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const whenTicketIsDone = sectionOf(
+      featureSpecsOf(spec),
+      "Write a ticket's scenarios into the feature spec of their area when the ticket is done",
+      'When the area has no feature spec yet'
+    );
+
+    expect(whenTicketIsDone).toContain(
+      'Replace a scenario the ticket changed: the new text goes under the same ID.'
+    );
+    expect(whenTicketIsDone).toContain(
+      "Delete a scenario the ticket removed, and a story that has no scenario left. The test that carried the scenario's ID was deleted in the same ticket, during the build."
+    );
+    expect(whenTicketIsDone).toContain(
+      'Leave out the "(changed)" and "(removed)" marks. They belong to the scope summary.'
+    );
+    expect(sectionOf(spec, '## Solution and tickets', '## The scope summary')).toContain(
+      'A scenario the task changes or removes belongs to the ticket that changes or removes it.'
+    );
+    expect(sectionOf(spec, '## Stories', '## Solution and tickets')).toContain(
+      'For a scenario the task removes, give its ID and title with "(removed)" after the title.'
     );
   });
 });

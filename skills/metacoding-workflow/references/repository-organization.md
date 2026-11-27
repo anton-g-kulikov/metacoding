@@ -49,7 +49,7 @@ Each durable concept should have one primary home.
 - `/_meta/coding-standards.md`
   - the repo's rules for writing code, tests, and docs that no automated check enforces
 - `/_meta/specs/`
-  - one file per task that needs a spec: its confirmed scope summary and its tickets
+  - under `tasks/`, one file per task that needs a task spec: its confirmed scope summary and its tickets
 
 Rules:
 
@@ -63,16 +63,16 @@ Rules:
 
 - Read it while grounding, when the repo has one.
 - Where the project map names a place, use that place, and create it there when it does not exist yet.
-- The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the spec.
+- The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the task spec.
 - The places this reference names for those four records, and its rules for a repo's own place, apply only to a place the project map has no line for, and to a repo with no project map.
 
 ## Specs, Tickets, and Test Records
 
-The `metacoding-spec` skill decides which tasks need a spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
+The `metacoding-spec` skill decides which tasks need a task spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
 
-- A spec goes where the repo already keeps specs. When it has no such place, it goes to `/_meta/specs/<date>-<slug>.md`.
-- The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the spec.
-- Test intent lives in the scope summary, the spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
+- A task spec goes where the repo already keeps task specs. When it has no such place, it goes to `/_meta/specs/tasks/<date>-<slug>.md`.
+- The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the task spec.
+- Test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
 
 ## Decision Records
 

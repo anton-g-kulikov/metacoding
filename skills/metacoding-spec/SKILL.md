@@ -1,6 +1,6 @@
 ---
 name: metacoding-spec
-description: Turn a task's settled decisions into a scope summary with the solution sliced into tickets, get the user's confirmation, and then write the records, which are the glossary terms, the decision records, and a spec when the task has more than one ticket or a decision to record. Use when the decisions are settled and the task is to be built, when the user asks for a spec, a scope summary, or tickets, or when the metacoding workflow reaches its shape step.
+description: Turn a task's settled decisions into a scope summary with the solution sliced into tickets, get the user's confirmation, and then write the records, which are the glossary terms, the decision records, and a task spec when the task has more than one ticket or a decision to record. It also holds the format of the feature specs, the living documents of user stories per feature area. Use when the decisions are settled and the task is to be built, when the user asks for a task spec, user stories, a scope summary, or tickets, when a finished ticket's scenarios go into a feature spec, or when the metacoding workflow reaches its shape step.
 ---
 
 # Spec
@@ -17,7 +17,7 @@ When a decision that would change what gets built or how it is tested is still o
 
 When the repo has a project map, `.metacoding/project.md`, read it before writing the scope summary. The `metacoding-onboard` skill writes it, and it names where this repo keeps its tracker, its specs, its glossary, and its decision records.
 
-Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a spec, or a ticket, and create it there when it does not exist yet. The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the spec is the tracker.
+Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a task spec, or a ticket, and create it there when it does not exist yet. The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the task spec is the tracker.
 
 The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map.
 
@@ -40,9 +40,9 @@ Scenario: <ID> <title>
 ```
 
 - A scenario is one case of the story: the happy path, an error, an edge. Its "Then" names something the role can observe, so that a test can check it. When a scenario needs more than one Given, When, or Then, start each further line with "And".
-- Give each scenario an ID: the prefix of its feature area, a hyphen, and a number, such as `UPDATE-4`. The prefix is a short name for the area in capitals. Use the one the area's scenarios already carry in the repo's specs, and choose one for a new area.
-- A new scenario takes the number one above the highest its area has used, counting a spec that is still in progress.
-- List the scenarios the task adds or changes, and leave the area's other scenarios out. A scenario the task changes keeps its ID: write "(changed)" after its title.
+- Give each scenario an ID: the prefix of its feature area, a hyphen, and a number, such as `UPDATE-4`. The prefix is a short name for the area in capitals. Use the one the area's feature spec states, or the one a task spec still in progress uses for the area, and choose one for an area that has none yet.
+- A new scenario takes the number one above the highest that the area's feature spec or any task spec holds for that prefix, whether the task spec is in progress or done.
+- List the scenarios the task adds, changes, or removes, and leave the area's other scenarios out. A scenario the task changes keeps its ID: write "(changed)" after its title. For a scenario the task removes, give its ID and title with "(removed)" after the title.
 - The scenarios stand in place of success criteria and test intent: they are what the task must deliver and what its tests must prove.
 
 A task that changes no behavior a role can observe, such as a refactor, tooling, or docs, has no stories. Give it success criteria and test intent instead.
@@ -54,7 +54,7 @@ Describe the solution: the approach, and each public interface, data shape, or f
 Then slice the solution into tickets. A ticket is one piece that can be built, verified, reviewed, and committed on its own.
 
 - Make each ticket a vertical slice: it goes through every layer it needs and ends in something a user or caller can observe. A piece that only adds one layer, such as a database schema with nothing that reads it, belongs in the ticket that uses it.
-- Give each ticket the scenarios it delivers.
+- Give each ticket the scenarios it delivers. A scenario the task changes or removes belongs to the ticket that changes or removes it.
 - Order the tickets so that each builds on the ones before it.
 - A small task is one ticket. Add a ticket only when the piece can be finished and checked by itself.
 
@@ -98,21 +98,23 @@ Once the scope summary is confirmed, write these records before any other file c
 
 - **Terms.** Add each term listed under Terms to the glossary, or correct its entry: the term, its meaning in this project, and the words to avoid for it. The default place is `/_meta/glossary.md`; use the repo's own glossary if it keeps one elsewhere.
 - **Decisions.** Write each decision marked `[record]` to the decision records: the date, the decision, the alternatives considered, and why this one won. The default place is `/_meta/architecture-decisions.md`; use the repo's own place if it keeps decision records elsewhere. If the build later proves a recorded decision wrong, amend the entry: keep its original text and add what changed and why.
-- **The spec.** Write it when the task needs one, as the next section describes.
+- **The task spec.** Write it when the task needs one, as the next section describes.
 
-## The spec
+No feature spec is written now. Feature specs are written ticket by ticket, as the Feature specs section describes.
 
-Write a spec when either is true:
+## The task spec
+
+Write a task spec when either is true:
 
 - The summary has more than one ticket.
 - The summary has a decision marked `[record]`.
 
-A one-ticket task with no marked decision needs no spec. Record its confirmed summary where the repo already tracks work, such as an issue or a pull request. When the repo tracks work nowhere, the summary in the conversation is the record.
+A one-ticket task with no marked decision needs no task spec. Record its confirmed summary where the repo already tracks work, such as an issue or a pull request. When the repo tracks work nowhere, the summary in the conversation is the record.
 
-Put the spec where the repo already keeps specs or documents of that kind. When it has no such place, use `/_meta/specs/<date>-<slug>.md`, with the date as `YYYY-MM-DD`. The spec is the confirmed scope summary as one file, with a status and one section per field:
+Put the task spec where the repo already keeps task specs or documents of that kind. When it has no such place, use `/_meta/specs/tasks/<date>-<slug>.md`, with the date as `YYYY-MM-DD`. The task spec is the confirmed scope summary as one file, with a status and one section per field:
 
 ```text
-# Spec: <title>
+# Task spec: <title>
 
 - Status: in progress
 
@@ -138,12 +140,59 @@ Put the spec where the repo already keeps specs or documents of that kind. When 
   - Delivers:
 ```
 
-A one-ticket spec lists its ticket by title alone.
+A one-ticket task spec lists its ticket by title alone.
 
-The spec of a task without stories has `## Success criteria` and `## Test intent` where `## Stories` is, and each of its tickets gives its success criteria and test intent where "Delivers" is.
+The task spec of a task without stories has `## Success criteria` and `## Test intent` where `## Stories` is, and each of its tickets gives its success criteria and test intent where "Delivers" is.
 
-When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the spec. Otherwise the checklist in the spec is the tracker: tick a ticket when it is done.
+When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the task spec. Otherwise the checklist in the task spec is the tracker: tick a ticket when it is done.
 
-While the spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the spec with its date before building it.
+While the task spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the task spec with its date before building it.
 
-When the last ticket is done, set the spec's status to done, and from then on leave the spec in place and unchanged. The spec is the record of what was agreed; facts that stay true belong in the repo's system documentation.
+When the last ticket is done, set the task spec's status to done, and from then on leave the task spec in place and unchanged. The task spec is the record of what was agreed. What a feature area does now belongs in its feature spec, and other facts that stay true belong in the repo's system documentation.
+
+## Feature specs
+
+A feature spec is the living document of one feature area: how the area works today, and the stories of each role. A task spec records what one task agreed and is then left alone; a feature spec is corrected whenever a task changes the area's behavior.
+
+Put a feature spec where the repo already keeps documents of that kind. When it has no such place, use `/_meta/specs/<area>.md`. Name the area as the scope summary names it, and write that name in lower case with hyphens for the file. Give the feature spec this format:
+
+````text
+# Feature spec: <area>
+
+- ID prefix: <PREFIX>
+
+<what the area is for, in a sentence or two>
+
+## Solution
+
+<how the area works today: its approach, its interfaces, and its rules>
+
+## Stories
+
+### <Role>
+
+#### <story title>
+
+As a <role>, I want <what>, so that <why>.
+
+```gherkin
+Scenario: <ID> <title>
+  Given <the starting state>
+  When <what the role does>
+  Then <what the role can observe>
+```
+````
+
+The Solution section says how this one area works today. What spans areas, such as structure, internals, and technical guidance, stays in the repo's system documentation.
+
+Write a ticket's scenarios into the feature spec of their area when the ticket is done: after its tests pass, and before it is committed or handed off. Do this whether or not the task has a task spec. The feature spec then says only what is built and has a test.
+
+- Add a new scenario to the `gherkin` block of its story. Add a new story, with its sentence and its own block, under its role.
+- Replace a scenario the ticket changed: the new text goes under the same ID.
+- Delete a scenario the ticket removed, and a story that has no scenario left. The test that carried the scenario's ID was deleted in the same ticket, during the build.
+- Leave out the "(changed)" and "(removed)" marks. They belong to the scope summary.
+- Correct the Solution section when the ticket changed how the area works. A ticket that delivers no scenario still does this, when the area has a feature spec.
+
+When the area has no feature spec yet, create it with the stories of this ticket only; later tickets add theirs. Do not write stories for behavior that was there before. Say so after the sentence on what the area is for: the file holds the stories settled since the day it was created.
+
+When the repo already keeps its scenarios somewhere else, such as feature files that a test runner executes, those are its feature specs. Keep them there, follow their own conventions for names and IDs, and write no second copy.

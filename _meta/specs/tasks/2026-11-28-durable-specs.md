@@ -278,8 +278,10 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - Existing content tests keep their names. They are re-pointed where text moves to the new skill.
   - Changed on 2026-11-28, in ticket 1: eight existing tests were renamed, because their names said the shape skill does what the spec skill now does. No test was given an ID it did not have.
   - Changed on 2026-11-28, in ticket 2: one more existing test was renamed, because its name said tickets carry criteria and test intent where they now name the scenarios they deliver.
+  - Changed on 2026-11-28, in ticket 3: the names of existing tests that said "spec" now say "task spec", as the rename requires.
 - README and CHANGELOG are updated in each ticket, under "Unreleased". The version stays 2.0.1.
 - A new scenario takes the number one above the highest in its feature spec and in any task spec in progress.
+  - Changed on 2026-11-28, in ticket 3: done task specs count too. A removed scenario leaves the feature spec, so counting only the feature spec could hand its number out again.
 - The onboarding branch says to take the default places from `metacoding-shape`. After this branch they live in `metacoding-spec`, so whichever merges second re-points them.
 - The main checkout's installed `.claude/skills` is not refreshed by this task, because other sessions work there.
 
@@ -291,7 +293,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - [x] **2. Stories in the scope summary**
   - Delivers: SHAPE-3, SPEC-2, SPEC-3, SPEC-4
   - Blocked by: 1
-- [ ] **3. Task specs and feature specs**
+- [x] **3. Task specs and feature specs**
   - Delivers: SPEC-5, SPEC-6, SPEC-7, SPEC-8, SPEC-9
   - Blocked by: 2
 - [ ] **4. The workflow keeps both specs current**

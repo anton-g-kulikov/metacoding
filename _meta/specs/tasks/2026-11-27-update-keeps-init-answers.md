@@ -44,7 +44,7 @@
 
 ## Decisions made
 
-- `update` reads the init answers back from the installed `project-context.md` rather than from a separate config file. Recorded in [architecture-decisions.md](../architecture-decisions.md).
+- `update` reads the init answers back from the installed `project-context.md` rather than from a separate config file. Recorded in [architecture-decisions.md](../../architecture-decisions.md).
 - `update` stays hands-off for a `.gitignore` without a metacoding section; the strict error explains the fix instead.
 - The description default changes for new installs only.
 
