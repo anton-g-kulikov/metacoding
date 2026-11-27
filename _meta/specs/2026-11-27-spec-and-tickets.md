@@ -11,6 +11,7 @@ Shape ends in a documented solution that is sliced into tickets, so the agreed s
 - `metacoding-shape` closes with a scope summary that also states the solution and the tickets, and works the same when run on its own.
 - When the task has more than one ticket or any `[record]` decision, shape writes a spec after the user confirms.
 - Decision records are written when the summary is confirmed, and amended at step 6 if the build proved one wrong.
+- Settled terms are listed in the scope summary and written to the glossary when it is confirmed, so nothing is written before confirmation.
 - The workflow runs build, verify, review, artifacts, and close once per ticket, and waits for the user's go between tickets.
 - Review checks each ticket against its own criteria, and the whole change against the spec after the last ticket.
 
@@ -20,11 +21,13 @@ Shape ends in a documented solution that is sliced into tickets, so the agreed s
 - Content tests in `test/unit/skill-content.test.ts`.
 - README and CHANGELOG.
 - This repo's own records for this change: this spec, the decision records, the glossary.
+- Added on 2026-11-27: the `task-entry.md` template follows the scope summary fields.
+- Added on 2026-11-27, carried over from the glossary and decision-records change: the glossary timing above, and heading guards for content tests that slice a document by its headings.
 
 ## Out of scope
 
 - Installer code. The spec format lives inside the shape skill, so no packaged file is added.
-- A separate test document, the `task-entry.md` template, and `_meta/project-task-list.md`.
+- A separate test document and `_meta/project-task-list.md`.
 - The follow-ups from the review of the companion-skills change, and cleanup of stale files on `update`.
 
 ## Solution
@@ -41,6 +44,10 @@ Shape ends in a documented solution that is sliced into tickets, so the agreed s
 - The unit is called "ticket"; "slice" stays a verb and the quality bar.
 - Slicing is part of `metacoding-shape`, not a new skill.
 - The workflow pauses between tickets.
+
+## Terms
+
+Task, shape, spec, and ticket, as defined in [glossary.md](../glossary.md).
 
 ## Assumptions
 
@@ -59,9 +66,9 @@ One content test per behavior in the success criteria, written first and seen fa
 - [x] **2. Shape writes the spec**
   - Success criteria: the skill states the threshold, the spec's format and location, and where tickets live; the layout reference prescribes `/_meta/specs/` and no longer forbids new task records.
   - Test intent: the shape skill names the threshold and `/_meta/specs/`; the layout reference lists specs and keeps "no separate test document"; the adaptation reference covers a repo without a tracker.
-- [ ] **3. Decision records at the end of shape**
-  - Success criteria: shape writes `[record]` decisions on confirmation; step 6 amends a record the build proved wrong.
-  - Test intent: the shape skill and the layout reference say records are written when the summary is confirmed; the workflow rules say step 6 amends.
+- [x] **3. Decision records and glossary terms at the end of shape**
+  - Success criteria: shape writes `[record]` decisions on confirmation; step 6 amends a record the build proved wrong; the scope summary has a Terms field and the glossary is written on confirmation; every content test that slices by headings checks the headings exist.
+  - Test intent: the shape skill and the layout reference say records and terms are written when the summary is confirmed; the workflow rules say step 6 amends; the summary block and the task entry template carry Terms.
 - [ ] **4. The workflow runs per ticket**
   - Success criteria: steps 3 to 7 run once per ticket and the workflow waits between tickets; TDD takes the ticket's test intent; review checks each ticket and, after the last, the whole change against the spec.
   - Test intent: the workflow skill and rules state the loop and the pause; the TDD skill names the ticket's test intent; the review skill names the final pass against the spec.

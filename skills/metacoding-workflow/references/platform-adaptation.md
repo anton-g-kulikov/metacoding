@@ -19,7 +19,7 @@ If the repo does not track test intent in docs:
 
 If the repo has no glossary:
 
-- propose `/_meta/glossary.md` to the user when the first term is settled, and create it once they agree
+- propose `/_meta/glossary.md` in the scope summary that lists the first settled term, and create it once the summary is confirmed
 
 If the repo has no decision records:
 

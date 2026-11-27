@@ -79,7 +79,7 @@ The workflow skill runs these steps in order:
 3. Build test-first (`metacoding-tdd`, or `metacoding-debug` for a bug with an unknown cause).
 4. Verify with tests and direct checks.
 5. Review the diff against the scope and the repo's standards (`metacoding-review`).
-6. Update the docs that materially changed, and write the decision records the scope summary marked.
+6. Update the docs that materially changed, and amend a decision record the build proved wrong.
 7. Close with a VCS handoff or completion confirmation.
 
 ## Enforced Workflow
@@ -104,10 +104,10 @@ Before any file changes, `metacoding-shape` interviews you about the task:
 - It asks in rounds of numbered questions, each with a recommended answer, so you can reply with "1 yes, 2 yes, 3 the second option".
 - Each round's answers decide which questions come next.
 - It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, with its own success criteria and test intent. A small task stays one ticket.
-- It closes with a scope summary (goal, success criteria, in and out of scope, solution, decisions, assumptions, test intent, tickets) and waits for your confirmation.
-- Once you confirm, a task with more than one ticket, or with a decision worth recording, is written up as a spec. A smaller task gets none.
+- It closes with a scope summary (goal, success criteria, in and out of scope, solution, decisions, terms, assumptions, test intent, tickets) and waits for your confirmation.
+- Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a spec; a smaller task gets none.
 
-If you tell it to proceed without questions, it lists the unasked decisions as assumptions in the scope summary and continues.
+If you tell it to proceed without questions, it lists the unasked decisions as assumptions in the scope summary and continues; your instruction counts as the confirmation.
 
 ### Mandatory TDD Sequence
 
@@ -150,8 +150,8 @@ The workflow follows MECE documentation ownership to avoid duplication:
 
 It keeps three kinds of document that make the next session better informed:
 
-- **Glossary** (`/_meta/glossary.md`): the project's own terms, one line each. The agent reads it while grounding, and the interview adds a term when its meaning is settled.
-- **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, so confirming the summary approves writing them.
+- **Glossary** (`/_meta/glossary.md`): the project's own terms, one line each. The agent reads it while grounding. A term settled during shaping is listed in the scope summary and written once you confirm it.
+- **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, and they are written once you confirm it, before the build. If the build proves one wrong, the entry is amended.
 - **Specs** (`/_meta/specs/<date>-<slug>.md`): the confirmed scope summary of a task with more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo has a tracker, and a finished spec stays as the record of what was agreed.
 
 A repo that already keeps specs keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the spec, and the tests. A repo that already keeps one gets it updated as before.

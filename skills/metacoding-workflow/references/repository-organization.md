@@ -71,7 +71,7 @@ The `metacoding-shape` skill decides which tasks need a spec, writes it once the
 2. **Surprising without context.** Someone reading the code would wonder why it was done this way.
 3. **A real trade-off.** There were workable alternatives, and this one was chosen for stated reasons.
 
-A decision reaches this file through the scope summary: the interview marks it `[record]`, the user confirms the summary, and the entry is written once the work is done. Give each entry a date, the decision, the alternatives considered, and why this one won.
+A decision reaches this file through the scope summary: the `metacoding-shape` skill marks it `[record]` and writes the entry once the user confirms the summary, before the build starts. The skill holds the entry format and how to amend an entry.
 
 Create the file with the first such entry. If the repo already keeps decision records somewhere else, use that place.
 
@@ -84,10 +84,10 @@ Create the file with the first such entry. If the repo already keeps decision re
 ```
 
 - Read it while grounding, and use its terms in code, tests, docs, and questions to the user.
-- Add or correct a term at the moment its meaning is settled.
+- Add or correct a term once the scope summary that lists it is confirmed.
 - Keep it to meanings. Implementation detail belongs in the system documentation.
 - If the repo already keeps a glossary somewhere else, use that one.
-- If the repo has no glossary, propose the file to the user before creating it.
+- If the repo has no glossary, follow `references/platform-adaptation.md`.
 
 ## Temporary File Management
 

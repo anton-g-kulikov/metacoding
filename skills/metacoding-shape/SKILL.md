@@ -33,7 +33,7 @@ When you cannot reach the user directly, for example when running as a subagent,
 
 Read the project's glossary before the first round, when it has one, and use its terms in your questions.
 
-When an answer settles what a project term means, record it in the glossary straight away: the term, its meaning in this project, and the words to avoid for it. The default place is `/_meta/glossary.md`; use the repo's own glossary if it keeps one elsewhere, and propose the file to the user if it has none. The glossary is the one file the interview writes before the scope summary is confirmed.
+When an answer settles what a project term means, note the term, its meaning in this project, and the words to avoid for it, and list it under Terms in the scope summary. Nothing is written to the glossary until the summary is confirmed.
 
 When the user's wording conflicts with the glossary, or one word is doing two jobs, raise it as a decision.
 
@@ -92,6 +92,7 @@ In scope:
 Out of scope:
 Solution:
 Decisions made:
+Terms:
 Assumptions:
 Test intent:
 Tickets:
@@ -99,18 +100,28 @@ Tickets:
 
 Under "Tickets", number the tickets in build order and give each a title, its success criteria, and its test intent. For a one-ticket task, give the title alone: the fields above already describe it.
 
-Under "Decisions made", put `[record]` in front of each decision that is hard to reverse, surprising without context, and a real trade-off between workable alternatives. Confirming the summary also approves writing those as decision records once the work is done.
+Under "Decisions made", put `[record]` in front of each decision that is hard to reverse, surprising without context, and a real trade-off between workable alternatives. Confirming the summary also approves writing those as decision records.
+
+Under "Terms", list each term the interview settled, with its meaning and the words to avoid. When the repo has no glossary yet, propose creating one there, by default at `/_meta/glossary.md`: confirming the summary approves it.
 
 Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the test intent seeds test-first work, and a later review checks the result against it.
 
 Two shortcuts:
 
 - When grounding leaves no decision open, skip the rounds: describe the solution, slice it into tickets, and send the scope summary directly.
-- When the user tells you to proceed without questions, send the scope summary with every unasked decision listed under Assumptions, then continue.
+- When the user tells you to proceed without questions, send the scope summary with every unasked decision listed under Assumptions, then continue. That instruction stands in for the confirmation.
+
+## Records written on confirmation
+
+Once the scope summary is confirmed, write these records before any other file changes:
+
+- **Terms.** Add each term listed under Terms to the glossary, or correct its entry: the term, its meaning in this project, and the words to avoid for it. The default place is `/_meta/glossary.md`; use the repo's own glossary if it keeps one elsewhere.
+- **Decisions.** Write each decision marked `[record]` to the decision records: the date, the decision, the alternatives considered, and why this one won. The default place is `/_meta/architecture-decisions.md`; use the repo's own place if it keeps decision records elsewhere. If the build later proves a recorded decision wrong, amend the entry: keep its original text and add what changed and why.
+- **The spec.** Write it when the task needs one, as the next section describes.
 
 ## The spec
 
-Once the user confirms the scope summary, or has told you to proceed without questions, write a spec when either is true:
+Write a spec when either is true:
 
 - The summary has more than one ticket.
 - The summary has a decision marked `[record]`.
@@ -135,6 +146,8 @@ Put the spec where the repo already keeps specs or documents of that kind. When 
 ## Solution
 
 ## Decisions made
+
+## Terms
 
 ## Assumptions
 

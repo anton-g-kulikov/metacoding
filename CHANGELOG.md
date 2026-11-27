@@ -15,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix
 - A review step in the workflow, between verification and artifact updates
-- A project glossary at `/_meta/glossary.md`: read while grounding, and extended by the interview when a term's meaning is settled
-- A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`
+- A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
+- A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
 - Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
 
 ### Changed

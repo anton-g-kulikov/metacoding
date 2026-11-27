@@ -7,6 +7,7 @@
 - Out of scope:
 - Solution:
 - Decisions made:
+- Terms:
 - Assumptions:
 - Test intent:
 - Tickets:

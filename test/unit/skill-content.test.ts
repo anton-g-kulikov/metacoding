@@ -118,6 +118,7 @@ describe('installed skill content: durable artifacts', () => {
       'Out of scope:',
       'Solution:',
       'Decisions made:',
+      'Terms:',
       'Assumptions:',
       'Test intent:',
       'Tickets:',
@@ -129,22 +130,130 @@ describe('installed skill content: durable artifacts', () => {
     }
   });
 
-  test('the interview records settled terms and marks decisions to record', async () => {
+  test('shape lists settled terms in the scope summary and writes nothing before confirmation', async () => {
     const { read } = await installFor('codex');
-    const interview = read('metacoding-shape/SKILL.md');
+    const shape = read('metacoding-shape/SKILL.md');
+    const terms = shape.slice(
+      shape.indexOf('## Terms'),
+      shape.indexOf('## Question format')
+    );
+    const summaryStart = shape.indexOf('```text\nScope summary\n');
+    const summary = shape.slice(summaryStart, shape.indexOf('```', summaryStart + 3));
 
-    expect(interview).toContain('## Terms');
-    expect(interview).toContain('`/_meta/glossary.md`');
-    expect(interview).toContain('propose');
-    expect(interview).toContain('[record]');
-    expect(interview).toContain('hard to reverse');
-    expect(interview).toContain('decision record');
+    expect(shape).toContain('## Terms');
+    expect(shape).toContain('## Question format');
+    expect(summaryStart).toBeGreaterThan(-1);
+    expect(terms).toContain('list it under Terms in the scope summary');
+    expect(terms).toContain('Nothing is written to the glossary until the summary is confirmed');
+    expect(summary).toContain('\nTerms:\n');
+    expect(shape).toContain(
+      'propose creating one there, by default at `/_meta/glossary.md`: confirming the summary approves it'
+    );
+    expect(shape).not.toContain('straight away');
+    expect(shape).not.toContain('before the scope summary is confirmed');
   });
 
-  test('the workflow reads the glossary while grounding and writes marked decision records at the end', async () => {
+  test('shape marks the decisions to record against a three-part bar', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+
+    const closing = shape.slice(
+      shape.indexOf('## Closing the interview'),
+      shape.indexOf('## Records written on confirmation')
+    );
+
+    expect(shape).toContain('## Closing the interview');
+    expect(shape).toContain('## Records written on confirmation');
+    expect(closing).toContain('put `[record]` in front of each decision');
+    expect(closing).toContain(
+      'hard to reverse, surprising without context, and a real trade-off'
+    );
+    expect(closing).toContain(
+      'Confirming the summary also approves writing those as decision records.'
+    );
+  });
+
+  test('shape writes the terms and the marked decisions once the summary is confirmed', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const records = shape.slice(
+      shape.indexOf('## Records written on confirmation'),
+      shape.indexOf('## The spec')
+    );
+
+    expect(shape).toContain('## Records written on confirmation');
+    expect(shape).toContain('## The spec');
+    expect(records).toContain('Once the scope summary is confirmed');
+    expect(records).toContain('before any other file changes');
+    expect(records).toContain('`/_meta/glossary.md`');
+    expect(records).toContain("use the repo's own glossary if it keeps one elsewhere");
+    expect(records).toContain('`/_meta/architecture-decisions.md`');
+    expect(records).toContain("use the repo's own place if it keeps decision records elsewhere");
+    expect(records).toContain('the date, the decision, the alternatives considered, and why this one won');
+    expect(records).toContain(
+      'amend the entry: keep its original text and add what changed and why'
+    );
+    expect(records).toContain('**The spec.** Write it when the task needs one');
+    expect(shape).not.toContain('once the work is done');
+  });
+
+  test('an instruction to proceed without questions stands in for the confirmation', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+
+    expect(shape).toContain(
+      'then continue. That instruction stands in for the confirmation.'
+    );
+  });
+
+  test('the layout reference says records and terms are written on confirmation', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const decisions = layout.slice(
+      layout.indexOf('## Decision Records'),
+      layout.indexOf('## Glossary')
+    );
+    const glossary = layout.slice(
+      layout.indexOf('## Glossary'),
+      layout.indexOf('## Temporary File Management')
+    );
+
+    expect(layout).toContain('## Decision Records');
+    expect(layout).toContain('## Glossary');
+    expect(layout).toContain('## Temporary File Management');
+    expect(decisions).toContain('writes the entry once the user confirms the summary');
+    expect(decisions).toContain('holds the entry format and how to amend an entry');
+    expect(decisions).not.toContain('once the work is done');
+    expect(glossary).toContain('once the scope summary that lists it is confirmed');
+    expect(glossary).not.toContain('at the moment its meaning is settled');
+    expect(glossary).toContain('follow `references/platform-adaptation.md`');
+  });
+
+  test('a repo without a glossary gets one proposed in the scope summary', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const section = adaptation.slice(
+      adaptation.indexOf('## Missing Glossary or Decision Records'),
+      adaptation.indexOf('## Missing Git Context')
+    );
+
+    expect(adaptation).toContain('## Missing Glossary or Decision Records');
+    expect(adaptation).toContain('## Missing Git Context');
+    expect(section).toContain('propose `/_meta/glossary.md` in the scope summary');
+    expect(section).toContain('once the summary is confirmed');
+  });
+
+  test('the workflow reads the glossary while grounding and amends decision records at the end', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const skill = read('metacoding-workflow/SKILL.md');
+    const stepMarkers = [
+      '1. Ground in the repository.',
+      '2. Shape the task',
+      '3. Build test-first.',
+      '6. Update artifacts',
+      '7. Close the loop.',
+    ];
     const grounding = rules.slice(
       rules.indexOf('1. Ground in the repository.'),
       rules.indexOf('2. Shape the task')
@@ -154,11 +263,18 @@ describe('installed skill content: durable artifacts', () => {
       rules.indexOf('7. Close the loop.')
     );
 
+    for (const marker of stepMarkers) {
+      expect(rules).toContain(marker);
+    }
     expect(grounding).toContain('glossary');
     expect(grounding).toContain('decision records');
-    expect(artifacts).toContain('[record]');
-    expect(artifacts).toContain('`/_meta/architecture-decisions.md`');
+    expect(artifacts).toContain(
+      'Amend a decision record the build proved wrong, as the `metacoding-shape` skill describes'
+    );
+    expect(artifacts).not.toContain('Write each decision marked');
     expect(skill).toContain('glossary');
+    expect(skill).toContain('amend any decision record the build proved wrong');
+    expect(skill).not.toContain('write the decision records the scope summary marked');
     expect(skill).not.toContain('bootstrap');
   });
 });
@@ -175,7 +291,7 @@ describe('installed skill content: solution and tickets', () => {
     expect(summary).toContain('\nTickets:\n');
   });
 
-  test('the workflow rules name the solution and the tickets in the scope summary', async () => {
+  test('the workflow rules name the solution, the terms, and the tickets in the scope summary', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const summaryLine = rules
@@ -183,6 +299,7 @@ describe('installed skill content: solution and tickets', () => {
       .find((line) => line.includes('Close with the scope summary'));
 
     expect(summaryLine).toContain('solution');
+    expect(summaryLine).toContain('terms');
     expect(summaryLine).toContain('tickets');
   });
 
@@ -194,6 +311,8 @@ describe('installed skill content: solution and tickets', () => {
       shape.indexOf('## Closing the interview')
     );
 
+    expect(shape).toContain('## Solution and tickets');
+    expect(shape).toContain('## Closing the interview');
     expect(section).toContain('the approach');
     expect(section).toContain('public interface');
   });
@@ -207,6 +326,7 @@ describe('installed skill content: solution and tickets', () => {
     );
 
     expect(shape).toContain('## Solution and tickets');
+    expect(shape).toContain('## Closing the interview');
     expect(section).toContain('built, verified, reviewed, and committed on its own');
     expect(section).toContain('vertical slice');
     expect(section).toContain('its own success criteria and test intent');
@@ -221,6 +341,8 @@ describe('installed skill content: solution and tickets', () => {
       shape.indexOf('## Closing the interview')
     );
 
+    expect(shape).toContain('## Solution and tickets');
+    expect(shape).toContain('## Closing the interview');
     expect(section).toContain('put the cut to the user as a decision');
     expect(shape).toContain('how it is sliced into tickets');
   });
@@ -230,6 +352,7 @@ describe('installed skill content: solution and tickets', () => {
     const shape = read('metacoding-shape/SKILL.md');
     const closing = shape.slice(shape.indexOf('## Closing the interview'));
 
+    expect(shape).toContain('## Closing the interview');
     expect(closing).toContain('number the tickets in build order');
     expect(closing).toContain('a title, its success criteria, and its test intent');
     expect(closing).toContain('For a one-ticket task, give the title alone');
@@ -250,10 +373,10 @@ describe('installed skill content: the spec', () => {
     const section = shape.slice(shape.indexOf('## The spec'));
 
     expect(shape).toContain('## The spec');
-    expect(section).toContain('Once the user confirms the scope summary');
-    expect(section).toContain('or has told you to proceed without questions');
+    expect(section).toContain('Write a spec when either is true');
     expect(section).toContain('The summary has more than one ticket.');
     expect(section).toContain('The summary has a decision marked `[record]`.');
+    expect(shape).toContain('# Shape');
     expect(shape.slice(0, shape.indexOf('# Shape'))).toContain(
       'a spec when the task has more than one ticket or a decision to record'
     );
@@ -298,6 +421,7 @@ describe('installed skill content: the spec', () => {
       '## Out of scope',
       '## Solution',
       '## Decisions made',
+      '## Terms',
       '## Assumptions',
       '## Test intent',
       '## Tickets',
@@ -330,7 +454,7 @@ describe('installed skill content: the spec', () => {
     expect(section).toContain("belong in the repo's system documentation");
   });
 
-  test('the workflow leaves the spec to the shape skill', async () => {
+  test('the workflow leaves the records and the spec to the shape skill', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const skill = read('metacoding-workflow/SKILL.md');
@@ -341,8 +465,12 @@ describe('installed skill content: the spec', () => {
 
     expect(rules).toContain('2. Shape the task');
     expect(rules).toContain('3. Build test-first.');
-    expect(shaping).toContain('When the task needs a spec, the skill writes it once the summary is confirmed.');
+    expect(shaping).toContain(
+      'Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.'
+    );
     expect(shaping).toContain('For a task that needs none');
-    expect(skill).toContain('the skill then writes a spec when the task needs one');
+    expect(skill).toContain(
+      'the skill then writes the settled terms, the marked decision records, and a spec when the task needs one'
+    );
   });
 });
