@@ -33,3 +33,15 @@
 **Why.** Rebuilding from detection replaced what the user entered and reported the file as locally edited on every update. A config file would be the cleaner store, but installs made before it existed have only `project-context.md`, so they would need a migration that reads that file anyway. Reading it directly fixes every existing install with no new file. The cost is that renaming one of the four labels in the template now needs a reader for the old label.
 
 **Amended 2026-11-27.** "Every existing install" was too wide. A 2.0.x Claude Code install keeps its project context in `.claude/metacoding-workflow/references/`, not in the skill folder, so `update` also reads that file when it migrates the layout. The labels are the same in both places.
+
+## 2026-11-28: The project map is a committed file of its own
+
+**Decision.** `metacoding-onboard` writes where a repo keeps its tracker, specs, glossary and decision records to `.metacoding/project.md`, a committed file at the same path in every repo. The skills read it by path. With the user's yes, the agent's own instruction file gets one line that points to it and holds nothing else.
+
+**Alternatives.**
+
+- A marked section in the root `CLAUDE.md`, which was the first suggestion.
+- A marked section in the root `AGENTS.md`.
+- The installed `references/project-context.md`, next to the `init` answers.
+
+**Why.** The skills are installed for three agents. Claude Code loads `CLAUDE.md` on its own and Codex loads `AGENTS.md`, so a section in either file reaches only some of them, while every agent can read a file by path. A file of its own also needs no merging into a file the user owns, and it can be written by the agent alone, so it works for an install that never ran the CLI. The installed `project-context.md` is ignored by git, exists once per agent, and is rewritten by `update`, so answers kept there would not reach a teammate or a fresh clone. The path cannot be under `/_meta`, because a repo that keeps its docs elsewhere has no such folder, and this file is where a session learns that. The cost is that a session running no metacoding skill does not know the file exists; the one-line pointer is there for that case.

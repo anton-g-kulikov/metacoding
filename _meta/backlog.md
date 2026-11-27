@@ -6,11 +6,10 @@ Most items come from a comparison of these skills with Matt Pocock's skills, mad
 
 ## Next, each on its own branch
 
-1. **Onboarding skill.** A separate skill from `init`, which only installs the skills and asks general project questions. It records once where the tracker, specs, glossary and decision records live, so later sessions read that instead of deciding again. Where the answers are stored (the root `CLAUDE.md` was suggested) is decided when the task is shaped.
-2. **Durable specs with user stories.** Specs saved in their respective folders, holding the shaped solution and a set of user stories in Gherkin form with acceptance criteria, grouped by user role and tied to specific test cases and scenarios. Today's spec is a record of one task, filed by date, with success criteria and test intent as free prose and no link from a criterion to its test. Shaped together with two other changes to what `metacoding-shape` writes:
+1. **Durable specs with user stories.** Specs saved in their respective folders, holding the shaped solution and a set of user stories in Gherkin form with acceptance criteria, grouped by user role and tied to specific test cases and scenarios. Today's spec is a record of one task, filed by date, with success criteria and test intent as free prose and no link from a criterion to its test. Shaped together with two other changes to what `metacoding-shape` writes:
    - Tickets are a linear list: no blocking edges, no sizing rule, no expand-then-contract rule for a wide refactor. The spec has no step that agrees test seams with the user and no rule that keeps file paths and code out of it.
    - `metacoding-shape` does four jobs (interview, solution, tickets, spec), so it cannot run as a plain interview.
-3. **Distribution.** There is no plugin manifest, and the workflow skill reads `references/project-context.md`, which only the CLI generates, so a plain skill install would break. `update` also reads that file back; see the decision record of 2026-11-27. Depends on where onboarding puts the project facts.
+2. **Distribution.** There is no plugin manifest, and the workflow skill reads `references/project-context.md`, which only the CLI generates, so a plain skill install would break. `update` also reads that file back; see the decision record of 2026-11-27. Onboarding keeps the project map at `.metacoding/project.md`; see the decision record of 2026-11-28.
 
 ## Later
 
