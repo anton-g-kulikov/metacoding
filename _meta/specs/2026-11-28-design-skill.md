@@ -66,6 +66,12 @@ Changed on 2026-11-28, found in the review of ticket 1:
 - The rule texts say a little more than the one-line rules above, and it is kept because each rule needs it to hold in use: depth is judged at the interface; a module that fails the deletion test is merged into its caller or into the module it passes calls to; a seam is real when two things do sit behind it; the two or three interfaces of rule 7 differ in kind.
 - The build moment is stated in full, as the interview agreed it: when the interface to test through is unclear or missing, and when restructuring once the behaviors are green.
 
+Changed on 2026-11-28, found in the review of ticket 2:
+
+- Run alone, the skill proposes a seam for new code only where one is needed, so that the proposal does not break rule 4.
+- An accepted proposal for new code becomes a task of its own, like a picked candidate, and the skill says to agree the task's scope with the user before any file changes. Without that, a pick could be read as the go to edit.
+- When existing code has no candidate for change, the skill says so.
+
 ## Decisions made
 
 - The guidance is a new companion skill, `metacoding-design`. A reference file of the workflow skill is out of reach when a companion runs alone, and paragraphs in three skills would state the same rules three times.
@@ -98,7 +104,7 @@ Changed on 2026-11-28, before the build: the ticket "The workflow says when to u
   - Success criteria: the first, second and fourth success criteria above. The skill is in the skill tables and folder trees of the docs and in the CHANGELOG, and the system documentation states who names other skills.
   - Test intent: the skill is installed for all three agents, with `agents/openai.yaml` for Codex. It states each term with its words to avoid, each of the seven rules, and both examples for rules 1, 4 and 6. Step 2 and step 3 name `metacoding-design` and its condition, in both the workflow skill and its workflow rules.
   - Blocked by: none.
-- [ ] **2. Running the skill alone**
+- [x] **2. Running the skill alone**
   - Success criteria: the third success criterion above.
   - Test intent: it works on what the user names and asks when nothing is named; new code gets an interface and its seams; existing code gets numbered candidates with a first pick; tests move to the new interface; no file is changed; a picked candidate becomes a task to shape.
   - Blocked by: 1.

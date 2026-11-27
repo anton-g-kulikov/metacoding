@@ -1,4 +1,4 @@
 interface:
   display_name: "Metacoding Design"
   short_description: "Design code by module depth, interfaces, and seams"
-  default_prompt: "Use $metacoding-design to decide the shape of this code by module depth, interfaces, and seams: a small interface with a lot behind it, and a seam only where something varies."
+  default_prompt: "Use $metacoding-design to design the module I name, or to assess the code I point at, by module depth, interfaces, and seams, and bring me a proposal without changing any file."

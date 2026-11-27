@@ -148,6 +148,8 @@ For the last ticket of a task with several, the scope axis runs once more on the
 
 Three of its seven rules come with a good and a bad example. The examples are pseudocode, and the rules name no language.
 
+You can also run it on its own, on a module or an area you name. For new code it proposes the interface and its seams. For existing code it lists numbered candidates for change, each with what is wrong, the proposed change, and what happens to the tests, and says which one it would do first. It changes no file: a proposal you accept, or a candidate you pick, becomes a task of its own, with its scope agreed before any file changes.
+
 ### Debugging
 
 For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test. It keeps a raw capture from a real system out of the repo, and masks credentials and personal data in whatever it shows, writes into the repo, or commits.

@@ -1,11 +1,11 @@
 ---
 name: metacoding-design
-description: Decide the shape of code by module depth, interfaces, and seams, so that a lot of behavior sits behind a small interface and a seam exists only where something varies. Use when the user asks to design a module or an interface, to decide where a seam goes, or to make code easier to test or to change, or when the metacoding workflow has an interface to design.
+description: Decide the shape of code by module depth, interfaces, and seams, so that a lot of behavior sits behind a small interface and a seam exists only where something varies. Use when the user asks to design a module or an interface, to decide where a seam goes, to make code easier to test or to change, or to assess the shape of existing code, or when the metacoding workflow has an interface to design.
 ---
 
 # Design
 
-Use this skill to decide the shape of code before it is written. The shape is three things: how much a module hides, what its callers must know, and where one part can be swapped for another.
+Use this skill to decide the shape of code before it is written, and to assess the shape of code that exists. The shape is three things: how much a module hides, what its callers must know, and where one part can be swapped for another.
 
 ## Terms
 
@@ -87,3 +87,19 @@ function set_expiry(order):
 ### 7. Design a lasting interface more than once
 
 For an interface that will be hard to change, such as one that other projects call, a data format, or a module with many callers, sketch two or three different interfaces before choosing. Make them differ in kind: the smallest one that works, the one that makes the common case a single call, the one that leaves the most room for later. When the host agent supports subagents, you may give each one to its own subagent. Put the choice to the user with your recommendation and what each one costs.
+
+## On its own
+
+When the user asks for this skill directly, and not as a step of a task already under way, work on the module or area they name. When they name none, ask which one. Change no file: the result is a proposal.
+
+**New code.** Propose the interface: everything a caller must know. Say where a seam is needed, if anywhere, and what sits behind it.
+
+**Existing code.** Read the code and its tests, then list the candidates for change, numbered. When there is none, say so. For each candidate, give:
+
+- what is wrong, in the terms above, such as "shallow: the caller makes four calls in a fixed order"
+- the proposed change
+- what happens to the tests: which tests would be written at the new interface, and which old tests would be deleted. Old tests of the parts a change replaces are not kept beside the new ones.
+
+Say which candidate you would do first, and why.
+
+A proposal the user accepts, or a candidate they pick, becomes a task of its own. Agree its scope with the user before any file changes.

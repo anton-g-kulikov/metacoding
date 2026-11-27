@@ -1894,13 +1894,11 @@ describe('installed skill content: the design skill', () => {
   });
 
   test('design sketches a lasting interface more than once and puts the choice to the user', async () => {
-    const { read } = await installFor('codex');
-    const design = read('metacoding-design/SKILL.md');
-    const rule = design.slice(
-      design.indexOf('### 7. Design a lasting interface more than once')
+    const rule = await designSection(
+      '### 7. Design a lasting interface more than once',
+      '## On its own'
     );
 
-    expect(design).toContain('### 7. Design a lasting interface more than once');
     expect(rule).toContain('sketch two or three different interfaces before choosing');
     expect(rule).not.toContain('API');
     expect(rule).toContain(
@@ -1950,6 +1948,90 @@ describe('installed skill content: the design skill', () => {
     );
     expect(buildStep).toContain(
       'Use the `metacoding-design` skill when the interface to test through is unclear or does not exist yet, and when restructuring once the behaviors are green.'
+    );
+  });
+});
+
+describe('installed skill content: the design skill on its own', () => {
+  const onItsOwn = async () => {
+    const { read } = await installFor('codex');
+    const design = read('metacoding-design/SKILL.md');
+
+    expect(design).toContain('## On its own');
+    return design.slice(design.indexOf('## On its own'));
+  };
+
+  test('design says it also judges code that exists', async () => {
+    const { read } = await installFor('codex');
+    const design = read('metacoding-design/SKILL.md');
+    const intro = design.slice(design.indexOf('# Design'), design.indexOf('## Terms'));
+
+    expect(design).toContain('# Design');
+    expect(design).toContain('## Terms');
+    expect(intro).toContain(
+      'Use this skill to decide the shape of code before it is written, and to assess the shape of code that exists.'
+    );
+    expect(design).toMatch(/^description: .*or to assess the shape of existing code/m);
+  });
+
+  test('alone, design works on what the user names and asks when they name nothing', async () => {
+    const section = await onItsOwn();
+
+    expect(section).toContain(
+      'When the user asks for this skill directly, and not as a step of a task already under way, work on the module or area they name. When they name none, ask which one.'
+    );
+  });
+
+  test('alone, design proposes an interface and its seams for new code', async () => {
+    const section = await onItsOwn();
+
+    expect(section).toContain(
+      '**New code.** Propose the interface: everything a caller must know.'
+    );
+    expect(section).toContain(
+      'Say where a seam is needed, if anywhere, and what sits behind it.'
+    );
+  });
+
+  test('alone, design lists numbered candidates for existing code and names the first', async () => {
+    const section = await onItsOwn();
+
+    expect(section).toContain(
+      '**Existing code.** Read the code and its tests, then list the candidates for change, numbered.'
+    );
+    expect(section).toContain('When there is none, say so.');
+    expect(section).toContain('- what is wrong, in the terms above');
+    expect(section).toContain('- the proposed change');
+    expect(section).toContain('- what happens to the tests');
+    expect(section).toContain('Say which candidate you would do first, and why.');
+  });
+
+  test('alone, design moves the tests to the new interface instead of keeping both', async () => {
+    const section = await onItsOwn();
+
+    expect(section).toContain(
+      'which tests would be written at the new interface, and which old tests would be deleted'
+    );
+    expect(section).toContain(
+      'Old tests of the parts a change replaces are not kept beside the new ones.'
+    );
+  });
+
+  test('alone, design changes no file and a picked candidate becomes a task', async () => {
+    const section = await onItsOwn();
+
+    expect(section).toContain('Change no file: the result is a proposal.');
+    expect(section).toContain(
+      'A proposal the user accepts, or a candidate they pick, becomes a task of its own. Agree its scope with the user before any file changes.'
+    );
+  });
+
+  test('the Codex prompt of design asks for a proposal and no file change', async () => {
+    const { read } = await installFor('codex');
+    const metadata = read('metacoding-design/agents/openai.yaml');
+
+    expect(metadata).toContain(
+      'default_prompt: "Use $metacoding-design to design the module I name, or to assess the code I point at, by module depth, interfaces, and seams, and bring me a proposal without changing any file."'
     );
   });
 });
