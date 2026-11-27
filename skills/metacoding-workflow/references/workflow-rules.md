@@ -11,12 +11,13 @@
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Shape the task: interview the user and capture task scope.
    - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.
+   - Then use the `metacoding-spec` skill: describe the solution and slice it into tickets.
    - When the solution adds a module or changes an interface, design that part with the `metacoding-design` skill before the scope summary is sent.
    - Close with the scope summary: goal, success criteria, in and out of scope, solution, decisions, terms, assumptions, test intent, and the tickets the solution is sliced into.
    - Wait for the user to confirm the scope summary before changing any file.
-   - Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.
+   - Once the summary is confirmed, the `metacoding-spec` skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.
    - For a task that needs none, record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.
-   - When VCS work is in scope, commit the records the skill wrote on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way.
+   - When VCS work is in scope, commit those records on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way.
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
    - Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.
@@ -33,7 +34,7 @@
 6. Update artifacts using MECE documentation rules.
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
    - Update the one artifact that owns the concept instead of duplicating the same information, as `references/repository-organization.md` describes.
-   - Amend a decision record the build proved wrong, as the `metacoding-shape` skill describes.
+   - Amend a decision record the build proved wrong, as the `metacoding-spec` skill describes.
    - Handle specs, tickets, and test records as `references/repository-organization.md` describes.
    - Keep system docs evergreen and free of task status.
 7. Close the loop.
@@ -47,7 +48,7 @@ A task with more than one ticket repeats steps 3 to 7 for each ticket, in the or
 
 - Build, verify, and review one ticket before starting the next.
 - In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the spec.
-- In step 6, mark the ticket done where the tickets are tracked, so that a tick in the spec's checklist is part of the ticket's commit. With the last ticket, mark the spec done, as the `metacoding-shape` skill describes.
+- In step 6, mark the ticket done where the tickets are tracked, so that a tick in the spec's checklist is part of the ticket's commit. With the last ticket, mark the spec done, as the `metacoding-spec` skill describes.
 - Close each ticket on its own in step 7: commit it or hand it off, and report what was done.
 - After every ticket but the last, wait for the user's go before starting the next one.
 - After the last ticket is closed, use the `metacoding-retro` skill once for the task. It proposes lasting changes for the task's mistakes, and the user decides which are made. Those changes come after the last ticket and are not part of the task's spec, which stays done.
@@ -60,7 +61,7 @@ A session can end before a task's last ticket is done. When grounding finds a sp
 
 - The spec is the agreed scope. Skip step 2.
 - Start at the first ticket that is not marked done where the tickets are tracked, and follow the rules above from there, including the wait before each next ticket.
-- When the request changes what the spec agreed, settle the change first, as the `metacoding-shape` skill describes for a spec in progress.
+- When the request changes what the spec agreed, settle the change first, as the `metacoding-spec` skill describes for a spec in progress.
 - Ask the user which task to work on when more than one spec is in progress, or when you cannot tell whether the request belongs to the spec.
 
 ## Scope Control

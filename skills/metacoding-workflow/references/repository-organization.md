@@ -68,7 +68,7 @@ Rules:
 
 ## Specs, Tickets, and Test Records
 
-The `metacoding-shape` skill decides which tasks need a spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
+The `metacoding-spec` skill decides which tasks need a spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
 
 - A spec goes where the repo already keeps specs. When it has no such place, it goes to `/_meta/specs/<date>-<slug>.md`.
 - The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the spec.
@@ -82,7 +82,7 @@ The `metacoding-shape` skill decides which tasks need a spec, writes it once the
 2. **Surprising without context.** Someone reading the code would wonder why it was done this way.
 3. **A real trade-off.** There were workable alternatives, and this one was chosen for stated reasons.
 
-A decision reaches this file through the scope summary: the `metacoding-shape` skill marks it `[record]` and writes the entry once the user confirms the summary, before the build starts. The skill holds the entry format and how to amend an entry.
+A decision reaches this file through the scope summary: the `metacoding-spec` skill marks it `[record]` and writes the entry once the user confirms the summary, before the build starts. The skill holds the entry format and how to amend an entry.
 
 A retro can add an entry too: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves.
 

@@ -13,6 +13,7 @@ export const WORKFLOW_SKILL = 'metacoding-workflow';
 export const METACODING_SKILLS = [
   WORKFLOW_SKILL,
   'metacoding-shape',
+  'metacoding-spec',
   'metacoding-tdd',
   'metacoding-review',
   'metacoding-debug',

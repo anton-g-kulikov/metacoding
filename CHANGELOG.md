@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Companion skills, installed next to `metacoding-workflow` and usable on their own:
-  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
+  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a summary of the decisions, terms and assumptions. It writes no file, so it can be used as a plain interview
+  - `metacoding-spec`: turns the settled decisions into a scope summary, gets it confirmed, and writes the records. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like and on test doubles
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards, with a fixed list of code smells for what those standards leave open, two of them about the shape of the code: a function or module that only passes calls on, and an interface or abstract type with one implementation that nothing swaps for another
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix, and masks credentials and personal data in what it captures
@@ -29,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The records that shaping writes (glossary terms, decision records, the spec) are committed on their own before the build, when VCS work is in scope. So is a confirmed change to a spec in progress
 - A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
-- Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
+- Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-spec` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
 - A plugin install for Claude Code: the repo is a plugin and its own marketplace, so Claude Code installs the skills from it without the CLI. The plugin has the version of the npm package
 - A plugin install for Codex and for Antigravity, from the same repo and with the same version. Both follow the agents' documentation and are not yet tried on a real install
 

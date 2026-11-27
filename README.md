@@ -80,8 +80,9 @@ Antigravity: .agents/skills/
 
 | Skill | Role |
 | --- | --- |
-| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug` and `metacoding-design` at the right step, and `metacoding-retro` after the last ticket |
-| `metacoding-shape` | Settles open decisions with you and ends in a confirmed scope summary |
+| `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls `metacoding-shape`, `metacoding-spec`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug` and `metacoding-design` at the right step, and `metacoding-retro` after the last ticket |
+| `metacoding-shape` | Settles open decisions with you in an interview |
+| `metacoding-spec` | Turns the settled decisions into a confirmed scope summary with tickets, and writes the records |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-review` | Checks the finished change against the agreed scope and the repo's standards |
 | `metacoding-debug` | Finds the cause of a bug, starting from a command that reproduces it |
@@ -89,7 +90,7 @@ Antigravity: .agents/skills/
 | `metacoding-retro` | Looks back at a finished task and proposes lasting changes for its mistakes |
 | `metacoding-onboard` | Run once per repo. Records where the repo keeps its tracker, specs, glossary and decision records in a project map, `.metacoding/project.md` |
 
-Each companion skill also works on its own, so you can ask for only an interview, only a review, only a diagnosis, or only a retro.
+Each companion skill also works on its own, so you can ask for only an interview, only a scope summary, only a review, only a diagnosis, or only a retro.
 
 For Codex, a CLI install looks like:
 
@@ -109,6 +110,9 @@ For Codex, a CLI install looks like:
 │       ├── changelog-entry.md
 │       └── project-context.md
 ├── metacoding-shape/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+├── metacoding-spec/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 ├── metacoding-tdd/
@@ -136,7 +140,7 @@ Claude Code and Antigravity get the same folders without the Codex-only `agents/
 The workflow skill runs these steps in order:
 
 1. Ground in the repo and look up facts before asking questions.
-2. Shape the task: interview the user on open decisions and confirm scope before changing code (`metacoding-shape`).
+2. Shape the task: interview the user on open decisions (`metacoding-shape`), then confirm the scope summary before changing code (`metacoding-spec`).
 3. Build test-first (`metacoding-tdd`, or `metacoding-debug` for a bug with an unknown cause).
 4. Verify with tests and direct checks.
 5. Review the diff against the scope and the repo's standards (`metacoding-review`).
@@ -150,7 +154,7 @@ Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its ow
 The `metacoding-workflow` skill applies a strict operating contract for development tasks. It does not only provide prompts; it enforces an execution order and completion gates:
 
 1. Repository grounding before planning.
-2. Shaping: a scope interview that ends in a confirmed scope summary.
+2. Shaping: an interview on the open decisions, then a confirmed scope summary.
 3. Mandatory TDD sequence.
 4. Verification through targeted checks.
 5. Review against scope and standards.
@@ -166,6 +170,11 @@ Before any file changes, `metacoding-shape` interviews you about the task:
 - It looks up facts itself (code, config, tests, docs, git history) and asks you only for decisions.
 - It asks in rounds of numbered questions, each with a recommended answer, so you can reply with "1 yes, 2 yes, 3 the second option".
 - Each round's answers decide which questions come next.
+- It closes with a summary of the decisions, terms and assumptions, and writes no file. Run on its own, it stops there.
+
+Then `metacoding-spec` turns the settled decisions into the agreed scope:
+
+- It starts from what is already settled and does not ask it again.
 - It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, with its own success criteria and test intent. A small task stays one ticket.
 - It closes with a scope summary (goal, success criteria, in and out of scope, solution, decisions, terms, assumptions, test intent, tickets) and waits for your confirmation.
 - Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a spec; a smaller task gets none.
@@ -236,7 +245,7 @@ It keeps no log: the changes, with their commit messages, are the record.
 - It closes by telling you how to work from here: what it wrote, how to start a task, and what each installed metacoding skill is for.
 - Run it again when a place moves: it shows the current project map and asks what changed.
 
-The workflow reads the project map while grounding, and `metacoding-shape` reads it before its first round. In a repo with no project map, the workflow says so in one line and carries on.
+The workflow reads the project map while grounding, and `metacoding-shape` and `metacoding-spec` read it before they start. In a repo with no project map, the workflow says so in one line and carries on.
 
 ### Scope and Task-Switching Rules
 

@@ -84,7 +84,7 @@ describe('installed skill content: durable artifacts', () => {
     expect(prescribed).toContain('`/_meta/specs/`');
     expect(prescribed).not.toContain('project-task-list.md');
     expect(prescribed).not.toContain('test-documentation.md');
-    expect(records).toContain('`metacoding-shape` skill decides which tasks need a spec');
+    expect(records).toContain('`metacoding-spec` skill decides which tasks need a spec');
     expect(records).toContain('where the repo already keeps specs');
     expect(records).toContain('`/_meta/specs/<date>-<slug>.md`');
     expect(records).toContain("go to the repo's tracker when it keeps one current");
@@ -174,7 +174,7 @@ describe('installed skill content: durable artifacts', () => {
   test('the task entry template carries the scope summary fields', async () => {
     const { read } = await installFor('codex');
     const template = read('metacoding-workflow/assets/templates/task-entry.md');
-    const interview = read('metacoding-shape/SKILL.md');
+    const spec = read('metacoding-spec/SKILL.md');
     const summaryFields = [
       'Goal:',
       'Success criteria:',
@@ -189,64 +189,69 @@ describe('installed skill content: durable artifacts', () => {
     ];
 
     for (const field of summaryFields) {
-      expect(interview).toContain(`\n${field}`);
+      expect(spec).toContain(`\n${field}`);
       expect(template).toContain(`- ${field}`);
     }
   });
 
-  test('shape lists settled terms in the scope summary and writes nothing before confirmation', async () => {
+  test('settled terms are listed in both summaries and written only after confirmation', async () => {
     const { read } = await installFor('codex');
     const shape = read('metacoding-shape/SKILL.md');
+    const spec = read('metacoding-spec/SKILL.md');
     const terms = shape.slice(
       shape.indexOf('## Terms'),
       shape.indexOf('## Question format')
     );
-    const summaryStart = shape.indexOf('```text\nScope summary\n');
-    const summary = shape.slice(summaryStart, shape.indexOf('```', summaryStart + 3));
+    const summaryStart = spec.indexOf('```text\nScope summary\n');
+    const summary = spec.slice(summaryStart, spec.indexOf('```', summaryStart + 3));
 
     expect(shape).toContain('## Terms');
     expect(shape).toContain('## Question format');
     expect(summaryStart).toBeGreaterThan(-1);
-    expect(terms).toContain('list it under Terms in the scope summary');
-    expect(terms).toContain('Nothing is written to the glossary until the summary is confirmed');
+    expect(terms).toContain('list it under Terms in the decisions summary');
+    expect(terms).toContain(
+      'The `metacoding-spec` skill writes them to the glossary once its scope summary is confirmed.'
+    );
     expect(summary).toContain('\nTerms:\n');
-    expect(shape).toContain(
+    expect(spec).toContain(
       'propose creating one there, by default at `/_meta/glossary.md`: confirming the summary approves it'
     );
-    expect(shape).not.toContain('straight away');
-    expect(shape).not.toContain('before the scope summary is confirmed');
+    for (const skill of [shape, spec]) {
+      expect(skill).not.toContain('straight away');
+      expect(skill).not.toContain('before the scope summary is confirmed');
+    }
   });
 
-  test('shape marks the decisions to record against a three-part bar', async () => {
+  test('the scope summary marks the decisions to record against a three-part bar', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
+    const spec = read('metacoding-spec/SKILL.md');
 
-    const closing = shape.slice(
-      shape.indexOf('## Closing the interview'),
-      shape.indexOf('## Records written on confirmation')
+    const summarySection = spec.slice(
+      spec.indexOf('## The scope summary'),
+      spec.indexOf('## Records written on confirmation')
     );
 
-    expect(shape).toContain('## Closing the interview');
-    expect(shape).toContain('## Records written on confirmation');
-    expect(closing).toContain('put `[record]` in front of each decision');
-    expect(closing).toContain(
+    expect(spec).toContain('## The scope summary');
+    expect(spec).toContain('## Records written on confirmation');
+    expect(summarySection).toContain('put `[record]` in front of each decision');
+    expect(summarySection).toContain(
       'hard to reverse, surprising without context, and a real trade-off'
     );
-    expect(closing).toContain(
+    expect(summarySection).toContain(
       'Confirming the summary also approves writing those as decision records.'
     );
   });
 
-  test('shape writes the terms and the marked decisions once the summary is confirmed', async () => {
+  test('the spec skill writes the terms and the marked decisions once the summary is confirmed', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const records = shape.slice(
-      shape.indexOf('## Records written on confirmation'),
-      shape.indexOf('## The spec')
+    const spec = read('metacoding-spec/SKILL.md');
+    const records = spec.slice(
+      spec.indexOf('## Records written on confirmation'),
+      spec.indexOf('## The spec')
     );
 
-    expect(shape).toContain('## Records written on confirmation');
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## Records written on confirmation');
+    expect(spec).toContain('## The spec');
     expect(records).toContain('Once the scope summary is confirmed');
     expect(records).toContain('before any other file changes');
     expect(records).toContain('`/_meta/glossary.md`');
@@ -258,14 +263,14 @@ describe('installed skill content: durable artifacts', () => {
       'amend the entry: keep its original text and add what changed and why'
     );
     expect(records).toContain('**The spec.** Write it when the task needs one');
-    expect(shape).not.toContain('once the work is done');
+    expect(spec).not.toContain('once the work is done');
   });
 
   test('an instruction to proceed without questions stands in for the confirmation', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
+    const spec = read('metacoding-spec/SKILL.md');
 
-    expect(shape).toContain(
+    expect(spec).toContain(
       'then continue. That instruction stands in for the confirmation.'
     );
   });
@@ -333,7 +338,7 @@ describe('installed skill content: durable artifacts', () => {
     expect(grounding).toContain('glossary');
     expect(grounding).toContain('decision records');
     expect(artifacts).toContain(
-      'Amend a decision record the build proved wrong, as the `metacoding-shape` skill describes'
+      'Amend a decision record the build proved wrong, as the `metacoding-spec` skill describes'
     );
     expect(artifacts).not.toContain('Write each decision marked');
     expect(skill).not.toContain('write the decision records the scope summary marked');
@@ -344,9 +349,9 @@ describe('installed skill content: durable artifacts', () => {
 describe('installed skill content: solution and tickets', () => {
   test('the scope summary states the solution and the tickets', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const summaryStart = shape.indexOf('```text\nScope summary\n');
-    const summary = shape.slice(summaryStart, shape.indexOf('```', summaryStart + 3));
+    const spec = read('metacoding-spec/SKILL.md');
+    const summaryStart = spec.indexOf('```text\nScope summary\n');
+    const summary = spec.slice(summaryStart, spec.indexOf('```', summaryStart + 3));
 
     expect(summaryStart).toBeGreaterThan(-1);
     expect(summary).toContain('\nSolution:\n');
@@ -367,28 +372,28 @@ describe('installed skill content: solution and tickets', () => {
 
   test('the solution names the approach and what changes', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(
-      shape.indexOf('## Solution and tickets'),
-      shape.indexOf('## Closing the interview')
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(
+      spec.indexOf('## Solution and tickets'),
+      spec.indexOf('## The scope summary')
     );
 
-    expect(shape).toContain('## Solution and tickets');
-    expect(shape).toContain('## Closing the interview');
+    expect(spec).toContain('## Solution and tickets');
+    expect(spec).toContain('## The scope summary');
     expect(section).toContain('the approach');
     expect(section).toContain('public interface');
   });
 
-  test('shape slices the solution into tickets that are vertical slices', async () => {
+  test('the solution is sliced into tickets that are vertical slices', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(
-      shape.indexOf('## Solution and tickets'),
-      shape.indexOf('## Closing the interview')
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(
+      spec.indexOf('## Solution and tickets'),
+      spec.indexOf('## The scope summary')
     );
 
-    expect(shape).toContain('## Solution and tickets');
-    expect(shape).toContain('## Closing the interview');
+    expect(spec).toContain('## Solution and tickets');
+    expect(spec).toContain('## The scope summary');
     expect(section).toContain('built, verified, reviewed, and committed on its own');
     expect(section).toContain('vertical slice');
     expect(section).toContain('its own success criteria and test intent');
@@ -397,59 +402,59 @@ describe('installed skill content: solution and tickets', () => {
 
   test('an open choice of how to slice goes to the user as a decision', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(
-      shape.indexOf('## Solution and tickets'),
-      shape.indexOf('## Closing the interview')
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(
+      spec.indexOf('## Solution and tickets'),
+      spec.indexOf('## The scope summary')
     );
 
-    expect(shape).toContain('## Solution and tickets');
-    expect(shape).toContain('## Closing the interview');
+    expect(spec).toContain('## Solution and tickets');
+    expect(spec).toContain('## The scope summary');
     expect(section).toContain('put the cut to the user as a decision');
-    expect(shape).toContain('how it is sliced into tickets');
+    expect(spec).toContain('how it is sliced into tickets');
   });
 
   test('the scope summary lists tickets in build order with their criteria and test intent', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const closing = shape.slice(shape.indexOf('## Closing the interview'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const summarySection = spec.slice(spec.indexOf('## The scope summary'));
 
-    expect(shape).toContain('## Closing the interview');
-    expect(closing).toContain('number the tickets in build order');
-    expect(closing).toContain('a title, its success criteria, and its test intent');
-    expect(closing).toContain('For a one-ticket task, give the title alone');
+    expect(spec).toContain('## The scope summary');
+    expect(summarySection).toContain('number the tickets in build order');
+    expect(summarySection).toContain('a title, its success criteria, and its test intent');
+    expect(summarySection).toContain('For a one-ticket task, give the title alone');
   });
 
   test('a small task stays one ticket', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
+    const spec = read('metacoding-spec/SKILL.md');
 
-    expect(shape).toContain('A small task is one ticket');
+    expect(spec).toContain('A small task is one ticket');
   });
 });
 
 describe('installed skill content: the spec', () => {
-  test('shape writes a spec after confirmation for more than one ticket or a marked decision', async () => {
+  test('a spec is written after confirmation for more than one ticket or a marked decision', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(spec.indexOf('## The spec'));
 
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(section).toContain('Write a spec when either is true');
     expect(section).toContain('The summary has more than one ticket.');
     expect(section).toContain('The summary has a decision marked `[record]`.');
-    expect(shape).toContain('# Shape');
-    expect(shape.slice(0, shape.indexOf('# Shape'))).toContain(
+    expect(spec).toContain('\n# Spec\n');
+    expect(spec.slice(0, spec.indexOf('\n# Spec\n'))).toContain(
       'a spec when the task has more than one ticket or a decision to record'
     );
   });
 
   test('a one-ticket task with no marked decision gets no spec', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(spec.indexOf('## The spec'));
 
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(section).toContain('needs no spec');
     expect(section).toContain('where the repo already tracks work');
     expect(section).toContain('the summary in the conversation is the record');
@@ -457,10 +462,10 @@ describe('installed skill content: the spec', () => {
 
   test("the spec goes to the repo's own place or /_meta/specs", async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(spec.indexOf('## The spec'));
 
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(section).toContain('where the repo already keeps specs');
     expect(section).toContain('`/_meta/specs/<date>-<slug>.md`');
     expect(section).toContain('`YYYY-MM-DD`');
@@ -468,12 +473,12 @@ describe('installed skill content: the spec', () => {
 
   test('the spec holds a status, the scope summary fields, and the tickets', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(spec.indexOf('## The spec'));
     const formatStart = section.indexOf('```text\n# Spec:');
     const format = section.slice(formatStart, section.indexOf('```', formatStart + 3));
 
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(formatStart).toBeGreaterThan(-1);
     expect(format).toContain('- Status: in progress');
     for (const heading of [
@@ -496,10 +501,10 @@ describe('installed skill content: the spec', () => {
 
   test("tickets go to the repo's tracker when it keeps one current, otherwise the spec is the tracker", async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(spec.indexOf('## The spec'));
 
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(section).toContain('When the repo keeps a tracker current');
     expect(section).toContain('create the tickets there and link each one from the spec');
     expect(section).toContain('the checklist in the spec is the tracker');
@@ -507,16 +512,16 @@ describe('installed skill content: the spec', () => {
 
   test('a finished spec is marked done and stays in place unchanged', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(spec.indexOf('## The spec'));
 
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(section).toContain("set the spec's status to done");
     expect(section).toContain('leave the spec in place and unchanged');
     expect(section).toContain("belong in the repo's system documentation");
   });
 
-  test('the workflow leaves the records and the spec to the shape skill', async () => {
+  test('the workflow leaves the records and the spec to the spec skill', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const shaping = rules.slice(
@@ -527,7 +532,7 @@ describe('installed skill content: the spec', () => {
     expect(rules).toContain('2. Shape the task');
     expect(rules).toContain('3. Build test-first.');
     expect(shaping).toContain(
-      'Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.'
+      'Once the summary is confirmed, the `metacoding-spec` skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.'
     );
     expect(shaping).toContain('For a task that needs none');
   });
@@ -578,7 +583,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(tickets).toContain('In step 6, mark the ticket done where the tickets are tracked');
     expect(tickets).toContain("is part of the ticket's commit");
     expect(tickets).toContain(
-      'With the last ticket, mark the spec done, as the `metacoding-shape` skill describes.'
+      'With the last ticket, mark the spec done, as the `metacoding-spec` skill describes.'
     );
   });
 
@@ -781,27 +786,27 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(finalPass).toContain("Tickets can each pass while the task's goal is still missed.");
   });
 
-  test('shape says the tickets are built and reviewed one at a time', async () => {
+  test('the scope summary says the tickets are built and reviewed one at a time', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const closing = shape.slice(
-      shape.indexOf('## Closing the interview'),
-      shape.indexOf('## Records written on confirmation')
+    const spec = read('metacoding-spec/SKILL.md');
+    const summarySection = spec.slice(
+      spec.indexOf('## The scope summary'),
+      spec.indexOf('## Records written on confirmation')
     );
 
-    expect(shape).toContain('## Closing the interview');
-    expect(shape).toContain('## Records written on confirmation');
-    expect(closing).toContain(
+    expect(spec).toContain('## The scope summary');
+    expect(spec).toContain('## Records written on confirmation');
+    expect(summarySection).toContain(
       "the tickets are built one at a time, each ticket's test intent seeds its test-first work, and reviews check each ticket and then the whole change against the summary."
     );
   });
 
   test('a ticket in the spec checklist is ticked when it is done', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = spec.slice(spec.indexOf('## The spec'));
 
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(section).toContain(
       'the checklist in the spec is the tracker: tick a ticket when it is done.'
     );
@@ -809,9 +814,9 @@ describe('installed skill content: building ticket by ticket', () => {
 
   test('a change to a spec in progress is confirmed and written into the spec first', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
+    const spec = read('metacoding-spec/SKILL.md');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
-    const section = shape.slice(shape.indexOf('## The spec'));
+    const section = spec.slice(spec.indexOf('## The spec'));
     const resuming = rules.slice(
       rules.indexOf('### Resuming a task'),
       rules.indexOf('## Scope Control')
@@ -820,16 +825,16 @@ describe('installed skill content: building ticket by ticket', () => {
     for (const marker of ['### Resuming a task', '## Scope Control']) {
       expect(rules).toContain(marker);
     }
-    expect(shape).toContain('## The spec');
+    expect(spec).toContain('## The spec');
     expect(section).toContain(
       'While the spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the spec with its date before building it.'
     );
     expect(resuming).toContain(
-      'When the request changes what the spec agreed, settle the change first, as the `metacoding-shape` skill describes for a spec in progress.'
+      'When the request changes what the spec agreed, settle the change first, as the `metacoding-spec` skill describes for a spec in progress.'
     );
   });
 
-  test('the records shape writes are committed on their own before the build', async () => {
+  test('the records written on confirmation are committed on their own before the build', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
     const shaping = rules.slice(
@@ -840,7 +845,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(rules).toContain('2. Shape the task');
     expect(rules).toContain('3. Build test-first.');
     expect(shaping).toContain(
-      "When VCS work is in scope, commit the records the skill wrote on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way."
+      "When VCS work is in scope, commit those records on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way."
     );
   });
 
@@ -1213,7 +1218,7 @@ describe('installed skill content: prompt upkeep', () => {
         'The steps, in order. What each one requires is in the Operating Sequence of `references/workflow-rules.md`.',
         '',
         '1. Ground in the repo.',
-        '2. Shape, with `metacoding-shape`.',
+        '2. Shape, with `metacoding-shape` and `metacoding-spec`.',
         '3. Build test-first, with `metacoding-tdd` or `metacoding-debug`.',
         '4. Verify.',
         '5. Review, with `metacoding-review`.',
@@ -1298,7 +1303,7 @@ describe('installed skill content: onboarding', () => {
     expect(intro).toContain('Run this once per repo, and again when one of the places moves.');
     expect(intro).toContain('so that no later session has to work the places out again');
     expect(intro).toContain(
-      'The metacoding workflow and the `metacoding-shape` skill read that file.'
+      'The metacoding workflow and the `metacoding-shape` and `metacoding-spec` skills read that file.'
     );
   });
 
@@ -1413,15 +1418,15 @@ describe('installed skill content: onboarding', () => {
     );
   });
 
-  test('onboarding recommends the defaults of the shape skill for what the repo lacks', async () => {
+  test('onboarding recommends the defaults of the spec skill for what the repo lacks', async () => {
     const { read } = await installFor('codex');
     const onboard = read('metacoding-onboard/SKILL.md');
     const section = sectionOf(onboard, '## 2. Ask', '### The pointer');
 
     expect(section).toContain(
-      'For a place the repo does not have, recommend the default: the place the `metacoding-shape` skill uses in a repo that has none.'
+      'For a place the repo does not have, recommend the default: the place the `metacoding-spec` skill uses in a repo that has none.'
     );
-    expect(section).toContain('`../metacoding-shape/SKILL.md`');
+    expect(section).toContain('`../metacoding-spec/SKILL.md`');
     expect(section).toContain(
       'In an empty folder all four recommendations are the defaults, and the user can confirm the round in one line.'
     );
@@ -1485,7 +1490,7 @@ describe('installed skill content: onboarding', () => {
 
     expect(section).toContain('Record the places and create none of them.');
     expect(section).toContain(
-      'is created by the `metacoding-shape` skill when a task first needs it, at the path recorded here'
+      'is created by the `metacoding-spec` skill when a task first needs it, at the path recorded here'
     );
   });
 
@@ -1648,32 +1653,37 @@ describe('installed skill content: using the project map', () => {
       'When the repo has a project map, `.metacoding/project.md`, read it before the first round.'
     );
     expect(section).toContain('The `metacoding-onboard` skill writes it');
+    expect(section).toContain('Read the glossary at the place it names.');
   });
 
-  test('shape reads and writes its records where the project map says', async () => {
+  test('the spec skill reads and writes its records where the project map says', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = sectionOf(shape, '## The project map', '## Terms');
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = sectionOf(spec, '## The project map', '## Solution and tickets');
+
+    expect(section).toContain(
+      'When the repo has a project map, `.metacoding/project.md`, read it before writing the scope summary.'
+    );
 
     expect(section).toContain(
       'Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a spec, or a ticket, and create it there when it does not exist yet.'
     );
   });
 
-  test('shape falls back to its defaults for a missing line or a missing project map', async () => {
+  test('the spec skill falls back to its defaults for a missing line or a missing project map', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = sectionOf(shape, '## The project map', '## Terms');
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = sectionOf(spec, '## The project map', '## Solution and tickets');
 
     expect(section).toContain(
       "The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map."
     );
   });
 
-  test('shape on its own treats a tracker line that says none as an answer', async () => {
+  test('the spec skill on its own treats a tracker line that says none as an answer', async () => {
     const { read } = await installFor('codex');
-    const shape = read('metacoding-shape/SKILL.md');
-    const section = sectionOf(shape, '## The project map', '## Terms');
+    const spec = read('metacoding-spec/SKILL.md');
+    const section = sectionOf(spec, '## The project map', '## Solution and tickets');
 
     expect(section).toContain('The tracker line says where this repo tracks work.');
     expect(section).toContain(
@@ -2347,6 +2357,125 @@ describe('installed skill content: working without the CLI', () => {
     expect(skill).toContain('## Start Here');
     expect(intro).toContain(
       "When the skills are installed as a plugin, the name carries the plugin's prefix, such as `metacoding:metacoding-shape`."
+    );
+  });
+});
+
+describe('installed skill content: shape and spec are two skills', () => {
+  test('SHAPE-1: shape ends in a decisions summary', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const closing = shape.slice(shape.indexOf('## Closing the interview'));
+    const summaryStart = closing.indexOf('```text\nDecisions summary\n');
+    const summary = closing.slice(summaryStart, closing.indexOf('```', summaryStart + 3));
+
+    expect(shape).toContain('## Closing the interview');
+    expect(summaryStart).toBeGreaterThan(-1);
+    for (const field of ['Goal:', 'Decisions made:', 'Terms:', 'Assumptions:']) {
+      expect(summary).toContain(`\n${field}\n`);
+    }
+    expect(closing).toContain(
+      'When the user asked only to be questioned, stop here. The decisions summary in the conversation is the result.'
+    );
+  });
+
+  test('SHAPE-1: shape writes no file and holds no spec rules', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const closing = shape.slice(shape.indexOf('## Closing the interview'));
+
+    expect(shape).toContain('## Closing the interview');
+    expect(closing).toContain('This skill writes no file.');
+    for (const moved of [
+      '## Solution and tickets',
+      '## Records written on confirmation',
+      '## The spec',
+      '```text\nScope summary\n',
+      '[record]',
+    ]) {
+      expect(shape).not.toContain(moved);
+    }
+  });
+
+  test('SHAPE-2: shape hands a task that is to be built over to the spec skill', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const closing = shape.slice(shape.indexOf('## Closing the interview'));
+
+    expect(shape).toContain('## Closing the interview');
+    expect(closing).toContain(
+      'When the task is to be built, continue with the `metacoding-spec` skill.'
+    );
+    expect(closing).toContain(
+      "gets the user's confirmation, and writes the records. Changing files starts only after that confirmation."
+    );
+  });
+
+  test('SPEC-1: spec starts from settled decisions and sends an open one to shape', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const start = spec.slice(
+      spec.indexOf('## Start from settled decisions'),
+      spec.indexOf('## Solution and tickets')
+    );
+
+    expect(spec).toContain('## Start from settled decisions');
+    expect(spec).toContain('## Solution and tickets');
+    expect(start).toContain(
+      'the decisions summary of the `metacoding-shape` skill, or what you and the user agreed earlier in the conversation'
+    );
+    expect(start).toContain(
+      'Do not ask the user again for a decision that is already settled.'
+    );
+    expect(start).toContain(
+      'When a decision that would change what gets built or how it is tested is still open, settle it first with the `metacoding-shape` skill'
+    );
+    expect(start).toContain(
+      'The one decision this skill asks itself is how to cut the work into tickets'
+    );
+  });
+
+  test('the Codex prompts give the interview to shape and the scope summary to spec', async () => {
+    const { read } = await installFor('codex');
+    const shapePrompt = read('metacoding-shape/agents/openai.yaml');
+    const specPrompt = read('metacoding-spec/agents/openai.yaml');
+
+    expect(shapePrompt).toContain('close with a summary of the decisions, terms and assumptions');
+    expect(shapePrompt).not.toContain('tickets');
+    expect(specPrompt).toContain('$metacoding-spec');
+    expect(specPrompt).toContain('get it confirmed before changing anything');
+  });
+
+  test('FLOW-1: workflow step 2 uses shape, then spec', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const shaping = rules.slice(
+      rules.indexOf('2. Shape the task'),
+      rules.indexOf('3. Build test-first.')
+    );
+
+    expect(rules).toContain('2. Shape the task');
+    expect(rules).toContain('3. Build test-first.');
+    expect(skill).toContain('2. Shape, with `metacoding-shape` and `metacoding-spec`.');
+    expect(shaping.indexOf('Use the `metacoding-shape` skill')).toBeGreaterThan(-1);
+    expect(shaping.indexOf('Then use the `metacoding-spec` skill')).toBeGreaterThan(
+      shaping.indexOf('Use the `metacoding-shape` skill')
+    );
+  });
+
+  test('FLOW-1: no file changes before the scope summary is confirmed', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const shaping = rules.slice(
+      rules.indexOf('2. Shape the task'),
+      rules.indexOf('3. Build test-first.')
+    );
+
+    expect(rules).toContain('2. Shape the task');
+    expect(rules).toContain('3. Build test-first.');
+    expect(shaping).toContain(
+      'Wait for the user to confirm the scope summary before changing any file.'
     );
   });
 });

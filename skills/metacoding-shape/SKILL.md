@@ -1,6 +1,6 @@
 ---
 name: metacoding-shape
-description: Shape a task before any change by interviewing the user in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary with the solution sliced into tickets, written up as a spec when the task has more than one ticket or a decision to record. Use when a request leaves decisions open, when the user asks to shape a task, to be questioned, or to clarify scope first, or when the metacoding workflow reaches its shape step.
+description: Interview the user about a task before any change, in rounds of numbered questions with a recommended answer each, ending in a summary of the settled decisions, terms and assumptions. Use when a request leaves decisions open, when the user asks to shape a task, to be questioned, or to clarify scope first, or when the metacoding workflow reaches its shape step.
 ---
 
 # Shape
@@ -31,17 +31,13 @@ When you cannot reach the user directly, for example when running as a subagent,
 
 ## The project map
 
-When the repo has a project map, `.metacoding/project.md`, read it before the first round. The `metacoding-onboard` skill writes it, and it names where this repo keeps its tracker, its specs, its glossary, and its decision records.
-
-Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a spec, or a ticket, and create it there when it does not exist yet. The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the spec is the tracker.
-
-The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map.
+When the repo has a project map, `.metacoding/project.md`, read it before the first round. The `metacoding-onboard` skill writes it, and it names where this repo keeps its tracker, its specs, its glossary, and its decision records. Read the glossary at the place it names.
 
 ## Terms
 
 Read the project's glossary before the first round, when it has one, and use its terms in your questions.
 
-When an answer settles what a project term means, note the term, its meaning in this project, and the words to avoid for it, and list it under Terms in the scope summary. Nothing is written to the glossary until the summary is confirmed.
+When an answer settles what a project term means, note the term, its meaning in this project, and the words to avoid for it, and list it under Terms in the decisions summary. The `metacoding-spec` skill writes them to the glossary once its scope summary is confirmed.
 
 When the user's wording conflicts with the glossary, or one word is doing two jobs, raise it as a decision.
 
@@ -72,106 +68,28 @@ Check each area and ask only where a real decision is open.
 - Tests: which behaviors must be proven, and at which level
 - Done: how the user will check the result
 
-## Solution and tickets
-
-When the decisions are settled, describe the solution: the approach, and each public interface, data shape, or file layout that changes. Say what a builder needs to start, and leave the code out.
-
-Then slice the solution into tickets. A ticket is one piece that can be built, verified, reviewed, and committed on its own.
-
-- Make each ticket a vertical slice: it goes through every layer it needs and ends in something a user or caller can observe. A piece that only adds one layer, such as a database schema with nothing that reads it, belongs in the ticket that uses it.
-- Give each ticket its own success criteria and test intent.
-- Order the tickets so that each builds on the ones before it.
-- A small task is one ticket. Add a ticket only when the piece can be finished and checked by itself.
-
-When there is more than one reasonable way to cut the work, put the cut to the user as a decision, with your recommended cut.
-
 ## Closing the interview
 
-The interview is complete when both are true:
-
-- You can name no further decision that would change what gets built, how it is sliced into tickets, or how it is tested.
-- You have sent the scope summary below and the user has confirmed it.
+The interview is complete when you can name no further decision that would change what gets built or how it is tested. Then send the decisions summary:
 
 ```text
-Scope summary
+Decisions summary
 Goal:
-Success criteria:
-In scope:
-Out of scope:
-Solution:
 Decisions made:
 Terms:
 Assumptions:
-Test intent:
-Tickets:
 ```
 
-Under "Tickets", number the tickets in build order and give each a title, its success criteria, and its test intent. For a one-ticket task, give the title alone: the fields above already describe it.
+- Under "Decisions made", list each decision the user settled, one line each.
+- Under "Terms", list the terms you noted during the interview.
+- Under "Assumptions", list what you took as given without asking.
 
-Under "Decisions made", put `[record]` in front of each decision that is hard to reverse, surprising without context, and a real trade-off between workable alternatives. Confirming the summary also approves writing those as decision records.
+This skill writes no file. What follows depends on why the interview was run:
 
-Under "Terms", list each term the interview settled, with its meaning and the words to avoid. When the repo has no glossary yet, propose creating one there, by default at `/_meta/glossary.md`: confirming the summary approves it.
-
-Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the tickets are built one at a time, each ticket's test intent seeds its test-first work, and reviews check each ticket and then the whole change against the summary.
+- When the task is to be built, continue with the `metacoding-spec` skill. It turns these decisions into a scope summary with the solution and its tickets, gets the user's confirmation, and writes the records. Changing files starts only after that confirmation.
+- When the user asked only to be questioned, stop here. The decisions summary in the conversation is the result.
 
 Two shortcuts:
 
-- When reading the repo leaves no decision open, skip the rounds: describe the solution, slice it into tickets, and send the scope summary directly.
-- When the user tells you to proceed without questions, send the scope summary with every unasked decision listed under Assumptions, then continue. That instruction stands in for the confirmation.
-
-## Records written on confirmation
-
-Once the scope summary is confirmed, write these records before any other file changes:
-
-- **Terms.** Add each term listed under Terms to the glossary, or correct its entry: the term, its meaning in this project, and the words to avoid for it. The default place is `/_meta/glossary.md`; use the repo's own glossary if it keeps one elsewhere.
-- **Decisions.** Write each decision marked `[record]` to the decision records: the date, the decision, the alternatives considered, and why this one won. The default place is `/_meta/architecture-decisions.md`; use the repo's own place if it keeps decision records elsewhere. If the build later proves a recorded decision wrong, amend the entry: keep its original text and add what changed and why.
-- **The spec.** Write it when the task needs one, as the next section describes.
-
-## The spec
-
-Write a spec when either is true:
-
-- The summary has more than one ticket.
-- The summary has a decision marked `[record]`.
-
-A one-ticket task with no marked decision needs no spec. Record its confirmed summary where the repo already tracks work, such as an issue or a pull request. When the repo tracks work nowhere, the summary in the conversation is the record.
-
-Put the spec where the repo already keeps specs or documents of that kind. When it has no such place, use `/_meta/specs/<date>-<slug>.md`, with the date as `YYYY-MM-DD`. The spec is the confirmed scope summary as one file, with a status and one section per field:
-
-```text
-# Spec: <title>
-
-- Status: in progress
-
-## Goal
-
-## Success criteria
-
-## In scope
-
-## Out of scope
-
-## Solution
-
-## Decisions made
-
-## Terms
-
-## Assumptions
-
-## Test intent
-
-## Tickets
-
-- [ ] 1. <title>
-  - Success criteria:
-  - Test intent:
-```
-
-A one-ticket spec lists its ticket by title alone.
-
-When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the spec. Otherwise the checklist in the spec is the tracker: tick a ticket when it is done.
-
-While the spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the spec with its date before building it.
-
-When the last ticket is done, set the spec's status to done, and from then on leave the spec in place and unchanged. The spec is the record of what was agreed; facts that stay true belong in the repo's system documentation.
+- When reading the repo leaves no decision open, skip the rounds and send the decisions summary directly.
+- When the user tells you to proceed without questions, list every unasked decision under Assumptions and continue without waiting for answers.

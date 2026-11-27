@@ -9,7 +9,8 @@ This skill takes one task from request to handoff. It owns the order of the step
 
 | Skill | What it does |
 | --- | --- |
-| `metacoding-shape` | Settles open decisions with the user and ends in a confirmed scope summary |
+| `metacoding-shape` | Settles open decisions with the user in an interview |
+| `metacoding-spec` | Turns the settled decisions into a confirmed scope summary with tickets, and writes the records |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-debug` | Finds the cause of a bug from a command that reproduces it |
 | `metacoding-review` | Checks the finished change against the scope and the repo's standards |
@@ -32,7 +33,7 @@ Load a companion skill by name with your agent's skill mechanism. When the skill
 The steps, in order. What each one requires is in the Operating Sequence of `references/workflow-rules.md`.
 
 1. Ground in the repo.
-2. Shape, with `metacoding-shape`.
+2. Shape, with `metacoding-shape` and `metacoding-spec`.
 3. Build test-first, with `metacoding-tdd` or `metacoding-debug`.
 4. Verify.
 5. Review, with `metacoding-review`.
