@@ -29,7 +29,7 @@ export class InitCommand {
   }
 
   async execute(options: InitOptions): Promise<void> {
-    console.log(chalk.cyan.bold('metacoding skill setup\n'));
+    console.log(chalk.cyan.bold('metacoding skills setup\n'));
 
     const projectInfo = await this.projectDetector.detectProject();
     const vendorChoice = await this.getVendorChoice(options);
@@ -41,7 +41,7 @@ export class InitCommand {
           type: 'confirm',
           name: 'proceed',
           message:
-            'The metacoding workflow skill is already installed here. Reinstall it?',
+            'The metacoding skills are already installed here. Reinstall them?',
           default: false,
         },
       ]);
@@ -60,7 +60,7 @@ export class InitCommand {
     );
     await this.setupProject(vendors.map((vendor) => ({ ...baseConfig, vendor })));
 
-    console.log(chalk.green.bold('\nmetacoding skill installed.\n'));
+    console.log(chalk.green.bold('\nmetacoding skills installed.\n'));
     this.displayNextSteps(vendorChoice);
 
     if (
@@ -152,7 +152,7 @@ export class InitCommand {
   }
 
   private async setupProject(configs: ProjectConfig[]): Promise<void> {
-    const spinner = ora('Installing metacoding workflow skill...').start();
+    const spinner = ora('Installing metacoding skills...').start();
 
     try {
       let installedFiles = 0;
@@ -166,9 +166,9 @@ export class InitCommand {
 
       await this.gitIgnoreManager.updateGitIgnore(process.cwd());
 
-      spinner.succeed('Workflow skill installed successfully');
+      spinner.succeed('Skills installed successfully');
     } catch (error) {
-      spinner.fail('Failed to install metacoding skill');
+      spinner.fail('Failed to install metacoding skills');
       throw error;
     }
   }

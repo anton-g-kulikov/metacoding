@@ -13,18 +13,18 @@ export async function main(): Promise<void> {
 
   program
     .name('metacoding')
-    .description('Install and sync the metacoding workflow skill for coding agents')
+    .description('Install and sync the metacoding skills for coding agents')
     .version(version)
     .addHelpText(
       'after',
       `
 ${chalk.cyan('Examples:')}
-  ${chalk.dim('$')} metacoding init                    # Install the workflow skill in the current project
+  ${chalk.dim('$')} metacoding init                    # Install the skills in the current project
   ${chalk.dim('$')} metacoding init --template react   # Install with React-oriented project context
-  ${chalk.dim('$')} metacoding init --vendor claude-code  # Install the Claude Code skill variant
+  ${chalk.dim('$')} metacoding init --vendor claude-code  # Install the Claude Code variant
   ${chalk.dim('$')} metacoding init --vendor all       # Install all supported workspace variants
-  ${chalk.dim('$')} metacoding update --dry-run        # Validate the installed skill package
-  ${chalk.dim('$')} metacoding update                  # Sync the installed skill to the packaged version
+  ${chalk.dim('$')} metacoding update --dry-run        # Validate the installed skills
+  ${chalk.dim('$')} metacoding update                  # Sync the installed skills to the packaged version
   ${chalk.dim('$')} metacoding update --force          # Overwrite local skill edits with the packaged version
 
 ${chalk.cyan('Learn more:')}
@@ -36,7 +36,7 @@ ${chalk.cyan('Learn more:')}
   // Initialize command
   program
     .command('init')
-    .description('Install the metacoding workflow skill in the current project')
+    .description('Install the metacoding skills in the current project')
     .option(
       '-t, --template <type>',
       'project template (general, react, node, python, typescript)',
@@ -65,7 +65,7 @@ ${chalk.cyan('Learn more:')}
   program
     .command('update')
     .description(
-      'Sync the installed metacoding workflow skill or validate its current setup'
+      'Sync the installed metacoding skills or validate the current setup'
     )
     .option('--template <type>', 'update to specific template type')
     .option(

@@ -93,12 +93,7 @@ export class GitIgnoreManager {
       return;
     }
 
-    const existingLines = new Set(
-      existingContent.split(/\r?\n/).map((line) => line.trim())
-    );
-    const missing = GitIgnoreManager.getAIAssistantPatterns().filter(
-      (pattern) => !pattern.startsWith('#') && !existingLines.has(pattern)
-    );
+    const missing = await this.getMissingPatterns(projectPath);
 
     if (missing.length === 0) {
       return;
@@ -106,6 +101,24 @@ export class GitIgnoreManager {
 
     const separator = existingContent.endsWith('\n') ? '' : '\n';
     await fs.appendFile(gitignorePath, separator + missing.join('\n') + '\n');
+  }
+
+  /**
+   * List the exclusion patterns that .gitignore lacks: all of them when the
+   * file does not exist.
+   */
+  async getMissingPatterns(projectPath: string): Promise<string[]> {
+    const gitignorePath = path.join(projectPath, '.gitignore');
+    const content = (await fs.pathExists(gitignorePath))
+      ? await fs.readFile(gitignorePath, 'utf8')
+      : '';
+    const existingLines = new Set(
+      content.split(/\r?\n/).map((line) => line.trim())
+    );
+
+    return GitIgnoreManager.getAIAssistantPatterns().filter(
+      (pattern) => !pattern.startsWith('#') && !existingLines.has(pattern)
+    );
   }
 
   /**

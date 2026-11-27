@@ -39,18 +39,19 @@ Options:
 - `--backup`: create a backup before updating
 - `--force`: overwrite local edits in the installed skills
 - `--dry-run`: validate instead of mutating
-- `--strict`: require the `.gitignore` exclusion during validation
+- `--strict`: with `--dry-run`, also require every metacoding exclusion pattern in `.gitignore`, and name the ones that are missing
 
 Behavior:
 
 - adds any packaged skill the install lacks
 - migrates the 2.0.x Claude Code subagent layout to the skill layout, removing the old files once they are backed up
+- removes the files an earlier version installed and this one no longer ships, once they are backed up, and a skill folder they leave empty
 - fills in the patterns an existing metacoding `.gitignore` section lacks
 - `--dry-run` fails with a migration hint when only the old Claude Code layout is present
 
 ## Installed Artifact Contract
 
-The CLI considers the install valid when the vendor-specific required files exist: a fixed set in the workflow skill, plus the `SKILL.md` of each companion skill.
+The CLI considers the install valid when the vendor-specific required files exist: a fixed set in the workflow skill, plus the `SKILL.md` of each companion skill and, for Codex, the `agents/openai.yaml` of every skill.
 
 ### Codex
 
@@ -62,12 +63,16 @@ The CLI considers the install valid when the vendor-specific required files exis
 .codex/skills/metacoding-workflow/references/project-context.md
 .codex/skills/metacoding-workflow/assets/templates/task-entry.md
 .codex/skills/metacoding-shape/SKILL.md
+.codex/skills/metacoding-shape/agents/openai.yaml
 .codex/skills/metacoding-tdd/SKILL.md
+.codex/skills/metacoding-tdd/agents/openai.yaml
 .codex/skills/metacoding-review/SKILL.md
+.codex/skills/metacoding-review/agents/openai.yaml
 .codex/skills/metacoding-debug/SKILL.md
+.codex/skills/metacoding-debug/agents/openai.yaml
 ```
 
-For Codex, `metacoding-workflow/agents/openai.yaml` must also define `interface.display_name` and `interface.default_prompt`.
+For Codex, each skill's `agents/openai.yaml` must also define `interface.display_name` and `interface.default_prompt`.
 
 ### Claude Code
 

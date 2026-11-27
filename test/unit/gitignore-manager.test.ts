@@ -66,4 +66,30 @@ describe('GitIgnoreManager', () => {
     await manager.updateGitIgnore(workspace);
     expect(await manager.hasMetacodingPatterns(workspace)).toBe(true);
   });
+
+  test('lists the exclusions a gitignore lacks', async () => {
+    const workspace = await createTempWorkspace('metacoding-gitignore-lists-missing');
+    const manager = new GitIgnoreManager();
+
+    expect(await manager.getMissingPatterns(workspace)).toEqual([
+      '.codex/skills/metacoding-*/',
+      '.claude/skills/metacoding-*/',
+      '.agents/skills/metacoding-*/',
+      '.backup/',
+    ]);
+
+    await fs.writeFile(
+      path.join(workspace, '.gitignore'),
+      'node_modules/\n.claude/skills/metacoding-*/\n',
+      'utf8'
+    );
+    expect(await manager.getMissingPatterns(workspace)).toEqual([
+      '.codex/skills/metacoding-*/',
+      '.agents/skills/metacoding-*/',
+      '.backup/',
+    ]);
+
+    await manager.updateGitIgnore(workspace);
+    expect(await manager.getMissingPatterns(workspace)).toEqual([]);
+  });
 });

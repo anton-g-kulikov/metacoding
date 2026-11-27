@@ -267,9 +267,10 @@ describe('SkillManager', () => {
       vendor: 'antigravity',
     });
 
-    expect(manager.getBackupTargets('antigravity')).toEqual(
-      METACODING_SKILLS.map((skill) => path.join('.agents', 'skills', skill))
-    );
+    expect(manager.getBackupTargets('antigravity')).toEqual([
+      ...METACODING_SKILLS.map((skill) => path.join('.agents', 'skills', skill)),
+      path.join('.agents', 'skills', 'metacoding-interview'),
+    ]);
 
     const installed = await manager.getInstalledFiles('antigravity');
     for (const skill of METACODING_SKILLS) {

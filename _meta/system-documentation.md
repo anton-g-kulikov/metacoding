@@ -18,17 +18,18 @@ The canonical source of truth lives in [`skills/`](../skills), one folder per sk
 
 ### `metacoding update`
 
-1. Validate that the workflow skill is already installed.
+1. Validate that the skills are already installed.
 2. Detect installed vendor variants, or target one explicit vendor with `--vendor`.
 3. Optionally back up the installed skill folders into `.backup/<timestamp>/`.
 4. Rebuild the packaged file set for the current project context.
 5. Detect local edits inside the installed skills.
 6. Resolve conflicts interactively or overwrite them with `--force`.
 7. Sync the installed skills to the packaged version, adding any packaged skill the install lacks.
-8. For Claude Code, migrate the 2.0.x subagent layout: remove `.claude/agents/metacoding-workflow.md` and `.claude/metacoding-workflow/` once they are backed up.
-9. Add the exclusion patterns that an existing metacoding `.gitignore` section lacks.
+8. Remove the files an earlier version installed and this one no longer ships, once they are backed up, and a skill folder they leave empty. The list names single files and is fixed in `src/services/skill-manager.ts`, so files the user added are never touched.
+9. For Claude Code, migrate the 2.0.x subagent layout: remove `.claude/agents/metacoding-workflow.md` and `.claude/metacoding-workflow/` once they are backed up.
+10. Add the exclusion patterns that an existing metacoding `.gitignore` section lacks.
 
-`metacoding update --dry-run` changes nothing. It checks the required files listed in [`api-design.md`](api-design.md) and fails when only the old Claude Code layout is present.
+`metacoding update --dry-run` changes nothing. It checks the required files listed in [`api-design.md`](api-design.md) and fails when only the old Claude Code layout is present. With `--strict` it also fails when `.gitignore` lacks a metacoding exclusion pattern.
 
 ## Packaged Skill Structure
 
@@ -93,10 +94,12 @@ That file is generated per project and points the agent to the right language re
   - Generates project-specific installation files.
   - Installs and enumerates vendor installs.
   - Detects and removes the 2.0.x Claude Code subagent layout.
+  - Lists and removes the files an earlier version installed and this one no longer ships.
 - `src/services/project-detector.ts`
   - Detects project type and tech stack using lightweight repo heuristics.
 - `src/services/gitignore-manager.ts`
   - Appends a metacoding section to `.gitignore`, or fills in the patterns an existing section lacks.
+  - Lists the exclusion patterns a `.gitignore` lacks, for strict validation.
 - `src/services/backup.ts`
   - Creates timestamped backups and prunes old ones.
 - `src/services/conflict-resolution.ts`

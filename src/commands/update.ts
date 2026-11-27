@@ -11,7 +11,7 @@ import { ProjectDetector } from '../services/project-detector';
 import { SkillManager } from '../services/skill-manager';
 
 /**
- * Handles syncing an installed workflow skill with the packaged version.
+ * Handles syncing the installed skills with the packaged version.
  */
 export class UpdateCommand {
   private readonly skillManager: SkillManager;
@@ -38,13 +38,13 @@ export class UpdateCommand {
 
     if (installedVendors.length === 0) {
       throw new Error(
-        'No metacoding workflow skill installation found. Run "metacoding init" first.'
+        'No metacoding installation found. Run "metacoding init" first.'
       );
     }
 
     const targetVendors = this.getTargetVendors(installedVendors, options.vendor);
 
-    console.log(chalk.cyan('Syncing metacoding workflow skill...\n'));
+    console.log(chalk.cyan('Syncing metacoding skills...\n'));
 
     const projectInfo = await this.projectDetector.detectProject();
     const projectType = options.template || projectInfo.type || 'general';
@@ -121,6 +121,8 @@ export class UpdateCommand {
 
       writeSpinner.succeed(`Updated ${vendor} skill files (${vendorFilesUpdated} files)`);
 
+      await this.cleanUpRetiredFiles(vendor, options);
+
       if (vendor === 'claude-code') {
         await this.migrateLegacyClaudeInstall(options);
       }
@@ -133,7 +135,7 @@ export class UpdateCommand {
 
     console.log(
       chalk.green.bold(
-        `\nmetacoding workflow skill is up to date (${filesUpdated} files synced).\n`
+        `\nmetacoding skills are up to date (${filesUpdated} files synced).\n`
       )
     );
   }
@@ -166,8 +168,39 @@ export class UpdateCommand {
     );
   }
 
+  /**
+   * Remove files an earlier version installed and this one no longer ships.
+   * They are only deleted when this run backed them up.
+   */
+  private async cleanUpRetiredFiles(
+    vendor: AgentVendor,
+    options: UpdateOptions
+  ): Promise<void> {
+    const retiredFiles = await this.skillManager.findRetiredFiles(vendor);
+    if (retiredFiles.length === 0) {
+      return;
+    }
+
+    if (options.backup === false) {
+      console.log(
+        chalk.yellow(
+          'Files that metacoding no longer ships were kept because backups are disabled. ' +
+            `Remove ${retiredFiles.join(', ')} yourself.`
+        )
+      );
+      return;
+    }
+
+    const removed = await this.skillManager.removeRetiredFiles(vendor);
+    console.log(
+      chalk.green(
+        `Removed files that metacoding no longer ships (${removed.join(', ')}).`
+      )
+    );
+  }
+
   private async validateSetup(options: UpdateOptions): Promise<void> {
-    console.log(chalk.cyan('Validating metacoding workflow skill...\n'));
+    console.log(chalk.cyan('Validating metacoding skills...\n'));
 
     const installedVendors = await this.skillManager.getInstalledVendors();
     if (installedVendors.length === 0) {
@@ -206,27 +239,33 @@ export class UpdateCommand {
       }
 
       if (vendor === 'codex') {
-        const yamlPath = '.codex/skills/metacoding-workflow/agents/openai.yaml';
-        const yamlContent = await fs.readFile(yamlPath, 'utf8');
-        const parsed = YAML.parse(yamlContent);
+        for (const directory of this.skillManager.getSkillDirectories(vendor)) {
+          const yamlPath = path.join(directory, 'agents/openai.yaml');
+          const yamlContent = await fs.readFile(yamlPath, 'utf8');
+          let parsed;
+          try {
+            parsed = YAML.parse(yamlContent);
+          } catch {
+            throw new Error(`Validation failed: ${yamlPath} is not valid YAML.`);
+          }
 
-        if (!parsed?.interface?.display_name || !parsed?.interface?.default_prompt) {
-          throw new Error(
-            'Validation failed: agents/openai.yaml is missing required interface fields.'
-          );
+          if (!parsed?.interface?.display_name || !parsed?.interface?.default_prompt) {
+            throw new Error(
+              `Validation failed: ${yamlPath} is missing required interface fields.`
+            );
+          }
         }
       }
     }
 
     if (options.strict) {
-      const gitignorePath = '.gitignore';
-      if (await fs.pathExists(gitignorePath)) {
-        const content = await fs.readFile(gitignorePath, 'utf8');
-        if (!content.includes('# metacoding: AI coding assistant exclusions')) {
-          throw new Error(
-            'Validation failed: .gitignore is missing the metacoding skill exclusion.'
-          );
-        }
+      const missingPatterns = await this.gitIgnoreManager.getMissingPatterns(
+        process.cwd()
+      );
+      if (missingPatterns.length > 0) {
+        throw new Error(
+          `Validation failed: .gitignore is missing metacoding exclusions: ${missingPatterns.join(', ')}.`
+        );
       }
     }
 
@@ -265,7 +304,7 @@ export class UpdateCommand {
 
     if (!installedVendors.includes(normalizedVendor)) {
       throw new Error(
-        `No installed metacoding skill was found for vendor "${normalizedVendor}".`
+        `No metacoding installation was found for vendor "${normalizedVendor}".`
       );
     }
 
@@ -275,9 +314,10 @@ export class UpdateCommand {
   private getRequiredFilesForVendor(vendor: AgentVendor): string[] {
     const workflowDir = this.skillManager.getInstallDirectory(vendor);
     const companionDirs = this.skillManager.getSkillDirectories(vendor).slice(1);
+    // Codex needs its UI metadata next to every skill.
+    const skillFiles = ['SKILL.md', ...(vendor === 'codex' ? ['agents/openai.yaml'] : [])];
     const workflowFiles = [
-      'SKILL.md',
-      ...(vendor === 'codex' ? ['agents/openai.yaml'] : []),
+      ...skillFiles,
       'references/workflow-rules.md',
       'references/platform-adaptation.md',
       'references/project-context.md',
@@ -286,7 +326,9 @@ export class UpdateCommand {
 
     return [
       ...workflowFiles.map((file) => path.join(workflowDir, file)),
-      ...companionDirs.map((directory) => path.join(directory, 'SKILL.md')),
+      ...companionDirs.flatMap((directory) =>
+        skillFiles.map((file) => path.join(directory, file))
+      ),
     ];
   }
 

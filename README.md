@@ -207,10 +207,11 @@ metacoding update --dry-run --strict
 metacoding update --force
 ```
 
-- `update` syncs the installed skills with the packaged version, and adds any packaged skill the install lacks.
+- `update` syncs the installed skills with the packaged version, and adds any packaged skill the install lacks. It also removes files that an earlier version installed and this one no longer ships, after backing them up; files you added are kept.
 - `update --vendor <vendor>` syncs or validates only one installed vendor variant.
 - `update --vendor all` syncs or validates all installed vendor variants explicitly.
 - `update --dry-run` validates the installed skills without changing files.
+- `update --dry-run --strict` also fails when `.gitignore` lacks a metacoding exclusion pattern, and names the missing ones.
 - `update --force` overwrites local edits inside the installed skill directories.
 
 ## Using the Skill

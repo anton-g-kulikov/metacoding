@@ -33,7 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metacoding update --dry-run` fails with a migration hint when only the old Claude Code layout is present
 - `metacoding init` and `metacoding update` fill in exclusion patterns that an existing metacoding `.gitignore` section lacks
 - The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
-- `metacoding update --dry-run` requires each companion skill's `SKILL.md`
+- `metacoding update --dry-run` requires each companion skill's `SKILL.md` and, for Codex, checks the `agents/openai.yaml` of every skill instead of the workflow skill's alone, and names a file that is not valid YAML
+- `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns. It used to check only for the section header
+- `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
+- CLI help and messages say "skills" where they said "workflow skill"
 - Installs skip `.DS_Store` files
 - `task-entry.md` now carries the scope summary fields
 - The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
@@ -42,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
 - The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
-- The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` does not delete files, so existing installs keep a leftover copy
+- The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
 
 ## [2.0.1] - 2026-03-28
 

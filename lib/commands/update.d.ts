@@ -8,6 +8,7 @@ export declare class UpdateCommand {
     constructor();
     execute(options: UpdateOptions): Promise<void>;
     private migrateLegacyClaudeInstall;
+    private cleanUpRetiredFiles;
     private validateSetup;
     private getDefaultTestFramework;
     private getDefaultBuildTool;

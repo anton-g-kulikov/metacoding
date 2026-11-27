@@ -87,7 +87,7 @@ describe('UpdateCommand', () => {
 
     const update = new UpdateCommand();
     await expect(update.execute({})).rejects.toThrow(
-      'No metacoding workflow skill installation found'
+      'No metacoding installation found'
     );
   });
 
@@ -242,8 +242,10 @@ describe('UpdateCommand', () => {
       }
 
       const update = new UpdateCommand();
+      // Codex also needs each companion's agents/openai.yaml.
+      const missingFiles = vendor === 'codex' ? 8 : 4;
       await expect(update.execute({ dryRun: true })).rejects.toThrow(
-        `4 required ${vendor} skill files are missing`
+        `${missingFiles} required ${vendor} skill files are missing`
       );
 
       await update.execute({});
@@ -390,5 +392,174 @@ describe('UpdateCommand', () => {
       )
     ).toBe(true);
     expect(await fs.readFile(legacyAgent, 'utf8')).toBe('legacy agent');
+  });
+
+  test.each(companionSkills)(
+    'dry-run fails when the Codex metadata of %s is missing',
+    async (skill) => {
+      const workspace = await createTempWorkspace(`metacoding-validate-yaml-missing-${skill}`);
+      process.chdir(workspace);
+
+      const init = new InitCommand();
+      await init.execute({ template: 'general', force: true });
+      await fs.remove(path.join(workspace, '.codex/skills', skill, 'agents/openai.yaml'));
+
+      const update = new UpdateCommand();
+      await expect(update.execute({ dryRun: true })).rejects.toThrow(
+        '1 required codex skill files are missing'
+      );
+    }
+  );
+
+  test.each(['metacoding-workflow', ...companionSkills])(
+    'dry-run fails when the Codex metadata of %s lacks interface fields',
+    async (skill) => {
+      const workspace = await createTempWorkspace(`metacoding-validate-yaml-${skill}`);
+      process.chdir(workspace);
+
+      const init = new InitCommand();
+      await init.execute({ template: 'general', force: true });
+      const yamlPath = path.join('.codex/skills', skill, 'agents/openai.yaml');
+      await fs.writeFile(
+        path.join(workspace, yamlPath),
+        'interface:\n  display_name: "Only a name"\n',
+        'utf8'
+      );
+
+      const update = new UpdateCommand();
+      await expect(update.execute({ dryRun: true })).rejects.toThrow(
+        `Validation failed: ${yamlPath} is missing required interface fields.`
+      );
+    }
+  );
+
+  test('strict dry-run names the gitignore exclusions that are missing', async () => {
+    const workspace = await createTempWorkspace('metacoding-validate-strict');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+    await fs.writeFile(
+      path.join(workspace, '.gitignore'),
+      '# metacoding: AI coding assistant exclusions\n.codex/skills/metacoding-*/\n',
+      'utf8'
+    );
+
+    const update = new UpdateCommand();
+    await expect(update.execute({ dryRun: true })).resolves.toBeUndefined();
+    await expect(update.execute({ dryRun: true, strict: true })).rejects.toThrow(
+      'Validation failed: .gitignore is missing metacoding exclusions: ' +
+        '.claude/skills/metacoding-*/, .agents/skills/metacoding-*/, .backup/'
+    );
+  });
+
+  test('strict dry-run fails when there is no gitignore', async () => {
+    const workspace = await createTempWorkspace('metacoding-validate-strict-nofile');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+    await fs.remove(path.join(workspace, '.gitignore'));
+
+    const update = new UpdateCommand();
+    await expect(update.execute({ dryRun: true, strict: true })).rejects.toThrow(
+      'Validation failed: .gitignore is missing metacoding exclusions: .codex/skills/metacoding-*/'
+    );
+  });
+
+  test.each(vendorSkillsDirs)(
+    'removes files a %s install no longer ships, after backing them up',
+    async (vendor, skillsDir) => {
+      const workspace = await createTempWorkspace(`metacoding-update-retired-${vendor}`);
+      process.chdir(workspace);
+
+      const init = new InitCommand();
+      await init.execute({ template: 'general', vendor, force: true });
+
+      const retired = [
+        'metacoding-interview/SKILL.md',
+        'metacoding-interview/agents/openai.yaml',
+        'metacoding-workflow/references/interview.md',
+        'metacoding-workflow/assets/templates/test-plan.md',
+      ];
+      for (const file of retired) {
+        await fs.outputFile(path.join(workspace, skillsDir, file), `retired ${file}`, 'utf8');
+      }
+      const userCopy = path.join(workspace, skillsDir, 'metacoding-workflow/user.SKILL.md');
+      await fs.outputFile(userCopy, 'my own notes', 'utf8');
+
+      const update = new UpdateCommand();
+      await update.execute({});
+
+      const [backupName] = await fs.readdir(path.join(workspace, '.backup'));
+      for (const file of retired) {
+        expect(await fs.pathExists(path.join(workspace, skillsDir, file))).toBe(false);
+        expect(
+          await fs.readFile(
+            path.join(workspace, '.backup', backupName as string, skillsDir, file),
+            'utf8'
+          )
+        ).toBe(`retired ${file}`);
+      }
+      expect(
+        await fs.pathExists(path.join(workspace, skillsDir, 'metacoding-interview'))
+      ).toBe(false);
+      expect(await fs.readFile(userCopy, 'utf8')).toBe('my own notes');
+    }
+  );
+
+  test('keeps files the user added to a skill folder it no longer ships', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-retired-userfile');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+
+    const retiredSkill = path.join(workspace, '.codex/skills/metacoding-interview');
+    await fs.outputFile(path.join(retiredSkill, 'SKILL.md'), 'retired', 'utf8');
+    await fs.outputFile(path.join(retiredSkill, 'agents/openai.yaml'), 'retired', 'utf8');
+    await fs.outputFile(path.join(retiredSkill, 'user.SKILL.md'), 'my own notes', 'utf8');
+
+    const update = new UpdateCommand();
+    await update.execute({});
+
+    expect(await fs.readdir(retiredSkill)).toEqual(['user.SKILL.md']);
+    expect(await fs.readFile(path.join(retiredSkill, 'user.SKILL.md'), 'utf8')).toBe(
+      'my own notes'
+    );
+  });
+
+  test('dry-run names a Codex metadata file that is not valid YAML', async () => {
+    const workspace = await createTempWorkspace('metacoding-validate-yaml-malformed');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+    const yamlPath = path.join('.codex/skills/metacoding-review/agents/openai.yaml');
+    await fs.writeFile(path.join(workspace, yamlPath), 'interface: [unclosed', 'utf8');
+
+    const update = new UpdateCommand();
+    await expect(update.execute({ dryRun: true })).rejects.toThrow(
+      `Validation failed: ${yamlPath} is not valid YAML.`
+    );
+  });
+
+  test('keeps files it no longer ships when backups are disabled', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-retired-nobackup');
+    process.chdir(workspace);
+
+    const init = new InitCommand();
+    await init.execute({ template: 'general', force: true });
+
+    const retiredFile = path.join(
+      workspace,
+      '.codex/skills/metacoding-workflow/assets/templates/test-plan.md'
+    );
+    await fs.outputFile(retiredFile, 'retired', 'utf8');
+
+    const update = new UpdateCommand();
+    await update.execute({ backup: false });
+
+    expect(await fs.readFile(retiredFile, 'utf8')).toBe('retired');
   });
 });

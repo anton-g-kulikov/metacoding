@@ -3,10 +3,12 @@ import * as path from 'path';
 import { AgentVendor, ProjectConfig } from '../types';
 
 /**
- * Skills shipped in the package. The workflow skill is the orchestrator and
- * the entrypoint that marks a vendor install; the others are its companions.
+ * The orchestrator skill, and the entrypoint that marks a vendor install.
  */
 export const WORKFLOW_SKILL = 'metacoding-workflow';
+/**
+ * Skills shipped in the package: the workflow skill, then its companions.
+ */
 export const METACODING_SKILLS = [
   WORKFLOW_SKILL,
   'metacoding-shape',
@@ -35,6 +37,22 @@ export class SkillManager {
   private readonly legacyClaudePaths = [
     path.join('.claude', 'agents', 'metacoding-workflow.md'),
     path.join('.claude', 'metacoding-workflow'),
+  ];
+  /**
+   * Skill folders that an earlier version installed and this one no longer
+   * ships.
+   */
+  private readonly retiredSkills = ['metacoding-interview'];
+  /**
+   * Files, relative to a vendor's skills directory, that an earlier version
+   * installed and this one no longer ships. Listed one by one so that a file
+   * the user added next to them is never removed.
+   */
+  private readonly retiredFiles = [
+    path.join('metacoding-interview', 'SKILL.md'),
+    path.join('metacoding-interview', 'agents', 'openai.yaml'),
+    path.join(WORKFLOW_SKILL, 'references', 'interview.md'),
+    path.join(WORKFLOW_SKILL, 'assets', 'templates', 'test-plan.md'),
   ];
   private readonly vendorDefinitions: Record<AgentVendor, VendorInstallDefinition> = {
     codex: {
@@ -131,11 +149,72 @@ export class SkillManager {
   }
 
   getBackupTargets(vendor: AgentVendor): string[] {
+    const targets = [
+      ...this.getSkillDirectories(vendor),
+      ...this.getRetiredSkillDirectories(vendor),
+    ];
+
     if (vendor === 'claude-code') {
-      return [...this.getSkillDirectories(vendor), ...this.legacyClaudePaths];
+      return [...targets, ...this.legacyClaudePaths];
     }
 
-    return this.getSkillDirectories(vendor);
+    return targets;
+  }
+
+  /**
+   * Files on disk that an earlier version installed and this one no longer
+   * ships.
+   */
+  async findRetiredFiles(vendor: AgentVendor): Promise<string[]> {
+    const found: string[] = [];
+
+    for (const retiredFile of this.retiredFiles) {
+      const fullPath = path.join(this.vendorDefinitions[vendor].skillsDir, retiredFile);
+      if (await fs.pathExists(fullPath)) {
+        found.push(fullPath);
+      }
+    }
+
+    return found;
+  }
+
+  /**
+   * Remove the retired files, and a retired skill folder they leave empty.
+   * Returns the files that were removed.
+   */
+  async removeRetiredFiles(vendor: AgentVendor): Promise<string[]> {
+    const removed = await this.findRetiredFiles(vendor);
+
+    for (const retiredFile of removed) {
+      await fs.remove(retiredFile);
+    }
+    for (const directory of this.getRetiredSkillDirectories(vendor)) {
+      await this.removeEmptyDirectories(directory);
+    }
+
+    return removed;
+  }
+
+  private getRetiredSkillDirectories(vendor: AgentVendor): string[] {
+    return this.retiredSkills.map((skill) =>
+      path.join(this.vendorDefinitions[vendor].skillsDir, skill)
+    );
+  }
+
+  private async removeEmptyDirectories(root: string): Promise<void> {
+    if (!(await fs.pathExists(root))) {
+      return;
+    }
+
+    for (const entry of await fs.readdir(root, { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        await this.removeEmptyDirectories(path.join(root, entry.name));
+      }
+    }
+
+    if ((await fs.readdir(root)).length === 0) {
+      await fs.rmdir(root);
+    }
   }
 
   async installSkill(config: ProjectConfig): Promise<string[]> {
