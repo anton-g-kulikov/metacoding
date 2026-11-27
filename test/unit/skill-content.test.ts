@@ -1185,7 +1185,7 @@ describe('installed skill content: prompt upkeep', () => {
         '',
         '1. Ground in the repo.',
         '2. Shape, with `metacoding-shape`.',
-        '3. Build test-first, with `metacoding-tdd`, or with `metacoding-debug` when the task is a bug whose cause is unknown.',
+        '3. Build test-first, with `metacoding-tdd` or `metacoding-debug`.',
         '4. Verify.',
         '5. Review, with `metacoding-review`.',
         '6. Update artifacts.',
@@ -1199,6 +1199,7 @@ describe('installed skill content: prompt upkeep', () => {
       'Changing files starts only after',
       'the skill then writes the settled terms',
       'a failing test before each piece of production code',
+      'a bug whose cause is unknown',
       'it ends in a regression test and a fix',
       'Run the smallest relevant checks first',
       'Confirm the behavior a user would observe',
@@ -1209,5 +1210,26 @@ describe('installed skill content: prompt upkeep', () => {
     ]) {
       expect(steps).not.toContain(detail);
     }
+  });
+
+  test('the workflow rules keep what the old step summaries said about artifacts and closing', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const artifacts = rules.slice(
+      rules.indexOf('6. Update artifacts'),
+      rules.indexOf('7. Close the loop.')
+    );
+    const closing = rules.slice(
+      rules.indexOf('7. Close the loop.'),
+      rules.indexOf('## Tickets')
+    );
+
+    for (const marker of ['6. Update artifacts', '7. Close the loop.', '## Tickets']) {
+      expect(rules).toContain(marker);
+    }
+    expect(artifacts).toContain(
+      'Update the one artifact that owns the concept instead of duplicating the same information, as `references/repository-organization.md` describes.'
+    );
+    expect(closing).toContain('Either way, state explicitly that the work is complete.');
   });
 });

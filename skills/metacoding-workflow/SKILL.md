@@ -29,7 +29,7 @@ The steps, in order. What each one requires is in the Operating Sequence of `ref
 
 1. Ground in the repo.
 2. Shape, with `metacoding-shape`.
-3. Build test-first, with `metacoding-tdd`, or with `metacoding-debug` when the task is a bug whose cause is unknown.
+3. Build test-first, with `metacoding-tdd` or `metacoding-debug`.
 4. Verify.
 5. Review, with `metacoding-review`.
 6. Update artifacts.
