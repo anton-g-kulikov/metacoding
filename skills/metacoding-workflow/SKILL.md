@@ -25,13 +25,15 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 
 ## Steps
 
-1. **Ground in the repo.** Read the code, config, tests, and docs the task touches, including the glossary and decision records when the repo has them, and any spec still in progress. Look up facts yourself, so the user is asked only for decisions.
-2. **Shape.** Use `metacoding-shape`. Changing files starts only after the user confirms its scope summary; the skill then writes the settled terms, the marked decision records, and a spec when the task needs one.
-3. **Build test-first.** Use `metacoding-tdd`: mandatory TDD, a failing test before each piece of production code. When the task is a bug whose cause is unknown, use `metacoding-debug` for this step; it ends in a regression test and a fix.
-4. **Verify.** Run the smallest relevant checks first, then broader checks when justified. Confirm the behavior a user would observe, beyond a clean compile.
-5. **Review.** Use `metacoding-review` on the diff, and act on what it finds.
-6. **Update artifacts.** Update the one document that owns each concept that changed, and amend any decision record the build proved wrong, following `references/repository-organization.md`.
-7. **Close.** Finish with a commit, a commit-ready handoff, or an explicit completion confirmation, as `references/workflow-rules.md` describes.
+The steps, in order. What each one requires is in the Operating Sequence of `references/workflow-rules.md`.
+
+1. Ground in the repo.
+2. Shape, with `metacoding-shape`.
+3. Build test-first, with `metacoding-tdd`, or with `metacoding-debug` when the task is a bug whose cause is unknown.
+4. Verify.
+5. Review, with `metacoding-review`.
+6. Update artifacts.
+7. Close.
 
 Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets, as the Tickets section of `references/workflow-rules.md` describes. When the request continues a task that an earlier session left unfinished, the task resumes from its spec at the first ticket not yet done, as the same section describes.
 

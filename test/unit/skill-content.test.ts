@@ -307,8 +307,6 @@ describe('installed skill content: durable artifacts', () => {
       'Amend a decision record the build proved wrong, as the `metacoding-shape` skill describes'
     );
     expect(artifacts).not.toContain('Write each decision marked');
-    expect(skill).toContain('glossary');
-    expect(skill).toContain('amend any decision record the build proved wrong');
     expect(skill).not.toContain('write the decision records the scope summary marked');
     expect(skill).not.toContain('bootstrap');
   });
@@ -492,7 +490,6 @@ describe('installed skill content: the spec', () => {
   test('the workflow leaves the records and the spec to the shape skill', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
-    const skill = read('metacoding-workflow/SKILL.md');
     const shaping = rules.slice(
       rules.indexOf('2. Shape the task'),
       rules.indexOf('3. Build test-first.')
@@ -504,9 +501,6 @@ describe('installed skill content: the spec', () => {
       'Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.'
     );
     expect(shaping).toContain('For a task that needs none');
-    expect(skill).toContain(
-      'the skill then writes the settled terms, the marked decision records, and a spec when the task needs one'
-    );
   });
 });
 
@@ -624,7 +618,6 @@ describe('installed skill content: building ticket by ticket', () => {
   test('grounding looks for a spec in progress', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
-    const skill = read('metacoding-workflow/SKILL.md');
     const grounding = rules.slice(
       rules.indexOf('1. Ground in the repository.'),
       rules.indexOf('2. Shape the task')
@@ -638,7 +631,6 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(grounding).toContain(
       'When the request continues that task, resume it as the Tickets section describes.'
     );
-    expect(skill).toContain('and any spec still in progress');
   });
 
   test('an unfinished task resumes from its spec at the first ticket not done', async () => {
@@ -1171,5 +1163,51 @@ describe('installed skill content: skill refinements', () => {
     expect(between).toContain(
       'An unrelated request is queued, or the task is paused, as the user decides and as Scope Control in `references/workflow-rules.md` describes'
     );
+  });
+});
+
+describe('installed skill content: prompt upkeep', () => {
+  test('the workflow skill lists the steps as an index and leaves what they require to the workflow rules', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const steps = skill.slice(
+      skill.indexOf('## Steps'),
+      skill.indexOf('## Rules Between Steps')
+    );
+
+    expect(skill).toContain('## Steps');
+    expect(skill).toContain('## Rules Between Steps');
+    expect(rules).toContain('## Operating Sequence');
+    expect(steps).toContain(
+      [
+        'The steps, in order. What each one requires is in the Operating Sequence of `references/workflow-rules.md`.',
+        '',
+        '1. Ground in the repo.',
+        '2. Shape, with `metacoding-shape`.',
+        '3. Build test-first, with `metacoding-tdd`, or with `metacoding-debug` when the task is a bug whose cause is unknown.',
+        '4. Verify.',
+        '5. Review, with `metacoding-review`.',
+        '6. Update artifacts.',
+        '7. Close.',
+        '',
+      ].join('\n')
+    );
+    for (const detail of [
+      'Look up facts yourself',
+      'and any spec still in progress',
+      'Changing files starts only after',
+      'the skill then writes the settled terms',
+      'a failing test before each piece of production code',
+      'it ends in a regression test and a fix',
+      'Run the smallest relevant checks first',
+      'Confirm the behavior a user would observe',
+      'act on what it finds',
+      'Update the one document that owns each concept',
+      'amend any decision record the build proved wrong',
+      'commit-ready handoff',
+    ]) {
+      expect(steps).not.toContain(detail);
+    }
   });
 });
