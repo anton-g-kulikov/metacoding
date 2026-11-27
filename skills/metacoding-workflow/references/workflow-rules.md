@@ -8,7 +8,7 @@
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Shape the task: interview the user and capture task scope.
    - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.
-   - Close with the scope summary: goal, success criteria, in and out of scope, decisions, assumptions, test intent.
+   - Close with the scope summary: goal, success criteria, in and out of scope, solution, decisions, assumptions, test intent, and the tickets the solution is sliced into.
    - Wait for the user to confirm the scope summary before changing any file.
    - Record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.
 3. Build test-first.

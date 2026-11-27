@@ -103,7 +103,8 @@ Before any file changes, `metacoding-shape` interviews you about the task:
 - It looks up facts itself (code, config, tests, docs, git history) and asks you only for decisions.
 - It asks in rounds of numbered questions, each with a recommended answer, so you can reply with "1 yes, 2 yes, 3 the second option".
 - Each round's answers decide which questions come next.
-- It closes with a scope summary (goal, success criteria, in and out of scope, decisions, assumptions, test intent) and waits for your confirmation.
+- It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, with its own success criteria and test intent. A small task stays one ticket.
+- It closes with a scope summary (goal, success criteria, in and out of scope, solution, decisions, assumptions, test intent, tickets) and waits for your confirmation.
 
 If you tell it to proceed without questions, it lists the unasked decisions as assumptions in the scope summary and continues.
 

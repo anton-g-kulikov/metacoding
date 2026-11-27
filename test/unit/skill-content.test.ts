@@ -132,3 +132,83 @@ describe('installed skill content: durable artifacts', () => {
     expect(skill).not.toContain('bootstrap');
   });
 });
+
+describe('installed skill content: solution and tickets', () => {
+  test('the scope summary states the solution and the tickets', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const summaryStart = shape.indexOf('```text\nScope summary\n');
+    const summary = shape.slice(summaryStart, shape.indexOf('```', summaryStart + 3));
+
+    expect(summaryStart).toBeGreaterThan(-1);
+    expect(summary).toContain('\nSolution:\n');
+    expect(summary).toContain('\nTickets:\n');
+  });
+
+  test('the workflow rules name the solution and the tickets in the scope summary', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const summaryLine = rules
+      .split('\n')
+      .find((line) => line.includes('Close with the scope summary'));
+
+    expect(summaryLine).toContain('solution');
+    expect(summaryLine).toContain('tickets');
+  });
+
+  test('the solution names the approach and what changes', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(
+      shape.indexOf('## Solution and tickets'),
+      shape.indexOf('## Closing the interview')
+    );
+
+    expect(section).toContain('the approach');
+    expect(section).toContain('public interface');
+  });
+
+  test('shape slices the solution into tickets that are vertical slices', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(
+      shape.indexOf('## Solution and tickets'),
+      shape.indexOf('## Closing the interview')
+    );
+
+    expect(shape).toContain('## Solution and tickets');
+    expect(section).toContain('built, verified, reviewed, and committed on its own');
+    expect(section).toContain('vertical slice');
+    expect(section).toContain('its own success criteria and test intent');
+    expect(section).toContain('each builds on the ones before it');
+  });
+
+  test('an open choice of how to slice goes to the user as a decision', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(
+      shape.indexOf('## Solution and tickets'),
+      shape.indexOf('## Closing the interview')
+    );
+
+    expect(section).toContain('put the cut to the user as a decision');
+    expect(shape).toContain('how it is sliced into tickets');
+  });
+
+  test('the scope summary lists tickets in build order with their criteria and test intent', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const closing = shape.slice(shape.indexOf('## Closing the interview'));
+
+    expect(closing).toContain('number the tickets in build order');
+    expect(closing).toContain('a title, its success criteria, and its test intent');
+    expect(closing).toContain('For a one-ticket task, give the title alone');
+  });
+
+  test('a small task stays one ticket', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+
+    expect(shape).toContain('A small task is one ticket');
+  });
+});

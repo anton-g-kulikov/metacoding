@@ -1,6 +1,6 @@
 ---
 name: metacoding-shape
-description: Shape a task before any change by interviewing the user in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary. Use when a request leaves decisions open, when the user asks to shape a task, to be questioned, or to clarify scope first, or when the metacoding workflow reaches its shape step.
+description: Shape a task before any change by interviewing the user in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary with the solution sliced into tickets. Use when a request leaves decisions open, when the user asks to shape a task, to be questioned, or to clarify scope first, or when the metacoding workflow reaches its shape step.
 ---
 
 # Shape
@@ -64,11 +64,24 @@ Check each area and ask only where a real decision is open.
 - Tests: which behaviors must be proven, and at which level
 - Done: how the user will check the result
 
+## Solution and tickets
+
+When the decisions are settled, describe the solution: the approach, and each public interface, data shape, or file layout that changes. Say what a builder needs to start, and leave the code out.
+
+Then slice the solution into tickets. A ticket is one piece that can be built, verified, reviewed, and committed on its own.
+
+- Make each ticket a vertical slice: it goes through every layer it needs and ends in something a user or caller can observe. A piece that only adds one layer, such as a database schema with nothing that reads it, belongs in the ticket that uses it.
+- Give each ticket its own success criteria and test intent.
+- Order the tickets so that each builds on the ones before it.
+- A small task is one ticket. Add a ticket only when the piece can be finished and checked by itself.
+
+When there is more than one reasonable way to cut the work, put the cut to the user as a decision, with your recommended cut.
+
 ## Closing the interview
 
 The interview is complete when both are true:
 
-- You can name no further decision that would change what gets built or how it is tested.
+- You can name no further decision that would change what gets built, how it is sliced into tickets, or how it is tested.
 - You have sent the scope summary below and the user has confirmed it.
 
 ```text
@@ -77,10 +90,14 @@ Goal:
 Success criteria:
 In scope:
 Out of scope:
+Solution:
 Decisions made:
 Assumptions:
 Test intent:
+Tickets:
 ```
+
+Under "Tickets", number the tickets in build order and give each a title, its success criteria, and its test intent. For a one-ticket task, give the title alone: the fields above already describe it.
 
 Under "Decisions made", put `[record]` in front of each decision that is hard to reverse, surprising without context, and a real trade-off between workable alternatives. Confirming the summary also approves writing those as decision records once the work is done.
 
@@ -88,5 +105,5 @@ Changing files starts after that confirmation. The confirmed summary is the agre
 
 Two shortcuts:
 
-- When grounding leaves no decision open, skip the rounds and send the scope summary directly.
+- When grounding leaves no decision open, skip the rounds: describe the solution, slice it into tickets, and send the scope summary directly.
 - When the user tells you to proceed without questions, send the scope summary with every unasked decision listed under Assumptions, then continue.

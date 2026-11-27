@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Four companion skills, installed next to `metacoding-workflow` and usable on their own:
-  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary
+  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix
