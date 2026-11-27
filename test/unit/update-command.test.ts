@@ -184,7 +184,7 @@ describe('UpdateCommand', () => {
       await fs.pathExists(
         path.join(
           workspace,
-          '.claude/skills/metacoding-interview/SKILL.md'
+          '.claude/skills/metacoding-shape/SKILL.md'
         )
       )
     ).toBe(true);
@@ -219,7 +219,7 @@ describe('UpdateCommand', () => {
     ['antigravity', '.agents/skills'],
   ] as const;
   const companionSkills = [
-    'metacoding-interview',
+    'metacoding-shape',
     'metacoding-tdd',
     'metacoding-review',
     'metacoding-debug',

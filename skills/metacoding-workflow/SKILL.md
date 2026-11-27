@@ -9,7 +9,7 @@ This skill takes one task from request to handoff. It owns the order of the step
 
 | Skill | What it does |
 | --- | --- |
-| `metacoding-interview` | Settles open decisions with the user and ends in a confirmed scope summary |
+| `metacoding-shape` | Settles open decisions with the user and ends in a confirmed scope summary |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-debug` | Finds the cause of a bug from a command that reproduces it |
 | `metacoding-review` | Checks the finished change against the scope and the repo's standards |
@@ -32,7 +32,7 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 ## Steps
 
 1. **Ground in the repo.** Read the code, config, tests, and docs the task touches, including the glossary and decision records when the repo has them. Look up facts yourself, so the user is asked only for decisions.
-2. **Interview.** Use `metacoding-interview`. Changing files starts only after the user confirms its scope summary.
+2. **Shape.** Use `metacoding-shape`. Changing files starts only after the user confirms its scope summary.
 3. **Build test-first.** Use `metacoding-tdd`: mandatory TDD, a failing test before each piece of production code. When the task is a bug whose cause is unknown, use `metacoding-debug` for this step; it ends in a regression test and a fix.
 4. **Verify.** Run the smallest relevant checks first, then broader checks when justified. Confirm the behavior a user would observe, beyond a clean compile.
 5. **Review.** Use `metacoding-review` on the diff, and fix what it finds.

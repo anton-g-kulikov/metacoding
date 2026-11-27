@@ -82,7 +82,7 @@ describe('installed skill content: durable artifacts', () => {
   test('the task entry template carries the scope summary fields', async () => {
     const { read } = await installFor('codex');
     const template = read('metacoding-workflow/assets/templates/task-entry.md');
-    const interview = read('metacoding-interview/SKILL.md');
+    const interview = read('metacoding-shape/SKILL.md');
     const summaryFields = [
       'Goal:',
       'Success criteria:',
@@ -101,7 +101,7 @@ describe('installed skill content: durable artifacts', () => {
 
   test('the interview records settled terms and marks decisions to record', async () => {
     const { read } = await installFor('codex');
-    const interview = read('metacoding-interview/SKILL.md');
+    const interview = read('metacoding-shape/SKILL.md');
 
     expect(interview).toContain('## Terms');
     expect(interview).toContain('`/_meta/glossary.md`');
@@ -117,7 +117,7 @@ describe('installed skill content: durable artifacts', () => {
     const skill = read('metacoding-workflow/SKILL.md');
     const grounding = rules.slice(
       rules.indexOf('1. Ground in the repository.'),
-      rules.indexOf('2. Interview the user')
+      rules.indexOf('2. Shape the task')
     );
     const artifacts = rules.slice(
       rules.indexOf('6. Update artifacts'),

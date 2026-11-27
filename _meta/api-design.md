@@ -61,7 +61,7 @@ The CLI considers the install valid when the vendor-specific required files exis
 .codex/skills/metacoding-workflow/references/platform-adaptation.md
 .codex/skills/metacoding-workflow/references/project-context.md
 .codex/skills/metacoding-workflow/assets/templates/task-entry.md
-.codex/skills/metacoding-interview/SKILL.md
+.codex/skills/metacoding-shape/SKILL.md
 .codex/skills/metacoding-tdd/SKILL.md
 .codex/skills/metacoding-review/SKILL.md
 .codex/skills/metacoding-debug/SKILL.md
@@ -77,7 +77,7 @@ For Codex, `metacoding-workflow/agents/openai.yaml` must also define `interface.
 .claude/skills/metacoding-workflow/references/platform-adaptation.md
 .claude/skills/metacoding-workflow/references/project-context.md
 .claude/skills/metacoding-workflow/assets/templates/task-entry.md
-.claude/skills/metacoding-interview/SKILL.md
+.claude/skills/metacoding-shape/SKILL.md
 .claude/skills/metacoding-tdd/SKILL.md
 .claude/skills/metacoding-review/SKILL.md
 .claude/skills/metacoding-debug/SKILL.md
@@ -91,7 +91,7 @@ For Codex, `metacoding-workflow/agents/openai.yaml` must also define `interface.
 .agents/skills/metacoding-workflow/references/platform-adaptation.md
 .agents/skills/metacoding-workflow/references/project-context.md
 .agents/skills/metacoding-workflow/assets/templates/task-entry.md
-.agents/skills/metacoding-interview/SKILL.md
+.agents/skills/metacoding-shape/SKILL.md
 .agents/skills/metacoding-tdd/SKILL.md
 .agents/skills/metacoding-review/SKILL.md
 .agents/skills/metacoding-debug/SKILL.md

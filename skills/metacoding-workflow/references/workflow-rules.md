@@ -6,8 +6,8 @@
    - Read the relevant code, config, tests, docs, and `references/repository-organization.md` first.
    - Read the glossary and the decision records when the repo has them, and use the glossary's terms.
    - Look up every fact you can find yourself, so the user is asked only for decisions.
-2. Interview the user and capture task scope.
-   - Use the `metacoding-interview` skill: ask the open decisions in numbered rounds, each with a recommended answer.
+2. Shape the task: interview the user and capture task scope.
+   - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.
    - Close with the scope summary: goal, success criteria, in and out of scope, decisions, assumptions, test intent.
    - Wait for the user to confirm the scope summary before changing any file.
    - Record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.

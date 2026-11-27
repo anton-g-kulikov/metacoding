@@ -4,7 +4,7 @@
 
 `metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files.
 
-The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-interview`, `metacoding-tdd`, `metacoding-review`, and `metacoding-debug` are its companions and also work on their own.
+The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, and `metacoding-debug` are its companions and also work on their own.
 
 ## Runtime Flow
 
@@ -51,7 +51,7 @@ skills/
 │       ├── repeated-task-checklist.md
 │       ├── changelog-entry.md
 │       └── project-context.md
-├── metacoding-interview/
+├── metacoding-shape/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 ├── metacoding-tdd/

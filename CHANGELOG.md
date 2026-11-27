@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Four companion skills, installed next to `metacoding-workflow` and usable on their own:
-  - `metacoding-interview`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary
+  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix
@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `metacoding-workflow` is now an orchestrator: it keeps the step order, grounding, verification, artifact rules and close-out, and calls the companion skills for the interview, build, debug and review steps
+- `metacoding-workflow` is now an orchestrator: it keeps the step order, grounding, verification, artifact rules and close-out, and calls the companion skills for the shape, build, debug and review steps
 - `metacoding init` and `metacoding update` install and sync all five skills; `update` adds the companion skills to an existing install
 - The `.gitignore` section now uses `metacoding-*/` patterns per agent so it covers every skill
 - **Claude Code now installs as a skill** at `.claude/skills/metacoding-workflow/` instead of a subagent at `.claude/agents/metacoding-workflow.md` with a support bundle in `.claude/metacoding-workflow/`. A subagent cannot question the user directly, which blocked the scope interview

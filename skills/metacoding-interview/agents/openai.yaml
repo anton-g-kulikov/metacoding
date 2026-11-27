@@ -1,4 +1,0 @@
-interface:
-  display_name: "Metacoding Interview"
-  short_description: "Settle open decisions before any change"
-  default_prompt: "Use $metacoding-interview to look up the facts yourself, ask me the open decisions in numbered rounds with a recommended answer each, and get the scope summary confirmed before changing anything."

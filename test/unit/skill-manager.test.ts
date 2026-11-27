@@ -160,9 +160,9 @@ describe('SkillManager', () => {
         expect(orchestrator).toContain(`\`${companion}\``);
       }
 
-      const interview = contentOf(`${skillsDir}/metacoding-interview/SKILL.md`);
-      expect(interview).toContain('Recommended:');
-      expect(interview).toContain('Scope summary');
+      const shape = contentOf(`${skillsDir}/metacoding-shape/SKILL.md`);
+      expect(shape).toContain('Recommended:');
+      expect(shape).toContain('Scope summary');
 
       expect(
         contentOf(`${skillsDir}/metacoding-workflow/references/project-context.md`)

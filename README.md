@@ -27,7 +27,7 @@ Antigravity: .agents/skills/
 | Skill | Role |
 | --- | --- |
 | `metacoding-workflow` | The orchestrator. Takes one task from request to handoff and calls the other four at the right step |
-| `metacoding-interview` | Settles open decisions with you and ends in a confirmed scope summary |
+| `metacoding-shape` | Settles open decisions with you and ends in a confirmed scope summary |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-review` | Checks the finished change against the agreed scope and the repo's standards |
 | `metacoding-debug` | Finds the cause of a bug, starting from a command that reproduces it |
@@ -56,7 +56,7 @@ For Codex, the project install looks like:
 │       ├── repeated-task-checklist.md
 │       ├── changelog-entry.md
 │       └── project-context.md
-├── metacoding-interview/
+├── metacoding-shape/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
 ├── metacoding-tdd/
@@ -75,7 +75,7 @@ Claude Code and Antigravity get the same folders without the Codex-only `agents/
 The workflow skill runs these steps in order:
 
 1. Ground in the repo and look up facts before asking questions.
-2. Interview the user on open decisions and confirm scope before changing code (`metacoding-interview`).
+2. Shape the task: interview the user on open decisions and confirm scope before changing code (`metacoding-shape`).
 3. Build test-first (`metacoding-tdd`, or `metacoding-debug` for a bug with an unknown cause).
 4. Verify with tests and direct checks.
 5. Review the diff against the scope and the repo's standards (`metacoding-review`).
@@ -87,7 +87,7 @@ The workflow skill runs these steps in order:
 The `metacoding-workflow` skill applies a strict operating contract for development tasks. It does not only provide prompts; it enforces an execution order and completion gates:
 
 1. Repository grounding before planning.
-2. Scope interview that ends in a confirmed scope summary.
+2. Shaping: a scope interview that ends in a confirmed scope summary.
 3. Mandatory TDD sequence.
 4. Verification through targeted checks.
 5. Review against scope and standards.
@@ -96,9 +96,9 @@ The `metacoding-workflow` skill applies a strict operating contract for developm
 
 The task stays bounded throughout: one active task, with unrelated requests queued.
 
-### Scope Interview
+### Shaping
 
-Before any file changes, the agent interviews you about the task:
+Before any file changes, `metacoding-shape` interviews you about the task:
 
 - It looks up facts itself (code, config, tests, docs, git history) and asks you only for decisions.
 - It asks in rounds of numbered questions, each with a recommended answer, so you can reply with "1 yes, 2 yes, 3 the second option".
@@ -206,7 +206,7 @@ metacoding update --force
 
 ## Using the Skill
 
-After installation, point your coding agent at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-interview` or `/metacoding-review` when you want only that step.
+After installation, point your coding agent at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-shape` or `/metacoding-review` when you want only that step.
 
 The skill will:
 

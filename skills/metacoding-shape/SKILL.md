@@ -1,9 +1,9 @@
 ---
-name: metacoding-interview
-description: Interview the user about a task before any change, in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary. Use when a request leaves decisions open, when the user asks to be questioned or to clarify scope first, or when the metacoding workflow reaches its interview step.
+name: metacoding-shape
+description: Shape a task before any change by interviewing the user in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary. Use when a request leaves decisions open, when the user asks to shape a task, to be questioned, or to clarify scope first, or when the metacoding workflow reaches its shape step.
 ---
 
-# Interview
+# Shape
 
 Run this interview after reading the relevant parts of the repository and before changing any code, test, or doc. Its goal is a shared understanding of the task: every question that shapes the work is either looked up by you or settled by the user.
 

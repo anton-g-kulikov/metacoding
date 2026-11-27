@@ -9,7 +9,7 @@ import { AgentVendor, ProjectConfig } from '../types';
 export const WORKFLOW_SKILL = 'metacoding-workflow';
 export const METACODING_SKILLS = [
   WORKFLOW_SKILL,
-  'metacoding-interview',
+  'metacoding-shape',
   'metacoding-tdd',
   'metacoding-review',
   'metacoding-debug',
