@@ -31,6 +31,7 @@ Give metacoding a way to turn a task's mistakes into lasting changes, so the sam
   - The workflow rules: a one-ticket task's retro follows the close of that ticket, and the retro's changes are not part of the task's spec.
   - README: a "Retro" section, a line in "Completion Criteria", and a bullet in the list of what the skill will do.
   - CHANGELOG: the retro in the line on what the orchestrator calls.
+- Added on 2026-11-28, confirmed by the user before ticket 2: the layout reference says a glossary term and a decision record reach their files only through a confirmed scope summary. Ticket 2 adds the retro as a second route to both rules, so the layout reference and the retro skill agree. The README's list of the documents the workflow keeps is updated to match.
 
 ## Out of scope
 
@@ -93,4 +94,4 @@ One content test per rule, written first and seen failing, each tied to its head
   - Test intent: `update` adds the skill to an install that lacks it and reports the right count of missing files per vendor; the skill text states each of the seven parts under its own heading; it does not point at `references/` or `assets/`; the Codex metadata has a display name and a default prompt; the Tickets section says to run the retro once after the last ticket, and the Completion Standard names it.
 - [ ] **2. A home for standards in the layout**
   - Success criteria: the fourth success criterion above.
-  - Test intent: the layout reference lists `/_meta/coding-standards.md` among the document homes and says what it holds; the platform-adaptation reference says to propose the file when the repo has no standards file, and to create it once the user approves.
+  - Test intent: the layout reference lists `/_meta/coding-standards.md` among the document homes and says what it holds; the platform-adaptation reference says to propose the file when the repo has no standards file, and to create it once the user approves. Added on 2026-11-28: the layout reference's rules for decision records and for the glossary each name the retro as a second route.
