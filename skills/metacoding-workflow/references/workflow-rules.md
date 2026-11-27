@@ -10,7 +10,8 @@
    - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.
    - Close with the scope summary: goal, success criteria, in and out of scope, solution, decisions, assumptions, test intent, and the tickets the solution is sliced into.
    - Wait for the user to confirm the scope summary before changing any file.
-   - Record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.
+   - When the task needs a spec, the skill writes it once the summary is confirmed.
+   - For a task that needs none, record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
    - Take the test intent from the confirmed scope summary.
@@ -27,7 +28,7 @@
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
    - Update the one artifact that owns the concept instead of duplicating the same information.
    - Write each decision marked `[record]` in the confirmed scope summary to `/_meta/architecture-decisions.md`, or to the place the repo already keeps its decision records.
-   - Handle the repo's existing task and test records as `references/repository-organization.md` describes.
+   - Handle specs, tickets, and test records as `references/repository-organization.md` describes.
    - Keep system docs evergreen and free of task status.
 7. Close the loop.
    - If VCS work is in scope, produce or perform a clean commit-ready summary.

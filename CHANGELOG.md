@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A review step in the workflow, between verification and artifact updates
 - A project glossary at `/_meta/glossary.md`: read while grounding, and extended by the interview when a term's meaning is settled
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`
+- Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
 
 ### Changed
 
@@ -31,12 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metacoding update --dry-run` requires each companion skill's `SKILL.md`
 - Installs skip `.DS_Store` files
 - `task-entry.md` now carries the scope summary fields
-- The confirmed scope is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
+- The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
 
 ### Removed
 
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
-- The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them
+- The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
 - The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` does not delete files, so existing installs keep a leftover copy
 
 ## [2.0.1] - 2026-03-28

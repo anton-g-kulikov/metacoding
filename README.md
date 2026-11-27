@@ -105,6 +105,7 @@ Before any file changes, `metacoding-shape` interviews you about the task:
 - Each round's answers decide which questions come next.
 - It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, with its own success criteria and test intent. A small task stays one ticket.
 - It closes with a scope summary (goal, success criteria, in and out of scope, solution, decisions, assumptions, test intent, tickets) and waits for your confirmation.
+- Once you confirm, a task with more than one ticket, or with a decision worth recording, is written up as a spec. A smaller task gets none.
 
 If you tell it to proceed without questions, it lists the unasked decisions as assumptions in the scope summary and continues.
 
@@ -147,12 +148,13 @@ The workflow follows MECE documentation ownership to avoid duplication:
 - System documentation stays evergreen and factual.
 - Only the artifact that owns a concept is updated.
 
-It keeps two documents that make the next session better informed:
+It keeps three kinds of document that make the next session better informed:
 
 - **Glossary** (`/_meta/glossary.md`): the project's own terms, one line each. The agent reads it while grounding, and the interview adds a term when its meaning is settled.
 - **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, so confirming the summary approves writing them.
+- **Specs** (`/_meta/specs/<date>-<slug>.md`): the confirmed scope summary of a task with more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo has a tracker, and a finished spec stays as the record of what was agreed.
 
-It does not create a task list or a test documentation file. Task status and test intent live in the confirmed scope summary, the issue or pull request, the tests, and version control. A repo that already keeps either file gets it updated as before.
+A repo that already keeps specs keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the spec, and the tests. A repo that already keeps one gets it updated as before.
 
 ### Completion Criteria
 
@@ -217,7 +219,7 @@ The skill will:
 - build test-first, one behavior at a time
 - review the diff against the agreed scope before closing
 - read the project glossary and decision records, and keep them current
-- work with the task and test records the repo already has, without creating new ones
+- write a spec for a task with more than one ticket or a decision marked `[record]`
 - produce a commit-ready handoff when git actions are unavailable or out of scope
 
 ## Migration Notes

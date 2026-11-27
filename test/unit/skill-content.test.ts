@@ -37,20 +37,48 @@ describe('installed skill content: durable artifacts', () => {
     expect(layout).toContain('## Glossary');
   });
 
-  test('the layout reference keeps existing task and test records without prescribing new ones', async () => {
+  test('the layout reference says where specs and tickets go, and keeps no separate test document', async () => {
     const { read } = await installFor('codex');
     const layout = read('metacoding-workflow/references/repository-organization.md');
     const prescribed = layout.slice(
       layout.indexOf('## MECE Documentation Architecture'),
-      layout.indexOf('## Task and Test Records')
+      layout.indexOf('## Specs, Tickets, and Test Records')
+    );
+    const records = layout.slice(
+      layout.indexOf('## Specs, Tickets, and Test Records'),
+      layout.indexOf('## Decision Records')
     );
 
-    expect(layout).toContain('## Task and Test Records');
+    expect(layout).toContain('## MECE Documentation Architecture');
+    expect(layout).toContain('## Specs, Tickets, and Test Records');
+    expect(layout).toContain('## Decision Records');
+    expect(prescribed).toContain('`/_meta/specs/`');
     expect(prescribed).not.toContain('project-task-list.md');
     expect(prescribed).not.toContain('test-documentation.md');
-    expect(layout).toContain('keep updating it');
-    expect(layout).toContain('Create neither');
+    expect(records).toContain('`metacoding-shape` skill decides which tasks need a spec');
+    expect(records).toContain('where the repo already keeps specs');
+    expect(records).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(records).toContain("go to the repo's tracker when it keeps one current");
+    expect(records).toContain('checklist in the spec');
+    expect(records).toContain('do not create one');
+    expect(layout).not.toContain('Create neither');
     expect(layout).not.toContain('test documentation belongs under `/test`');
+  });
+
+  test('a repo without a tracker keeps the tickets as a checklist in the spec', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const section = adaptation.slice(
+      adaptation.indexOf('## Missing Task Tracking'),
+      adaptation.indexOf('## Missing Test Documentation')
+    );
+
+    expect(adaptation).toContain('## Missing Task Tracking');
+    expect(adaptation).toContain('## Missing Test Documentation');
+    expect(section).toContain('checklist in the spec');
+    expect(section).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(section).toContain('needs no spec');
+    expect(section).toContain('the confirmed scope summary in the conversation is the record');
   });
 
   test('the layout reference sets a three-part bar for decision records', async () => {
@@ -88,9 +116,11 @@ describe('installed skill content: durable artifacts', () => {
       'Success criteria:',
       'In scope:',
       'Out of scope:',
+      'Solution:',
       'Decisions made:',
       'Assumptions:',
       'Test intent:',
+      'Tickets:',
     ];
 
     for (const field of summaryFields) {
@@ -210,5 +240,109 @@ describe('installed skill content: solution and tickets', () => {
     const shape = read('metacoding-shape/SKILL.md');
 
     expect(shape).toContain('A small task is one ticket');
+  });
+});
+
+describe('installed skill content: the spec', () => {
+  test('shape writes a spec after confirmation for more than one ticket or a marked decision', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('Once the user confirms the scope summary');
+    expect(section).toContain('or has told you to proceed without questions');
+    expect(section).toContain('The summary has more than one ticket.');
+    expect(section).toContain('The summary has a decision marked `[record]`.');
+    expect(shape.slice(0, shape.indexOf('# Shape'))).toContain(
+      'a spec when the task has more than one ticket or a decision to record'
+    );
+  });
+
+  test('a one-ticket task with no marked decision gets no spec', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('needs no spec');
+    expect(section).toContain('where the repo already tracks work');
+    expect(section).toContain('the summary in the conversation is the record');
+  });
+
+  test("the spec goes to the repo's own place or /_meta/specs", async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('where the repo already keeps specs');
+    expect(section).toContain('`/_meta/specs/<date>-<slug>.md`');
+    expect(section).toContain('`YYYY-MM-DD`');
+  });
+
+  test('the spec holds a status, the scope summary fields, and the tickets', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+    const formatStart = section.indexOf('```text\n# Spec:');
+    const format = section.slice(formatStart, section.indexOf('```', formatStart + 3));
+
+    expect(shape).toContain('## The spec');
+    expect(formatStart).toBeGreaterThan(-1);
+    expect(format).toContain('- Status: in progress');
+    for (const heading of [
+      '## Goal',
+      '## Success criteria',
+      '## In scope',
+      '## Out of scope',
+      '## Solution',
+      '## Decisions made',
+      '## Assumptions',
+      '## Test intent',
+      '## Tickets',
+    ]) {
+      expect(format).toContain(`\n${heading}\n`);
+    }
+    expect(format).toContain('- [ ] 1. <title>\n  - Success criteria:\n  - Test intent:');
+    expect(section).toContain('A one-ticket spec lists its ticket by title alone.');
+  });
+
+  test("tickets go to the repo's tracker when it keeps one current, otherwise the spec is the tracker", async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain('When the repo keeps a tracker current');
+    expect(section).toContain('create the tickets there and link each one from the spec');
+    expect(section).toContain('the checklist in the spec is the tracker');
+  });
+
+  test('a finished spec is marked done and stays in place unchanged', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain("set the spec's status to done");
+    expect(section).toContain('leave the spec in place and unchanged');
+    expect(section).toContain("belong in the repo's system documentation");
+  });
+
+  test('the workflow leaves the spec to the shape skill', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const shaping = rules.slice(
+      rules.indexOf('2. Shape the task'),
+      rules.indexOf('3. Build test-first.')
+    );
+
+    expect(rules).toContain('2. Shape the task');
+    expect(rules).toContain('3. Build test-first.');
+    expect(shaping).toContain('When the task needs a spec, the skill writes it once the summary is confirmed.');
+    expect(shaping).toContain('For a task that needs none');
+    expect(skill).toContain('the skill then writes a spec when the task needs one');
   });
 });

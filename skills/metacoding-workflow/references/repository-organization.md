@@ -16,7 +16,7 @@ Prefer a structure equivalent to:
 ```text
 /src        # application and library source code
 /test       # automated tests and fixtures
-/_meta      # system, architecture, and API docs, the glossary, and decision records
+/_meta      # system, architecture, and API docs, the glossary, decision records, and specs
 ```
 
 Within source and tests:
@@ -46,6 +46,8 @@ Each durable concept should have one primary home.
   - architectural trade-offs and rationale
 - `/_meta/glossary.md`
   - the project's own terms and what they mean
+- `/_meta/specs/`
+  - one file per task that needs a spec: its confirmed scope summary and its tickets
 
 Rules:
 
@@ -53,12 +55,13 @@ Rules:
 - Keep system documentation evergreen and free of task-status noise.
 - Update exactly the artifact whose responsibility changed.
 
-## Task and Test Records
+## Specs, Tickets, and Test Records
 
-Task status and test intent live where the work happens: the confirmed scope summary, the issue or pull request, the tests themselves, and version control history.
+The `metacoding-shape` skill decides which tasks need a spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
 
-- If the repo already keeps a task list or a test documentation file, keep updating it as part of the task.
-- Create neither in a repo that lacks one.
+- A spec goes where the repo already keeps specs. When it has no such place, it goes to `/_meta/specs/<date>-<slug>.md`.
+- The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the spec.
+- Test intent lives in the scope summary, the spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
 
 ## Decision Records
 

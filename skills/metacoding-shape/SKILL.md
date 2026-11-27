@@ -1,6 +1,6 @@
 ---
 name: metacoding-shape
-description: Shape a task before any change by interviewing the user in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary with the solution sliced into tickets. Use when a request leaves decisions open, when the user asks to shape a task, to be questioned, or to clarify scope first, or when the metacoding workflow reaches its shape step.
+description: Shape a task before any change by interviewing the user in rounds of numbered questions with a recommended answer each, ending in a confirmed scope summary with the solution sliced into tickets, written up as a spec when the task has more than one ticket or a decision to record. Use when a request leaves decisions open, when the user asks to shape a task, to be questioned, or to clarify scope first, or when the metacoding workflow reaches its shape step.
 ---
 
 # Shape
@@ -107,3 +107,48 @@ Two shortcuts:
 
 - When grounding leaves no decision open, skip the rounds: describe the solution, slice it into tickets, and send the scope summary directly.
 - When the user tells you to proceed without questions, send the scope summary with every unasked decision listed under Assumptions, then continue.
+
+## The spec
+
+Once the user confirms the scope summary, or has told you to proceed without questions, write a spec when either is true:
+
+- The summary has more than one ticket.
+- The summary has a decision marked `[record]`.
+
+A one-ticket task with no marked decision needs no spec. Record its confirmed summary where the repo already tracks work, such as an issue or a pull request. When the repo tracks work nowhere, the summary in the conversation is the record.
+
+Put the spec where the repo already keeps specs or documents of that kind. When it has no such place, use `/_meta/specs/<date>-<slug>.md`, with the date as `YYYY-MM-DD`. The spec is the confirmed scope summary as one file, with a status and one section per field:
+
+```text
+# Spec: <title>
+
+- Status: in progress
+
+## Goal
+
+## Success criteria
+
+## In scope
+
+## Out of scope
+
+## Solution
+
+## Decisions made
+
+## Assumptions
+
+## Test intent
+
+## Tickets
+
+- [ ] 1. <title>
+  - Success criteria:
+  - Test intent:
+```
+
+A one-ticket spec lists its ticket by title alone.
+
+When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the spec. Otherwise the checklist in the spec is the tracker.
+
+When the last ticket is done, set the spec's status to done, and from then on leave the spec in place and unchanged. The spec is the record of what was agreed; facts that stay true belong in the repo's system documentation.

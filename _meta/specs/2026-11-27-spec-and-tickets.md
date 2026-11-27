@@ -1,7 +1,6 @@
 # Spec: Spec and tickets
 
 - Status: in progress
-- Confirmed: 2026-11-27
 
 ## Goal
 
@@ -57,7 +56,7 @@ One content test per behavior in the success criteria, written first and seen fa
 - [x] **1. Shape ends in a solution and tickets**
   - Success criteria: the scope summary has Solution and Tickets fields; the skill defines a ticket as a vertical slice with its own success criteria and test intent; a small task stays one ticket.
   - Test intent: the shape skill's summary block carries both fields; the skill text states the ticket definition and the one-ticket rule; the workflow rules list the same summary fields.
-- [ ] **2. Shape writes the spec**
+- [x] **2. Shape writes the spec**
   - Success criteria: the skill states the threshold, the spec's format and location, and where tickets live; the layout reference prescribes `/_meta/specs/` and no longer forbids new task records.
   - Test intent: the shape skill names the threshold and `/_meta/specs/`; the layout reference lists specs and keeps "no separate test document"; the adaptation reference covers a repo without a tracker.
 - [ ] **3. Decision records at the end of shape**

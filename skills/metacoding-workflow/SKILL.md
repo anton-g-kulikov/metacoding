@@ -32,7 +32,7 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 ## Steps
 
 1. **Ground in the repo.** Read the code, config, tests, and docs the task touches, including the glossary and decision records when the repo has them. Look up facts yourself, so the user is asked only for decisions.
-2. **Shape.** Use `metacoding-shape`. Changing files starts only after the user confirms its scope summary.
+2. **Shape.** Use `metacoding-shape`. Changing files starts only after the user confirms its scope summary; the skill then writes a spec when the task needs one.
 3. **Build test-first.** Use `metacoding-tdd`: mandatory TDD, a failing test before each piece of production code. When the task is a bug whose cause is unknown, use `metacoding-debug` for this step; it ends in a regression test and a fix.
 4. **Verify.** Run the smallest relevant checks first, then broader checks when justified. Confirm the behavior a user would observe, beyond a clean compile.
 5. **Review.** Use `metacoding-review` on the diff, and fix what it finds.

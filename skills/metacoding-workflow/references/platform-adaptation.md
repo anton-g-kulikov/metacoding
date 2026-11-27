@@ -2,16 +2,17 @@
 
 ## Missing Task Tracking
 
-If the repo does not have a task list or status document:
+If the repo has no tracker, such as issues or a task list it keeps current:
 
-- the confirmed scope summary in the conversation is the record of the task
+- the tickets of a spec are a checklist in the spec, which goes to `/_meta/specs/<date>-<slug>.md` unless the repo keeps specs elsewhere
+- for a task that needs no spec, the confirmed scope summary in the conversation is the record
 - write a task entry in the shape of `assets/templates/task-entry.md` only when the user asks for a durable one, in the place they name
 
 ## Missing Test Documentation
 
 If the repo does not track test intent in docs:
 
-- the test intent in the confirmed scope summary is the record, together with the tests themselves
+- the test intent in the confirmed scope summary, and in the spec when the task has one, is the record, together with the tests themselves
 - leave it there; a separate test document is kept only where the repo already has one
 
 ## Missing Glossary or Decision Records
