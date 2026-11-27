@@ -26,7 +26,7 @@ Load a companion skill by name with your agent's skill mechanism. When the skill
 1. Read `references/project-context.md` first when it exists. Without it, find the project's type, tech stack, and test and build commands in the repo.
 2. Read `references/workflow-rules.md` for the operating contract.
 3. Read `references/repository-organization.md` before planning or editing.
-4. Read `references/platform-adaptation.md` if the repo lacks task docs, test docs, or git context.
+4. Read `references/platform-adaptation.md` if the repo lacks task docs, feature specs, test docs, or git context.
 
 ## Steps
 

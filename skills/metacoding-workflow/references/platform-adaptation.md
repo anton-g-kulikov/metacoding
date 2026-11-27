@@ -10,12 +10,18 @@ If the repo has no tracker, such as issues or a task list it keeps current:
 - for a task that needs no task spec, the confirmed scope summary in the conversation is the record
 - write a task entry in the shape of `assets/templates/task-entry.md` only when the user asks for a durable one, in the place they name
 
+## Missing Feature Specs
+
+If the repo has no feature spec for a feature area:
+
+- the first ticket that delivers a scenario in an area creates that area's feature spec, as the `metacoding-spec` skill describes
+
 ## Missing Test Documentation
 
-If the repo does not track test intent in docs:
+If the repo keeps no test documentation file:
 
-- the test intent in the confirmed scope summary, and in the task spec when the task has one, is the record, together with the tests themselves
-- leave it there; a separate test document is kept only where the repo already has one
+- the scenarios, or the test intent of a task without stories, stay where `references/repository-organization.md` says they live, together with the tests themselves
+- leave them there; a separate test document is kept only where the repo already has one
 
 ## Missing Glossary or Decision Records
 

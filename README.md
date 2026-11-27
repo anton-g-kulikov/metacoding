@@ -139,12 +139,12 @@ Claude Code and Antigravity get the same folders without the Codex-only `agents/
 
 The workflow skill runs these steps in order:
 
-1. Ground in the repo and look up facts before asking questions.
+1. Ground in the repo, read the feature specs of the areas the task touches, and look up facts before asking questions.
 2. Shape the task: interview the user on open decisions (`metacoding-shape`), then confirm the scope summary before changing code (`metacoding-spec`).
 3. Build test-first (`metacoding-tdd`, or `metacoding-debug` for a bug with an unknown cause).
 4. Verify with tests and direct checks.
 5. Review the diff against the scope and the repo's standards (`metacoding-review`).
-6. Update the docs that materially changed, and amend a decision record the build proved wrong.
+6. Update the feature spec of each area the ticket changed, then the other docs that materially changed, and amend a decision record the build proved wrong.
 7. Close with a commit or a handoff, and say explicitly that the work is complete.
 
 Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next. When the workflow commits, the records that shaping writes are committed on their own before the first ticket, so a ticket's commit holds only that ticket's work. When a new session is asked to continue a task with a task spec still in progress, it starts at the first ticket not yet done, without shaping the task again.
@@ -273,7 +273,7 @@ It keeps five kinds of document that make the next session better informed:
 
 A retro can also propose a glossary term or a decision record, which is written once you approve it.
 
-These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps documents of either kind keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the task spec, and the tests. A repo that already keeps one gets it updated as before.
+These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps documents of either kind keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: scenarios live in the scope summary, the task spec, and the feature spec, and the tests prove them. For a task without stories, test intent lives in the scope summary, the task spec, and the tests. A repo that already keeps a test documentation file gets it updated as before.
 
 ### Completion Criteria
 
@@ -285,6 +285,7 @@ A task is considered complete only when all of the following are true:
 - Review findings were fixed, accepted, or listed as follow-ups.
 - Changed artifacts were updated, or a conscious deferral was documented.
 - Every ticket is closed and, when the task has a task spec, it is marked done.
+- The scenarios the task delivered are in the feature specs of their areas.
 - The handoff includes outcome, verification status, and remaining risks.
 - After the last ticket is closed, the retro has run and its lessons, if any, have been put to you.
 
@@ -350,6 +351,7 @@ The workflow skill will:
 - look back at the task after its last ticket, and propose lasting changes for its mistakes
 - read the project glossary and decision records, and keep them current
 - write a task spec for a task with more than one ticket or a decision marked `[record]`
+- read the feature specs of the areas a task touches, and keep them up to date ticket by ticket
 - produce a commit-ready handoff when git actions are unavailable or out of scope
 
 ## Migration Notes

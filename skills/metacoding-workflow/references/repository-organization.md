@@ -35,7 +35,7 @@ Each durable concept should have one primary home.
   - usage
   - user-facing workflows
 - `/_meta/system-documentation.md`
-  - evergreen system behavior
+  - evergreen system behavior that spans feature areas
   - stable repository structure
   - non-temporal technical guidance
 - `/_meta/api-design.md`
@@ -49,6 +49,7 @@ Each durable concept should have one primary home.
 - `/_meta/coding-standards.md`
   - the repo's rules for writing code, tests, and docs that no automated check enforces
 - `/_meta/specs/`
+  - one feature spec per feature area, as `<area>.md`: how the area works today, and its stories by role
   - under `tasks/`, one file per task that needs a task spec: its confirmed scope summary and its tickets
 
 Rules:
@@ -68,11 +69,12 @@ Rules:
 
 ## Specs, Tickets, and Test Records
 
-The `metacoding-spec` skill decides which tasks need a task spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
+The `metacoding-spec` skill decides which tasks need a task spec, writes it once the user confirms the scope summary, and holds the rules and the file formats of task specs and feature specs. This reference covers only where things go:
 
 - A task spec goes where the repo already keeps task specs. When it has no such place, it goes to `/_meta/specs/tasks/<date>-<slug>.md`.
+- A feature spec goes where the repo already keeps documents of that kind. When it has no such place, it goes to `/_meta/specs/<area>.md`.
 - The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the task spec.
-- Test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
+- Scenarios live in the scope summary, in the task spec when the task has one, and in the feature spec, and the tests prove them. For a task without stories, test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
 
 ## Decision Records
 

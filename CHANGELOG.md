@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
 - Feature specs at `/_meta/specs/<area>.md`: the living document of one feature area, with an ID prefix, a Solution section that says how the area works today, and its stories by role with their scenarios in `gherkin` blocks. When a ticket is done, its scenarios are written into the feature spec of their area; a changed scenario replaces the old text under its ID, and a removed one leaves with its test. A feature spec starts with the first task that delivers a scenario in its area, with no backfill
+- The workflow reads the feature specs of the areas a task touches while grounding and updates them in its artifact step, before the ticket is marked done, so that the change to a feature spec is part of its ticket's commit. A task is not complete until the scenarios it delivered are in the feature specs
 - Task specs at `/_meta/specs/tasks/<date>-<slug>.md`: `metacoding-spec` writes the confirmed scope summary as a task spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the task spec unless the repo already has a tracker
 - A plugin install for Claude Code: the repo is a plugin and its own marketplace, so Claude Code installs the skills from it without the CLI. The plugin has the version of the npm package
 - A plugin install for Codex and for Antigravity, from the same repo and with the same version. Both follow the agents' documentation and are not yet tried on a real install
@@ -63,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
 - The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a task spec instead
-- The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
+- The `test-plan.md` template. Scenarios, or the test intent of a task without stories, now live in the scope summary. `metacoding update` removes the copy an existing install has
 - The five language references (`references/typescript.md`, `javascript.md`, `node.md`, `react.md` and `python.md`) and the "Recommended References" section of `project-context.md`. The references restated the workflow rules in general terms, and the section repeated a list the skill already holds. `metacoding update` removes the copies an existing install has
 - The legacy `templates/` and `workflow/` folders from the 1.x instruction-file generator, which the package does not ship
 

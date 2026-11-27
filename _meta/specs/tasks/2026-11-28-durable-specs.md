@@ -296,7 +296,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - [x] **3. Task specs and feature specs**
   - Delivers: SPEC-5, SPEC-6, SPEC-7, SPEC-8, SPEC-9
   - Blocked by: 2
-- [ ] **4. The workflow keeps both specs current**
+- [x] **4. The workflow keeps both specs current**
   - Delivers: FLOW-2, FLOW-3, FLOW-4
   - Blocked by: 3
 - [ ] **5. Tests carry scenario IDs**

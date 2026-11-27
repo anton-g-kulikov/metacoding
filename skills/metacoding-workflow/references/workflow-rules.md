@@ -7,6 +7,7 @@
    - Read the project map, `.metacoding/project.md`, when the repo has one, and use the places it names, as `references/repository-organization.md` describes.
    - When the repo has no project map, tell the user in one line that the `metacoding-onboard` skill can record where the repo keeps its tracker, specs, glossary, and decision records, then carry on with the task.
    - Read the glossary and the decision records when the repo has them, and use the glossary's terms.
+   - Read the feature specs of the feature areas the task touches, when the repo has them: they say what each area does today.
    - Look for a task spec whose status is in progress, where `references/repository-organization.md` says task specs go. When the request continues that task, resume it as the Tickets section describes.
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Shape the task: interview the user and capture task scope.
@@ -32,6 +33,7 @@
    - Use the `metacoding-review` skill on the diff: one pass against the agreed scope, one against the repo's standards. For a task with more than one ticket, the agreed scope is the ticket, as the skill describes.
    - Act on its findings as the skill describes: it says which are fixed and which go to the user. Then rerun the checks from step 4.
 6. Update artifacts using MECE documentation rules.
+   - Update the feature spec of each feature area the ticket changed, as the `metacoding-spec` skill describes: write the ticket's scenarios into it, and correct its Solution section when the ticket changed how the area works. Do this before the ticket is marked done, so that the feature spec is part of the ticket's commit.
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
    - Update the one artifact that owns the concept instead of duplicating the same information, as `references/repository-organization.md` describes.
    - Amend a decision record the build proved wrong, as the `metacoding-spec` skill describes.
@@ -48,7 +50,7 @@ A task with more than one ticket repeats steps 3 to 7 for each ticket, in the or
 
 - Build, verify, and review one ticket before starting the next.
 - In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the task spec.
-- In step 6, mark the ticket done where the tickets are tracked, so that a tick in the task spec's checklist is part of the ticket's commit. With the last ticket, mark the task spec done, as the `metacoding-spec` skill describes.
+- In step 6, update the feature specs first, then mark the ticket done where the tickets are tracked, so that a tick in the task spec's checklist is part of the ticket's commit. With the last ticket, mark the task spec done, as the `metacoding-spec` skill describes.
 - Close each ticket on its own in step 7: commit it or hand it off, and report what was done.
 - After every ticket but the last, wait for the user's go before starting the next one.
 - After the last ticket is closed, use the `metacoding-retro` skill once for the task. It proposes lasting changes for the task's mistakes, and the user decides which are made. Those changes come after the last ticket and are not part of the task spec, which stays done.
@@ -91,5 +93,6 @@ The task is not complete until:
 - the review's findings are fixed, accepted by the user, or listed as follow-ups
 - changed artifacts are updated or consciously deferred according to MECE ownership
 - every ticket is closed and, when the task has a task spec, it is marked done
+- the scenarios the task delivered are in the feature specs of their areas
 - the user receives a clean summary of outcome, verification, and remaining risks
 - after the last ticket is closed, the retro has run and its lessons, if any, have been put to the user

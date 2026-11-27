@@ -106,11 +106,11 @@ describe('installed skill content: durable artifacts', () => {
     const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
     const section = adaptation.slice(
       adaptation.indexOf('## Missing Task Tracking'),
-      adaptation.indexOf('## Missing Test Documentation')
+      adaptation.indexOf('## Missing Feature Specs')
     );
 
     expect(adaptation).toContain('## Missing Task Tracking');
-    expect(adaptation).toContain('## Missing Test Documentation');
+    expect(adaptation).toContain('## Missing Feature Specs');
     expect(section).toContain('checklist in the task spec');
     expect(section).toContain('`/_meta/specs/tasks/<date>-<slug>.md`');
     expect(section).toContain('needs no task spec');
@@ -593,7 +593,9 @@ describe('installed skill content: building ticket by ticket', () => {
 
     expect(rules).toContain('## Tickets');
     expect(rules).toContain('## Scope Control');
-    expect(tickets).toContain('In step 6, mark the ticket done where the tickets are tracked');
+    expect(tickets).toContain(
+      'In step 6, update the feature specs first, then mark the ticket done where the tickets are tracked'
+    );
     expect(tickets).toContain("is part of the ticket's commit");
     expect(tickets).toContain(
       'With the last ticket, mark the task spec done, as the `metacoding-spec` skill describes.'
@@ -2794,6 +2796,95 @@ describe('installed skill content: task specs and feature specs', () => {
     );
     expect(sectionOf(spec, '## Stories', '## Solution and tickets')).toContain(
       'For a scenario the task removes, give its ID and title with "(removed)" after the title.'
+    );
+  });
+});
+
+describe('installed skill content: the workflow keeps both specs current', () => {
+  test('FLOW-2: grounding reads the feature specs of the areas the task touches', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+
+    expect(sectionOf(rules, '1. Ground in the repository.', '2. Shape the task')).toContain(
+      'Read the feature specs of the feature areas the task touches, when the repo has them: they say what each area does today.'
+    );
+  });
+
+  test("FLOW-3: the artifact step writes the ticket's scenarios into the feature spec before the commit", async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+
+    expect(sectionOf(rules, '6. Update artifacts', '7. Close the loop.')).toContain(
+      "Update the feature spec of each feature area the ticket changed, as the `metacoding-spec` skill describes: write the ticket's scenarios into it, and correct its Solution section when the ticket changed how the area works. Do this before the ticket is marked done, so that the feature spec is part of the ticket's commit."
+    );
+    expect(sectionOf(rules, '## Tickets', '### Resuming a task')).toContain(
+      'In step 6, update the feature specs first, then mark the ticket done where the tickets are tracked'
+    );
+  });
+
+  test('FLOW-3: a task is not complete until its scenarios are in the feature specs', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+
+    expect(sectionOf(rules, '## Completion Standard')).toContain(
+      '- the scenarios the task delivered are in the feature specs of their areas'
+    );
+  });
+
+  test('FLOW-4: the layout reference says where feature specs and task specs go', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const prescribed = sectionOf(
+      layout,
+      '## MECE Documentation Architecture',
+      '## Specs, Tickets, and Test Records'
+    );
+    const records = sectionOf(layout, '## Specs, Tickets, and Test Records', '## Decision Records');
+
+    expect(prescribed).toContain(
+      '- `/_meta/specs/`\n  - one feature spec per feature area, as `<area>.md`: how the area works today, and its stories by role\n  - under `tasks/`, one file per task that needs a task spec: its confirmed scope summary and its tickets'
+    );
+    expect(records).toContain(
+      'A feature spec goes where the repo already keeps documents of that kind. When it has no such place, it goes to `/_meta/specs/<area>.md`.'
+    );
+    expect(records).toContain(
+      'A task spec goes where the repo already keeps task specs. When it has no such place, it goes to `/_meta/specs/tasks/<date>-<slug>.md`.'
+    );
+    expect(records).toContain(
+      'holds the rules and the file formats of task specs and feature specs. This reference covers only where things go:'
+    );
+    expect(prescribed).toContain('- evergreen system behavior that spans feature areas');
+  });
+
+  test('FLOW-4: the workflow still creates no separate test document', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+
+    expect(
+      sectionOf(layout, '## Specs, Tickets, and Test Records', '## Decision Records')
+    ).toContain(
+      'Scenarios live in the scope summary, in the task spec when the task has one, and in the feature spec, and the tests prove them. For a task without stories, test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.'
+    );
+    expect(
+      sectionOf(adaptation, '## Missing Test Documentation', '## Missing Glossary or Decision Records')
+    ).toContain(
+      '- the scenarios, or the test intent of a task without stories, stay where `references/repository-organization.md` says they live, together with the tests themselves\n- leave them there; a separate test document is kept only where the repo already has one'
+    );
+  });
+
+  test('a repo without feature specs gets one per area as tickets deliver scenarios', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+
+    expect(
+      sectionOf(adaptation, '## Missing Feature Specs', '## Missing Test Documentation')
+    ).toContain(
+      "the first ticket that delivers a scenario in an area creates that area's feature spec, as the `metacoding-spec` skill describes"
+    );
+    expect(skill).toContain(
+      'if the repo lacks task docs, feature specs, test docs, or git context.'
     );
   });
 });
