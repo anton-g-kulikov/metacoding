@@ -26,6 +26,7 @@
 #### 2. **Version & Documentation Updates**
 
 - [ ] Version bumped in package.json (Current: **[CURRENT]** → Target: **[TARGET]**)
+- [ ] Same version set in the three plugin manifests: `.claude-plugin/plugin.json`, `plugin.json`, `.antigravity-plugin/plugin.json` (`npx jest` fails when one differs)
 - [ ] CHANGELOG.md updated with new release entry
 - [ ] Breaking changes documented (if any)
 - [ ] README.md updated for new features (if applicable)
@@ -56,7 +57,7 @@ env npm_config_cache=/tmp/metacoding-npm-cache npm pack --dry-run
 ### Phase 2: Version Management
 
 ```bash
-# Update version in package.json
+# Update version in package.json and the three plugin manifests
 # Update CHANGELOG.md entry
 git commit -m "chore: bump version to vX.Y.Z"
 git tag vX.Y.Z
