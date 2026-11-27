@@ -805,3 +805,83 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(prompt).toContain('wait for my go before the next');
   });
 });
+
+describe('installed skill content: skill refinements', () => {
+  test('TDD has a test doubles section that keeps the rule on what to replace', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    expect(tdd).toContain('## What a good test looks like');
+    expect(tdd.indexOf('## Test doubles')).toBeGreaterThan(
+      tdd.indexOf('## What a good test looks like')
+    );
+    expect(tdd).toContain(
+      'It replaces only what sits outside your control: network, clock, randomness, third-party services.'
+    );
+    expect(section).toContain('replace only what sits outside your control');
+  });
+
+  test('TDD prefers a real or in-memory stand-in over a mock that checks calls', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    expect(section).toContain(
+      'Prefer a real or in-memory stand-in to a mock that checks which calls were made'
+    );
+    expect(section).toContain('Check calls only when the call itself is the behavior');
+  });
+
+  test("TDD never replaces the code under test or the codebase's own modules", async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    expect(section).toContain(
+      'Never replace the code under test or another module of this codebase.'
+    );
+  });
+
+  test('TDD shows a good and a bad example of a test double', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const section = tdd.slice(
+      tdd.indexOf('## Test doubles'),
+      tdd.indexOf('## When a behavior cannot be tested first')
+    );
+
+    expect(tdd).toContain('## Test doubles');
+    expect(tdd).toContain('## When a behavior cannot be tested first');
+    const good = section.slice(section.indexOf('Good:'), section.indexOf('Bad:'));
+    const bad = section.slice(section.indexOf('Bad:'));
+
+    expect(section).toContain('Good:');
+    expect(section).toContain('Bad:');
+    expect(good).toContain(
+      'Good: the double is a clock, which is outside your control, and the test checks the result.'
+    );
+    expect(good).toContain('clock = FixedClock("2026-01-01")');
+    expect(good).toContain('assert order.expires_on == "2026-01-08"');
+    expect(bad).toContain(
+      'Bad: the double replaces a module of this codebase, and the test checks a call.'
+    );
+    expect(bad).toContain('pricing = mock(pricing_module)');
+    expect(bad).toContain('assert pricing.calculate was called once');
+  });
+});

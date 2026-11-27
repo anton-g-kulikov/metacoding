@@ -30,6 +30,29 @@ Leave restructuring until the behaviors on the list are green. Then refactor in 
 - Its expected value comes from somewhere other than the code under test: a literal, a worked example, the spec. A test that recomputes the answer the way the code does always passes.
 - It replaces only what sits outside your control: network, clock, randomness, third-party services. The modules of this codebase run for real.
 
+## Test doubles
+
+A test double stands in for something the test cannot use for real. The last point above is the rule: replace only what sits outside your control. This is how to apply it.
+
+- Prefer a real or in-memory stand-in to a mock that checks which calls were made: a temporary directory, an in-memory database, a clock you can set. Check calls only when the call itself is the behavior, such as "sends one email".
+- Never replace the code under test or another module of this codebase. A test that does so passes while the real pieces no longer fit together.
+
+Good: the double is a clock, which is outside your control, and the test checks the result.
+
+```text
+clock = FixedClock("2026-01-01")
+order = place_order(cart, clock)
+assert order.expires_on == "2026-01-08"
+```
+
+Bad: the double replaces a module of this codebase, and the test checks a call.
+
+```text
+pricing = mock(pricing_module)
+place_order(cart, pricing)
+assert pricing.calculate was called once
+```
+
 ## When a behavior cannot be tested first
 
 Some changes have no practical automated test: pure configuration, generated files, visual polish. Say which behavior is affected and why, get the user to accept the exception, record it, and verify that behavior by hand.

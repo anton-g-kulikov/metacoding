@@ -121,7 +121,7 @@ For testable changes, `metacoding-tdd` enforces this order:
 3. Implement the minimum production code to pass.
 4. Move to the next behavior. Refactor only after the listed behaviors are green.
 
-Tests go through public interfaces, and expected values come from a source other than the code under test.
+Tests go through public interfaces, and expected values come from a source other than the code under test. Test doubles replace only what is outside your control, such as the network or the clock; the skill prefers a real or in-memory stand-in to a mock that checks calls, and shows a good and a bad example.
 
 ### Review
 

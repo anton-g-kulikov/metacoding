@@ -58,7 +58,7 @@ One content test per new rule, written first and seen failing. The tickets list 
 
 ## Tickets
 
-- [ ] **1. Test doubles in metacoding-tdd**
+- [x] **1. Test doubles in metacoding-tdd**
   - Success criteria: the first success criterion above.
   - Test intent: the skill has the section; it states the three rules; it shows a good and a bad example.
 - [ ] **2. Secrets in metacoding-debug**
