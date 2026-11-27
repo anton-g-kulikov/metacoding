@@ -75,7 +75,7 @@ The workflow skill runs these steps in order:
 4. Verify with tests and direct checks.
 5. Review the diff against the scope and the repo's standards (`metacoding-review`).
 6. Update the docs that materially changed, and amend a decision record the build proved wrong.
-7. Close with a VCS handoff or completion confirmation.
+7. Close with a commit or a handoff, and say explicitly that the work is complete.
 
 Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next. When the workflow commits, the records that shaping writes are committed on their own before the first ticket, so a ticket's commit holds only that ticket's work. When a new session is asked to continue a task whose spec is still in progress, it starts at the first ticket not yet done, without shaping the task again.
 

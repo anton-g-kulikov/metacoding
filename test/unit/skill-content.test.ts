@@ -1,4 +1,5 @@
-import { SkillManager } from '../../src/services/skill-manager';
+import YAML from 'yaml';
+import { METACODING_SKILLS, SkillManager } from '../../src/services/skill-manager';
 import { AgentVendor } from '../../src/types';
 
 const skillsDirs: Record<AgentVendor, string> = {
@@ -26,6 +27,17 @@ async function installFor(vendor: AgentVendor, projectType = 'typescript') {
   };
 
   return { files, read };
+}
+
+/** The parsed frontmatter of a SKILL.md, after checking that the block is there. */
+function frontmatterOf(skillFile: string): Record<string, unknown> {
+  const opening = '---\n';
+  const end = skillFile.indexOf('\n---\n', opening.length);
+
+  expect(skillFile.startsWith(opening)).toBe(true);
+  expect(end).toBeGreaterThan(-1);
+  // An agent that cannot parse the block loads the skill with no description.
+  return YAML.parse(skillFile.slice(opening.length, end));
 }
 
 describe('installed skill content: durable artifacts', () => {
@@ -1231,5 +1243,31 @@ describe('installed skill content: prompt upkeep', () => {
       'Update the one artifact that owns the concept instead of duplicating the same information, as `references/repository-organization.md` describes.'
     );
     expect(closing).toContain('Either way, state explicitly that the work is complete.');
+  });
+
+  test('every skill has frontmatter that parses, with its name and a description, for every vendor', async () => {
+    for (const vendor of Object.keys(skillsDirs) as AgentVendor[]) {
+      const { read } = await installFor(vendor);
+
+      for (const skill of METACODING_SKILLS) {
+        const frontmatter = frontmatterOf(read(`${skill}/SKILL.md`));
+
+        expect(frontmatter.name).toBe(skill);
+        expect(typeof frontmatter.description).toBe('string');
+        expect(frontmatter.description).not.toBe('');
+      }
+    }
+  });
+
+  test('the workflow skill applies only when the request asks for it or for gated execution', async () => {
+    const { read } = await installFor('codex');
+    const { description } = frontmatterOf(read('metacoding-workflow/SKILL.md'));
+
+    expect(description).toContain(
+      'Use only when the request asks for the metacoding workflow, or for strict, gated execution of a task.'
+    );
+    for (const broadTrigger of ['feature work', 'bug fixes', 'refactors', 'reviews']) {
+      expect(description).not.toContain(broadTrigger);
+    }
   });
 });

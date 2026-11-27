@@ -1,6 +1,6 @@
 ---
 name: metacoding-workflow
-description: Run a task through the full metacoding workflow, from repo grounding and a scope interview through mandatory TDD, verification, review, and MECE doc updates to a clean handoff. Use this skill for feature work, bug fixes, refactors, or reviews where the user wants strict, gated execution with single-task focus rather than ad hoc coding.
+description: Run one task through the full metacoding workflow, from repo grounding and shaping the task with the user through mandatory TDD one ticket at a time, verification, review, and doc updates to a clean handoff. Use only when the request asks for the metacoding workflow, or for strict, gated execution of a task.
 ---
 
 # Metacoding Workflow

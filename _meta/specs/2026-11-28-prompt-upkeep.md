@@ -1,6 +1,6 @@
 # Spec: Prompt upkeep
 
-- Status: in progress
+- Status: done
 
 ## Goal
 
@@ -24,6 +24,12 @@ Remove three kinds of dead weight from the skill text: the steps described twice
   - `workflow-rules.md`, step 7: one line that says to state explicitly that the work is complete. The old step 7 of `SKILL.md` offered "an explicit completion confirmation", and no other file said it.
   - `workflow-rules.md`, step 6: the line on the one owning artifact names `references/repository-organization.md`, as the old step 6 of `SKILL.md` did.
   - `SKILL.md`, step 3 of the index: it names both skills and no longer says when `metacoding-debug` applies. `workflow-rules.md` says that.
+- Added on 2026-11-28, in ticket 3: a content test that the frontmatter of every skill parses as YAML and holds the skill's name and a description, for every vendor.
+- Corrected on 2026-11-28, after the review of the whole change:
+  - No tracked `lib/` file is built from `skill-manager.ts`, so none changed.
+  - The line added to step 7 of `workflow-rules.md` applies in both cases, with and without VCS work. The old step 7 of `SKILL.md` offered the confirmation as a third way to close. Step 7 of the list in the README follows the new line.
+  - Two facts did move from `SKILL.md` to `workflow-rules.md`, as the addition above describes, so "no text moves between the two files" under Decisions made holds only for the text of the Operating Sequence as it was.
+  - The index names four companion skills, not the three that the test intent of ticket 2 says.
 
 ## Out of scope
 
@@ -61,6 +67,20 @@ Remove three kinds of dead weight from the skill text: the steps described twice
 
   The wording may shift slightly in review; the meaning does not.
 
+  Changed on 2026-11-28, in ticket 3. The description reads:
+
+  ```text
+  Run one task through the full metacoding workflow, from repo grounding and shaping the task with the user through mandatory TDD one ticket at a time, verification, review, and doc updates to a clean handoff. Use only when the request asks for the metacoding workflow, or for strict, gated execution of a task.
+  ```
+
+  What changed from the wording above, and why:
+
+  - No colon followed by a space: that is not valid in an unquoted YAML value, and an agent that cannot parse the frontmatter loads the skill with no description.
+  - "mandatory TDD" stays, because an install test pins it in the skill.
+  - "shaping the task with the user" replaces "a scope interview": the glossary keeps "interview" for the method, not for the step.
+  - "the request" replaces "the user", so that a brief written by another session counts.
+  - "strict, gated execution of a task" replaces "a task to be run with these gates", which pointed at gates the first sentence did not name.
+
 ## Decisions made
 
 - `workflow-rules.md` owns the steps; `SKILL.md` keeps an index. No text moves between the two files, so branches that edit steps 1 and 2 in `workflow-rules.md` are not disturbed.
@@ -96,6 +116,6 @@ Each ticket starts with a failing test. Assertions that pin sentences being remo
 - [x] **2. One home for the steps**
   - Success criteria: the second success criterion above.
   - Test intent: "Steps" holds the seven names, the three companion skills and the pointer, and none of the removed sentences; the tickets and resuming sentences are still there.
-- [ ] **3. Narrow the workflow description**
+- [x] **3. Narrow the workflow description**
   - Success criteria: the third success criterion above.
   - Test intent: the description states the two triggers and no longer lists feature work, bug fixes, refactors or reviews; the frontmatter still has a name and a description for every vendor.
