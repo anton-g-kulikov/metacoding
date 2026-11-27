@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { AgentVendor, ProjectConfig } from '../types';
+import { AgentVendor, InstalledProjectContext, ProjectConfig } from '../types';
 
 /**
  * The orchestrator skill, and the entrypoint that marks a vendor install.
@@ -16,6 +16,12 @@ export const METACODING_SKILLS = [
   'metacoding-review',
   'metacoding-debug',
 ] as const;
+
+/** Description used when the user gives none. */
+export const DEFAULT_PROJECT_DESCRIPTION = 'A project using the metacoding skills';
+
+/** The generated file, relative to the workflow skill, that holds the init answers. */
+export const PROJECT_CONTEXT_FILE = 'references/project-context.md';
 
 interface VendorInstallDefinition {
   vendor: AgentVendor;
@@ -245,14 +251,68 @@ export class SkillManager {
     }
 
     files.push({
-      path: path.join(
-        this.getInstallDirectory(config.vendor),
-        'references/project-context.md'
-      ),
+      path: path.join(this.getInstallDirectory(config.vendor), PROJECT_CONTEXT_FILE),
       content: await this.renderProjectContext(config),
     });
 
     return files;
+  }
+
+  /**
+   * Read the init answers back from the installed project context. A value
+   * is undefined when the file or its line is missing. The labels match
+   * assets/templates/project-context.md.
+   */
+  async readInstalledProjectContext(
+    vendor: AgentVendor
+  ): Promise<InstalledProjectContext> {
+    const content = await this.readInstalledProjectContextFile(vendor);
+    // Values are kept as written, so that rendering them again changes nothing.
+    const valueOf = (label: string): string | undefined => {
+      const prefix = `- ${label}: `;
+      const line = content.split(/\r?\n/).find((entry) => entry.startsWith(prefix));
+      return line?.slice(prefix.length);
+    };
+
+    return {
+      name: valueOf('Project name'),
+      description: valueOf('Description'),
+      projectType: valueOf('Project type'),
+      techStack: valueOf('Tech stack')
+        ?.split(',')
+        .map((item) => item.trim())
+        .filter(Boolean),
+    };
+  }
+
+  /**
+   * Default test framework for a project type, used when none was chosen.
+   */
+  getDefaultTestFramework(projectType: string): string {
+    switch (projectType) {
+      case 'react':
+        return 'Jest + React Testing Library';
+      case 'python':
+        return 'Pytest';
+      default:
+        return 'Use the repository default';
+    }
+  }
+
+  /**
+   * Default build tool for a project type, used when none was chosen.
+   */
+  getDefaultBuildTool(projectType: string): string {
+    switch (projectType) {
+      case 'react':
+        return 'Vite';
+      case 'node':
+        return 'Node.js toolchain';
+      case 'python':
+        return 'Poetry or the repository default';
+      default:
+        return 'Use the repository default';
+    }
   }
 
   async getInstalledFiles(vendor: AgentVendor): Promise<string[]> {
@@ -263,6 +323,27 @@ export class SkillManager {
     }
 
     return files;
+  }
+
+  /**
+   * Content of the installed project context, or of the one the 2.0.x Claude
+   * Code layout kept in its support bundle; empty when neither exists.
+   */
+  private async readInstalledProjectContextFile(vendor: AgentVendor): Promise<string> {
+    const candidates = [
+      path.join(this.getInstallDirectory(vendor), PROJECT_CONTEXT_FILE),
+      ...(vendor === 'claude-code'
+        ? [path.join('.claude', 'metacoding-workflow', PROJECT_CONTEXT_FILE)]
+        : []),
+    ];
+
+    for (const candidate of candidates) {
+      if (await fs.pathExists(candidate)) {
+        return fs.readFile(candidate, 'utf8');
+      }
+    }
+
+    return '';
   }
 
   private async hasVendorInstall(vendor: AgentVendor): Promise<boolean> {
@@ -340,14 +421,16 @@ export class SkillManager {
       PROJECT_DESCRIPTION: config.description,
       PROJECT_TYPE: config.projectType,
       TECH_STACK: config.techStack.join(', '),
-      TEST_FRAMEWORK: config.testFramework || 'Use the repo default',
-      BUILD_TOOL: config.buildTool || 'Use the repo default',
+      TEST_FRAMEWORK:
+        config.testFramework || this.getDefaultTestFramework(config.projectType),
+      BUILD_TOOL: config.buildTool || this.getDefaultBuildTool(config.projectType),
       RECOMMENDED_REFERENCES: recommendedReferences.join('\n'),
       AGENT_VENDOR: config.vendor,
     };
 
     return Object.entries(variables).reduce((content, [key, value]) => {
-      return content.replace(new RegExp(`{{${key}}}`, 'g'), value);
+      // A function keeps `$` sequences in a value from being read as patterns.
+      return content.replace(new RegExp(`{{${key}}}`, 'g'), () => value);
     }, template);
   }
 

@@ -1,19 +1,19 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import inquirer from 'inquirer';
 import { InitCommand } from '../../src/commands/init';
 import { UpdateCommand } from '../../src/commands/update';
+import { AgentVendor } from '../../src/types';
 import { createTempWorkspace } from './test-utils';
 
 describe('UpdateCommand', () => {
   const originalCwd = process.cwd();
-  let logSpy: jest.SpyInstance;
-
   beforeEach(() => {
-    logSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
+    jest.spyOn(console, 'log').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
-    logSpy.mockRestore();
+    jest.restoreAllMocks();
     process.chdir(originalCwd);
   });
 
@@ -561,5 +561,227 @@ describe('UpdateCommand', () => {
     await update.execute({ backup: false });
 
     expect(await fs.readFile(retiredFile, 'utf8')).toBe('retired');
+  });
+
+  const projectTypes = ['general', 'typescript', 'react', 'node', 'javascript', 'python'];
+
+  async function initWithAnswers(
+    vendor: AgentVendor,
+    projectType: string,
+    answers: { name?: string; description?: string; techStack?: string[] } = {}
+  ): Promise<jest.SpyInstance> {
+    const promptSpy = jest.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      name: 'shop',
+      description: 'Online shop backend',
+      projectType,
+      techStack: ['Go', 'Postgres'],
+      ...answers,
+    } as never);
+
+    await new InitCommand().execute({ template: 'general', vendor });
+
+    return promptSpy;
+  }
+
+  test.each(vendorSkillsDirs)(
+    'keeps the project answers of a %s install and reports no local edits',
+    async (vendor, skillsDir) => {
+      const workspace = await createTempWorkspace(`metacoding-update-answers-${vendor}`);
+      process.chdir(workspace);
+
+      const promptSpy = await initWithAnswers(vendor, 'python');
+      const contextFile = path.join(
+        workspace,
+        skillsDir,
+        'metacoding-workflow/references/project-context.md'
+      );
+      const installed = await fs.readFile(contextFile, 'utf8');
+
+      await new UpdateCommand().execute({});
+
+      expect(installed).toContain('- Project name: shop\n');
+      expect(installed).toContain('- Description: Online shop backend\n');
+      expect(installed).toContain('- Project type: python\n');
+      expect(installed).toContain('- Tech stack: Go, Postgres\n');
+      expect(await fs.readFile(contextFile, 'utf8')).toBe(installed);
+      // The only prompt was init's; update found nothing to resolve.
+      expect(promptSpy).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  test.each(projectTypes)(
+    'reports no local edits for an untouched %s install',
+    async (projectType) => {
+      const workspace = await createTempWorkspace(`metacoding-update-untouched-${projectType}`);
+      process.chdir(workspace);
+
+      const promptSpy = await initWithAnswers('codex', projectType);
+      const contextFile = path.join(
+        workspace,
+        '.codex/skills/metacoding-workflow/references/project-context.md'
+      );
+      const installed = await fs.readFile(contextFile, 'utf8');
+
+      await new UpdateCommand().execute({});
+
+      expect(await fs.readFile(contextFile, 'utf8')).toBe(installed);
+      expect(promptSpy).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  test('--template overrides the installed project type and what follows from it', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-template');
+    process.chdir(workspace);
+
+    await initWithAnswers('codex', 'python');
+
+    await new UpdateCommand().execute({ template: 'react', force: true });
+
+    const context = await fs.readFile(
+      path.join(workspace, '.codex/skills/metacoding-workflow/references/project-context.md'),
+      'utf8'
+    );
+    expect(context).toContain('- Project name: shop\n');
+    expect(context).toContain('- Description: Online shop backend\n');
+    expect(context).toContain('- Tech stack: Go, Postgres\n');
+    expect(context).toContain('- Project type: react\n');
+    expect(context).toContain('- Default test framework: Jest + React Testing Library\n');
+    expect(context).toContain('- Default build tool: Vite\n');
+    expect(context).toContain('`references/react.md`');
+    expect(context).not.toContain('`references/python.md`');
+  });
+
+  test('falls back to detection when the project context is missing', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-nocontext');
+    process.chdir(workspace);
+
+    await initWithAnswers('codex', 'python');
+    const contextFile = path.join(
+      workspace,
+      '.codex/skills/metacoding-workflow/references/project-context.md'
+    );
+    await fs.remove(contextFile);
+
+    await new UpdateCommand().execute({});
+
+    const context = await fs.readFile(contextFile, 'utf8');
+    expect(context).toContain(`- Project name: ${path.basename(workspace)}\n`);
+    expect(context).toContain('- Description: A project using the metacoding skills\n');
+    expect(context).toContain('- Project type: general\n');
+    expect(context).toContain('- Tech stack: TypeScript\n');
+  });
+
+  test('falls back to detection for a line the project context lacks', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-noline');
+    process.chdir(workspace);
+
+    await initWithAnswers('codex', 'python');
+    const contextFile = path.join(
+      workspace,
+      '.codex/skills/metacoding-workflow/references/project-context.md'
+    );
+    const installed = await fs.readFile(contextFile, 'utf8');
+    await fs.writeFile(
+      contextFile,
+      installed.replace('- Description: Online shop backend\n', ''),
+      'utf8'
+    );
+
+    await new UpdateCommand().execute({ force: true });
+
+    const context = await fs.readFile(contextFile, 'utf8');
+    expect(context).toContain('- Project name: shop\n');
+    expect(context).toContain('- Description: A project using the metacoding skills\n');
+    expect(context).toContain('- Project type: python\n');
+    expect(context).toContain('- Tech stack: Go, Postgres\n');
+  });
+
+  test.each([
+    ['surrounding spaces', { name: ' shop ', description: 'Online shop backend ' }],
+    ['dollar patterns', { description: "Costs $& and $' and $1 more" }],
+    ['an empty tech stack', { techStack: [] }],
+  ])('keeps answers with %s exactly and reports no local edits', async (_label, answers) => {
+    const workspace = await createTempWorkspace('metacoding-update-answers-exact');
+    process.chdir(workspace);
+
+    const promptSpy = await initWithAnswers('codex', 'general', answers);
+    const contextFile = path.join(
+      workspace,
+      '.codex/skills/metacoding-workflow/references/project-context.md'
+    );
+    const installed = await fs.readFile(contextFile, 'utf8');
+    const expected = {
+      name: 'shop',
+      description: 'Online shop backend',
+      techStack: ['Go', 'Postgres'],
+      ...answers,
+    };
+
+    await new UpdateCommand().execute({});
+
+    expect(installed).toContain(`- Project name: ${expected.name}\n`);
+    expect(installed).toContain(`- Description: ${expected.description}\n`);
+    expect(installed).toContain(`- Tech stack: ${expected.techStack.join(', ')}\n`);
+    expect(await fs.readFile(contextFile, 'utf8')).toBe(installed);
+    expect(promptSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test('falls back to the detected project type when the line is missing', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-notype');
+    process.chdir(workspace);
+    await fs.writeJson('package.json', {
+      name: 'demo-app',
+      dependencies: { react: '^18.0.0' },
+    });
+
+    await initWithAnswers('codex', 'python');
+    const contextFile = path.join(
+      workspace,
+      '.codex/skills/metacoding-workflow/references/project-context.md'
+    );
+    const installed = await fs.readFile(contextFile, 'utf8');
+    await fs.writeFile(contextFile, installed.replace('- Project type: python\n', ''), 'utf8');
+
+    await new UpdateCommand().execute({ force: true });
+
+    const context = await fs.readFile(contextFile, 'utf8');
+    expect(context).toContain('- Project name: shop\n');
+    expect(context).toContain('- Project type: react\n');
+  });
+
+  test('keeps the project answers of a legacy Claude Code install when migrating it', async () => {
+    const workspace = await createTempWorkspace('metacoding-update-legacy-answers');
+    process.chdir(workspace);
+
+    await fs.outputFile(
+      path.join(workspace, '.claude/agents/metacoding-workflow.md'),
+      'legacy agent',
+      'utf8'
+    );
+    await fs.outputFile(
+      path.join(workspace, '.claude/metacoding-workflow/references/project-context.md'),
+      [
+        '# Project Context',
+        '',
+        '- Project name: shop',
+        '- Description: Online shop backend',
+        '- Project type: python',
+        '- Agent vendor: claude-code',
+        '- Tech stack: Go, Postgres',
+        '',
+      ].join('\n'),
+      'utf8'
+    );
+
+    await new UpdateCommand().execute({});
+
+    const context = await fs.readFile(
+      path.join(workspace, '.claude/skills/metacoding-workflow/references/project-context.md'),
+      'utf8'
+    );
+    expect(context).toContain('- Project name: shop\n');
+    expect(context).toContain('- Description: Online shop backend\n');
+    expect(context).toContain('- Project type: python\n');
+    expect(context).toContain('- Tech stack: Go, Postgres\n');
   });
 });

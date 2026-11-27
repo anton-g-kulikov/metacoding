@@ -48,6 +48,7 @@ describe('InitCommand', () => {
       ).toBe(true);
     }
     expect(projectContext).toContain('Project type: react');
+    expect(projectContext).toContain('- Description: A project using the metacoding skills\n');
     expect(projectContext).toContain('Agent vendor: codex');
     expect(projectContext).toContain('React, TypeScript');
     expect(projectContext).toContain('references/repository-organization.md');
@@ -82,7 +83,7 @@ describe('InitCommand', () => {
     const workspace = await createTempWorkspace('metacoding-init-interactive');
     process.chdir(workspace);
 
-    jest
+    const promptSpy = jest
       .spyOn(inquirer, 'prompt')
       .mockResolvedValueOnce({ vendor: 'claude-code' } as never)
       .mockResolvedValueOnce({
@@ -104,6 +105,14 @@ describe('InitCommand', () => {
       'utf8'
     );
 
+    expect(promptSpy).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'description',
+          default: 'A project using the metacoding skills',
+        }),
+      ])
+    );
     expect(projectContext).toContain('Project name: interactive-app');
     expect(projectContext).toContain('Project type: python');
     expect(projectContext).toContain('Agent vendor: claude-code');

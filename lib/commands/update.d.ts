@@ -10,8 +10,6 @@ export declare class UpdateCommand {
     private migrateLegacyClaudeInstall;
     private cleanUpRetiredFiles;
     private validateSetup;
-    private getDefaultTestFramework;
-    private getDefaultBuildTool;
     private getTargetVendors;
     private getRequiredFilesForVendor;
     private normalizeVendor;

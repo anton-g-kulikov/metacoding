@@ -21,7 +21,7 @@ The canonical source of truth lives in [`skills/`](../skills), one folder per sk
 1. Validate that the skills are already installed.
 2. Detect installed vendor variants, or target one explicit vendor with `--vendor`.
 3. Optionally back up the installed skill folders into `.backup/<timestamp>/`.
-4. Rebuild the packaged file set for the current project context.
+4. Rebuild the packaged file set. The project name, description, tech stack and project type come from the installed `references/project-context.md` of each vendor, or from the one in the 2.0.x Claude Code bundle when that layout is being migrated; a value it lacks comes from project detection, and `--template` overrides the project type.
 5. Detect local edits inside the installed skills.
 6. Resolve conflicts interactively or overwrite them with `--force`.
 7. Sync the installed skills to the packaged version, adding any packaged skill the install lacks.
@@ -91,7 +91,8 @@ That file is generated per project and points the agent to the right language re
 - `src/services/skill-manager.ts`
   - Holds the list of packaged skills and reads them from `skills/`.
   - Renders vendor-specific install layouts.
-  - Generates project-specific installation files.
+  - Generates project-specific installation files, and reads the init answers back from an installed project context.
+  - Holds the default description and the default test framework and build tool per project type.
   - Installs and enumerates vendor installs.
   - Detects and removes the 2.0.x Claude Code subagent layout.
   - Lists and removes the files an earlier version installed and this one no longer ships.

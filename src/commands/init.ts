@@ -10,7 +10,7 @@ import {
 import { FileSystemService } from '../services/filesystem';
 import { GitIgnoreManager } from '../services/gitignore-manager';
 import { ProjectDetector } from '../services/project-detector';
-import { SkillManager } from '../services/skill-manager';
+import { DEFAULT_PROJECT_DESCRIPTION, SkillManager } from '../services/skill-manager';
 
 /**
  * Handles skill installation for the current project.
@@ -84,15 +84,15 @@ export class InitCommand {
     if (options.force && process.env.NODE_ENV === 'test') {
       return {
         name: projectInfo.name || 'test-project',
-        description: 'A project using the metacoding workflow skill',
+        description: DEFAULT_PROJECT_DESCRIPTION,
         techStack: projectInfo.techStack.length
           ? projectInfo.techStack
           : ['TypeScript'],
         projectType: options.template || projectInfo.type || 'general',
-        testFramework: this.getDefaultTestFramework(
+        testFramework: this.skillManager.getDefaultTestFramework(
           options.template || projectInfo.type || 'general'
         ),
-        buildTool: this.getDefaultBuildTool(
+        buildTool: this.skillManager.getDefaultBuildTool(
           options.template || projectInfo.type || 'general'
         ),
         vendor,
@@ -111,7 +111,7 @@ export class InitCommand {
         type: 'input',
         name: 'description',
         message: 'Project description:',
-        default: 'A project using the metacoding workflow skill',
+        default: DEFAULT_PROJECT_DESCRIPTION,
       },
       {
         type: 'list',
@@ -145,8 +145,8 @@ export class InitCommand {
       description: answers.description,
       techStack: answers.techStack,
       projectType: answers.projectType,
-      testFramework: this.getDefaultTestFramework(answers.projectType),
-      buildTool: this.getDefaultBuildTool(answers.projectType),
+      testFramework: this.skillManager.getDefaultTestFramework(answers.projectType),
+      buildTool: this.skillManager.getDefaultBuildTool(answers.projectType),
       vendor,
     };
   }
@@ -170,30 +170,6 @@ export class InitCommand {
     } catch (error) {
       spinner.fail('Failed to install metacoding skills');
       throw error;
-    }
-  }
-
-  private getDefaultTestFramework(projectType: string): string {
-    switch (projectType) {
-      case 'react':
-        return 'Jest + React Testing Library';
-      case 'python':
-        return 'Pytest';
-      default:
-        return 'Use the repository default';
-    }
-  }
-
-  private getDefaultBuildTool(projectType: string): string {
-    switch (projectType) {
-      case 'react':
-        return 'Vite';
-      case 'node':
-        return 'Node.js toolchain';
-      case 'python':
-        return 'Poetry or the repository default';
-      default:
-        return 'Use the repository default';
     }
   }
 

@@ -34,7 +34,7 @@ metacoding update [options]
 
 Options:
 
-- `--template <type>`: override the detected project type during sync
+- `--template <type>`: override the installed project type during sync
 - `--vendor <vendor>`: sync or validate one installed vendor, or `all` installed vendors explicitly
 - `--backup`: create a backup before updating
 - `--force`: overwrite local edits in the installed skills
@@ -44,6 +44,7 @@ Options:
 Behavior:
 
 - adds any packaged skill the install lacks
+- rebuilds `references/project-context.md` from the project name, description, tech stack and project type that the installed file holds, and detects only a value it cannot find there. When it migrates the 2.0.x Claude Code layout, it reads them from that layout's `project-context.md`
 - migrates the 2.0.x Claude Code subagent layout to the skill layout, removing the old files once they are backed up
 - removes the files an earlier version installed and this one no longer ships, once they are backed up, and a skill folder they leave empty
 - fills in the patterns an existing metacoding `.gitignore` section lacks

@@ -277,4 +277,49 @@ describe('SkillManager', () => {
       expect(installed).toContain(path.join('.agents', 'skills', skill, 'SKILL.md'));
     }
   });
+
+  test('reads the init answers back from an installed project context', async () => {
+    const workspace = await createTempWorkspace('metacoding-skill-context');
+    process.chdir(workspace);
+    const manager = new SkillManager();
+    const contextFile = path.join(
+      workspace,
+      '.agents/skills/metacoding-workflow/references/project-context.md'
+    );
+    const nothing = {
+      name: undefined,
+      description: undefined,
+      projectType: undefined,
+      techStack: undefined,
+    };
+
+    expect(await manager.readInstalledProjectContext('antigravity')).toEqual(nothing);
+
+    await fs.outputFile(
+      contextFile,
+      [
+        '# Project Context',
+        '',
+        '- Project name: shop',
+        '- Description: Online shop: backend, API',
+        '- Project type: python',
+        '- Tech stack: Go, Postgres',
+        '',
+      ].join('\r\n'),
+      'utf8'
+    );
+    expect(await manager.readInstalledProjectContext('antigravity')).toEqual({
+      name: 'shop',
+      description: 'Online shop: backend, API',
+      projectType: 'python',
+      techStack: ['Go', 'Postgres'],
+    });
+
+    await fs.writeFile(contextFile, '- Project name: shop\n- Tech stack: \n', 'utf8');
+    expect(await manager.readInstalledProjectContext('antigravity')).toEqual({
+      ...nothing,
+      name: 'shop',
+      techStack: [],
+    });
+  });
 });

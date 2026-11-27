@@ -31,6 +31,17 @@ export interface ProjectConfig {
   vendor: AgentVendor;
 }
 
+/**
+ * The answers given at init, read back from an installed project context.
+ * A value is undefined when the file or its line is missing.
+ */
+export interface InstalledProjectContext {
+  name: string | undefined;
+  description: string | undefined;
+  projectType: string | undefined;
+  techStack: string[] | undefined;
+}
+
 export interface Template {
   name: string;
   description: string;

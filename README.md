@@ -208,6 +208,7 @@ metacoding update --force
 ```
 
 - `update` syncs the installed skills with the packaged version, and adds any packaged skill the install lacks. It also removes files that an earlier version installed and this one no longer ships, after backing them up; files you added are kept.
+- `update` keeps the project name, description, tech stack and project type you entered at `init`. `update --template <type>` changes the project type.
 - `update --vendor <vendor>` syncs or validates only one installed vendor variant.
 - `update --vendor all` syncs or validates all installed vendor variants explicitly.
 - `update --dry-run` validates the installed skills without changing files.

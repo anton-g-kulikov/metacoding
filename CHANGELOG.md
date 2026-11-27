@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns. It used to check only for the section header
 - `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
 - CLI help and messages say "skills" where they said "workflow skill"
+- The default project description for a new install is "A project using the metacoding skills"
 - Installs skip `.DS_Store` files
 - `task-entry.md` now carries the scope summary fields
 - The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
@@ -46,6 +47,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
 - The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
 - The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
+
+### Fixed
+
+- `metacoding update` keeps the project name, description, tech stack and project type entered at `init`. It used to rebuild `project-context.md` from detected defaults, which replaced those answers and reported the file as locally edited on every update
+- `metacoding update` no longer reports an untouched `node` install as locally edited; `init` and `update` disagreed about its default build tool
 
 ## [2.0.1] - 2026-03-28
 

@@ -8,7 +8,11 @@ import { BackupService } from '../services/backup';
 import { ConflictResolutionService } from '../services/conflict-resolution';
 import { GitIgnoreManager } from '../services/gitignore-manager';
 import { ProjectDetector } from '../services/project-detector';
-import { SkillManager } from '../services/skill-manager';
+import {
+  DEFAULT_PROJECT_DESCRIPTION,
+  PROJECT_CONTEXT_FILE,
+  SkillManager,
+} from '../services/skill-manager';
 
 /**
  * Handles syncing the installed skills with the packaged version.
@@ -47,7 +51,6 @@ export class UpdateCommand {
     console.log(chalk.cyan('Syncing metacoding skills...\n'));
 
     const projectInfo = await this.projectDetector.detectProject();
-    const projectType = options.template || projectInfo.type || 'general';
 
     if (options.backup !== false) {
       const backupSpinner = ora('Creating backup...').start();
@@ -65,13 +68,18 @@ export class UpdateCommand {
     let filesUpdated = 0;
 
     for (const vendor of targetVendors) {
+      // Keep what the user entered at init; detect only what the install lacks.
+      // `??` on purpose: an answer may be empty, such as a tech stack with no entries.
+      const installed = await this.skillManager.readInstalledProjectContext(vendor);
+      const projectType =
+        options.template || installed.projectType || projectInfo.type || 'general';
       const projectConfig = {
-        name: projectInfo.name,
-        description: 'A project using the metacoding workflow skill',
-        techStack: projectInfo.techStack,
+        name: installed.name ?? projectInfo.name,
+        description: installed.description ?? DEFAULT_PROJECT_DESCRIPTION,
+        techStack: installed.techStack ?? projectInfo.techStack,
         projectType,
-        testFramework: this.getDefaultTestFramework(projectType),
-        buildTool: this.getDefaultBuildTool(projectType),
+        testFramework: this.skillManager.getDefaultTestFramework(projectType),
+        buildTool: this.skillManager.getDefaultBuildTool(projectType),
         vendor,
       };
 
@@ -272,22 +280,6 @@ export class UpdateCommand {
     console.log(chalk.green('Validation passed.'));
   }
 
-  private getDefaultTestFramework(projectType: string): string {
-    return projectType === 'python'
-      ? 'Pytest'
-      : projectType === 'react'
-        ? 'Jest + React Testing Library'
-        : 'Use the repository default';
-  }
-
-  private getDefaultBuildTool(projectType: string): string {
-    return projectType === 'react'
-      ? 'Vite'
-      : projectType === 'python'
-        ? 'Poetry or the repository default'
-        : 'Use the repository default';
-  }
-
   private getTargetVendors(
     installedVendors: AgentVendor[],
     selectedVendor?: AgentVendorOption
@@ -320,7 +312,7 @@ export class UpdateCommand {
       ...skillFiles,
       'references/workflow-rules.md',
       'references/platform-adaptation.md',
-      'references/project-context.md',
+      PROJECT_CONTEXT_FILE,
       'assets/templates/task-entry.md',
     ];
 

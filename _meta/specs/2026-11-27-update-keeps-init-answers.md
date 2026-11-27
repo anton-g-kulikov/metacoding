@@ -60,7 +60,7 @@ Every behavior in the success criteria gets a unit test, written first and seen 
 
 ## Tickets
 
-- [ ] **1. Update keeps the init answers**
+- [x] **1. Update keeps the init answers**
   - Success criteria: the first five success criteria above.
   - Test intent: an install with its own name, description, tech stack and type keeps all four through `update`; an unedited install produces no conflict; `--template` overrides the type and what follows from it; a missing file and a missing line each fall back to detection; a fresh install has the new default description.
 - [ ] **2. The strict error says how to fix it**
