@@ -3,8 +3,17 @@ import * as path from 'path';
 import { METACODING_SKILLS } from '../../src/services/skill-manager';
 
 const repoRoot = path.join(__dirname, '../..');
+const pluginName = 'metacoding';
+
+/** The plugin manifest each agent reads, by agent. */
+const manifestPaths = {
+  'Claude Code': '.claude-plugin/plugin.json',
+  Codex: 'plugin.json',
+  Antigravity: '.antigravity-plugin/plugin.json',
+};
 
 interface PluginManifest {
+  $schema?: string;
   name: string;
   version: string;
   description: string;
@@ -12,7 +21,7 @@ interface PluginManifest {
 
 interface Marketplace {
   name: string;
-  plugins: Array<{ name: string; source: unknown }>;
+  plugins: unknown[];
 }
 
 async function readJson<T>(relativePath: string): Promise<T> {
@@ -20,34 +29,77 @@ async function readJson<T>(relativePath: string): Promise<T> {
   return JSON.parse(content) as T;
 }
 
-describe('plugin install: Claude Code', () => {
-  test('the repo root is a plugin named metacoding', async () => {
-    const manifest = await readJson<PluginManifest>(
-      '.claude-plugin/plugin.json'
-    );
+describe('plugin install: the manifests', () => {
+  test.each(Object.entries(manifestPaths))(
+    'the repo root is a plugin named metacoding for %s',
+    async (_agent, manifestPath) => {
+      const manifest = await readJson<PluginManifest>(manifestPath);
 
-    expect(manifest.name).toBe('metacoding');
-    expect(typeof manifest.description).toBe('string');
-    expect(manifest.description).not.toBe('');
+      expect(manifest.name).toBe(pluginName);
+      expect(manifest.description).toMatch(/\S/);
+    }
+  );
+
+  test.each(Object.entries(manifestPaths))(
+    'the plugin for %s has the version of the npm package',
+    async (_agent, manifestPath) => {
+      const manifest = await readJson<PluginManifest>(manifestPath);
+      const packageJson = await readJson<{ version: string }>('package.json');
+
+      expect(manifest.version).toBe(packageJson.version);
+    }
+  );
+
+  test('every agent gets the same plugin details', async () => {
+    const withoutSchema = async (manifestPath: string) => {
+      const manifest = await readJson<PluginManifest>(manifestPath);
+      delete manifest.$schema;
+      return manifest;
+    };
+    const claudeCode = await withoutSchema(manifestPaths['Claude Code']);
+
+    for (const manifestPath of Object.values(manifestPaths)) {
+      expect(await withoutSchema(manifestPath)).toEqual(claudeCode);
+    }
   });
 
-  test('the plugin has the version of the npm package', async () => {
-    const manifest = await readJson<PluginManifest>(
-      '.claude-plugin/plugin.json'
+  test('the Codex manifest names the schema that makes Codex read a root plugin.json', async () => {
+    const manifest = await readJson<PluginManifest>(manifestPaths.Codex);
+
+    expect(manifest.$schema).toBe(
+      'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json'
     );
-    const packageJson = await readJson<{ version: string }>('package.json');
-
-    expect(manifest.version).toBe(packageJson.version);
   });
+});
 
-  test('the repo is a marketplace that offers the plugin from its root', async () => {
+describe('plugin install: the marketplaces', () => {
+  test('the repo is a Claude Code marketplace that offers the plugin from its root', async () => {
     const marketplace = await readJson<Marketplace>(
       '.claude-plugin/marketplace.json'
     );
 
-    expect(marketplace.name).toBe('metacoding');
+    expect(marketplace.name).toBe(pluginName);
     expect(marketplace.plugins).toEqual([
-      expect.objectContaining({ name: 'metacoding', source: './' }),
+      expect.objectContaining({ name: pluginName, source: './' }),
+    ]);
+  });
+
+  test('the repo is a Codex marketplace that offers the plugin from its git address', async () => {
+    const marketplace = await readJson<Marketplace>(
+      '.agents/plugins/marketplace.json'
+    );
+
+    expect(marketplace.name).toBe(pluginName);
+    expect(marketplace.plugins).toEqual([
+      {
+        name: pluginName,
+        source: {
+          source: 'url',
+          url: 'https://github.com/anton-g-kulikov/metacoding.git',
+        },
+        policy: { installation: 'AVAILABLE', authentication: 'ON_INSTALL' },
+        category: 'Productivity',
+      },
     ]);
   });
 });

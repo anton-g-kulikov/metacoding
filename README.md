@@ -9,7 +9,11 @@ There are two ways to install the skills: as a plugin, which your agent installs
 
 ## Install as a Plugin
 
-A plugin install needs no CLI. The agent takes the skills from this repository.
+A plugin install needs no CLI. The agent takes the skills from this repository. A new plugin version comes with each release of this package.
+
+In a plugin install each skill's name carries the plugin's name in front, such as `metacoding:metacoding-workflow`. In Claude Code you type `/metacoding:metacoding-workflow`.
+
+The Claude Code plugin passes Claude Code's own validation. The Codex and Antigravity plugins follow each agent's documentation and have not yet been tried on a real install. If one does not work for you, please [open an issue](https://github.com/anton-g-kulikov/metacoding/issues) and use the CLI meanwhile.
 
 ### Claude Code
 
@@ -27,12 +31,31 @@ claude plugin marketplace add anton-g-kulikov/metacoding
 claude plugin install metacoding@metacoding
 ```
 
-A new plugin version comes with each release of this package. Claude Code does not update a plugin from a marketplace you added yourself unless you turn auto-update on for it. To update by hand:
+Claude Code does not update a plugin from a marketplace you added yourself unless you turn auto-update on for it. To update by hand:
 
 ```bash
 claude plugin marketplace update metacoding
 claude plugin update metacoding@metacoding
 ```
+
+### Codex
+
+```bash
+codex plugin marketplace add anton-g-kulikov/metacoding
+codex plugin add metacoding
+```
+
+Start a new session afterwards. `codex plugin marketplace upgrade metacoding` refreshes the marketplace. Codex's documentation does not say how an installed plugin is then updated.
+
+The Codex IDE extension does not support plugins. Use the CLI below for it.
+
+### Antigravity
+
+```bash
+agy plugin install https://github.com/anton-g-kulikov/metacoding
+```
+
+Antigravity's documentation names no command that updates a plugin installed this way.
 
 ## What It Installs
 
@@ -303,7 +326,7 @@ metacoding update --force
 
 ## Using the Skill
 
-After installation, ask your coding agent to run the `metacoding-onboard` skill once. Then point it at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-shape` or `/metacoding-review` when you want only that step. In a plugin install each name carries the plugin's name in front: `/metacoding:metacoding-workflow`, `/metacoding:metacoding-shape`, `/metacoding:metacoding-review`.
+After installation, ask your coding agent to run the `metacoding-onboard` skill once. Then point it at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-shape` or `/metacoding-review` when you want only that step. In a plugin install the names carry a prefix, as the plugin section above shows.
 
 The workflow skill will:
 

@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
 - Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
 - A plugin install for Claude Code: the repo is a plugin and its own marketplace, so Claude Code installs the skills from it without the CLI. The plugin has the version of the npm package
+- A plugin install for Codex and for Antigravity, from the same repo and with the same version. Both follow the agents' documentation and are not yet tried on a real install
 
 ### Changed
 

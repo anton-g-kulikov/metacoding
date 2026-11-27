@@ -1,0 +1,17 @@
+{
+  "name": "metacoding",
+  "plugins": [
+    {
+      "name": "metacoding",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/anton-g-kulikov/metacoding.git"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

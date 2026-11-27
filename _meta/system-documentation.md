@@ -92,17 +92,24 @@ That file is generated per project from the answers given at `init`. The workflo
 
 ## Plugin Install
 
-The repo root is also a Claude Code plugin, so Claude Code can install the skills from this repository without the CLI. It reads the `skills/` folder at the plugin root. The manifest does not list the skills, so every folder under `skills/` ships. Claude Code lists each skill with the plugin's prefix, such as `metacoding:metacoding-shape`.
+The repo root is also a plugin for Claude Code, Codex and Antigravity, so each of them can install the skills from this repository without the CLI. Each agent reads the `skills/` folder at the plugin root. No manifest lists the skills, so every folder under `skills/` ships. An agent lists each skill with the plugin's prefix, such as `metacoding:metacoding-shape`.
 
 ```text
 .claude-plugin/
 ├── plugin.json        # Claude Code plugin manifest
-└── marketplace.json   # makes the repo its own marketplace; its one entry points at the repo root
+└── marketplace.json   # makes the repo a Claude Code marketplace; its one entry points at the repo root
+plugin.json            # Codex plugin manifest; Codex reads a root manifest only when its `$schema` is an agent-plugins.org one
+.agents/plugins/
+└── marketplace.json   # makes the repo a Codex marketplace; its one entry points at the repo's git address
+.antigravity-plugin/
+└── plugin.json        # Antigravity plugin manifest; Antigravity installs from the GitHub address and needs no marketplace
 ```
 
-The plugin manifest carries the version of `package.json`, and a test fails when the two differ. A plugin install is updated when that version changes, not on every commit.
+Every manifest carries the version of `package.json` and the same description, and a test fails when one differs. Claude Code updates a plugin install when that version changes, not on every commit.
 
-Check a manifest change with:
+The Codex and Antigravity files follow those agents' documentation and have not been run on a real install.
+
+Check a change to the Claude Code files with:
 
 ```bash
 claude plugin validate --strict .
@@ -111,6 +118,8 @@ claude --plugin-dir . plugin details metacoding
 ```
 
 The first checks the marketplace file, the second the plugin manifest, and the third lists the skills Claude Code finds.
+
+Antigravity has `agy plugin validate <dir>` for its manifest. Codex's documentation names no validate command; `codex plugin marketplace list` shows whether Codex can read the marketplace.
 
 ## Core Services
 
