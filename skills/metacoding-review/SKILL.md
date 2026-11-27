@@ -10,7 +10,7 @@ Review the diff of the change on two separate axes, then fix what the review fin
 ## What to review
 
 1. Pin the diff. For uncommitted work, that is the working tree against `HEAD`. For a branch, it is the branch against its merge base with the main branch. When neither fits, ask the user for the starting point.
-2. Find the agreed scope: the confirmed scope summary, a task entry, an issue, or a spec. When none exists, ask the user what the change was meant to do and review against the answer.
+2. Find the agreed scope: the confirmed scope summary, a task entry, an issue, or a spec. When the change is one ticket of a larger task, the agreed scope is that ticket's success criteria and test intent, read together with the task's in-scope and out-of-scope lists. When none exists, ask the user what the change was meant to do and review against the answer.
 3. Find the repo's standards: contributor and style docs, agent instruction files, lint and formatter config, and the patterns in the files next to the ones that changed.
 
 ## Who reviews
@@ -33,6 +33,10 @@ The author of a change reads it with the author's assumptions. When the host age
 - Leftovers: debug output, commented-out code, temporary files, stale docs for behavior that changed.
 
 Skip anything the repo's linter or formatter already enforces.
+
+## After the last ticket
+
+When the change is the last ticket of a task with several, run the scope axis once more after the ticket's own review and before the task is closed. Pin the diff from the commit before the task's first ticket, and ask the user when you cannot tell which that is. Compare the whole change with the task's spec or scope summary: its goal, its success criteria, and its in-scope and out-of-scope lists. Tickets can each pass while the task's goal is still missed.
 
 ## Report
 

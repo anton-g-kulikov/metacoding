@@ -14,7 +14,7 @@
    - For a task that needs none, record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
-   - Take the test intent from the confirmed scope summary.
+   - Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.
    - For a bug whose cause is unknown, use the `metacoding-debug` skill for this step.
    - Keep to the confirmed scope: no unrelated features, cleanup, or opportunistic refactors.
    - Add blocking related work as a subtask; defer unrelated work.
@@ -22,7 +22,7 @@
    - Run the smallest relevant checks first, then broader checks when justified.
    - Confirm observable behavior, not just compiler success.
 5. Review.
-   - Use the `metacoding-review` skill on the diff: one pass against the confirmed scope, one against the repo's standards.
+   - Use the `metacoding-review` skill on the diff: one pass against the agreed scope, one against the repo's standards. For a task with more than one ticket, the agreed scope is the ticket, as the skill describes.
    - Fix its findings and rerun the checks from step 4.
 6. Update artifacts using MECE documentation rules.
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
@@ -33,6 +33,18 @@
 7. Close the loop.
    - If VCS work is in scope, produce or perform a clean commit-ready summary.
    - If VCS work is out of scope, provide a concise handoff with verification status and remaining risks.
+
+## Tickets
+
+A task with more than one ticket repeats steps 3 to 7 for each ticket, in the order of the scope summary.
+
+- Build, verify, and review one ticket before starting the next.
+- In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the spec.
+- In step 6, mark the ticket done where the tickets are tracked, so that a tick in the spec's checklist is part of the ticket's commit. With the last ticket, mark the spec done, as the `metacoding-shape` skill describes.
+- Close each ticket on its own in step 7: commit it or hand it off, and report what was done.
+- After every ticket but the last, wait for the user's go before starting the next one.
+
+A one-ticket task runs the sequence once, against the scope summary. When it has a spec, step 6 marks its ticket and the spec done in the same way.
 
 ## Scope Control
 
@@ -57,4 +69,5 @@ The task is not complete until:
 - relevant checks have been run or an explicit limitation is recorded
 - the review's findings are fixed, accepted by the user, or listed as follow-ups
 - changed artifacts are updated or consciously deferred according to MECE ownership
+- every ticket is closed and, when the task has a spec, the spec is marked done
 - the user receives a clean summary of outcome, verification, and remaining risks

@@ -39,6 +39,8 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 6. **Update artifacts.** Update the one document that owns each concept that changed, and amend any decision record the build proved wrong, following `references/repository-organization.md`.
 7. **Close.** Finish with a commit, a commit-ready handoff, or an explicit completion confirmation, as `references/workflow-rules.md` describes.
 
+Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets, as the Tickets section of `references/workflow-rules.md` describes.
+
 ## Rules Between Steps
 
 - Work one bounded task at a time. Queue unrelated requests for later; take on a related blocker only as a subtask the active task needs.

@@ -82,6 +82,8 @@ The workflow skill runs these steps in order:
 6. Update the docs that materially changed, and amend a decision record the build proved wrong.
 7. Close with a VCS handoff or completion confirmation.
 
+Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next.
+
 ## Enforced Workflow
 
 The `metacoding-workflow` skill applies a strict operating contract for development tasks. It does not only provide prompts; it enforces an execution order and completion gates:
@@ -94,7 +96,7 @@ The `metacoding-workflow` skill applies a strict operating contract for developm
 6. MECE artifact updates.
 7. Explicit closure with handoff or VCS action.
 
-The task stays bounded throughout: one active task, with unrelated requests queued.
+The task stays bounded throughout: one active task, built one ticket at a time, with unrelated requests queued.
 
 ### Shaping
 
@@ -113,7 +115,7 @@ If you tell it to proceed without questions, it lists the unasked decisions as a
 
 For testable changes, `metacoding-tdd` enforces this order:
 
-1. List the behaviors the change must prove, starting from the test intent in the scope summary.
+1. List the behaviors the change must prove, starting from the test intent of the ticket being built, or of the scope summary for a one-ticket task.
 2. Take one behavior: write its test and watch it fail.
 3. Implement the minimum production code to pass.
 4. Move to the next behavior. Refactor only after the listed behaviors are green.
@@ -124,10 +126,12 @@ Tests go through public interfaces, and expected values come from a source other
 
 Before closing, `metacoding-review` checks the diff on two separate axes:
 
-- **Scope:** anything missing, extra, wrong, or unproven compared with the confirmed scope summary.
+- **Scope:** anything missing, extra, wrong, or unproven compared with the agreed scope: the ticket's success criteria and test intent, or the scope summary of a one-ticket task.
 - **Standards:** breaks with the repo's documented rules, departures from neighbouring code, and leftovers such as debug output.
 
 Where the agent supports subagents, each axis is reviewed in a fresh context that sees only the diff and what that axis compares it with.
+
+For the last ticket of a task with several, the scope axis runs once more on the whole change against the spec, because tickets can each pass while the task's goal is still missed. The spec is then marked done.
 
 ### Debugging
 
@@ -165,6 +169,7 @@ A task is considered complete only when all of the following are true:
 - Relevant checks were run, or an explicit limitation was recorded.
 - Review findings were fixed, accepted, or listed as follow-ups.
 - Changed artifacts were updated, or a conscious deferral was documented.
+- Every ticket is closed and, when the task has a spec, the spec is marked done.
 - The handoff includes outcome, verification status, and remaining risks.
 
 ## CLI
@@ -217,6 +222,7 @@ The skill will:
 - wait for you to confirm the scope summary before changing files
 - keep work scoped to one bounded task
 - build test-first, one behavior at a time
+- build a task with several tickets one ticket at a time, and wait for your go between tickets
 - review the diff against the agreed scope before closing
 - read the project glossary and decision records, and keep them current
 - write a spec for a task with more than one ticket or a decision marked `[record]`

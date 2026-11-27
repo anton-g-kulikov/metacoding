@@ -9,7 +9,7 @@ Build the change as a series of small loops. Each loop proves one behavior with 
 
 ## Before the first loop
 
-1. Write down the test intent: the behaviors the change must prove, including error and edge cases. When a confirmed scope summary exists, start from its test intent. Record the list where the repo keeps such notes, or in your plan when it keeps none.
+1. Write down the test intent: the behaviors the change must prove, including error and edge cases. Start from the test intent of the ticket you are building, when the task has more than one ticket; otherwise from the test intent of the confirmed scope summary, when one exists. Record the list where the repo keeps such notes, or in your plan when it keeps none.
 2. Find how this repo tests similar code: the framework, the file layout, the helpers, and the command that runs one test file. Follow that.
 3. Name the public interface each behavior will be tested through: a function, a CLI command, an HTTP route, a rendered component. When the right interface is unclear or does not exist yet, settle it with the user before writing tests.
 

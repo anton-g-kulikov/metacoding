@@ -474,3 +474,225 @@ describe('installed skill content: the spec', () => {
     );
   });
 });
+
+describe('installed skill content: building ticket by ticket', () => {
+  test('the workflow skill points to the ticket loop and its pause', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const steps = skill.slice(
+      skill.indexOf('## Steps'),
+      skill.indexOf('## Rules Between Steps')
+    );
+
+    expect(skill).toContain('## Steps');
+    expect(skill).toContain('## Rules Between Steps');
+    expect(steps).toContain(
+      "Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets, as the Tickets section of `references/workflow-rules.md` describes."
+    );
+  });
+
+  test('the workflow rules repeat steps 3 to 7 for each ticket in order', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain(
+      'repeats steps 3 to 7 for each ticket, in the order of the scope summary'
+    );
+    expect(tickets).toContain('Build, verify, and review one ticket before starting the next.');
+  });
+
+  test('a ticket is marked done in the artifact step, and the spec with the last ticket', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain('In step 6, mark the ticket done where the tickets are tracked');
+    expect(tickets).toContain("is part of the ticket's commit");
+    expect(tickets).toContain(
+      'With the last ticket, mark the spec done, as the `metacoding-shape` skill describes.'
+    );
+  });
+
+  test('each ticket closes on its own and the workflow waits before the next', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain(
+      'Close each ticket on its own in step 7: commit it or hand it off, and report what was done.'
+    );
+    expect(tickets).toContain(
+      "After every ticket but the last, wait for the user's go before starting the next one."
+    );
+  });
+
+  test('the last ticket also gets the whole change reviewed against the spec', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('## Tickets');
+    expect(rules).toContain('## Scope Control');
+    expect(tickets).toContain(
+      'In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the spec.'
+    );
+  });
+
+  test('a one-ticket task runs the sequence once against the scope summary', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = rules.slice(
+      rules.indexOf('## Tickets'),
+      rules.indexOf('## Scope Control')
+    );
+    const build = rules.slice(
+      rules.indexOf('3. Build test-first.'),
+      rules.indexOf('4. Verify.')
+    );
+
+    for (const marker of [
+      '## Tickets',
+      '## Scope Control',
+      '3. Build test-first.',
+      '4. Verify.',
+    ]) {
+      expect(rules).toContain(marker);
+    }
+    expect(tickets).toContain(
+      'A one-ticket task runs the sequence once, against the scope summary.'
+    );
+    expect(tickets).toContain('When it has a spec, step 6 marks its ticket and the spec done');
+    expect(build).toContain(
+      'Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.'
+    );
+  });
+
+  test('the workflow rules review a ticket as the agreed scope', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const review = rules.slice(
+      rules.indexOf('5. Review.'),
+      rules.indexOf('6. Update artifacts')
+    );
+
+    expect(rules).toContain('5. Review.');
+    expect(rules).toContain('6. Update artifacts');
+    expect(review).toContain(
+      'For a task with more than one ticket, the agreed scope is the ticket, as the skill describes.'
+    );
+  });
+
+  test('the completion standard requires closed tickets and a spec marked done', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const completion = rules.slice(rules.indexOf('## Completion Standard'));
+
+    expect(rules).toContain('## Completion Standard');
+    expect(completion).toContain(
+      'every ticket is closed and, when the task has a spec, the spec is marked done'
+    );
+  });
+
+  test('TDD starts from the test intent of the ticket being built', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const before = tdd.slice(
+      tdd.indexOf('## Before the first loop'),
+      tdd.indexOf('## The loop')
+    );
+
+    expect(tdd).toContain('## Before the first loop');
+    expect(tdd).toContain('## The loop');
+    expect(before).toContain(
+      'Start from the test intent of the ticket you are building, when the task has more than one ticket; otherwise from the test intent of the confirmed scope summary, when one exists.'
+    );
+  });
+
+  test('review checks a ticket against its own criteria and the task scope lists', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const what = review.slice(
+      review.indexOf('## What to review'),
+      review.indexOf('## Who reviews')
+    );
+
+    expect(review).toContain('## What to review');
+    expect(review).toContain('## Who reviews');
+    expect(what).toContain(
+      "that ticket's success criteria and test intent, read together with the task's in-scope and out-of-scope lists"
+    );
+  });
+
+  test('review checks the whole change against the spec with the last ticket', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const finalPass = review.slice(
+      review.indexOf('## After the last ticket'),
+      review.indexOf('## Report')
+    );
+
+    expect(review).toContain('## After the last ticket');
+    expect(review).toContain('## Report');
+    expect(finalPass).toContain(
+      "run the scope axis once more after the ticket's own review and before the task is closed"
+    );
+    expect(finalPass).toContain("Pin the diff from the commit before the task's first ticket");
+    expect(finalPass).toContain(
+      "Compare the whole change with the task's spec or scope summary: its goal, its success criteria, and its in-scope and out-of-scope lists."
+    );
+    expect(finalPass).toContain("Tickets can each pass while the task's goal is still missed.");
+  });
+
+  test('shape says the tickets are built and reviewed one at a time', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const closing = shape.slice(
+      shape.indexOf('## Closing the interview'),
+      shape.indexOf('## Records written on confirmation')
+    );
+
+    expect(shape).toContain('## Closing the interview');
+    expect(shape).toContain('## Records written on confirmation');
+    expect(closing).toContain(
+      "the tickets are built one at a time, each ticket's test intent seeds its test-first work, and reviews check each ticket and then the whole change against the summary."
+    );
+  });
+
+  test('a ticket in the spec checklist is ticked when it is done', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+
+    expect(shape).toContain('## The spec');
+    expect(section).toContain(
+      'the checklist in the spec is the tracker: tick a ticket when it is done.'
+    );
+  });
+
+  test('the Codex prompt for the workflow builds one ticket at a time and waits', async () => {
+    const { read } = await installFor('codex');
+    const prompt = read('metacoding-workflow/agents/openai.yaml');
+
+    expect(prompt).toContain('one ticket at a time');
+    expect(prompt).toContain('wait for my go before the next');
+  });
+});

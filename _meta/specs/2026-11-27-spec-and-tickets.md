@@ -1,6 +1,6 @@
 # Spec: Spec and tickets
 
-- Status: in progress
+- Status: done
 
 ## Goal
 
@@ -69,6 +69,6 @@ One content test per behavior in the success criteria, written first and seen fa
 - [x] **3. Decision records and glossary terms at the end of shape**
   - Success criteria: shape writes `[record]` decisions on confirmation; step 6 amends a record the build proved wrong; the scope summary has a Terms field and the glossary is written on confirmation; every content test that slices by headings checks the headings exist.
   - Test intent: the shape skill and the layout reference say records and terms are written when the summary is confirmed; the workflow rules say step 6 amends; the summary block and the task entry template carry Terms.
-- [ ] **4. The workflow runs per ticket**
+- [x] **4. The workflow runs per ticket**
   - Success criteria: steps 3 to 7 run once per ticket and the workflow waits between tickets; TDD takes the ticket's test intent; review checks each ticket and, after the last, the whole change against the spec.
   - Test intent: the workflow skill and rules state the loop and the pause; the TDD skill names the ticket's test intent; the review skill names the final pass against the spec.

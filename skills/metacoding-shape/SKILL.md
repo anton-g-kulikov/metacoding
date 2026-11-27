@@ -104,7 +104,7 @@ Under "Decisions made", put `[record]` in front of each decision that is hard to
 
 Under "Terms", list each term the interview settled, with its meaning and the words to avoid. When the repo has no glossary yet, propose creating one there, by default at `/_meta/glossary.md`: confirming the summary approves it.
 
-Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the test intent seeds test-first work, and a later review checks the result against it.
+Changing files starts after that confirmation. The confirmed summary is the agreed scope for everything that follows: the tickets are built one at a time, each ticket's test intent seeds its test-first work, and reviews check each ticket and then the whole change against the summary.
 
 Two shortcuts:
 
@@ -162,6 +162,6 @@ Put the spec where the repo already keeps specs or documents of that kind. When 
 
 A one-ticket spec lists its ticket by title alone.
 
-When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the spec. Otherwise the checklist in the spec is the tracker.
+When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the spec. Otherwise the checklist in the spec is the tracker: tick a ticket when it is done.
 
 When the last ticket is done, set the spec's status to done, and from then on leave the spec in place and unchanged. The spec is the record of what was agreed; facts that stay true belong in the repo's system documentation.
