@@ -45,12 +45,7 @@ For Codex, the project install looks like:
 │   │   ├── project-context.md
 │   │   ├── workflow-rules.md
 │   │   ├── repository-organization.md
-│   │   ├── platform-adaptation.md
-│   │   ├── typescript.md
-│   │   ├── javascript.md
-│   │   ├── node.md
-│   │   ├── react.md
-│   │   └── python.md
+│   │   └── platform-adaptation.md
 │   └── assets/templates/
 │       ├── task-entry.md
 │       ├── repeated-task-checklist.md

@@ -84,7 +84,7 @@ Each ticket starts with a failing test. Assertions that pin sentences being remo
 
 ## Tickets
 
-- [ ] **1. Drop the language references**
+- [x] **1. Drop the language references**
   - Success criteria: the first success criterion above.
   - Test intent: no vendor install ships a language file or mentions one; `project-context.md` has no "Recommended References" section; `update` removes the five files from an existing install and backs them up.
 - [ ] **2. One home for the steps**

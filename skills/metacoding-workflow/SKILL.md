@@ -22,12 +22,6 @@ Load a companion skill by name with your agent's skill mechanism. If your agent 
 2. Read `references/workflow-rules.md` for the operating contract.
 3. Read `references/repository-organization.md` before planning or editing.
 4. Read `references/platform-adaptation.md` if the repo lacks task docs, test docs, or git context.
-5. Load only the language reference that matches the task:
-   - `references/typescript.md`
-   - `references/javascript.md`
-   - `references/node.md`
-   - `references/react.md`
-   - `references/python.md`
 
 ## Steps
 

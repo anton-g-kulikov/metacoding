@@ -12,7 +12,3 @@
 
 - `references/workflow-rules.md`
 - `references/repository-organization.md`
-
-## Recommended References
-
-{{RECOMMENDED_REFERENCES}}

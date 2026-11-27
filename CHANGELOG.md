@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The workflow no longer refuses to switch tasks. When the user asks for something unrelated mid-task, it says what is unfinished and the user decides: queue the request, or pause the task at a ticket boundary and switch. For a switch at once, it sets the unfinished work aside and notes what is left
 - `metacoding update --dry-run` requires each companion skill's `SKILL.md` and, for Codex, checks the `agents/openai.yaml` of every skill instead of the workflow skill's alone, and names a file that is not valid YAML
 - `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns for the user to add. It used to check only for the section header
-- `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
+- `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, the five language references, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
 - CLI help and messages say "skills" where they said "workflow skill"
 - The default project description for a new install is "A project using the metacoding skills"
 - Installs skip `.DS_Store` files
@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
 - The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
 - The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
+- The five language references (`references/typescript.md`, `javascript.md`, `node.md`, `react.md` and `python.md`) and the "Recommended References" section of `project-context.md`. The references restated the workflow rules in general terms, and the section repeated a list the skill already holds. `metacoding update` removes the copies an existing install has
 - The legacy `templates/` and `workflow/` folders from the 1.x instruction-file generator, which the package does not ship
 
 ### Fixed

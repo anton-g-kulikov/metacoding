@@ -7,12 +7,12 @@ const skillsDirs: Record<AgentVendor, string> = {
   antigravity: '.agents/skills',
 };
 
-async function installFor(vendor: AgentVendor) {
+async function installFor(vendor: AgentVendor, projectType = 'typescript') {
   const files = await new SkillManager().generateInstallationFiles({
     name: 'demo-app',
     description: 'Demo application',
     techStack: ['TypeScript'],
-    projectType: 'typescript',
+    projectType,
     vendor,
   });
   const read = (relativePath: string): string => {
@@ -105,6 +105,41 @@ describe('installed skill content: durable artifacts', () => {
           .map((file) => file.path)
       ).toEqual([]);
     }
+  });
+
+  test('no vendor install ships or mentions a language reference', async () => {
+    const languages = ['typescript', 'javascript', 'node', 'react', 'python'];
+
+    for (const vendor of Object.keys(skillsDirs) as AgentVendor[]) {
+      // Each language is also a project type, which used to pick the references.
+      for (const projectType of ['general', ...languages]) {
+        const { files } = await installFor(vendor, projectType);
+
+        for (const language of languages) {
+          const languageFile = `references/${language}.md`;
+
+          expect(
+            files.filter((file) => file.path.endsWith(languageFile)).map((file) => file.path)
+          ).toEqual([]);
+          expect(
+            files
+              .filter((file) => file.content.includes(languageFile))
+              .map((file) => file.path)
+          ).toEqual([]);
+        }
+      }
+    }
+  });
+
+  test('the project context lists each reference once, with no recommended section', async () => {
+    const { read } = await installFor('codex');
+    const context = read('metacoding-workflow/references/project-context.md');
+
+    expect(context).toContain('## Required References');
+    expect(context).not.toContain('## Recommended References');
+    expect(context).not.toContain('{{');
+    expect(context.split('`references/workflow-rules.md`')).toHaveLength(2);
+    expect(context.split('`references/repository-organization.md`')).toHaveLength(2);
   });
 
   test('the task entry template carries the scope summary fields', async () => {
