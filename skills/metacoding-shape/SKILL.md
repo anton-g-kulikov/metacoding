@@ -108,7 +108,7 @@ Changing files starts after that confirmation. The confirmed summary is the agre
 
 Two shortcuts:
 
-- When grounding leaves no decision open, skip the rounds: describe the solution, slice it into tickets, and send the scope summary directly.
+- When reading the repo leaves no decision open, skip the rounds: describe the solution, slice it into tickets, and send the scope summary directly.
 - When the user tells you to proceed without questions, send the scope summary with every unasked decision listed under Assumptions, then continue. That instruction stands in for the confirmation.
 
 ## Records written on confirmation
@@ -163,5 +163,7 @@ Put the spec where the repo already keeps specs or documents of that kind. When 
 A one-ticket spec lists its ticket by title alone.
 
 When the repo keeps a tracker current, such as issues or a task list, create the tickets there and link each one from the spec. Otherwise the checklist in the spec is the tracker: tick a ticket when it is done.
+
+While the spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the spec with its date before building it.
 
 When the last ticket is done, set the spec's status to done, and from then on leave the spec in place and unchanged. The spec is the record of what was agreed; facts that stay true belong in the repo's system documentation.

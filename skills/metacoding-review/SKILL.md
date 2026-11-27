@@ -29,7 +29,7 @@ The author of a change reads it with the author's assumptions. When the host age
 **Standards.** Compare the diff with the repo's standards.
 
 - A break with a documented rule. Cite the file and the rule.
-- A departure from how neighbouring code solves the same thing.
+- A departure from how neighboring code solves the same thing.
 - Leftovers: debug output, commented-out code, temporary files, stale docs for behavior that changed.
 
 Skip anything the repo's linter or formatter already enforces.

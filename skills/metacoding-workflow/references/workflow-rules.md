@@ -5,6 +5,7 @@
 1. Ground in the repository.
    - Read the relevant code, config, tests, docs, and `references/repository-organization.md` first.
    - Read the glossary and the decision records when the repo has them, and use the glossary's terms.
+   - Look for a spec whose status is in progress, where `references/repository-organization.md` says specs go. When the request continues that task, resume it as the Tickets section describes.
    - Look up every fact you can find yourself, so the user is asked only for decisions.
 2. Shape the task: interview the user and capture task scope.
    - Use the `metacoding-shape` skill: ask the open decisions in numbered rounds, each with a recommended answer.
@@ -12,6 +13,7 @@
    - Wait for the user to confirm the scope summary before changing any file.
    - Once the summary is confirmed, the skill writes the settled terms to the glossary and the decisions marked `[record]` to the decision records, and a spec when the task needs one.
    - For a task that needs none, record the confirmed scope where the repo already tracks work: an issue, a pull request, or an existing task file, in the shape of `assets/templates/task-entry.md`. Where it tracks work nowhere, the confirmed summary in the conversation is the record.
+   - When VCS work is in scope, commit the records the skill wrote on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way.
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
    - Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.
@@ -45,6 +47,15 @@ A task with more than one ticket repeats steps 3 to 7 for each ticket, in the or
 - After every ticket but the last, wait for the user's go before starting the next one.
 
 A one-ticket task runs the sequence once, against the scope summary. When it has a spec, step 6 marks its ticket and the spec done in the same way.
+
+### Resuming a task
+
+A session can end before a task's last ticket is done. When grounding finds a spec in progress and the request continues its task, resume the task from the spec:
+
+- The spec is the agreed scope. Skip step 2.
+- Start at the first ticket that is not marked done where the tickets are tracked, and follow the rules above from there, including the wait before each next ticket.
+- When the request changes what the spec agreed, settle the change first, as the `metacoding-shape` skill describes for a spec in progress.
+- Ask the user which task to work on when more than one spec is in progress, or when you cannot tell whether the request belongs to the spec.
 
 ## Scope Control
 

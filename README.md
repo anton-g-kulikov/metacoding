@@ -82,7 +82,7 @@ The workflow skill runs these steps in order:
 6. Update the docs that materially changed, and amend a decision record the build proved wrong.
 7. Close with a VCS handoff or completion confirmation.
 
-Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next.
+Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next. When the workflow commits, the records that shaping writes are committed on their own before the first ticket, so a ticket's commit holds only that ticket's work. When a new session is asked to continue a task whose spec is still in progress, it starts at the first ticket not yet done, without shaping the task again.
 
 ## Enforced Workflow
 
@@ -108,6 +108,7 @@ Before any file changes, `metacoding-shape` interviews you about the task:
 - It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, with its own success criteria and test intent. A small task stays one ticket.
 - It closes with a scope summary (goal, success criteria, in and out of scope, solution, decisions, terms, assumptions, test intent, tickets) and waits for your confirmation.
 - Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a spec; a smaller task gets none.
+- While a spec is in progress, a change to what it agreed is put to you as a decision and written into the spec, with its date, before it is built.
 
 If you tell it to proceed without questions, it lists the unasked decisions as assumptions in the scope summary and continues; your instruction counts as the confirmation.
 
@@ -127,7 +128,7 @@ Tests go through public interfaces, and expected values come from a source other
 Before closing, `metacoding-review` checks the diff on two separate axes:
 
 - **Scope:** anything missing, extra, wrong, or unproven compared with the agreed scope: the ticket's success criteria and test intent, or the scope summary of a one-ticket task.
-- **Standards:** breaks with the repo's documented rules, departures from neighbouring code, and leftovers such as debug output.
+- **Standards:** breaks with the repo's documented rules, departures from neighboring code, and leftovers such as debug output.
 
 Where the agent supports subagents, each axis is reviewed in a fresh context that sees only the diff and what that axis compares it with.
 

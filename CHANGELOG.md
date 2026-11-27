@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix
 - A review step in the workflow, between verification and artifact updates
 - Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the spec
+- Resuming a task: grounding looks for a spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the spec as the agreed scope
+- A change to a spec in progress is confirmed by the user and written into the spec, with its date, before it is built
+- The records that shaping writes (glossary terms, decision records, the spec) are committed on their own before the build, when VCS work is in scope. So is a confirmed change to a spec in progress
 - A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
 - Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker

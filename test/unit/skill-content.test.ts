@@ -586,6 +586,69 @@ describe('installed skill content: building ticket by ticket', () => {
     );
   });
 
+  test('grounding looks for a spec in progress', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const grounding = rules.slice(
+      rules.indexOf('1. Ground in the repository.'),
+      rules.indexOf('2. Shape the task')
+    );
+
+    expect(rules).toContain('1. Ground in the repository.');
+    expect(rules).toContain('2. Shape the task');
+    expect(grounding).toContain(
+      'Look for a spec whose status is in progress, where `references/repository-organization.md` says specs go.'
+    );
+    expect(grounding).toContain(
+      'When the request continues that task, resume it as the Tickets section describes.'
+    );
+    expect(skill).toContain('and any spec still in progress');
+  });
+
+  test('an unfinished task resumes from its spec at the first ticket not done', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const resuming = rules.slice(
+      rules.indexOf('### Resuming a task'),
+      rules.indexOf('## Scope Control')
+    );
+    const steps = skill.slice(
+      skill.indexOf('## Steps'),
+      skill.indexOf('## Rules Between Steps')
+    );
+
+    for (const marker of ['## Tickets', '### Resuming a task', '## Scope Control']) {
+      expect(rules).toContain(marker);
+    }
+    expect(skill).toContain('## Steps');
+    expect(skill).toContain('## Rules Between Steps');
+    expect(rules.indexOf('### Resuming a task')).toBeGreaterThan(rules.indexOf('## Tickets'));
+    expect(resuming).toContain('The spec is the agreed scope. Skip step 2.');
+    expect(resuming).toContain(
+      'Start at the first ticket that is not marked done where the tickets are tracked, and follow the rules above from there, including the wait before each next ticket.'
+    );
+    expect(steps).toContain(
+      'When the request continues a task that an earlier session left unfinished, the task resumes from its spec at the first ticket not yet done, as the same section describes.'
+    );
+  });
+
+  test('the workflow asks which task to resume when it cannot tell', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const resuming = rules.slice(
+      rules.indexOf('### Resuming a task'),
+      rules.indexOf('## Scope Control')
+    );
+
+    expect(rules).toContain('### Resuming a task');
+    expect(rules).toContain('## Scope Control');
+    expect(resuming).toContain(
+      'Ask the user which task to work on when more than one spec is in progress, or when you cannot tell whether the request belongs to the spec.'
+    );
+  });
+
   test('the workflow rules review a ticket as the agreed scope', async () => {
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
@@ -685,6 +748,52 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(shape).toContain('## The spec');
     expect(section).toContain(
       'the checklist in the spec is the tracker: tick a ticket when it is done.'
+    );
+  });
+
+  test('a change to a spec in progress is confirmed and written into the spec first', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const section = shape.slice(shape.indexOf('## The spec'));
+    const resuming = rules.slice(
+      rules.indexOf('### Resuming a task'),
+      rules.indexOf('## Scope Control')
+    );
+
+    for (const marker of ['### Resuming a task', '## Scope Control']) {
+      expect(rules).toContain(marker);
+    }
+    expect(shape).toContain('## The spec');
+    expect(section).toContain(
+      'While the spec is in progress, a change to what it agreed is a decision for the user. Once they confirm it, write the change into the spec with its date before building it.'
+    );
+    expect(resuming).toContain(
+      'When the request changes what the spec agreed, settle the change first, as the `metacoding-shape` skill describes for a spec in progress.'
+    );
+  });
+
+  test('the records shape writes are committed on their own before the build', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const shaping = rules.slice(
+      rules.indexOf('2. Shape the task'),
+      rules.indexOf('3. Build test-first.')
+    );
+
+    expect(rules).toContain('2. Shape the task');
+    expect(rules).toContain('3. Build test-first.');
+    expect(shaping).toContain(
+      "When VCS work is in scope, commit the records the skill wrote on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a spec in progress is committed the same way."
+    );
+  });
+
+  test('the Codex prompt for the workflow resumes a task whose spec is in progress', async () => {
+    const { read } = await installFor('codex');
+    const prompt = read('metacoding-workflow/agents/openai.yaml');
+
+    expect(prompt).toContain(
+      'resume a task whose spec is still in progress or interview me on the open decisions and confirm the scope summary'
     );
   });
 
