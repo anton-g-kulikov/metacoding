@@ -147,7 +147,7 @@ For a bug with an unknown cause, `metacoding-debug` replaces the build step. It 
 - If you agree, it adds one line that points to the project map in the instruction file your agent loads at every start, such as `CLAUDE.md` or `AGENTS.md`. It adds the line only to a file the repo already has.
 - Run it again when a place moves: it shows the current project map and asks what changed.
 
-In a repo with no project map, the workflow says so in one line and carries on.
+The workflow reads the project map while grounding, and `metacoding-shape` reads it before its first round. In a repo with no project map, the workflow says so in one line and carries on.
 
 ### Scope and Task-Switching Rules
 
@@ -170,7 +170,7 @@ It keeps three kinds of document that make the next session better informed:
 - **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, and they are written once you confirm it, before the build. If the build proves one wrong, the entry is amended.
 - **Specs** (`/_meta/specs/<date>-<slug>.md`): the confirmed scope summary of a task with more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo has a tracker, and a finished spec stays as the record of what was agreed.
 
-A repo that already keeps specs keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the spec, and the tests. A repo that already keeps one gets it updated as before.
+These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps specs keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: test intent lives in the scope summary, the spec, and the tests. A repo that already keeps one gets it updated as before.
 
 ### Completion Criteria
 

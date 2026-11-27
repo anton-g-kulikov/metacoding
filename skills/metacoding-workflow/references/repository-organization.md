@@ -55,6 +55,15 @@ Rules:
 - Keep system documentation evergreen and free of task-status noise.
 - Update exactly the artifact whose responsibility changed.
 
+## Project Map
+
+`.metacoding/project.md` is the project map: the file that says where this repo keeps its tracker, its specs, its glossary, and its decision records. The `metacoding-onboard` skill writes it and holds its format.
+
+- Read it while grounding, when the repo has one.
+- Where the project map names a place, use that place, and create it there when it does not exist yet.
+- The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the spec.
+- The places this reference names for those four records, and its rules for a repo's own place, apply only to a place the project map has no line for, and to a repo with no project map.
+
 ## Specs, Tickets, and Test Records
 
 The `metacoding-shape` skill decides which tasks need a spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:

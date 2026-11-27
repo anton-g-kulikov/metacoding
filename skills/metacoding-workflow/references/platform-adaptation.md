@@ -1,5 +1,7 @@
 # Platform Adaptation
 
+These fallbacks come after the project map, `.metacoding/project.md`: where it names a tracker, a glossary, or a place for specs or decision records, that answer stands, as `references/repository-organization.md` describes.
+
 ## Missing Task Tracking
 
 If the repo has no tracker, such as issues or a task list it keeps current:

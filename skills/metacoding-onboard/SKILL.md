@@ -5,7 +5,7 @@ description: Record once where a repo keeps its tracker, specs, glossary, and de
 
 # Onboard
 
-Run this once per repo, and again when one of the places moves. It ends in a project map: a short file that says where this repo keeps its tracker, its specs, its glossary, and its decision records, so that no later session has to work the places out again.
+Run this once per repo, and again when one of the places moves. It ends in a project map: a short file that says where this repo keeps its tracker, its specs, its glossary, and its decision records, so that no later session has to work the places out again. The metacoding workflow and the `metacoding-shape` skill read that file.
 
 ## The project map
 
@@ -64,7 +64,7 @@ Offer it as the last question of the round, after the four places.
 
 Write the project map only after the user has confirmed the round. Nothing is written before that.
 
-Record the places and create none of them. A glossary, a decisions file, or a specs folder that does not exist yet is created later, when a task first needs it.
+Record the places and create none of them. A glossary, a decisions file, or a specs folder that does not exist yet is created by the `metacoding-shape` skill when a task first needs it, at the path recorded here.
 
 Add the pointer only when the user said yes to it, and only to a file the repo already has.
 

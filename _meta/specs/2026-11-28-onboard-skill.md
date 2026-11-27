@@ -33,6 +33,8 @@ A coding agent records once where a repo keeps its tracker, specs, glossary and 
   - The skill says the project map is committed when the user has commits made, and otherwise tells them it is waiting.
   - The pointer question is part of step 2, the instruction file is part of what step 1 looks for, and a re-run offers the pointer when the instruction file lacks it.
   - README gets an Onboarding section next to the sections of the other skills.
+- Added on 2026-11-28, found in the review of ticket 2 and kept because criterion 7 needs them to hold in use:
+  - The tracker line says where the repo tracks work, and a line that says none means it tracks work nowhere. The layout reference and `metacoding-shape` both say so, so that a task with no spec and a queued request have one answer.
 
 ## Out of scope
 
@@ -98,7 +100,7 @@ One content test per rule in the skill text, written first and seen failing, wit
 - [x] **1. The onboard skill writes the project map**
   - Success criteria: criteria 1 to 6, and criterion 8.
   - Test intent: the skill is in the skill list and in every agent's install; `update --dry-run` fails without its `SKILL.md`; the skill text states the path, the four lines, look then ask then write on confirmation, the empty-folder defaults, the re-run, that it creates nothing, and the pointer with its two limits; the workflow rules give the one-line pointer to the skill when a repo has no project map.
-- [ ] **2. The skills use the places the project map names**
+- [x] **2. The skills use the places the project map names**
   - Success criteria: criterion 7.
   - Test intent: grounding reads the project map; the layout and adaptation references put it before their own rules; shape writes terms, decisions and the spec where it says, and falls back when a line or the file is missing.
 - [ ] **3. Getting started**

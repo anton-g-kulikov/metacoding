@@ -66,7 +66,7 @@ describe('installed skill content: durable artifacts', () => {
     const layout = read('metacoding-workflow/references/repository-organization.md');
     const prescribed = layout.slice(
       layout.indexOf('## MECE Documentation Architecture'),
-      layout.indexOf('## Specs, Tickets, and Test Records')
+      layout.indexOf('## Project Map')
     );
     const records = layout.slice(
       layout.indexOf('## Specs, Tickets, and Test Records'),
@@ -74,6 +74,7 @@ describe('installed skill content: durable artifacts', () => {
     );
 
     expect(layout).toContain('## MECE Documentation Architecture');
+    expect(layout).toContain('## Project Map');
     expect(layout).toContain('## Specs, Tickets, and Test Records');
     expect(layout).toContain('## Decision Records');
     expect(prescribed).toContain('`/_meta/specs/`');
@@ -1292,6 +1293,9 @@ describe('installed skill content: onboarding', () => {
 
     expect(intro).toContain('Run this once per repo, and again when one of the places moves.');
     expect(intro).toContain('so that no later session has to work the places out again');
+    expect(intro).toContain(
+      'The metacoding workflow and the `metacoding-shape` skill read that file.'
+    );
   });
 
   test('the project map is one committed file at the same path in every repo', async () => {
@@ -1449,7 +1453,9 @@ describe('installed skill content: onboarding', () => {
     const section = sectionOf(onboard, '## 3. Write', '## Running it again');
 
     expect(section).toContain('Record the places and create none of them.');
-    expect(section).toContain('is created later, when a task first needs it');
+    expect(section).toContain(
+      'is created by the `metacoding-shape` skill when a task first needs it, at the path recorded here'
+    );
   });
 
   test('the pointer is added only on a yes, to a file the repo already has', async () => {
@@ -1508,7 +1514,7 @@ describe('installed skill content: onboarding', () => {
     const grounding = sectionOf(rules, '1. Ground in the repository.', '2. Shape the task');
 
     expect(grounding).toContain(
-      'When the repo has no project map, `.metacoding/project.md`, tell the user in one line that the `metacoding-onboard` skill can record where the repo keeps its tracker, specs, glossary, and decision records, then carry on with the task.'
+      'When the repo has no project map, tell the user in one line that the `metacoding-onboard` skill can record where the repo keeps its tracker, specs, glossary, and decision records, then carry on with the task.'
     );
   });
 
@@ -1530,5 +1536,117 @@ describe('installed skill content: onboarding', () => {
     expect(prompt).toContain('$metacoding-onboard');
     expect(prompt).toContain('one round of numbered questions with a recommended place for each');
     expect(prompt).toContain('write the project map once I confirm');
+  });
+});
+
+describe('installed skill content: using the project map', () => {
+  test('grounding reads the project map before the glossary and the decision records', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const grounding = sectionOf(rules, '1. Ground in the repository.', '2. Shape the task');
+    const readsMap =
+      'Read the project map, `.metacoding/project.md`, when the repo has one, and use the places it names, as `references/repository-organization.md` describes.';
+
+    expect(grounding).toContain(readsMap);
+    expect(grounding).toContain('Read the glossary and the decision records');
+    expect(grounding.indexOf(readsMap)).toBeLessThan(
+      grounding.indexOf('Read the glossary and the decision records')
+    );
+  });
+
+  test('the layout reference says what the project map is and who writes it', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const section = sectionOf(layout, '## Project Map', '## Specs, Tickets, and Test Records');
+
+    expect(layout).toContain('## MECE Documentation Architecture');
+    expect(layout.indexOf('## MECE Documentation Architecture')).toBeLessThan(
+      layout.indexOf('## Project Map')
+    );
+    expect(section).toContain('`.metacoding/project.md` is the project map');
+    expect(section).toContain('The `metacoding-onboard` skill writes it and holds its format.');
+  });
+
+  test('a place the project map names is used, and created there when it is missing', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const section = sectionOf(layout, '## Project Map', '## Specs, Tickets, and Test Records');
+
+    expect(section).toContain(
+      'Where the project map names a place, use that place, and create it there when it does not exist yet.'
+    );
+  });
+
+  test('the tracker line says where the repo tracks work, and none means nowhere', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const section = sectionOf(layout, '## Project Map', '## Specs, Tickets, and Test Records');
+
+    expect(section).toContain('The tracker line says where this repo tracks work.');
+    expect(section).toContain(
+      'A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the spec.'
+    );
+  });
+
+  test("the layout reference's own places apply only where the project map is silent", async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const section = sectionOf(layout, '## Project Map', '## Specs, Tickets, and Test Records');
+
+    expect(section).toContain(
+      "The places this reference names for those four records, and its rules for a repo's own place, apply only to a place the project map has no line for, and to a repo with no project map."
+    );
+  });
+
+  test('the adaptation fallbacks come after the project map', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const intro = sectionOf(adaptation, '# Platform Adaptation', '## Missing Task Tracking');
+
+    expect(intro).toContain(
+      'These fallbacks come after the project map, `.metacoding/project.md`: where it names a tracker, a glossary, or a place for specs or decision records, that answer stands, as `references/repository-organization.md` describes.'
+    );
+  });
+
+  test('shape reads the project map before the first round', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = sectionOf(shape, '## The project map', '## Terms');
+
+    expect(section).toContain(
+      'When the repo has a project map, `.metacoding/project.md`, read it before the first round.'
+    );
+    expect(section).toContain('The `metacoding-onboard` skill writes it');
+  });
+
+  test('shape reads and writes its records where the project map says', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = sectionOf(shape, '## The project map', '## Terms');
+
+    expect(section).toContain(
+      'Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a spec, or a ticket, and create it there when it does not exist yet.'
+    );
+  });
+
+  test('shape falls back to its defaults for a missing line or a missing project map', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = sectionOf(shape, '## The project map', '## Terms');
+
+    expect(section).toContain(
+      "The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map."
+    );
+  });
+
+  test('shape on its own treats a tracker line that says none as an answer', async () => {
+    const { read } = await installFor('codex');
+    const shape = read('metacoding-shape/SKILL.md');
+    const section = sectionOf(shape, '## The project map', '## Terms');
+
+    expect(section).toContain('The tracker line says where this repo tracks work.');
+    expect(section).toContain(
+      'A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the spec is the tracker.'
+    );
   });
 });
