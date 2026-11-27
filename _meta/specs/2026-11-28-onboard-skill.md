@@ -35,6 +35,10 @@ A coding agent records once where a repo keeps its tracker, specs, glossary and 
   - README gets an Onboarding section next to the sections of the other skills.
 - Added on 2026-11-28, found in the review of ticket 2 and kept because criterion 7 needs them to hold in use:
   - The tracker line says where the repo tracks work, and a line that says none means it tracks work nowhere. The layout reference and `metacoding-shape` both say so, so that a task with no spec and a queued request have one answer.
+- Added on 2026-11-28, found in the review of ticket 3:
+  - The skill closes every run with how to work from here, not only the first. The project map is committed while the installed skills are not, so a teammate on a fresh clone runs the skill in a repo that already has a project map, and would otherwise be told nothing.
+  - The line in `init`'s next steps comes after the step that shows where the skills are installed, and says "first, before any task".
+  - The glossary entry for Onboarding names getting started as the word for introducing a person, and calls onboarding the main job of the skill.
 
 ## Out of scope
 
@@ -103,7 +107,7 @@ One content test per rule in the skill text, written first and seen failing, wit
 - [x] **2. The skills use the places the project map names**
   - Success criteria: criterion 7.
   - Test intent: grounding reads the project map; the layout and adaptation references put it before their own rules; shape writes terms, decisions and the spec where it says, and falls back when a line or the file is missing.
-- [ ] **3. Getting started**
+- [x] **3. Getting started**
   - Success criteria: criteria 9 and 10.
   - Test intent: the skill's close names what it tells the user and takes each skill's purpose from its description; `init` prints the line.
 - [ ] **4. Onboard this repo**

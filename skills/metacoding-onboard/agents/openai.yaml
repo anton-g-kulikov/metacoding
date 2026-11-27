@@ -1,4 +1,4 @@
 interface:
   display_name: "Metacoding Onboard"
   short_description: "Record once where the repo keeps its records"
-  default_prompt: "Use $metacoding-onboard to look for where this repo keeps its tracker, specs, glossary, and decision records, ask me one round of numbered questions with a recommended place for each, and write the project map once I confirm."
+  default_prompt: "Use $metacoding-onboard to look for where this repo keeps its tracker, specs, glossary, and decision records, ask me one round of numbered questions with a recommended place for each, and write the project map once I confirm, then tell me how to start a task."

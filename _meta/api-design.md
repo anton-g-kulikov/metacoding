@@ -23,6 +23,7 @@ Behavior:
 - `all` installs all workspace-scoped vendor variants for mixed-agent teams
 - renders `references/project-context.md` for the chosen or detected project type
 - adds the metacoding section to `.gitignore`, or fills in the patterns an existing section lacks
+- prints next steps, which say to run the `metacoding-onboard` skill first, before any task
 
 ### `metacoding update`
 

@@ -166,6 +166,30 @@ describe('InitCommand', () => {
     ).toBe(true);
   });
 
+  test('the next steps say to run the onboard skill before any task', async () => {
+    const workspace = await createTempWorkspace('metacoding-init-next-steps');
+    process.chdir(workspace);
+
+    const command = new InitCommand();
+    await command.execute({ template: 'typescript', vendor: 'codex', force: true });
+
+    // The step number is a separate, styled argument; look at the text only.
+    const steps = logSpy.mock.calls.map((call) => String(call[1] ?? ''));
+    const onboardStep =
+      'Ask your agent to run the metacoding-onboard skill first, before any task. ' +
+      'It is installed next to the entrypoint above, and it records where this repo keeps ' +
+      'its tracker, specs, glossary and decision records, then tells you how to work from there.';
+    const workflowStep = 'Ask your agent to use the metacoding workflow for the next task.';
+    const entrypointStep =
+      'Use the installed vendor-specific metacoding skill entrypoint in your repo.';
+
+    expect(steps).toContain(onboardStep);
+    expect(steps).toContain(workflowStep);
+    expect(steps).toContain(entrypointStep);
+    expect(steps.indexOf(entrypointStep)).toBeLessThan(steps.indexOf(onboardStep));
+    expect(steps.indexOf(onboardStep)).toBeLessThan(steps.indexOf(workflowStep));
+  });
+
   test('points at update when legacy Claude Code subagent files remain', async () => {
     const workspace = await createTempWorkspace('metacoding-init-legacy');
     process.chdir(workspace);

@@ -180,9 +180,15 @@ export class InitCommand {
       'Use the installed vendor-specific metacoding skill entrypoint in your repo.'
     );
     this.displayNextStepsForVendor(vendor);
-    console.log(chalk.dim('2.'), 'Ask your agent to use the metacoding workflow for the next task.');
     console.log(
-      chalk.dim('3.'),
+      chalk.dim('2.'),
+      'Ask your agent to run the metacoding-onboard skill first, before any task. ' +
+        'It is installed next to the entrypoint above, and it records where this repo keeps ' +
+        'its tracker, specs, glossary and decision records, then tells you how to work from there.'
+    );
+    console.log(chalk.dim('3.'), 'Ask your agent to use the metacoding workflow for the next task.');
+    console.log(
+      chalk.dim('4.'),
       'Let the skill drive scope capture, test intent, implementation, verification, and close-out.'
     );
     console.log('');

@@ -1,5 +1,9 @@
 import YAML from 'yaml';
-import { METACODING_SKILLS, SkillManager } from '../../src/services/skill-manager';
+import {
+  METACODING_SKILLS,
+  SkillManager,
+  WORKFLOW_SKILL,
+} from '../../src/services/skill-manager';
 import { AgentVendor } from '../../src/types';
 
 const skillsDirs: Record<AgentVendor, string> = {
@@ -1440,7 +1444,7 @@ describe('installed skill content: onboarding', () => {
   test('onboarding writes the project map only after the user confirms', async () => {
     const { read } = await installFor('codex');
     const onboard = read('metacoding-onboard/SKILL.md');
-    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+    const section = sectionOf(onboard, '## 3. Write', '## 4. Get the user started');
 
     expect(section).toContain(
       'Write the project map only after the user has confirmed the round. Nothing is written before that.'
@@ -1450,7 +1454,7 @@ describe('installed skill content: onboarding', () => {
   test('onboarding records the places and creates none of them', async () => {
     const { read } = await installFor('codex');
     const onboard = read('metacoding-onboard/SKILL.md');
-    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+    const section = sectionOf(onboard, '## 3. Write', '## 4. Get the user started');
 
     expect(section).toContain('Record the places and create none of them.');
     expect(section).toContain(
@@ -1461,7 +1465,7 @@ describe('installed skill content: onboarding', () => {
   test('the pointer is added only on a yes, to a file the repo already has', async () => {
     const { read } = await installFor('codex');
     const onboard = read('metacoding-onboard/SKILL.md');
-    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+    const section = sectionOf(onboard, '## 3. Write', '## 4. Get the user started');
 
     expect(section).toContain(
       'Add the pointer only when the user said yes to it, and only to a file the repo already has.'
@@ -1471,7 +1475,7 @@ describe('installed skill content: onboarding', () => {
   test('the project map is committed, or the user is told it is waiting', async () => {
     const { read } = await installFor('codex');
     const onboard = read('metacoding-onboard/SKILL.md');
-    const section = sectionOf(onboard, '## 3. Write', '## Running it again');
+    const section = sectionOf(onboard, '## 3. Write', '## 4. Get the user started');
 
     expect(section).toContain(
       'Commit it when the user has you make commits; otherwise tell them the file is waiting to be committed.'
@@ -1648,5 +1652,62 @@ describe('installed skill content: using the project map', () => {
     expect(section).toContain(
       'A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the spec is the tracker.'
     );
+  });
+});
+
+describe('installed skill content: getting started', () => {
+  test('the onboard skill closes by telling the user how to work from here', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 4. Get the user started', '## Running it again');
+
+    expect(section).toContain(
+      'Close by telling the user how to work from here, in a few lines:'
+    );
+    expect(section).toContain(
+      '- What you wrote: the project map with its four lines, and the pointer when you added it.'
+    );
+    expect(section).toContain(
+      '- How to start a task: ask for the `metacoding-workflow` skill.'
+    );
+    expect(section).toContain(
+      '- What each metacoding skill is for, one line each, this one left out.'
+    );
+  });
+
+  test("the closing lines take each skill's purpose from its own description", async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## 4. Get the user started', '## Running it again');
+
+    expect(section).toContain(
+      "Take each skill's name and purpose from the description at the top of its `SKILL.md`, in the `metacoding-*` folders installed next to this skill's folder."
+    );
+    expect(section).toContain(
+      'Keep no list of your own, so that a skill added later is not left out.'
+    );
+    // No purpose is restated here, and no skill is named but the one that starts a task.
+    expect(section).not.toContain('request to handoff');
+    for (const skill of METACODING_SKILLS.filter((name) => name !== WORKFLOW_SKILL)) {
+      expect(section).not.toContain(skill);
+    }
+  });
+
+  test('a later run closes the same way, with what changed', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const section = sectionOf(onboard, '## Running it again');
+
+    expect(section).toContain(
+      'Close as step 4 describes, with what changed in place of what you wrote.'
+    );
+    expect(onboard).not.toContain('first run');
+  });
+
+  test('the Codex prompt for onboarding ends with how to start a task', async () => {
+    const { read } = await installFor('codex');
+    const prompt = read('metacoding-onboard/agents/openai.yaml');
+
+    expect(prompt).toContain('then tell me how to start a task');
   });
 });

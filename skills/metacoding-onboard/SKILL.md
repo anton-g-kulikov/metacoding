@@ -70,8 +70,20 @@ Add the pointer only when the user said yes to it, and only to a file the repo a
 
 The project map is meant to be committed. Commit it when the user has you make commits; otherwise tell them the file is waiting to be committed.
 
+## 4. Get the user started
+
+Close by telling the user how to work from here, in a few lines:
+
+- What you wrote: the project map with its four lines, and the pointer when you added it.
+- How to start a task: ask for the `metacoding-workflow` skill.
+- What each metacoding skill is for, one line each, this one left out.
+
+Take each skill's name and purpose from the description at the top of its `SKILL.md`, in the `metacoding-*` folders installed next to this skill's folder. Keep no list of your own, so that a skill added later is not left out.
+
 ## Running it again
 
 When the repo already has a project map, read it first, then look as in step 1 and compare. Show the user the current project map, name each line whose place you could not find, and ask what changed, in the same kind of round. A place that is recorded but not created yet is not an error.
 
 Rewrite the file only after they confirm, and change only the lines they changed. Offer the pointer again when the instruction file lacks it.
+
+Close as step 4 describes, with what changed in place of what you wrote.

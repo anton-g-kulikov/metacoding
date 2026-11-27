@@ -8,6 +8,6 @@
 
 **Ticket**: one piece of a task's solution that can be built, verified, reviewed, and committed on its own. Each ticket is a vertical slice. Avoid: slice as the name of the unit, task, story.
 
-**Onboarding**: a coding agent recording once where a repo keeps its tracker, specs, glossary and decision records; the job of the `metacoding-onboard` skill. Avoid: init, setup, and using the word for introducing a person to metacoding.
+**Onboarding**: a coding agent recording once where a repo keeps its tracker, specs, glossary and decision records; the main job of the `metacoding-onboard` skill. Avoid: init, setup, and using the word for introducing a person to metacoding, which is getting started.
 
 **Project map**: the file onboarding writes, `.metacoding/project.md`, which says where the repo keeps those records. Avoid: project context, which is the file of `init` answers.

@@ -145,6 +145,7 @@ For a bug with an unknown cause, `metacoding-debug` replaces the build step. It 
 - Once you confirm, it writes the answers to the project map, `.metacoding/project.md`, a file you commit with the repo.
 - It records the places and creates none of them. A glossary or a specs folder that does not exist yet is created when a task first needs it.
 - If you agree, it adds one line that points to the project map in the instruction file your agent loads at every start, such as `CLAUDE.md` or `AGENTS.md`. It adds the line only to a file the repo already has.
+- It closes by telling you how to work from here: what it wrote, how to start a task, and what each installed metacoding skill is for.
 - Run it again when a place moves: it shows the current project map and asks what changed.
 
 The workflow reads the project map while grounding, and `metacoding-shape` reads it before its first round. In a repo with no project map, the workflow says so in one line and carries on.
@@ -228,9 +229,9 @@ metacoding update --force
 
 ## Using the Skill
 
-After installation, point your coding agent at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-shape` or `/metacoding-review` when you want only that step.
+After installation, ask your coding agent to run the `metacoding-onboard` skill once. Then point it at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-shape` or `/metacoding-review` when you want only that step.
 
-The skill will:
+The workflow skill will:
 
 - inspect the repo, then interview you on the open decisions with a recommended answer for each
 - wait for you to confirm the scope summary before changing files
