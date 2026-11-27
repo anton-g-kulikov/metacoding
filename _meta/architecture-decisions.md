@@ -45,3 +45,5 @@
 - The installed `references/project-context.md`, next to the `init` answers.
 
 **Why.** The skills are installed for three agents. Claude Code loads `CLAUDE.md` on its own and Codex loads `AGENTS.md`, so a section in either file reaches only some of them, while every agent can read a file by path. A file of its own also needs no merging into a file the user owns, and it can be written by the agent alone, so it works for an install that never ran the CLI. The installed `project-context.md` is ignored by git, exists once per agent, and is rewritten by `update`, so answers kept there would not reach a teammate or a fresh clone. The path cannot be under `/_meta`, because a repo that keeps its docs elsewhere has no such folder, and this file is where a session learns that. The cost is that a session running no metacoding skill does not know the file exists; the one-line pointer is there for that case.
+
+**Amended 2026-11-28.** The decision left out a limit that was agreed with it: the pointer line goes only into an instruction file the repo already has. Onboarding creates no such file, so a repo without one, like this one, has the project map and no pointer.

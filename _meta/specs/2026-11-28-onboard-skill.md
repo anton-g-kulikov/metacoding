@@ -1,6 +1,6 @@
 # Spec: Onboard skill
 
-- Status: in progress
+- Status: done
 
 ## Goal
 
@@ -39,6 +39,10 @@ A coding agent records once where a repo keeps its tracker, specs, glossary and 
   - The skill closes every run with how to work from here, not only the first. The project map is committed while the installed skills are not, so a teammate on a fresh clone runs the skill in a repo that already has a project map, and would otherwise be told nothing.
   - The line in `init`'s next steps comes after the step that shows where the skills are installed, and says "first, before any task".
   - The glossary entry for Onboarding names getting started as the word for introducing a person, and calls onboarding the main job of the skill.
+- Added on 2026-11-28, found in the review of the whole change:
+  - The onboard skill says what the tracker line decides, tickets and queued requests alike, and has the agent say so in the tracker question. The meaning was stated only where the line is read, not where the user is asked.
+  - The skill's description no longer tells the agent to start onboarding when the workflow reports a missing project map. The workflow mentions the skill and carries on; the user asks for it.
+  - The decision record is amended with the limit it left out: the pointer goes only into an instruction file the repo already has.
 
 ## Out of scope
 
@@ -110,6 +114,6 @@ One content test per rule in the skill text, written first and seen failing, wit
 - [x] **3. Getting started**
   - Success criteria: criteria 9 and 10.
   - Test intent: the skill's close names what it tells the user and takes each skill's purpose from its description; `init` prints the line.
-- [ ] **4. Onboard this repo**
+- [x] **4. Onboard this repo**
   - Success criteria: criterion 11.
   - Test intent: no new test. Checked by running the installed skill here and reading the committed file against the repo.

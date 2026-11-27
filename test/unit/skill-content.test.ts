@@ -1329,6 +1329,33 @@ describe('installed skill content: onboarding', () => {
       'Keep the four labels as they are, so that a reader finds a place by its label.'
     );
     expect(section).toContain('Write each path from the repo root, starting with `/`.');
+    expect(section).toContain(
+      'Written by the `metacoding-onboard` skill; run it again to change a line.'
+    );
+  });
+
+  test('the tracker line says where the repo tracks work, for tickets and queued requests alike', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const format = sectionOf(onboard, '## The project map', '## 1. Look');
+    const ask = sectionOf(onboard, '## 2. Ask', '### The pointer');
+
+    expect(format).toContain(
+      'The tracker line says where the repo tracks work: the tickets of a spec go there, and so does a request queued for later.'
+    );
+    expect(format).toContain(
+      'A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each spec.'
+    );
+    expect(ask).toContain('Say in the tracker question what the answer decides.');
+  });
+
+  test('onboarding is asked for by the user, not started by the workflow', async () => {
+    const { read } = await installFor('codex');
+    const onboard = read('metacoding-onboard/SKILL.md');
+    const frontMatter = sectionOf(onboard, '---', '# Onboard');
+
+    expect(frontMatter).toContain('when the user asks to onboard the repo');
+    expect(frontMatter).not.toContain('workflow reports');
   });
 
   test('onboarding looks at what the repo has before it asks', async () => {

@@ -1,6 +1,6 @@
 ---
 name: metacoding-onboard
-description: Record once where a repo keeps its tracker, specs, glossary, and decision records, in a project map that later sessions read instead of working the places out again. Use when the metacoding skills are new to a repo, when the user asks to onboard the repo, when the metacoding workflow reports that the repo has no project map, or when one of those places has moved.
+description: Record once where a repo keeps its tracker, specs, glossary, and decision records, in a project map that later sessions read instead of working the places out again. Use when the metacoding skills are new to a repo, when the user asks to onboard the repo, or when one of those places has moved.
 ---
 
 # Onboard
@@ -24,6 +24,8 @@ Where this repo keeps its records. Written by the `metacoding-onboard` skill; ru
 
 Keep the four labels as they are, so that a reader finds a place by its label. Write each path from the repo root, starting with `/`.
 
+The tracker line says where the repo tracks work: the tickets of a spec go there, and so does a request queued for later. A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each spec.
+
 ## 1. Look
 
 Find out what the repo already has before asking anything.
@@ -40,7 +42,7 @@ For each place, note whether you found it and when it last changed. A tracker or
 
 Put the places to the user in one round of numbered questions, each with a recommended place and a one-line reason. Use the question format of the `metacoding-shape` skill, so that the user can answer the round in one line.
 
-Recommend what you found. When two candidates compete, such as an issue tracker and a task file that has gone quiet, name both and recommend one: which of them is kept current is the user's decision.
+Say in the tracker question what the answer decides. Recommend what you found. When two candidates compete, such as an issue tracker and a task file that has gone quiet, name both and recommend one: which of them is kept current is the user's decision.
 
 For a place the repo does not have, recommend the default: the place the `metacoding-shape` skill uses in a repo that has none. That skill names the defaults. Load it by name, or read `../metacoding-shape/SKILL.md`, which is installed next to this skill's folder.
 
