@@ -4,7 +4,7 @@
 
 `metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files.
 
-The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug`, `metacoding-design`, and `metacoding-retro` are its companions and also work on their own. The workflow skill says at which step each companion is used. No companion calls another, and none points at a file that only the workflow skill ships. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it.
+The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug`, `metacoding-design`, and `metacoding-retro` are its companions and also work on their own. The workflow skill says at which step each companion is used. No companion calls another, and none points at a file that only the workflow skill ships. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it. In a plugin install, an agent lists each skill with the plugin's prefix, such as `metacoding:metacoding-shape`.
 
 ## Runtime Flow
 
@@ -82,13 +82,13 @@ Antigravity: .agents/skills/metacoding-*/
 
 Only the Codex install includes the `agents/openai.yaml` files.
 
-The installed workflow skill always adds:
+A CLI install always adds this file to the workflow skill:
 
 ```text
 <skills folder>/metacoding-workflow/references/project-context.md
 ```
 
-That file is generated per project from the answers given at `init`.
+That file is generated per project from the answers given at `init`. The workflow skill reads it when it exists. Without it, the skill finds the project's type, tech stack, and test and build commands in the repo, so the skills also work in a plugin install.
 
 ## Core Services
 

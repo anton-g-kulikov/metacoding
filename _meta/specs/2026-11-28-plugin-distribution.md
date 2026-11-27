@@ -73,7 +73,7 @@ Each success criterion that a test can prove gets one, written first and seen fa
 
 ## Tickets
 
-- [ ] **1. The workflow skill works without `project-context.md`**
+- [x] **1. The workflow skill works without `project-context.md`**
   - Success criteria: "Start Here" tells the agent to read the file when it exists and to look the facts up otherwise. The skill says how a companion skill is named in a plugin install. The system documentation and the changelog say so too.
   - Test intent: a content test pins both new sentences under their headings and fails on the text as it was.
 - [ ] **2. Claude Code plugin**

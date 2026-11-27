@@ -18,11 +18,11 @@ This skill takes one task from request to handoff. It owns the order of the step
 
 One more skill, `metacoding-onboard`, is run once per repo instead of once per task. It records where the repo keeps its tracker, specs, glossary, and decision records in the project map, `.metacoding/project.md`.
 
-Load a companion skill by name with your agent's skill mechanism. If your agent cannot load skills by name, read `../<skill-name>/SKILL.md`, which is installed next to this skill's folder.
+Load a companion skill by name with your agent's skill mechanism. When the skills are installed as a plugin, the name carries the plugin's prefix, such as `metacoding:metacoding-shape`. If your agent cannot load skills by name, read `../<skill-name>/SKILL.md`, which is installed next to this skill's folder.
 
 ## Start Here
 
-1. Read `references/project-context.md` first.
+1. Read `references/project-context.md` first when it exists. Without it, find the project's type, tech stack, and test and build commands in the repo.
 2. Read `references/workflow-rules.md` for the operating contract.
 3. Read `references/repository-organization.md` before planning or editing.
 4. Read `references/platform-adaptation.md` if the repo lacks task docs, test docs, or git context.

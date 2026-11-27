@@ -2322,3 +2322,31 @@ describe('installed skill content: a home for standards', () => {
     expect(section).toContain('- leave it uncreated until there is a rule to put in it');
   });
 });
+
+describe('installed skill content: working without the CLI', () => {
+  test('the workflow skill reads the project context only when it exists', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const startHere = skill.slice(
+      skill.indexOf('## Start Here'),
+      skill.indexOf('## Steps')
+    );
+
+    expect(skill).toContain('## Start Here');
+    expect(skill).toContain('## Steps');
+    expect(startHere).toContain(
+      "1. Read `references/project-context.md` first when it exists. Without it, find the project's type, tech stack, and test and build commands in the repo."
+    );
+  });
+
+  test('the workflow skill names a companion skill as a plugin install lists it', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const intro = skill.slice(0, skill.indexOf('## Start Here'));
+
+    expect(skill).toContain('## Start Here');
+    expect(intro).toContain(
+      "When the skills are installed as a plugin, the name carries the plugin's prefix, such as `metacoding:metacoding-shape`."
+    );
+  });
+});
