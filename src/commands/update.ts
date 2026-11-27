@@ -230,6 +230,7 @@ export class UpdateCommand {
         '.codex/skills/metacoding-workflow/SKILL.md',
         '.codex/skills/metacoding-workflow/agents/openai.yaml',
         '.codex/skills/metacoding-workflow/references/workflow-rules.md',
+        '.codex/skills/metacoding-workflow/references/interview.md',
         '.codex/skills/metacoding-workflow/references/platform-adaptation.md',
         '.codex/skills/metacoding-workflow/references/project-context.md',
         '.codex/skills/metacoding-workflow/assets/templates/task-entry.md',
@@ -241,6 +242,7 @@ export class UpdateCommand {
         '.claude/agents/metacoding-workflow.md',
         '.claude/metacoding-workflow/SKILL.md',
         '.claude/metacoding-workflow/references/workflow-rules.md',
+        '.claude/metacoding-workflow/references/interview.md',
         '.claude/metacoding-workflow/references/platform-adaptation.md',
         '.claude/metacoding-workflow/references/project-context.md',
         '.claude/metacoding-workflow/assets/templates/task-entry.md',
@@ -250,6 +252,7 @@ export class UpdateCommand {
     return [
       '.agents/skills/metacoding-workflow/SKILL.md',
       '.agents/skills/metacoding-workflow/references/workflow-rules.md',
+      '.agents/skills/metacoding-workflow/references/interview.md',
       '.agents/skills/metacoding-workflow/references/platform-adaptation.md',
       '.agents/skills/metacoding-workflow/references/project-context.md',
       '.agents/skills/metacoding-workflow/assets/templates/task-entry.md',

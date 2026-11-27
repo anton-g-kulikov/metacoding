@@ -12,6 +12,7 @@
 
 - `references/workflow-rules.md`
 - `references/repository-organization.md`
+- `references/interview.md`
 
 ## Recommended References
 

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `references/interview.md`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary
+
+### Changed
+
+- The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
+- `metacoding update --dry-run` treats `references/interview.md` as a required file
+
 ## [2.0.1] - 2026-03-28
 
 ### Fixed

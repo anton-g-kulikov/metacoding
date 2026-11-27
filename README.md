@@ -30,6 +30,7 @@ The support bundle is installed alongside the entrypoint. The shared content inc
 references/
   project-context.md
   workflow-rules.md
+  interview.md
   platform-adaptation.md
   typescript.md
   javascript.md
@@ -53,6 +54,7 @@ For Codex, the project install looks like:
 ├── references/
 │   ├── project-context.md
 │   ├── workflow-rules.md
+│   ├── interview.md
 │   ├── platform-adaptation.md
 │   ├── typescript.md
 │   ├── javascript.md
@@ -69,8 +71,8 @@ For Codex, the project install looks like:
 
 The installed skill preserves the original `metacoding` workflow intent:
 
-1. Ground in the repo before asking questions.
-2. Capture scope before changing code.
+1. Ground in the repo and look up facts before asking questions.
+2. Interview the user on open decisions and confirm scope before changing code.
 3. Define test intent before implementation.
 4. Execute one bounded task at a time.
 5. Verify with tests and direct checks.
@@ -82,12 +84,23 @@ The installed skill preserves the original `metacoding` workflow intent:
 The `metacoding-workflow` skill applies a strict operating contract for development tasks. It does not only provide prompts; it enforces an execution order and completion gates:
 
 1. Repository grounding before planning.
-2. Scope capture with success criteria and non-goals.
+2. Scope interview that ends in a confirmed scope summary.
 3. Mandatory TDD sequence.
 4. Single-task execution with scope control.
 5. Verification through targeted checks.
 6. MECE artifact updates.
 7. Explicit closure with handoff or VCS action.
+
+### Scope Interview
+
+Before any file changes, the agent interviews you about the task:
+
+- It looks up facts itself (code, config, tests, docs, git history) and asks you only for decisions.
+- It asks in rounds of numbered questions, each with a recommended answer, so you can reply with "1 yes, 2 yes, 3 the second option".
+- Each round's answers decide which questions come next.
+- It closes with a scope summary (goal, success criteria, in and out of scope, decisions, assumptions, test intent) and waits for your confirmation.
+
+If you tell it to proceed without questions, it lists the unasked decisions as assumptions in the scope summary and continues.
 
 ### Mandatory TDD Sequence
 
@@ -171,7 +184,8 @@ After installation, point your coding agent at the installed vendor entrypoint o
 
 The skill will:
 
-- inspect the repo before asking clarifying questions
+- inspect the repo, then interview you on the open decisions with a recommended answer for each
+- wait for you to confirm the scope summary before changing files
 - keep work scoped to one bounded task
 - push test intent ahead of production edits
 - fall back to bundled templates when the repo lacks workflow artifacts

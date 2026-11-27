@@ -104,4 +104,57 @@ describe('SkillManager', () => {
       claudeFiles.some((file) => file.path.includes('agents/openai.yaml'))
     ).toBe(false);
   });
+
+  test('ships the interview reference and points every entrypoint at it', async () => {
+    const workspace = await createTempWorkspace('metacoding-interview');
+    process.chdir(workspace);
+
+    const manager = new SkillManager();
+    const baseConfig = {
+      name: 'demo-app',
+      description: 'Demo application',
+      techStack: ['TypeScript'],
+      projectType: 'typescript',
+      testFramework: 'Use the repository default',
+      buildTool: 'Use the repository default',
+    };
+    const expectations = [
+      {
+        vendor: 'codex' as const,
+        root: '.codex/skills/metacoding-workflow',
+        entry: '.codex/skills/metacoding-workflow/SKILL.md',
+      },
+      {
+        vendor: 'claude-code' as const,
+        root: '.claude/metacoding-workflow',
+        entry: '.claude/agents/metacoding-workflow.md',
+      },
+      {
+        vendor: 'antigravity' as const,
+        root: '.agents/skills/metacoding-workflow',
+        entry: '.agents/skills/metacoding-workflow/SKILL.md',
+      },
+    ];
+
+    for (const { vendor, root, entry } of expectations) {
+      const files = await manager.generateInstallationFiles({
+        ...baseConfig,
+        vendor,
+      });
+      const contentOf = (filePath: string) =>
+        files.find((file) => file.path === filePath)?.content;
+
+      const interview = contentOf(`${root}/references/interview.md`);
+      expect(interview).toContain('Recommended:');
+      expect(interview).toContain('Scope summary');
+
+      expect(contentOf(entry)).toContain('references/interview.md');
+      expect(contentOf(`${root}/references/workflow-rules.md`)).toContain(
+        'references/interview.md'
+      );
+      expect(contentOf(`${root}/references/project-context.md`)).toContain(
+        'references/interview.md'
+      );
+    }
+  });
 });

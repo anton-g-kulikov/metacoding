@@ -4,10 +4,11 @@
 
 1. Ground in the repository.
    - Read the relevant code, config, tests, docs, and `references/repository-organization.md` first.
-   - Ask questions only after inspection leaves material uncertainty.
-2. Capture task scope.
-   - State the goal, success criteria, and non-goals.
-   - Confirm consequences before mutating code when the change is broad or risky.
+   - Look up every fact you can find yourself, so the user is asked only for decisions.
+2. Interview the user and capture task scope.
+   - Follow `references/interview.md`: ask the open decisions in numbered rounds, each with a recommended answer.
+   - Close with the scope summary: goal, success criteria, in and out of scope, decisions, assumptions, test intent.
+   - Wait for the user to confirm the scope summary before changing any file.
 3. Enforce mandatory TDD.
    - Identify what should prove the change correct before implementation.
    - Document test cases before writing test code or production code.

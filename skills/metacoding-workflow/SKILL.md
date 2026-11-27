@@ -12,8 +12,9 @@ Use this skill when the user wants disciplined execution rather than ad hoc codi
 1. Read `references/project-context.md` first.
 2. Read `references/workflow-rules.md` for the operating contract.
 3. Read `references/repository-organization.md` before planning or editing.
-4. Read `references/platform-adaptation.md` if the repo lacks task docs, test docs, or git context.
-5. Load only the language reference that matches the task:
+4. Read `references/interview.md` and run the interview before planning the implementation.
+5. Read `references/platform-adaptation.md` if the repo lacks task docs, test docs, or git context.
+6. Load only the language reference that matches the task:
    - `references/typescript.md`
    - `references/javascript.md`
    - `references/node.md`
@@ -22,8 +23,8 @@ Use this skill when the user wants disciplined execution rather than ad hoc codi
 
 ## Core Rules
 
-1. Ground in the repo before asking clarifying questions.
-2. Capture scope, success criteria, and constraints before changing code.
+1. Ground in the repo first: look up facts yourself and ask the user only for decisions.
+2. Interview the user in rounds of numbered questions with recommended answers, then get the scope summary confirmed before changing code.
 3. Enforce mandatory TDD: document test intent, write or identify failing tests first, then implement production code.
 4. Work one bounded task at a time.
 5. Verify changes with tests and direct checks.
@@ -32,7 +33,7 @@ Use this skill when the user wants disciplined execution rather than ad hoc codi
 
 ## Enforcement
 
-- Do not skip directly to coding when repo inspection can reduce uncertainty.
+- Changing files starts only after the user confirms the scope summary from the interview.
 - Do not bypass TDD unless the user explicitly accepts the exception and the reason is recorded.
 - Do not switch to unrelated work mid-task. Queue it for later.
 - If a new blocker is required to finish the active task, treat it as a subtask.

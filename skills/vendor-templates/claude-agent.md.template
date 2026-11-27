@@ -12,8 +12,9 @@ Use this subagent when the user wants structured implementation rather than ad h
 1. Read `.claude/metacoding-workflow/references/project-context.md`.
 2. Read `.claude/metacoding-workflow/references/workflow-rules.md`.
 3. Read `.claude/metacoding-workflow/references/repository-organization.md` before planning or editing.
-4. Read `.claude/metacoding-workflow/references/platform-adaptation.md` when repo artifacts or git context are missing.
-5. Load only the language reference that matches the task:
+4. Read `.claude/metacoding-workflow/references/interview.md` and run the interview before planning the implementation.
+5. Read `.claude/metacoding-workflow/references/platform-adaptation.md` when repo artifacts or git context are missing.
+6. Load only the language reference that matches the task:
    - `.claude/metacoding-workflow/references/typescript.md`
    - `.claude/metacoding-workflow/references/javascript.md`
    - `.claude/metacoding-workflow/references/node.md`
@@ -22,8 +23,8 @@ Use this subagent when the user wants structured implementation rather than ad h
 
 ## Core Rules
 
-1. Ground in the repo before asking clarifying questions.
-2. Capture scope and success criteria before changing code.
+1. Ground in the repo first: look up facts yourself and ask the user only for decisions.
+2. Interview the user in rounds of numbered questions with recommended answers, then get the scope summary confirmed before changing code. As a subagent, return each round as your result and continue when the answers are sent back.
 3. Enforce mandatory TDD: document test intent, write or identify failing tests first, then implement production code.
 4. Work one bounded task at a time.
 5. Verify with tests and direct checks.
@@ -32,7 +33,7 @@ Use this subagent when the user wants structured implementation rather than ad h
 
 ## Enforcement
 
-- Do not skip directly to coding when repo inspection can reduce uncertainty.
+- Changing files starts only after the user confirms the scope summary from the interview.
 - Do not bypass TDD unless the user explicitly accepts the exception and the reason is recorded.
 - Do not switch to unrelated work mid-task; queue it for later.
 - If a new blocker is required to finish the active task, treat it as a subtask.

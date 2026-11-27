@@ -207,6 +207,7 @@ export class SkillManager {
   private getRecommendedReferences(config: ProjectConfig): string[] {
     const references = [
       '- `references/workflow-rules.md` for the gated task flow',
+      '- `references/interview.md` for the scope interview that runs before any change',
       '- `references/repository-organization.md` for repository structure and MECE documentation ownership',
       '- `references/platform-adaptation.md` for fallback behavior when repo artifacts or git are missing',
     ];
