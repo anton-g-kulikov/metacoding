@@ -61,7 +61,7 @@ One content test per new rule, written first and seen failing. The tickets list 
 - [x] **1. Test doubles in metacoding-tdd**
   - Success criteria: the first success criterion above.
   - Test intent: the skill has the section; it states the three rules; it shows a good and a bad example.
-- [ ] **2. Secrets in metacoding-debug**
+- [x] **2. Secrets in metacoding-debug**
   - Success criteria: the second success criterion above.
   - Test intent: phase 1 states the masking rule and names credentials and personal data; the clean-up phase says raw captures are deleted.
 - [ ] **3. Code smells in metacoding-review**

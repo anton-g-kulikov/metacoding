@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like and on test doubles
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards
-  - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix
+  - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix, and masks credentials and personal data in what it captures
 - A review step in the workflow, between verification and artifact updates
 - Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the spec
 - Resuming a task: grounding looks for a spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the spec as the agreed scope

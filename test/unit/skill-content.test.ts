@@ -884,4 +884,66 @@ describe('installed skill content: skill refinements', () => {
     expect(bad).toContain('pricing = mock(pricing_module)');
     expect(bad).toContain('assert pricing.calculate was called once');
   });
+
+  test('debug masks credentials and personal data in what it shows, writes, or commits', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const reproduce = debug.slice(
+      debug.indexOf('## 1. Reproduce with one command'),
+      debug.indexOf('## 2. Minimize')
+    );
+
+    expect(debug).toContain('## 1. Reproduce with one command');
+    expect(debug).toContain('## 2. Minimize');
+    expect(reproduce).toContain(
+      'credentials (tokens, passwords, keys, cookies) and personal data (names, emails, addresses, account numbers)'
+    );
+    expect(reproduce).toContain(
+      "Mask the secrets in everything you show the user, write into the repo, or commit: the command's input, a fixture, a log excerpt, the regression test."
+    );
+    expect(reproduce).toContain(
+      'Replace each secret with a made-up value of the same shape, then rerun the command to check that the masked version still fails.'
+    );
+  });
+
+  test('debug keeps the raw capture outside the repo', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const reproduce = debug.slice(
+      debug.indexOf('## 1. Reproduce with one command'),
+      debug.indexOf('## 2. Minimize')
+    );
+
+    expect(debug).toContain('## 1. Reproduce with one command');
+    expect(debug).toContain('## 2. Minimize');
+    expect(reproduce).toContain(
+      'Keep the raw capture outside the repo, and replay it from there.'
+    );
+  });
+
+  test('debug never prints a secret in a temporary log line', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const testing = debug.slice(
+      debug.indexOf('## 4. Test one hypothesis at a time'),
+      debug.indexOf('## 5. Fix with a regression test')
+    );
+
+    expect(debug).toContain('## 4. Test one hypothesis at a time');
+    expect(debug).toContain('## 5. Fix with a regression test');
+    expect(testing).toContain(
+      'Never print a credential or personal data in a log line: removing the line later does not remove what it already wrote.'
+    );
+  });
+
+  test('debug deletes the raw captures it made when it cleans up', async () => {
+    const { read } = await installFor('codex');
+    const debug = read('metacoding-debug/SKILL.md');
+    const cleanUp = debug.slice(debug.indexOf('## 6. Clean up'));
+
+    expect(debug).toContain('## 6. Clean up');
+    expect(cleanUp).toContain(
+      '- Raw captures you made are deleted. A file the user supplied stays theirs.'
+    );
+  });
 });

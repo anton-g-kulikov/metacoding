@@ -19,6 +19,11 @@ Build a single command that fails because of this bug and will pass once it is f
 
 Make the command fast and repeatable: narrow it to the affected path, pin time and randomness, isolate files and network.
 
+Captures from a real system often hold secrets: credentials (tokens, passwords, keys, cookies) and personal data (names, emails, addresses, account numbers).
+
+- Keep the raw capture outside the repo, and replay it from there.
+- Mask the secrets in everything you show the user, write into the repo, or commit: the command's input, a fixture, a log excerpt, the regression test. Replace each secret with a made-up value of the same shape, then rerun the command to check that the masked version still fails.
+
 Exit when you have run the command and it shows the symptom the user described, every time or at a steady high rate. When you cannot build one, say what you tried and ask the user for access, a captured artifact, or permission to add temporary logging. Leave theories until the command exists.
 
 ## 2. Minimize
@@ -31,7 +36,7 @@ Write three to five possible causes, ranked. Give each a prediction that can pro
 
 ## 4. Test one hypothesis at a time
 
-Check predictions in rank order, changing one thing per run. Prefer a debugger or a few targeted log lines at the point where two hypotheses differ. Mark every temporary log line with one unique tag, such as `[DEBUG-7f3a]`, so a single search finds them all later. For slow code, measure before and after instead of logging.
+Check predictions in rank order, changing one thing per run. Prefer a debugger or a few targeted log lines at the point where two hypotheses differ. Mark every temporary log line with one unique tag, such as `[DEBUG-7f3a]`, so a single search finds them all later. Never print a credential or personal data in a log line: removing the line later does not remove what it already wrote. For slow code, measure before and after instead of logging.
 
 Exit when one hypothesis predicted every observation and the others are ruled out.
 
@@ -50,4 +55,5 @@ When no test can reach the bug at the right level, say so. That gap is a finding
 - The regression test passes, or the missing test level is reported.
 - A search for the debug tag returns nothing.
 - Throwaway scripts are deleted.
+- Raw captures you made are deleted. A file the user supplied stays theirs.
 - The cause is stated in the commit message or handoff.

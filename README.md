@@ -136,7 +136,7 @@ For the last ticket of a task with several, the scope axis runs once more on the
 
 ### Debugging
 
-For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test.
+For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test. It keeps a raw capture from a real system out of the repo, and masks credentials and personal data in whatever it shows, writes into the repo, or commits.
 
 ### Scope and Task-Switching Rules
 
