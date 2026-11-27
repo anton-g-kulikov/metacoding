@@ -20,10 +20,14 @@ Remove three kinds of dead weight from the skill text: the steps described twice
 - Tests: `skill-content`, `skill-manager`, `update-command`.
 - README, CHANGELOG (under Unreleased), `_meta/system-documentation.md`.
 - This task's records: this spec, and the backlog with the prompt upkeep item removed.
+- Added on 2026-11-28, from the review of ticket 2, which found three things the index left open:
+  - `workflow-rules.md`, step 7: one line that says to state explicitly that the work is complete. The old step 7 of `SKILL.md` offered "an explicit completion confirmation", and no other file said it.
+  - `workflow-rules.md`, step 6: the line on the one owning artifact names `references/repository-organization.md`, as the old step 6 of `SKILL.md` did.
+  - `SKILL.md`, step 3 of the index: it names both skills and no longer says when `metacoding-debug` applies. `workflow-rules.md` says that.
 
 ## Out of scope
 
-- `workflow-rules.md`: not edited.
+- `workflow-rules.md`: not edited, apart from the two lines added on 2026-11-28 under In scope.
 - The Codex default prompt and "Rules Between Steps", which also repeat parts of the steps.
 - The companion skills' descriptions, and any user-invoked-only flag.
 - Refreshing the installed skills in the main checkout's `.claude/skills`; that waits until this branch is merged.
@@ -47,6 +51,8 @@ Remove three kinds of dead weight from the skill text: the steps described twice
   ```
 
   The two sentences after the list, on tickets and resuming, stay as they are. Nothing in the removed paragraphs is missing from `workflow-rules.md` or from the companion skill that owns it.
+
+  Changed on 2026-11-28: step 3 of the index reads "Build test-first, with `metacoding-tdd` or `metacoding-debug`.", and two facts from the removed paragraphs were missing after all. See the additions under In scope.
 - **Description.** Reword the workflow skill's description to:
 
   ```text
