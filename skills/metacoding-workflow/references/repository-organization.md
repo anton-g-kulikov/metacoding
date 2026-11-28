@@ -35,7 +35,7 @@ Each durable concept should have one primary home.
   - usage
   - user-facing workflows
 - `/_meta/system-documentation.md`
-  - evergreen system behavior
+  - evergreen system behavior that spans feature areas
   - stable repository structure
   - non-temporal technical guidance
 - `/_meta/api-design.md`
@@ -49,7 +49,8 @@ Each durable concept should have one primary home.
 - `/_meta/coding-standards.md`
   - the repo's rules for writing code, tests, and docs that no automated check enforces
 - `/_meta/specs/`
-  - one file per task that needs a spec: its confirmed scope summary and its tickets
+  - one feature spec per feature area, as `<area>.md`: how the area works today, and its stories by role
+  - under `tasks/`, one file per task that needs a task spec: its confirmed scope summary and its tickets
 
 Rules:
 
@@ -63,16 +64,18 @@ Rules:
 
 - Read it while grounding, when the repo has one.
 - Where the project map names a place, use that place, and create it there when it does not exist yet.
-- The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the spec.
+- The specs line names one folder: feature specs go in it, and task specs go in its `tasks/` folder.
+- The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the task spec.
 - The places this reference names for those four records, and its rules for a repo's own place, apply only to a place the project map has no line for, and to a repo with no project map.
 
 ## Specs, Tickets, and Test Records
 
-The `metacoding-shape` skill decides which tasks need a spec, writes it once the user confirms the scope summary, and holds the rules and the file format. This reference covers only where things go:
+The `metacoding-spec` skill decides which tasks need a task spec, writes it once the user confirms the scope summary, and holds the rules and the file formats of task specs and feature specs. This reference covers only where things go:
 
-- A spec goes where the repo already keeps specs. When it has no such place, it goes to `/_meta/specs/<date>-<slug>.md`.
-- The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the spec.
-- Test intent lives in the scope summary, the spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
+- A task spec goes where the repo already keeps task specs. When it has no such place, it goes to `/_meta/specs/tasks/<date>-<slug>.md`.
+- A feature spec goes where the repo already keeps documents of that kind. When it has no such place, it goes to `/_meta/specs/<area>.md`.
+- The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the task spec.
+- Scenarios live in the scope summary, in the task spec when the task has one, and in the feature spec, and the tests that prove them carry their IDs. For a task without stories, test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
 
 ## Decision Records
 
@@ -82,7 +85,7 @@ The `metacoding-shape` skill decides which tasks need a spec, writes it once the
 2. **Surprising without context.** Someone reading the code would wonder why it was done this way.
 3. **A real trade-off.** There were workable alternatives, and this one was chosen for stated reasons.
 
-A decision reaches this file through the scope summary: the `metacoding-shape` skill marks it `[record]` and writes the entry once the user confirms the summary, before the build starts. The skill holds the entry format and how to amend an entry.
+A decision reaches this file through the scope summary: the `metacoding-spec` skill marks it `[record]` and writes the entry once the user confirms the summary, before the build starts. The skill holds the entry format and how to amend an entry.
 
 A retro can add an entry too: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves.
 

@@ -220,6 +220,7 @@ describe('UpdateCommand', () => {
   ] as const;
   const companionSkills = [
     'metacoding-shape',
+    'metacoding-spec',
     'metacoding-tdd',
     'metacoding-review',
     'metacoding-debug',
@@ -227,6 +228,25 @@ describe('UpdateCommand', () => {
     'metacoding-retro',
     'metacoding-onboard',
   ];
+
+  test.each(vendorSkillsDirs)(
+    'INSTALL-1: update adds metacoding-spec to a %s install that lacks it',
+    async (vendor, skillsDir) => {
+      const workspace = await createTempWorkspace(`metacoding-update-spec-${vendor}`);
+      process.chdir(workspace);
+
+      const init = new InitCommand();
+      await init.execute({ template: 'general', vendor, force: true });
+      const specSkill = path.join(workspace, skillsDir, 'metacoding-spec');
+      await fs.remove(specSkill);
+
+      await new UpdateCommand().execute({});
+
+      expect(await fs.readFile(path.join(specSkill, 'SKILL.md'), 'utf8')).toContain(
+        'name: metacoding-spec\n'
+      );
+    }
+  );
 
   test.each(vendorSkillsDirs)(
     'adds companion skills to a %s install that only has the workflow skill',

@@ -77,7 +77,7 @@ A coding agent records once where a repo keeps its tracker, specs, glossary and 
 
 ## Decisions made
 
-- The project map is a committed file of its own at `.metacoding/project.md`, read by path. Recorded in [architecture-decisions.md](../architecture-decisions.md).
+- The project map is a committed file of its own at `.metacoding/project.md`, read by path. Recorded in [architecture-decisions.md](../../architecture-decisions.md).
 - Onboarding is a separate skill, not part of grounding, and it is for the agent, not the user.
 - One skill covers an existing repo and an empty folder.
 - It records the four places only, and creates none of them.
@@ -89,7 +89,7 @@ A coding agent records once where a repo keeps its tracker, specs, glossary and 
 
 ## Terms
 
-Onboarding and project map, as defined in [glossary.md](../glossary.md).
+Onboarding and project map, as defined in [glossary.md](../../glossary.md).
 
 ## Assumptions
 

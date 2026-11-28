@@ -10,26 +10,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Companion skills, installed next to `metacoding-workflow` and usable on their own:
-  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a scope summary. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice with its own success criteria and test intent
+  - `metacoding-shape`: a scope interview that separates facts (the agent looks them up) from decisions (the user answers), asks in rounds of numbered questions with a recommended answer each, and closes with a summary of the decisions, terms and assumptions. It writes no file, so it can be used as a plain interview
+  - `metacoding-spec`: turns the settled decisions into a scope summary, gets it confirmed, and writes the records. The summary states the solution and the tickets it is sliced into; each ticket is a vertical slice
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like and on test doubles
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards, with a fixed list of code smells for what those standards leave open, two of them about the shape of the code: a function or module that only passes calls on, and an interface or abstract type with one implementation that nothing swaps for another
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix, and masks credentials and personal data in what it captures
   - `metacoding-design`: code-design guidance with four terms (module, interface, depth, seam) and seven rules on deep modules, small interfaces and where a seam belongs. The workflow uses it when a solution adds a module or changes an interface, when the interface to test through is unclear or missing, and when code is restructured after its tests are green. Run on its own, it proposes an interface for new code or lists candidates for change in existing code, and changes no file
   - `metacoding-retro`: after the last ticket of a task, or on request, it turns the mistakes that cost rework and would happen again into lessons, proposes one lasting change for each (a check before a rule), and changes nothing until the user answers. A new rule goes where the repo keeps its standards, and an installed metacoding skill is never edited
 - `metacoding-onboard`, a skill run once per repo. It looks for where the repo keeps its tracker, specs, glossary and decision records, asks one round of numbered questions with a recommended place for each, and writes the answers to a project map at `.metacoding/project.md` once the user confirms. It records the places and creates none of them. With the user's yes, it adds a one-line pointer to the project map in an instruction file the repo already has, such as `CLAUDE.md` or `AGENTS.md`
-- The workflow reads the project map while grounding, and `metacoding-shape` reads it before its first round. Where it names a place for the tracker, the specs, the glossary or the decision records, that place is used, and created there when a task first needs it. A place it has no line for falls back to the repo's own place, or to the `/_meta` default
+- The workflow reads the project map while grounding, and `metacoding-shape` and `metacoding-spec` read it before they start. Where it names a place for the tracker, the specs, the glossary or the decision records, that place is used, and created there when a task first needs it. A place it has no line for falls back to the repo's own place, or to the `/_meta` default
 - In a repo with no project map, the workflow says in one line that `metacoding-onboard` can record the places, then carries on
 - `metacoding-onboard` closes by telling the user how to work from here: what it wrote, how to start a task, and what each installed metacoding skill is for, taken from each skill's own description
 - The "Next steps" that `metacoding init` prints say to run `metacoding-onboard` first, before any task
 - A default home for a repo's coding standards at `/_meta/coding-standards.md`: the rules that no automated check enforces. `metacoding-retro` proposes the file with the first new rule when the repo keeps its standards nowhere, and a retro can also add a glossary term or a decision record
+- User stories in the scope summary: `metacoding-spec` writes behavior a role can observe as stories grouped by role, each with Given/When/Then scenarios, in place of success criteria and test intent. Each scenario has an ID made of its feature area's prefix and a number, and each ticket names the scenarios it delivers. A task without such behavior keeps success criteria and test intent. A role is settled in the interview like any other term
+- Scenario IDs in tests: `metacoding-tdd` starts from the scenarios of the ticket being built, and the test that proves a scenario carries its ID in its name, or in a comment or tag where a name cannot hold it. `metacoding-review` finds an unproven scenario by searching the tests for its ID, and `metacoding-debug` gives the regression test the ID of the scenario it protects
+- Test seams: the scope summary names, for each story, the public interface its scenarios are tested through, preferring an interface that already exists and the highest one that works. `metacoding-tdd` tests through it
+- Paths to source and test files, and code, stay out of task specs and feature specs: a feature spec holds none, a task spec holds such paths only under "In scope", and either may hold a short snippet that states an interface
+- Ticket rules: each ticket names the tickets that block it, a ticket with more than five scenarios is split, and a wide refactor is sliced as add the new form, move the callers in batches, remove the old form. The workflow takes the first ticket that is not marked done and that no unfinished ticket blocks
 - A review step in the workflow, between verification and artifact updates
-- Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the spec
-- Resuming a task: grounding looks for a spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the spec as the agreed scope
-- A change to a spec in progress is confirmed by the user and written into the spec, with its date, before it is built
-- The records that shaping writes (glossary terms, decision records, the spec) are committed on their own before the build, when VCS work is in scope. So is a confirmed change to a spec in progress
+- Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the task spec
+- Resuming a task: grounding looks for a task spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the task spec as the agreed scope
+- A change to a task spec in progress is confirmed by the user and written into the task spec, with its date, before it is built
+- The records that `metacoding-spec` writes (glossary terms, decision records, the task spec) are committed on their own before the build, when VCS work is in scope. So is a confirmed change to a task spec in progress
 - A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
-- Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
+- Feature specs at `/_meta/specs/<area>.md`: the living document of one feature area, with an ID prefix, a Solution section that says how the area works today, and its stories by role with their scenarios in `gherkin` blocks. When a ticket is done, its scenarios are written into the feature spec of their area; a changed scenario replaces the old text under its ID, and a removed one leaves with its test. A feature spec starts with the first task that delivers a scenario in its area, with no backfill
+- The workflow reads the feature specs of the areas a task touches while grounding and updates them in its artifact step, before the ticket is marked done, so that the change to a feature spec is part of its ticket's commit. A task is not complete until the scenarios it delivered are in the feature specs
+- Task specs at `/_meta/specs/tasks/<date>-<slug>.md`: `metacoding-spec` writes the confirmed scope summary as a task spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the task spec unless the repo already has a tracker
 - A plugin install for Claude Code: the repo is a plugin and its own marketplace, so Claude Code installs the skills from it without the CLI. The plugin has the version of the npm package
 - A plugin install for Codex and for Antigravity, from the same repo and with the same version. Both follow the agents' documentation and are not yet tried on a real install
 
@@ -51,16 +59,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI help and messages say "skills" where they said "workflow skill"
 - The default project description for a new install is "A project using the metacoding skills"
 - Installs skip `.DS_Store` files
-- `task-entry.md` now carries the scope summary fields
-- The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
+- `task-entry.md` now carries the scope summary fields, including the stories
+- The confirmed scope of a task that needs no task spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
 - The workflow skill reads `references/project-context.md` only when it exists. Without the file, it finds the project's type, tech stack, and test and build commands in the repo, so the skills work in a plugin install
 - The workflow skill says that a companion skill's name carries the plugin's prefix in a plugin install, such as `metacoding:metacoding-shape`
 
 ### Removed
 
 - `skills/vendor-templates/claude-agent.md.template`, the Claude Code subagent entrypoint
-- The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a spec instead
-- The `test-plan.md` template. Test intent now lives in the scope summary. `metacoding update` removes the copy an existing install has
+- The prescribed `/_meta/project-task-list.md` and `/test/test-documentation.md`. A repo that already keeps either still gets it updated; the workflow no longer creates them. A task that needs one gets a task spec instead
+- The `test-plan.md` template. Scenarios, or the test intent of a task without stories, now live in the scope summary. `metacoding update` removes the copy an existing install has
 - The five language references (`references/typescript.md`, `javascript.md`, `node.md`, `react.md` and `python.md`) and the "Recommended References" section of `project-context.md`. The references restated the workflow rules in general terms, and the section repeated a list the skill already holds. `metacoding update` removes the copies an existing install has
 - The legacy `templates/` and `workflow/` folders from the 1.x instruction-file generator, which the package does not ship
 

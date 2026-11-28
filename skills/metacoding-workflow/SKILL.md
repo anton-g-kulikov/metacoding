@@ -9,7 +9,8 @@ This skill takes one task from request to handoff. It owns the order of the step
 
 | Skill | What it does |
 | --- | --- |
-| `metacoding-shape` | Settles open decisions with the user and ends in a confirmed scope summary |
+| `metacoding-shape` | Settles open decisions with the user in an interview |
+| `metacoding-spec` | Turns the settled decisions into a confirmed scope summary with tickets, and writes the records |
 | `metacoding-tdd` | Builds the change test-first, one behavior at a time |
 | `metacoding-debug` | Finds the cause of a bug from a command that reproduces it |
 | `metacoding-review` | Checks the finished change against the scope and the repo's standards |
@@ -25,21 +26,21 @@ Load a companion skill by name with your agent's skill mechanism. When the skill
 1. Read `references/project-context.md` first when it exists. Without it, find the project's type, tech stack, and test and build commands in the repo.
 2. Read `references/workflow-rules.md` for the operating contract.
 3. Read `references/repository-organization.md` before planning or editing.
-4. Read `references/platform-adaptation.md` if the repo lacks task docs, test docs, or git context.
+4. Read `references/platform-adaptation.md` if the repo lacks task docs, feature specs, test docs, or git context.
 
 ## Steps
 
 The steps, in order. What each one requires is in the Operating Sequence of `references/workflow-rules.md`.
 
 1. Ground in the repo.
-2. Shape, with `metacoding-shape`.
+2. Shape, with `metacoding-shape` and `metacoding-spec`.
 3. Build test-first, with `metacoding-tdd` or `metacoding-debug`.
 4. Verify.
 5. Review, with `metacoding-review`.
 6. Update artifacts.
 7. Close.
 
-Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets, as the Tickets section of `references/workflow-rules.md` describes. When the request continues a task that an earlier session left unfinished, the task resumes from its spec at the first ticket not yet done, as the same section describes.
+Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets, as the Tickets section of `references/workflow-rules.md` describes. When the request continues a task that an earlier session left unfinished, the task resumes from its task spec at the first ticket not yet done, as the same section describes.
 
 ## Rules Between Steps
 

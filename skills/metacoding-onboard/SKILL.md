@@ -5,7 +5,7 @@ description: Record once where a repo keeps its tracker, specs, glossary, and de
 
 # Onboard
 
-Run this once per repo, and again when one of the places moves. It ends in a project map: a short file that says where this repo keeps its tracker, its specs, its glossary, and its decision records, so that no later session has to work the places out again. The metacoding workflow and the `metacoding-shape` skill read that file.
+Run this once per repo, and again when one of the places moves. It ends in a project map: a short file that says where this repo keeps its tracker, its specs, its glossary, and its decision records, so that no later session has to work the places out again. The metacoding workflow and the `metacoding-shape` and `metacoding-spec` skills read that file.
 
 ## The project map
 
@@ -16,7 +16,7 @@ The project map is the file `.metacoding/project.md`, at the same path in every 
 
 Where this repo keeps its records. Written by the `metacoding-onboard` skill; run it again to change a line.
 
-- Tracker: <GitHub issues, a file path, or none: the checklist in each spec>
+- Tracker: <GitHub issues, a file path, or none: the checklist in each task spec>
 - Specs: <folder>
 - Glossary: <file>
 - Decision records: <file or folder>
@@ -24,14 +24,14 @@ Where this repo keeps its records. Written by the `metacoding-onboard` skill; ru
 
 Keep the four labels as they are, so that a reader finds a place by its label. Write each path from the repo root, starting with `/`.
 
-The tracker line says where the repo tracks work: the tickets of a spec go there, and so does a request queued for later. A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each spec.
+The tracker line says where the repo tracks work: the tickets of a task spec go there, and so does a request queued for later. A line that says none means the repo tracks work nowhere, and the tickets are a checklist in each task spec.
 
 ## 1. Look
 
 Find out what the repo already has before asking anything.
 
 - Tracker: the git remote and whether its issues are in use, or a task list or TODO file
-- Specs: a folder of specs, proposals, or design documents
+- Specs: a folder of specs, user stories, proposals, or design documents
 - Glossary: a glossary file, or a section of terms in the docs
 - Decision records: a decisions file, or a folder with one file per decision
 - Instruction file: the file your agent loads at the start of every session, such as `CLAUDE.md` or `AGENTS.md`, which the pointer in step 2 needs
@@ -44,7 +44,7 @@ Put the places to the user in one round of numbered questions, each with a recom
 
 Say in the tracker question what the answer decides. Recommend what you found. When two candidates compete, such as an issue tracker and a task file that has gone quiet, name both and recommend one: which of them is kept current is the user's decision.
 
-For a place the repo does not have, recommend the default: the place the `metacoding-shape` skill uses in a repo that has none. That skill names the defaults. Load it by name, or read `../metacoding-shape/SKILL.md`, which is installed next to this skill's folder.
+For a place the repo does not have, recommend the default: the place the `metacoding-spec` skill uses in a repo that has none. That skill names the defaults. Load it by name, or read `../metacoding-spec/SKILL.md`, which is installed next to this skill's folder.
 
 In an empty folder all four recommendations are the defaults, and the user can confirm the round in one line.
 
@@ -66,7 +66,7 @@ Offer it as the last question of the round, after the four places.
 
 Write the project map only after the user has confirmed the round. Nothing is written before that.
 
-Record the places and create none of them. A glossary, a decisions file, or a specs folder that does not exist yet is created by the `metacoding-shape` skill when a task first needs it, at the path recorded here.
+Record the places and create none of them. A glossary, a decisions file, or a specs folder that does not exist yet is created by the `metacoding-spec` skill when a task first needs it, at the path recorded here.
 
 Add the pointer only when the user said yes to it, and only to a file the repo already has.
 

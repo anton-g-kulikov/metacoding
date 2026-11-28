@@ -15,11 +15,11 @@ Collect the task's mistakes from what is on record before you trust your memory 
 
 - Review findings that had to be fixed.
 - Corrections from the user: an instruction they had to repeat, an approach they rejected, work they asked to have redone.
-- Changes to the agreed scope made during the build, such as dated additions to the spec.
+- Changes to the agreed scope made during the build, such as dated additions to the task spec.
 - Decision records amended because the build proved them wrong.
 - Checks that failed for a reason that could have been foreseen: a test, the linter, the build.
 
-When the conversation that did the work is gone, read the spec and the task's commits, then ask the user what went wrong.
+When the conversation that did the work is gone, read the task spec and the task's commits, then ask the user what went wrong.
 
 A retro is about mistakes. How fast the work went and what it cost to run are not its subject.
 

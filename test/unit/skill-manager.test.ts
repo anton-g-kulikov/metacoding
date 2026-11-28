@@ -113,6 +113,38 @@ describe('SkillManager', () => {
     expect(METACODING_SKILLS[0]).toBe('metacoding-workflow');
   });
 
+  test('INSTALL-1: metacoding-spec is installed with the other skills for every agent', async () => {
+    const skillsDirs = {
+      codex: '.codex/skills',
+      'claude-code': '.claude/skills',
+      antigravity: '.agents/skills',
+    } as const;
+
+    for (const vendor of Object.keys(skillsDirs) as Array<keyof typeof skillsDirs>) {
+      const files = await new SkillManager().generateInstallationFiles({
+        name: 'demo-app',
+        description: 'Demo application',
+        techStack: ['TypeScript'],
+        projectType: 'typescript',
+        vendor,
+      });
+      const installed = (skill: string, file: string) =>
+        files.find(
+          (candidate) => candidate.path === `${skillsDirs[vendor]}/${skill}/${file}`
+        );
+
+      expect(installed('metacoding-spec', 'SKILL.md')?.content).toContain(
+        'name: metacoding-spec\n'
+      );
+      expect(installed('metacoding-spec', 'agents/openai.yaml') !== undefined).toBe(
+        vendor === 'codex'
+      );
+      for (const skill of METACODING_SKILLS) {
+        expect(installed(skill, 'SKILL.md')).toBeDefined();
+      }
+    }
+  });
+
   test('installs the orchestrator and its companion skills for every vendor', async () => {
     const workspace = await createTempWorkspace('metacoding-multi-skill');
     process.chdir(workspace);
@@ -159,7 +191,10 @@ describe('SkillManager', () => {
 
       const shape = contentOf(`${skillsDir}/metacoding-shape/SKILL.md`);
       expect(shape).toContain('Recommended:');
-      expect(shape).toContain('Scope summary');
+      expect(shape).toContain('Decisions summary');
+      expect(contentOf(`${skillsDir}/metacoding-spec/SKILL.md`)).toContain(
+        'Scope summary'
+      );
 
       expect(
         contentOf(`${skillsDir}/metacoding-workflow/references/project-context.md`)

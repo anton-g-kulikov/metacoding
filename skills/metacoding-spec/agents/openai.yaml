@@ -1,0 +1,4 @@
+interface:
+  display_name: "Metacoding Spec"
+  short_description: "Agree the scope and write the records"
+  default_prompt: "Use $metacoding-spec to turn the settled decisions into a scope summary with the solution sliced into tickets, get it confirmed before changing anything, and then write the glossary terms, the decision records and the task spec."
