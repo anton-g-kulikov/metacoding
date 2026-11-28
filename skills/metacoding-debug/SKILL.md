@@ -42,7 +42,7 @@ Exit when one hypothesis predicted every observation and the others are ruled ou
 
 ## 5. Fix with a regression test
 
-1. Turn the minimized reproduction into a test at the level where the bug really occurs.
+1. Turn the minimized reproduction into a test at the level where the bug really occurs. A scenario is an agreed case of a behavior with an ID, found in the task's agreed scope or in the repo's feature spec for that area. When the broken behavior is one, give the test that scenario's ID: in its name, or in a comment or tag where a name cannot hold it.
 2. Watch it fail.
 3. Apply the fix.
 4. Watch it pass, then rerun the original command from phase 1.

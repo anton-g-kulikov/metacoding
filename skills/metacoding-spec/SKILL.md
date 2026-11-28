@@ -189,7 +189,7 @@ Write a ticket's scenarios into the feature spec of their area when the ticket i
 
 - Add a new scenario to the `gherkin` block of its story. Add a new story, with its sentence and its own block, under its role.
 - Replace a scenario the ticket changed: the new text goes under the same ID.
-- Delete a scenario the ticket removed, and a story that has no scenario left. The test that carried the scenario's ID was deleted in the same ticket, during the build.
+- Delete a scenario the ticket removed, and a story that has no scenario left. The tests that carried the scenario's ID were deleted in the same ticket, during the build.
 - Leave out the "(changed)" and "(removed)" marks. They belong to the scope summary.
 - Correct the Solution section when the ticket changed how the area works. A ticket that delivers no scenario still does this, when the area has a feature spec.
 

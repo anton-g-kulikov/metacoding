@@ -21,7 +21,7 @@
    - When VCS work is in scope, commit those records on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a task spec in progress is committed the same way.
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
-   - Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.
+   - Start from the scenarios of the ticket being built, or of the scope summary when the task is one ticket. A task without stories has test intent where the scenarios are.
    - Use the `metacoding-design` skill when the interface to test through is unclear or does not exist yet, and when restructuring once the behaviors are green.
    - For a bug whose cause is unknown, use the `metacoding-debug` skill for this step.
    - Keep to the confirmed scope: no unrelated features, cleanup, or opportunistic refactors.

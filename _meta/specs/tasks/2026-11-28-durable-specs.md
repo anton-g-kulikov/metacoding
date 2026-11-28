@@ -279,6 +279,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
   - Changed on 2026-11-28, in ticket 1: eight existing tests were renamed, because their names said the shape skill does what the spec skill now does. No test was given an ID it did not have.
   - Changed on 2026-11-28, in ticket 2: one more existing test was renamed, because its name said tickets carry criteria and test intent where they now name the scenarios they deliver.
   - Changed on 2026-11-28, in ticket 3: the names of existing tests that said "spec" now say "task spec", as the rename requires.
+  - Changed on 2026-11-28, in ticket 5: two existing tests were renamed, because their names said TDD and review start from test intent and criteria where they now start from scenarios.
 - README and CHANGELOG are updated in each ticket, under "Unreleased". The version stays 2.0.1.
 - A new scenario takes the number one above the highest in its feature spec and in any task spec in progress.
   - Changed on 2026-11-28, in ticket 3: done task specs count too. A removed scenario leaves the feature spec, so counting only the feature spec could hand its number out again.
@@ -299,7 +300,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - [x] **4. The workflow keeps both specs current**
   - Delivers: FLOW-2, FLOW-3, FLOW-4
   - Blocked by: 3
-- [ ] **5. Tests carry scenario IDs**
+- [x] **5. Tests carry scenario IDs**
   - Delivers: TDD-1, TDD-2, REVIEW-1, REVIEW-2, DEBUG-1
   - Blocked by: 2
 - [ ] **6. Test seams, and no paths in specs**

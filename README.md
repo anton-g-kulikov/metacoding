@@ -187,10 +187,12 @@ If you tell it to proceed without questions, it lists the unasked decisions as a
 
 For testable changes, `metacoding-tdd` enforces this order:
 
-1. List the behaviors the change must prove, starting from the test intent of the ticket being built, or of the scope summary for a one-ticket task.
+1. List the behaviors the change must prove, starting from the scenarios of the ticket being built, or of the scope summary for a one-ticket task. A task without stories starts from its test intent.
 2. Take one behavior: write its test and watch it fail.
 3. Implement the minimum production code to pass.
 4. Move to the next behavior. Refactor only after the listed behaviors are green.
+
+The test that proves a scenario carries the scenario's ID in its name, such as "UPDATE-4: keeps the saved settings", or in a comment or tag where a name cannot hold it. A search for the ID then finds the proof. Lower-level tests that no scenario names carry no ID.
 
 Tests go through public interfaces, and expected values come from a source other than the code under test. Test doubles replace only what is outside your control, such as the network or the clock; the skill prefers a real or in-memory stand-in to a mock that checks calls, and shows a good and a bad example.
 
@@ -198,7 +200,7 @@ Tests go through public interfaces, and expected values come from a source other
 
 Before closing, `metacoding-review` checks the diff on two separate axes:
 
-- **Scope:** anything missing, extra, wrong, or unproven compared with the agreed scope: the ticket's success criteria and test intent, or the scope summary of a one-ticket task.
+- **Scope:** anything missing, extra, wrong, or unproven compared with the agreed scope: the scenarios the ticket delivers, or the scope summary of a one-ticket task. It finds an unproven scenario by searching the tests for its ID, and reads the test it finds to see that it checks what the scenario's "Then" says. A task without stories is checked against its success criteria and test intent.
 - **Standards:** breaks with the repo's documented rules, departures from neighboring code, and leftovers such as debug output. Where the repo's own standards say nothing, it also checks a fixed list of code smells, and reports those to you as follow-ups instead of fixing them.
 
 Where the agent supports subagents, each axis is reviewed in a fresh context that sees only the diff and what that axis compares it with.
@@ -220,7 +222,7 @@ You can also run it on its own, on a module or an area you name. For new code it
 
 ### Debugging
 
-For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test. It keeps a raw capture from a real system out of the repo, and masks credentials and personal data in whatever it shows, writes into the repo, or commits.
+For a bug with an unknown cause, `metacoding-debug` replaces the build step. It builds one command that reproduces the bug, minimizes it, tests ranked hypotheses one at a time, and fixes the cause with a regression test. When the broken behavior is a scenario, the regression test carries that scenario's ID. It keeps a raw capture from a real system out of the repo, and masks credentials and personal data in whatever it shows, writes into the repo, or commits.
 
 ### Retro
 
@@ -273,7 +275,7 @@ It keeps five kinds of document that make the next session better informed:
 
 A retro can also propose a glossary term or a decision record, which is written once you approve it.
 
-These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps documents of either kind keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: scenarios live in the scope summary, the task spec, and the feature spec, and the tests prove them. For a task without stories, test intent lives in the scope summary, the task spec, and the tests. A repo that already keeps a test documentation file gets it updated as before.
+These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps documents of either kind keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: scenarios live in the scope summary, the task spec, and the feature spec, and the tests that prove them carry their IDs. For a task without stories, test intent lives in the scope summary, the task spec, and the tests. A repo that already keeps a test documentation file gets it updated as before.
 
 ### Completion Criteria
 

@@ -10,12 +10,12 @@ Review the diff of the change on two separate axes, then act on what the review 
 ## What to review
 
 1. Pin the diff. For uncommitted work, that is the working tree against `HEAD`. For a branch, it is the branch against its merge base with the main branch. When neither fits, ask the user for the starting point.
-2. Find the agreed scope: the confirmed scope summary, a task entry, an issue, or a task spec. When the change is one ticket of a larger task, the agreed scope is that ticket's success criteria and test intent, read together with the task's in-scope and out-of-scope lists. When none exists, ask the user what the change was meant to do and review against the answer.
+2. Find the agreed scope: the confirmed scope summary, a task entry, an issue, or a task spec. When none exists, ask the user what the change was meant to do and review against the answer. When the change is one ticket of a larger task, the agreed scope is the scenarios that ticket delivers, read together with the task's in-scope and out-of-scope lists. A scenario is one agreed case of a behavior, written as Given/When/Then, with an ID. In a task without stories, the ticket's success criteria and test intent take the place of the scenarios.
 3. Find the repo's standards: contributor and style docs, agent instruction files, lint and formatter config, and the patterns in the files next to the ones that changed.
 
 ## Who reviews
 
-The author of a change reads it with the author's assumptions. When the host agent supports subagents, give each axis to a subagent with a fresh context that receives only the diff and that axis's inputs, and run the two in parallel. The list of code smells below is one of the standards axis's inputs. When it does not, review the diff yourself, top to bottom, one axis at a time.
+The author of a change reads it with the author's assumptions. When the host agent supports subagents, give each axis to a subagent with a fresh context that receives only the diff and that axis's inputs, and run the two in parallel. The repo's tests are one of the scope axis's inputs, because it searches them for scenario IDs. The list of code smells below is one of the standards axis's inputs. When it does not, review the diff yourself, top to bottom, one axis at a time.
 
 ## The two axes
 
@@ -24,7 +24,7 @@ The author of a change reads it with the author's assumptions. When the host age
 - Missing: something the scope asked for that the diff lacks or only half does.
 - Extra: behavior or cleanup in the diff that the scope did not ask for.
 - Wrong: something that looks implemented and does not behave as agreed.
-- Unproven: a behavior in the test intent with no test that exercises it.
+- Unproven: a scenario with no test that proves it, or a behavior in the test intent with no test that exercises it. Search the tests for each scenario's ID. A scenario is unproven when no test carries its ID, or when the test that carries it does not check what the scenario's "Then" says. For a scenario the change removes, the check is the opposite: a test that still carries its ID is a Wrong finding.
 
 **Standards.** Compare the diff with the repo's standards.
 
@@ -52,7 +52,7 @@ A smell that also breaks the agreed scope is a scope finding, and is handled as 
 
 ## After the last ticket
 
-When the change is the last ticket of a task with several, run the scope axis once more after the ticket's own review and before the task is closed. Pin the diff from the commit before the task's first ticket, and ask the user when you cannot tell which that is. Compare the whole change with the task spec or the scope summary: its goal, its success criteria, and its in-scope and out-of-scope lists. Tickets can each pass while the task's goal is still missed.
+When the change is the last ticket of a task with several, run the scope axis once more after the ticket's own review and before the task is closed. Pin the diff from the commit before the task's first ticket, and ask the user when you cannot tell which that is. Compare the whole change with the task spec or the scope summary: its goal, its stories or success criteria, and its in-scope and out-of-scope lists. Search the tests once more for the ID of every scenario the task delivers. Tickets can each pass while the task's goal is still missed.
 
 ## Report
 

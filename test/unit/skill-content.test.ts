@@ -660,7 +660,7 @@ describe('installed skill content: building ticket by ticket', () => {
     );
     expect(tickets).toContain('When it has a task spec, step 6 marks its ticket and the task spec done');
     expect(build).toContain(
-      'Take the test intent from the ticket being built, or from the scope summary when the task is one ticket.'
+      'Start from the scenarios of the ticket being built, or of the scope summary when the task is one ticket.'
     );
   });
 
@@ -751,7 +751,7 @@ describe('installed skill content: building ticket by ticket', () => {
     );
   });
 
-  test('TDD starts from the test intent of the ticket being built', async () => {
+  test('TDD starts from what the ticket being built must prove', async () => {
     const { read } = await installFor('codex');
     const tdd = read('metacoding-tdd/SKILL.md');
     const before = tdd.slice(
@@ -762,11 +762,11 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(tdd).toContain('## Before the first loop');
     expect(tdd).toContain('## The loop');
     expect(before).toContain(
-      'Start from the test intent of the ticket you are building, when the task has more than one ticket; otherwise from the test intent of the confirmed scope summary, when one exists.'
+      'Start from the scenarios of the ticket you are building, or of the confirmed scope summary when the task is one ticket'
     );
   });
 
-  test('review checks a ticket against its own criteria and the task scope lists', async () => {
+  test('review checks a ticket against what it delivers and the task scope lists', async () => {
     const { read } = await installFor('codex');
     const review = read('metacoding-review/SKILL.md');
     const what = review.slice(
@@ -777,7 +777,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(review).toContain('## What to review');
     expect(review).toContain('## Who reviews');
     expect(what).toContain(
-      "that ticket's success criteria and test intent, read together with the task's in-scope and out-of-scope lists"
+      "the scenarios that ticket delivers, read together with the task's in-scope and out-of-scope lists"
     );
   });
 
@@ -796,7 +796,7 @@ describe('installed skill content: building ticket by ticket', () => {
     );
     expect(finalPass).toContain("Pin the diff from the commit before the task's first ticket");
     expect(finalPass).toContain(
-      "Compare the whole change with the task spec or the scope summary: its goal, its success criteria, and its in-scope and out-of-scope lists."
+      "Compare the whole change with the task spec or the scope summary: its goal, its stories or success criteria, and its in-scope and out-of-scope lists."
     );
     expect(finalPass).toContain("Tickets can each pass while the task's goal is still missed.");
   });
@@ -2681,11 +2681,8 @@ describe('installed skill content: task specs and feature specs', () => {
     const { files } = await installFor('codex');
     const bareSpec =
       /\b(?:a|the|its|one|no|whose|any|each|this|that|every|finished|one-ticket) spec\b(?! skill)/i;
-    // In the TDD skill, "spec" means any specification an expected value can come from.
-    const swept = files.filter((file) => !file.path.endsWith('metacoding-tdd/SKILL.md'));
-
-    expect(swept.length).toBeGreaterThan(10);
-    for (const file of swept) {
+    expect(files.length).toBeGreaterThan(10);
+    for (const file of files) {
       const body = file.content.replace(/^---\n[\s\S]*?\n---\n/, '');
       expect(
         body
@@ -2786,7 +2783,7 @@ describe('installed skill content: task specs and feature specs', () => {
       'Replace a scenario the ticket changed: the new text goes under the same ID.'
     );
     expect(whenTicketIsDone).toContain(
-      "Delete a scenario the ticket removed, and a story that has no scenario left. The test that carried the scenario's ID was deleted in the same ticket, during the build."
+      "Delete a scenario the ticket removed, and a story that has no scenario left. The tests that carried the scenario's ID were deleted in the same ticket, during the build."
     );
     expect(whenTicketIsDone).toContain(
       'Leave out the "(changed)" and "(removed)" marks. They belong to the scope summary.'
@@ -2864,7 +2861,7 @@ describe('installed skill content: the workflow keeps both specs current', () =>
     expect(
       sectionOf(layout, '## Specs, Tickets, and Test Records', '## Decision Records')
     ).toContain(
-      'Scenarios live in the scope summary, in the task spec when the task has one, and in the feature spec, and the tests prove them. For a task without stories, test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.'
+      'Scenarios live in the scope summary, in the task spec when the task has one, and in the feature spec, and the tests that prove them carry their IDs. For a task without stories, test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.'
     );
     expect(
       sectionOf(adaptation, '## Missing Test Documentation', '## Missing Glossary or Decision Records')
@@ -2885,6 +2882,136 @@ describe('installed skill content: the workflow keeps both specs current', () =>
     );
     expect(skill).toContain(
       'if the repo lacks task docs, feature specs, test docs, or git context.'
+    );
+  });
+});
+
+describe('installed skill content: tests carry scenario IDs', () => {
+  test("TDD-1: TDD starts from the ticket's scenarios", async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+
+    expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
+      'A scenario is one agreed case of a behavior, written as Given/When/Then, with an ID such as `UPDATE-4`. Start from the scenarios of the ticket you are building, or of the confirmed scope summary when the task is one ticket: each scenario is a behavior on the list.'
+    );
+    expect(sectionOf(tdd, '## The loop', '## What a good test looks like')).toContain(
+      'A scenario stays on the list: it is part of the agreed scope.'
+    );
+    expect(sectionOf(rules, '3. Build test-first.', '4. Verify.')).toContain(
+      'Start from the scenarios of the ticket being built, or of the scope summary when the task is one ticket.'
+    );
+  });
+
+  test('TDD-1: a task without stories starts from its test intent', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+
+    expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
+      'A task without stories has test intent where the scenarios are: a plain list of the behaviors to prove. Start from that.'
+    );
+    expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
+      '**Nothing agreed.** Write the list yourself.'
+    );
+    expect(sectionOf(rules, '3. Build test-first.', '4. Verify.')).toContain(
+      'A task without stories has test intent where the scenarios are.'
+    );
+  });
+
+  test('TDD-2: the test that proves a scenario carries its ID in its name', async () => {
+    const { read } = await installFor('codex');
+    const section = sectionOf(
+      read('metacoding-tdd/SKILL.md'),
+      '## Tests for scenarios',
+      '## When a behavior cannot be tested first'
+    );
+
+    expect(section).toContain(
+      'The test that proves a scenario carries the ID, so that a search for the ID finds the proof.'
+    );
+    expect(section).toContain(
+      'Put the ID in the name of the test, as in "UPDATE-4: keeps the saved settings". Where a name cannot hold it, put it in a comment or a tag on the test.'
+    );
+    expect(section).toContain(
+      'This section applies when the change has scenarios: agreed cases with an ID each, from the scope summary, a ticket, or a feature spec. Use the IDs you were given, and never make one up.'
+    );
+    expect(section).toContain(
+      'When the ticket changes a scenario, change the tests that carry its ID. When it removes a scenario, delete them.'
+    );
+    expect(section).toContain(
+      'When a scenario needs more than one test, each of them carries the ID.'
+    );
+  });
+
+  test('TDD-2: lower-level tests may be added without an ID', async () => {
+    const { read } = await installFor('codex');
+    const section = sectionOf(
+      read('metacoding-tdd/SKILL.md'),
+      '## Tests for scenarios',
+      '## When a behavior cannot be tested first'
+    );
+
+    expect(section).toContain(
+      'A test for a lower-level case that no scenario names carries no ID.'
+    );
+  });
+
+  test('TDD-2: TDD is done when every scenario has a test that carries its ID', async () => {
+    const { read } = await installFor('codex');
+
+    const done = sectionOf(read('metacoding-tdd/SKILL.md'), '## Done');
+
+    expect(done).toContain(
+      'Every scenario the change adds or changes has a test that carries its ID, and every other behavior on the list has a test. Each of these tests was seen failing and now passes. The one behavior without a test is a behavior with a recorded exception.'
+    );
+    expect(done).toContain('No test carries the ID of a scenario the change removed.');
+  });
+
+  test('REVIEW-1: review checks a ticket against the scenarios it delivers', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+
+    expect(sectionOf(review, '## What to review', '## Who reviews')).toContain(
+      "When the change is one ticket of a larger task, the agreed scope is the scenarios that ticket delivers, read together with the task's in-scope and out-of-scope lists. A scenario is one agreed case of a behavior, written as Given/When/Then, with an ID. In a task without stories, the ticket's success criteria and test intent take the place of the scenarios."
+    );
+  });
+
+  test('REVIEW-2: review finds an unproven scenario by searching the tests for its ID', async () => {
+    const { read } = await installFor('codex');
+    const review = read('metacoding-review/SKILL.md');
+    const scopeAxis = sectionOf(review, '**Scope.**', '**Standards.**');
+
+    expect(scopeAxis).toContain(
+      '- Unproven: a scenario with no test that proves it, or a behavior in the test intent with no test that exercises it. Search the tests for each scenario\'s ID. A scenario is unproven when no test carries its ID, or when the test that carries it does not check what the scenario\'s "Then" says.'
+    );
+    expect(scopeAxis).toContain(
+      'For a scenario the change removes, the check is the opposite: a test that still carries its ID is a Wrong finding.'
+    );
+    expect(sectionOf(review, '## Who reviews', '## The two axes')).toContain(
+      "The repo's tests are one of the scope axis's inputs, because it searches them for scenario IDs."
+    );
+  });
+
+  test('REVIEW-2: the whole-change pass searches for every scenario of the task', async () => {
+    const { read } = await installFor('codex');
+    const finalPass = sectionOf(read('metacoding-review/SKILL.md'), '## After the last ticket', '## Report');
+
+    expect(finalPass).toContain(
+      'Search the tests once more for the ID of every scenario the task delivers.'
+    );
+  });
+
+  test("DEBUG-1: the regression test carries the scenario's ID", async () => {
+    const { read } = await installFor('codex');
+    const fix = sectionOf(
+      read('metacoding-debug/SKILL.md'),
+      '## 5. Fix with a regression test',
+      '## 6. Clean up'
+    );
+
+    expect(fix).toContain(
+      "A scenario is an agreed case of a behavior with an ID, found in the task's agreed scope or in the repo's feature spec for that area. When the broken behavior is one, give the test that scenario's ID: in its name, or in a comment or tag where a name cannot hold it."
     );
   });
 });

@@ -74,7 +74,7 @@ The `metacoding-spec` skill decides which tasks need a task spec, writes it once
 - A task spec goes where the repo already keeps task specs. When it has no such place, it goes to `/_meta/specs/tasks/<date>-<slug>.md`.
 - A feature spec goes where the repo already keeps documents of that kind. When it has no such place, it goes to `/_meta/specs/<area>.md`.
 - The tickets go to the repo's tracker when it keeps one current, such as issues or a task list. Where it has no tracker, the tickets are a checklist in the task spec.
-- Scenarios live in the scope summary, in the task spec when the task has one, and in the feature spec, and the tests prove them. For a task without stories, test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
+- Scenarios live in the scope summary, in the task spec when the task has one, and in the feature spec, and the tests that prove them carry their IDs. For a task without stories, test intent lives in the scope summary, the task spec, and the tests themselves. If the repo already keeps a test documentation file, keep updating it; do not create one.
 
 ## Decision Records
 
