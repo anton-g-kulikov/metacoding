@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "metacoding",
+  "version": "2.0.1",
+  "description": "Workflow skills for coding agents: shape a task with the user, build it test-first, review it, and close it one ticket at a time.",
+  "author": {
+    "name": "Anton Kulikov"
+  },
+  "homepage": "https://github.com/anton-g-kulikov/metacoding#readme",
+  "repository": "https://github.com/anton-g-kulikov/metacoding",
+  "license": "MIT",
+  "keywords": ["workflow", "tdd", "code-review", "skills"]
+}

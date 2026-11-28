@@ -15,3 +15,7 @@
 **Retro**: looking back at a finished task to turn its mistakes into lasting changes; the name of the `metacoding-retro` skill. Avoid: retrospective, post-mortem.
 
 **Lesson**: a mistake that passed the retro's bar, together with the change proposed for it. Avoid: finding, which is the review's word for a problem in a diff; learning, takeaway.
+
+**Plugin install**: the skills as an agent installs them from this repo with its own plugin mechanism. Avoid: extension, package.
+
+**CLI install**: the skills as `metacoding init` copies them into a project. Avoid: local install, project install.

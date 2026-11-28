@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A project glossary at `/_meta/glossary.md`: read while grounding. A term settled during shaping is listed in the scope summary and written once the summary is confirmed
 - A bar for decision records in `/_meta/architecture-decisions.md` (hard to reverse, surprising without context, a real trade-off). The scope summary marks qualifying decisions with `[record]`, and they are written once the summary is confirmed
 - Specs at `/_meta/specs/<date>-<slug>.md`: `metacoding-shape` writes the confirmed scope summary as a spec when a task has more than one ticket or a decision marked `[record]`. The tickets are a checklist in the spec unless the repo already has a tracker
+- A plugin install for Claude Code: the repo is a plugin and its own marketplace, so Claude Code installs the skills from it without the CLI. The plugin has the version of the npm package
+- A plugin install for Codex and for Antigravity, from the same repo and with the same version. Both follow the agents' documentation and are not yet tried on a real install
 
 ### Changed
 
@@ -51,6 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Installs skip `.DS_Store` files
 - `task-entry.md` now carries the scope summary fields
 - The confirmed scope of a task that needs no spec is recorded where the repo already tracks work; otherwise the confirmed summary in the conversation is the record
+- The workflow skill reads `references/project-context.md` only when it exists. Without the file, it finds the project's type, tech stack, and test and build commands in the repo, so the skills work in a plugin install
+- The workflow skill says that a companion skill's name carries the plugin's prefix in a plugin install, such as `metacoding:metacoding-shape`
 
 ### Removed
 

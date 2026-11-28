@@ -9,8 +9,8 @@ Most items come from a comparison of these skills with Matt Pocock's skills, mad
 1. **Durable specs with user stories.** Specs saved in their respective folders, holding the shaped solution and a set of user stories in Gherkin form with acceptance criteria, grouped by user role and tied to specific test cases and scenarios. Today's spec is a record of one task, filed by date, with success criteria and test intent as free prose and no link from a criterion to its test. Shaped together with two other changes to what `metacoding-shape` writes:
    - Tickets are a linear list: no blocking edges, no sizing rule, no expand-then-contract rule for a wide refactor. The spec has no step that agrees test seams with the user and no rule that keeps file paths and code out of it.
    - `metacoding-shape` does four jobs (interview, solution, tickets, spec), so it cannot run as a plain interview.
-2. **Distribution.** There is no plugin manifest, and the workflow skill reads `references/project-context.md`, which only the CLI generates, so a plain skill install would break. `update` also reads that file back; see the decision record of 2026-11-27. Onboarding keeps the project map at `.metacoding/project.md`; see the decision record of 2026-11-28.
 
 ## Later
 
 - **Codebase scan.** `metacoding-design` assesses a module or area the user names. Nothing scans a whole codebase for candidates, such as by picking the files that change most from the git history, and reports them ranked.
+- **Codex skills folder.** The CLI installs the Codex variant into `.codex/skills/`. Codex's docs, as read on 2026-11-27, name only `.agents/skills/` for a repo; the old folder still loads but is undocumented.

@@ -2,7 +2,7 @@
 
 ## Overview
 
-`metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files.
+`metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files. The same skills can also be installed as a plugin, without the CLI; see Plugin Install below.
 
 The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, `metacoding-debug`, `metacoding-design`, and `metacoding-retro` are its companions and also work on their own. The workflow skill says at which step each companion is used. No companion calls another, and none points at a file that only the workflow skill ships. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it.
 
@@ -82,13 +82,44 @@ Antigravity: .agents/skills/metacoding-*/
 
 Only the Codex install includes the `agents/openai.yaml` files.
 
-The installed workflow skill always adds:
+A CLI install always adds this file to the workflow skill:
 
 ```text
 <skills folder>/metacoding-workflow/references/project-context.md
 ```
 
-That file is generated per project from the answers given at `init`.
+That file is generated per project from the answers given at `init`. The workflow skill reads it when it exists. Without it, the skill finds the project's type, tech stack, and test and build commands in the repo, so the skills also work in a plugin install.
+
+## Plugin Install
+
+The repo root is also a plugin for Claude Code, Codex and Antigravity, so each of them can install the skills from this repository without the CLI. Each agent reads the `skills/` folder at the plugin root. No manifest lists the skills, so every folder under `skills/` ships. An agent lists each skill with the plugin's prefix, such as `metacoding:metacoding-shape`.
+
+```text
+.claude-plugin/
+├── plugin.json        # Claude Code plugin manifest
+└── marketplace.json   # makes the repo a Claude Code marketplace; its one entry points at the repo root
+plugin.json            # Codex plugin manifest; Codex reads a root manifest only when its `$schema` is an agent-plugins.org one
+.agents/plugins/
+└── marketplace.json   # makes the repo a Codex marketplace; its one entry points at the repo's git address
+.antigravity-plugin/
+└── plugin.json        # Antigravity plugin manifest; Antigravity installs from the GitHub address and needs no marketplace
+```
+
+Every manifest carries the version of `package.json` and the same description, and a test fails when one differs. Claude Code updates a plugin install when that version changes, not on every commit.
+
+The Codex and Antigravity files follow those agents' documentation and have not been run on a real install.
+
+Check a change to the Claude Code files with:
+
+```bash
+claude plugin validate --strict .
+claude plugin validate --strict .claude-plugin/plugin.json
+claude --plugin-dir . plugin details metacoding
+```
+
+The first checks the marketplace file, the second the plugin manifest, and the third lists the skills Claude Code finds.
+
+Antigravity has `agy plugin validate <dir>` for its manifest. Codex's documentation names no validate command; `codex plugin marketplace list` shows whether Codex can read the marketplace.
 
 ## Core Services
 

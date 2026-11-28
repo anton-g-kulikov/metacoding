@@ -5,7 +5,61 @@
 
 `metacoding` packages a cross-agent workflow skill that enforces disciplined delivery for modern coding agents. Instead of generating editor-specific instruction files, it installs vendor-specific skills for Codex, Claude Code, or Antigravity from one shared set of skills.
 
+There are two ways to install the skills: as a plugin, which your agent installs from this repository, or with the `metacoding` CLI, which copies them into a project. Use one of the two in a project. With both, the agent lists each skill twice.
+
+## Install as a Plugin
+
+A plugin install needs no CLI. The agent takes the skills from this repository. A new plugin version comes with each release of this package.
+
+In a plugin install each skill's name carries the plugin's name in front, such as `metacoding:metacoding-workflow`. In Claude Code you type `/metacoding:metacoding-workflow`.
+
+The Claude Code plugin passes Claude Code's own validation. The Codex and Antigravity plugins follow each agent's documentation and have not yet been tried on a real install. If one does not work for you, please [open an issue](https://github.com/anton-g-kulikov/metacoding/issues) and use the CLI meanwhile.
+
+### Claude Code
+
+In a session:
+
+```text
+/plugin marketplace add anton-g-kulikov/metacoding
+/plugin install metacoding@metacoding
+```
+
+Or from a terminal:
+
+```bash
+claude plugin marketplace add anton-g-kulikov/metacoding
+claude plugin install metacoding@metacoding
+```
+
+Claude Code does not update a plugin from a marketplace you added yourself unless you turn auto-update on for it. To update by hand:
+
+```bash
+claude plugin marketplace update metacoding
+claude plugin update metacoding@metacoding
+```
+
+### Codex
+
+```bash
+codex plugin marketplace add anton-g-kulikov/metacoding
+codex plugin add metacoding
+```
+
+Start a new session afterwards. `codex plugin marketplace upgrade metacoding` refreshes the marketplace. Codex's documentation does not say how an installed plugin is then updated.
+
+The Codex IDE extension does not support plugins. Use the CLI below for it.
+
+### Antigravity
+
+```bash
+agy plugin install https://github.com/anton-g-kulikov/metacoding
+```
+
+Antigravity's documentation names no command that updates a plugin installed this way.
+
 ## What It Installs
+
+A plugin install and a CLI install hold the same skills, listed in the table below. The rest of this section shows a CLI install.
 
 Running `metacoding init` asks which coding agent you use:
 
@@ -37,7 +91,7 @@ Antigravity: .agents/skills/
 
 Each companion skill also works on its own, so you can ask for only an interview, only a review, only a diagnosis, or only a retro.
 
-For Codex, the project install looks like:
+For Codex, a CLI install looks like:
 
 ```text
 .codex/skills/
@@ -225,6 +279,11 @@ A task is considered complete only when all of the following are true:
 
 ## CLI
 
+The CLI is the second way to install. It copies the skills into the project, where a plugin install keeps them in the agent's own folder. Use it when:
+
+- a team wants to commit the skills, or edit them for one project. `update` then finds the local edits and asks before it replaces them.
+- the project has a 2.0.x Claude Code install. `update` migrates it in place.
+
 ### Install
 
 ```bash
@@ -267,7 +326,7 @@ metacoding update --force
 
 ## Using the Skill
 
-After installation, ask your coding agent to run the `metacoding-onboard` skill once. Then point it at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-shape` or `/metacoding-review` when you want only that step.
+After installation, ask your coding agent to run the `metacoding-onboard` skill once. Then point it at the installed vendor entrypoint or ask it to use the `metacoding-workflow` skill for the next task. In Claude Code you can also type `/metacoding-workflow`, or a companion skill such as `/metacoding-shape` or `/metacoding-review` when you want only that step. In a plugin install the names carry a prefix, as the plugin section above shows.
 
 The workflow skill will:
 
