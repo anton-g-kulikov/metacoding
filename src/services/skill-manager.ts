@@ -7,7 +7,8 @@ import { AgentVendor, InstalledProjectContext, ProjectConfig } from '../types';
  */
 export const WORKFLOW_SKILL = 'metacoding-workflow';
 /**
- * Skills shipped in the package: the workflow skill, then its companions.
+ * Skills shipped in the package: the workflow skill, then its companions,
+ * then the onboard skill, which is run once per repo.
  */
 export const METACODING_SKILLS = [
   WORKFLOW_SKILL,
@@ -15,6 +16,7 @@ export const METACODING_SKILLS = [
   'metacoding-tdd',
   'metacoding-review',
   'metacoding-debug',
+  'metacoding-onboard',
 ] as const;
 
 /** Description used when the user gives none. */

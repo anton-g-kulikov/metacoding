@@ -4,7 +4,7 @@
 
 ### `metacoding init`
 
-Install the workflow skill and its four companion skills into the current repository for a specific coding-agent vendor.
+Install the workflow skill and the five skills that ship with it into the current repository for a specific coding-agent vendor.
 
 ```bash
 metacoding init [options]
@@ -19,10 +19,11 @@ Options:
 Behavior:
 
 - asks for a vendor when `--vendor` is not provided
-- installs all five skills into the vendor's skills folder
+- installs all six skills into the vendor's skills folder
 - `all` installs all workspace-scoped vendor variants for mixed-agent teams
 - renders `references/project-context.md` for the chosen or detected project type
 - adds the metacoding section to `.gitignore`, or fills in the patterns an existing section lacks
+- prints next steps, which say to run the `metacoding-onboard` skill first, before any task
 
 ### `metacoding update`
 
@@ -52,7 +53,7 @@ Behavior:
 
 ## Installed Artifact Contract
 
-The CLI considers the install valid when the vendor-specific required files exist: a fixed set in the workflow skill, plus the `SKILL.md` of each companion skill and, for Codex, the `agents/openai.yaml` of every skill.
+The CLI considers the install valid when the vendor-specific required files exist: a fixed set in the workflow skill, plus the `SKILL.md` of each other skill and, for Codex, the `agents/openai.yaml` of every skill.
 
 ### Codex
 
@@ -71,6 +72,8 @@ The CLI considers the install valid when the vendor-specific required files exis
 .codex/skills/metacoding-review/agents/openai.yaml
 .codex/skills/metacoding-debug/SKILL.md
 .codex/skills/metacoding-debug/agents/openai.yaml
+.codex/skills/metacoding-onboard/SKILL.md
+.codex/skills/metacoding-onboard/agents/openai.yaml
 ```
 
 For Codex, each skill's `agents/openai.yaml` must also define `interface.display_name` and `interface.default_prompt`.
@@ -87,6 +90,7 @@ For Codex, each skill's `agents/openai.yaml` must also define `interface.display
 .claude/skills/metacoding-tdd/SKILL.md
 .claude/skills/metacoding-review/SKILL.md
 .claude/skills/metacoding-debug/SKILL.md
+.claude/skills/metacoding-onboard/SKILL.md
 ```
 
 ### Antigravity
@@ -101,6 +105,7 @@ For Codex, each skill's `agents/openai.yaml` must also define `interface.display
 .agents/skills/metacoding-tdd/SKILL.md
 .agents/skills/metacoding-review/SKILL.md
 .agents/skills/metacoding-debug/SKILL.md
+.agents/skills/metacoding-onboard/SKILL.md
 ```
 
 ## Conflict Semantics

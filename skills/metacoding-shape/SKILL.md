@@ -29,6 +29,14 @@ Hold a question for a later round when its wording would change with another ans
 
 When you cannot reach the user directly, for example when running as a subagent, return the round as your result and stop there. Continue when the answers are sent back.
 
+## The project map
+
+When the repo has a project map, `.metacoding/project.md`, read it before the first round. The `metacoding-onboard` skill writes it, and it names where this repo keeps its tracker, its specs, its glossary, and its decision records.
+
+Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a spec, or a ticket, and create it there when it does not exist yet. The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the spec is the tracker.
+
+The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map.
+
 ## Terms
 
 Read the project's glossary before the first round, when it has one, and use its terms in your questions.

@@ -4,7 +4,7 @@
 
 `metacoding` is now a vendor-aware skill-packaging CLI. Its job is to install and sync vendor-specific workflow skills for modern coding agents, not to generate editor-specific instruction files.
 
-The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, and `metacoding-debug` are its companions and also work on their own.
+The canonical source of truth lives in [`skills/`](../skills), one folder per skill. `metacoding-workflow` is the orchestrator; `metacoding-shape`, `metacoding-tdd`, `metacoding-review`, and `metacoding-debug` are its companions and also work on their own. `metacoding-onboard` is run once per repo: it writes the project map, `.metacoding/project.md`, which says where the repo keeps its tracker, specs, glossary and decision records. The agent writes that file; the CLI neither creates nor reads it.
 
 ## Runtime Flow
 
@@ -13,7 +13,7 @@ The canonical source of truth lives in [`skills/`](../skills), one folder per sk
 1. Detect the current project name, type, and tech stack.
 2. Ask which agent vendor the user wants: Codex, Claude Code, Antigravity, or all supported workspace variants.
 3. Generate a project-specific `references/project-context.md` for the workflow skill.
-4. Install all five skills into the selected vendor's skills folder, or into all three when `all` is selected.
+4. Install all six skills into the selected vendor's skills folder, or into all three when `all` is selected.
 5. Update `.gitignore` so installed skill artifacts and backups stay out of version control. An existing metacoding section only gains the patterns it lacks.
 
 ### `metacoding update`
@@ -56,7 +56,10 @@ skills/
 ├── metacoding-review/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
-└── metacoding-debug/
+├── metacoding-debug/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+└── metacoding-onboard/
     ├── SKILL.md
     └── agents/openai.yaml
 ```

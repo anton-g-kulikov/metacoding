@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `metacoding-tdd`: test-first building, one behavior at a time, with guidance on what a good test looks like and on test doubles
   - `metacoding-review`: a two-axis review of the diff against the confirmed scope and the repo's standards, with a fixed list of code smells for what those standards leave open
   - `metacoding-debug`: reproduce-first diagnosis that ends in a regression test and a fix, and masks credentials and personal data in what it captures
+- `metacoding-onboard`, a skill run once per repo. It looks for where the repo keeps its tracker, specs, glossary and decision records, asks one round of numbered questions with a recommended place for each, and writes the answers to a project map at `.metacoding/project.md` once the user confirms. It records the places and creates none of them. With the user's yes, it adds a one-line pointer to the project map in an instruction file the repo already has, such as `CLAUDE.md` or `AGENTS.md`
+- The workflow reads the project map while grounding, and `metacoding-shape` reads it before its first round. Where it names a place for the tracker, the specs, the glossary or the decision records, that place is used, and created there when a task first needs it. A place it has no line for falls back to the repo's own place, or to the `/_meta` default
+- In a repo with no project map, the workflow says in one line that `metacoding-onboard` can record the places, then carries on
+- `metacoding-onboard` closes by telling the user how to work from here: what it wrote, how to start a task, and what each installed metacoding skill is for, taken from each skill's own description
+- The "Next steps" that `metacoding init` prints say to run `metacoding-onboard` first, before any task
 - A review step in the workflow, between verification and artifact updates
 - Ticket-by-ticket building: the workflow runs build, verify, review, artifact updates and close once per ticket, ticks the ticket off, and waits for the user's go before the next. For the last ticket, the review also checks the whole change against the spec
 - Resuming a task: grounding looks for a spec still in progress, and a request that continues its task starts at the first ticket not yet done, with the spec as the agreed scope
@@ -26,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `metacoding-workflow` is now an orchestrator: it keeps the step order, grounding, verification, artifact rules and close-out, and calls the companion skills for the shape, build, debug and review steps
-- `metacoding init` and `metacoding update` install and sync all five skills; `update` adds the companion skills to an existing install
+- `metacoding init` and `metacoding update` install and sync all six skills; `update` adds the skills an existing install lacks
 - The `.gitignore` section now uses `metacoding-*/` patterns per agent so it covers every skill
 - **Claude Code now installs as a skill** at `.claude/skills/metacoding-workflow/` instead of a subagent at `.claude/agents/metacoding-workflow.md` with a support bundle in `.claude/metacoding-workflow/`. A subagent cannot question the user directly, which blocked the scope interview
 - `metacoding update` migrates the old Claude Code layout: it backs up the subagent files, installs the skill, removes the old files, and adds the new path to an existing metacoding `.gitignore` section
@@ -34,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `metacoding init` and `metacoding update` fill in exclusion patterns that an existing metacoding `.gitignore` section lacks
 - The workflow now waits for the user to confirm the scope summary before any file changes, instead of confirming only broad or risky changes
 - The workflow no longer refuses to switch tasks. When the user asks for something unrelated mid-task, it says what is unfinished and the user decides: queue the request, or pause the task at a ticket boundary and switch. For a switch at once, it sets the unfinished work aside and notes what is left
-- `metacoding update --dry-run` requires each companion skill's `SKILL.md` and, for Codex, checks the `agents/openai.yaml` of every skill instead of the workflow skill's alone, and names a file that is not valid YAML
+- `metacoding update --dry-run` requires the `SKILL.md` of every skill and, for Codex, checks the `agents/openai.yaml` of every skill instead of the workflow skill's alone, and names a file that is not valid YAML
 - `metacoding update --dry-run --strict` fails when `.gitignore` lacks any metacoding exclusion pattern, including when there is no `.gitignore`, and names the missing patterns for the user to add. It used to check only for the section header
 - `metacoding update` removes the files an earlier version installed and this one no longer ships (`assets/templates/test-plan.md`, `references/interview.md`, the five language references, and the files of `metacoding-interview/`), once they are backed up. Files you added next to them are kept
 - The description of `metacoding-workflow`, which an agent reads to decide when to load the skill, applies only when the user asks for the metacoding workflow or for a task to be run with its gates. It used to name feature work, bug fixes, refactors and reviews, which matched almost any coding request

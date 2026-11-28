@@ -14,6 +14,8 @@ This skill takes one task from request to handoff. It owns the order of the step
 | `metacoding-debug` | Finds the cause of a bug from a command that reproduces it |
 | `metacoding-review` | Checks the finished change against the scope and the repo's standards |
 
+One more skill, `metacoding-onboard`, is run once per repo instead of once per task. It records where the repo keeps its tracker, specs, glossary, and decision records in the project map, `.metacoding/project.md`.
+
 Load a companion skill by name with your agent's skill mechanism. If your agent cannot load skills by name, read `../<skill-name>/SKILL.md`, which is installed next to this skill's folder.
 
 ## Start Here
