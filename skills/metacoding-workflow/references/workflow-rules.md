@@ -21,7 +21,7 @@
    - When VCS work is in scope, commit those records on their own before the build starts, so that a ticket's commit holds only that ticket's work. A confirmed change to a task spec in progress is committed the same way.
 3. Build test-first.
    - Use the `metacoding-tdd` skill: one behavior at a time, a failing test before each piece of production code.
-   - Start from the scenarios of the ticket being built, or of the scope summary when the task is one ticket. A task without stories has test intent where the scenarios are.
+   - Start from the scenarios of the ticket being built, or of the scope summary when the task is one ticket. A ticket or a task without scenarios has test intent in their place.
    - Use the `metacoding-design` skill when the interface to test through is unclear or does not exist yet, and when restructuring once the behaviors are green.
    - For a bug whose cause is unknown, use the `metacoding-debug` skill for this step.
    - Keep to the confirmed scope: no unrelated features, cleanup, or opportunistic refactors.
@@ -33,7 +33,7 @@
    - Use the `metacoding-review` skill on the diff: one pass against the agreed scope, one against the repo's standards. For a task with more than one ticket, the agreed scope is the ticket, as the skill describes.
    - Act on its findings as the skill describes: it says which are fixed and which go to the user. Then rerun the checks from step 4.
 6. Update artifacts using MECE documentation rules.
-   - Update the feature spec of each feature area the ticket changed, as the `metacoding-spec` skill describes: write the ticket's scenarios into it, and correct its Solution section when the ticket changed how the area works. Do this before the ticket is marked done, so that the feature spec is part of the ticket's commit.
+   - Update the feature spec of each feature area the ticket changed, as the `metacoding-spec` skill describes: write the ticket's scenarios into it, and correct its Solution section when the ticket changed how the area works. Do this before the ticket is marked done, so that the feature spec is part of the ticket's commit. Then check that every scenario the ticket delivered is in the feature spec with the text that was agreed.
    - Refresh docs, task/status notes, changelog entries, or operational notes only when they materially changed.
    - Update the one artifact that owns the concept instead of duplicating the same information, as `references/repository-organization.md` describes.
    - Amend a decision record the build proved wrong, as the `metacoding-spec` skill describes.
@@ -46,8 +46,10 @@
 
 ## Tickets
 
-A task with more than one ticket repeats steps 3 to 7 for each ticket, in the order of the scope summary.
+A task with more than one ticket repeats steps 3 to 7 for each ticket, in the order the tickets are listed where they are tracked.
 
+- The next ticket is the first one in that list that is not marked done and that no unfinished ticket blocks. A ticket can be blocked when tickets were done out of order, for example after a pause. When every unfinished ticket is blocked, tell the user and ask how to go on.
+- The last ticket is the one that leaves no ticket unfinished, whatever its place in the list.
 - Build, verify, and review one ticket before starting the next.
 - In step 5 of the last ticket, the `metacoding-review` skill also checks the whole change against the task spec.
 - In step 6, update the feature specs first, then mark the ticket done where the tickets are tracked, so that a tick in the task spec's checklist is part of the ticket's commit. With the last ticket, mark the task spec done, as the `metacoding-spec` skill describes.
@@ -62,7 +64,7 @@ A one-ticket task runs the sequence once, against the scope summary. When it has
 A session can end before a task's last ticket is done. When grounding finds a task spec in progress and the request continues its task, resume the task from the task spec:
 
 - The task spec is the agreed scope. Skip step 2.
-- Start at the first ticket that is not marked done where the tickets are tracked, and follow the rules above from there, including the wait before each next ticket.
+- Read which tickets are marked done where the tickets are tracked, take the next ticket as the rules above say, and follow them from there, including the wait before each next ticket.
 - When the request changes what the task spec agreed, settle the change first, as the `metacoding-spec` skill describes for a task spec in progress.
 - Ask the user which task to work on when more than one task spec is in progress, or when you cannot tell whether the request belongs to the task spec.
 

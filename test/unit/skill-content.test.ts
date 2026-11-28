@@ -409,7 +409,7 @@ describe('installed skill content: solution and tickets', () => {
     expect(section).toContain('built, verified, reviewed, and committed on its own');
     expect(section).toContain('vertical slice');
     expect(section).toContain('Give each ticket the scenarios it delivers.');
-    expect(section).toContain('each builds on the ones before it');
+    expect(section).toContain('each comes after the tickets that block it');
   });
 
   test('an open choice of how to slice goes to the user as a decision', async () => {
@@ -437,9 +437,9 @@ describe('installed skill content: solution and tickets', () => {
 
     expect(spec).toContain('## The scope summary');
     expect(summarySection).toContain('number the tickets in build order');
-    expect(summarySection).toContain('a title and the IDs of the scenarios it delivers');
+    expect(summarySection).toContain('a title, the IDs of the scenarios it delivers');
     expect(summarySection).toContain(
-      'In a task without stories, give each its success criteria and its test intent.'
+      'A ticket that delivers no scenario, as every ticket of a task without stories, gives its success criteria and its test intent where the scenario IDs are.'
     );
     expect(summarySection).toContain('For a one-ticket task, give the title alone');
   });
@@ -525,7 +525,9 @@ describe('installed skill content: the task spec', () => {
 
     expect(spec).toContain('## The task spec');
     expect(section).toContain('When the repo keeps a tracker current');
-    expect(section).toContain('create the tickets there and link each one from the task spec');
+    expect(section).toContain(
+      "create the tickets there, link each one from the task spec, and record what blocks a ticket with the tracker's own blocking links, or in the ticket's text where the tracker has none"
+    );
     expect(section).toContain('the checklist in the task spec is the tracker');
   });
 
@@ -584,7 +586,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(rules).toContain('## Tickets');
     expect(rules).toContain('## Scope Control');
     expect(tickets).toContain(
-      'repeats steps 3 to 7 for each ticket, in the order of the scope summary'
+      'repeats steps 3 to 7 for each ticket, in the order the tickets are listed where they are tracked'
     );
     expect(tickets).toContain('Build, verify, and review one ticket before starting the next.');
   });
@@ -709,7 +711,7 @@ describe('installed skill content: building ticket by ticket', () => {
     expect(rules.indexOf('### Resuming a task')).toBeGreaterThan(rules.indexOf('## Tickets'));
     expect(resuming).toContain('The task spec is the agreed scope. Skip step 2.');
     expect(resuming).toContain(
-      'Start at the first ticket that is not marked done where the tickets are tracked, and follow the rules above from there, including the wait before each next ticket.'
+      'Read which tickets are marked done where the tickets are tracked, take the next ticket as the rules above say, and follow them from there, including the wait before each next ticket.'
     );
     expect(steps).toContain(
       'When the request continues a task that an earlier session left unfinished, the task resumes from its task spec at the first ticket not yet done, as the same section describes.'
@@ -2585,7 +2587,7 @@ describe('installed skill content: stories in the scope summary', () => {
       'Give each ticket the scenarios it delivers.'
     );
     expect(summarySectionOf(spec)).toContain(
-      'give each a title and the IDs of the scenarios it delivers'
+      'give each a title, the IDs of the scenarios it delivers'
     );
     expect(specFormatOf(spec)).toContain('- [ ] 1. <title>\n  - Delivers:');
   });
@@ -2615,7 +2617,7 @@ describe('installed skill content: stories in the scope summary', () => {
       'A task without stories has "Success criteria:" and "Test intent:" where "Stories:" is.'
     );
     expect(summarySection).toContain(
-      'In a task without stories, give each its success criteria and its test intent.'
+      'A ticket that delivers no scenario, as every ticket of a task without stories, gives its success criteria and its test intent where the scenario IDs are.'
     );
     expect(sectionOf(spec, '## The task spec', '## Feature specs')).toContain(
       'The task spec of a task without stories has `## Success criteria` and `## Test intent` where `## Stories` is, and each of its tickets gives its success criteria and test intent where "Delivers" is.'
@@ -2660,6 +2662,9 @@ describe('installed skill content: stories in the scope summary', () => {
     expect(stories).toContain(
       "List the scenarios the task adds, changes, or removes, and leave the area's other scenarios out."
     );
+    expect(stories).toContain(
+      'For a bug fix that restores what an existing scenario already says, list that scenario as it stands, with "(restored)" after its title.'
+    );
   });
 });
 
@@ -2677,6 +2682,9 @@ describe('installed skill content: task specs and feature specs', () => {
       'Put the task spec where the repo already keeps task specs or documents of that kind. When it has no such place, use `/_meta/specs/tasks/<date>-<slug>.md`, with the date as `YYYY-MM-DD`.'
     );
     expect(section).toContain('```text\n# Task spec: <title>');
+    expect(section).toContain(
+      "Under `## Stories`, lay the stories out as a feature spec does: a heading for each role, a heading for each story, the story's sentence, and its scenarios in a `gherkin` block."
+    );
     // Built from two parts so that a rename across this file cannot rewrite the old place.
     const oldPlace = ['/_meta/specs/', '<date>-<slug>.md'].join('');
     expect(
@@ -2793,7 +2801,7 @@ describe('installed skill content: task specs and feature specs', () => {
       "Delete a scenario the ticket removed, and a story that has no scenario left. The tests that carried the scenario's ID were deleted in the same ticket, during the build."
     );
     expect(whenTicketIsDone).toContain(
-      'Leave out the "(changed)" and "(removed)" marks. They belong to the scope summary.'
+      'Leave out the "(changed)", "(removed)" and "(restored)" marks. They belong to the scope summary.'
     );
     expect(sectionOf(spec, '## Solution and tickets', '## The scope summary')).toContain(
       'A scenario the task changes or removes belongs to the ticket that changes or removes it.'
@@ -2830,6 +2838,9 @@ describe('installed skill content: the workflow keeps both specs current', () =>
     const { read } = await installFor('codex');
     const rules = read('metacoding-workflow/references/workflow-rules.md');
 
+    expect(sectionOf(rules, '6. Update artifacts', '7. Close the loop.')).toContain(
+      'Then check that every scenario the ticket delivered is in the feature spec with the text that was agreed.'
+    );
     expect(sectionOf(rules, '## Completion Standard')).toContain(
       '- the scenarios the task delivered are in the feature specs of their areas'
     );
@@ -2916,13 +2927,13 @@ describe('installed skill content: tests carry scenario IDs', () => {
     const rules = read('metacoding-workflow/references/workflow-rules.md');
 
     expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
-      'A task without stories has test intent where the scenarios are: a plain list of the behaviors to prove. Start from that.'
+      'A ticket or a task without scenarios has test intent in their place: a plain list of the behaviors to prove. Start from that.'
     );
     expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
       '**Nothing agreed.** Write the list yourself.'
     );
     expect(sectionOf(rules, '3. Build test-first.', '4. Verify.')).toContain(
-      'A task without stories has test intent where the scenarios are.'
+      'A ticket or a task without scenarios has test intent in their place.'
     );
   });
 
@@ -2980,7 +2991,7 @@ describe('installed skill content: tests carry scenario IDs', () => {
     const review = read('metacoding-review/SKILL.md');
 
     expect(sectionOf(review, '## What to review', '## Who reviews')).toContain(
-      "When the change is one ticket of a larger task, the agreed scope is the scenarios that ticket delivers, read together with the task's in-scope and out-of-scope lists. A scenario is one agreed case of a behavior, written as Given/When/Then, with an ID. In a task without stories, the ticket's success criteria and test intent take the place of the scenarios."
+      "When the change is one ticket of a larger task, the agreed scope is the scenarios that ticket delivers, read together with the task's in-scope and out-of-scope lists. A scenario is one agreed case of a behavior, written as Given/When/Then, with an ID. For a ticket that delivers no scenario, its success criteria and test intent take their place."
     );
   });
 
@@ -3006,6 +3017,9 @@ describe('installed skill content: tests carry scenario IDs', () => {
 
     expect(finalPass).toContain(
       'Search the tests once more for the ID of every scenario the task delivers.'
+    );
+    expect(finalPass).toContain(
+      'Where the repo keeps feature specs, check that the scenarios of the tickets already closed are in them.'
     );
   });
 
@@ -3061,7 +3075,7 @@ describe('installed skill content: test seams, and no paths in specs', () => {
       'Give stories that can share a seam the same one. When a story needs a seam that does not exist yet, say so, and describe it in the solution.'
     );
     expect(seams).toContain(
-      'A task without stories has no story to name a seam for. Name one for each behavior in its test intent, in the same order.'
+      'A task without stories has no story to name a seam for. Name one for each behavior in its test intent, choosing it by the same three steps.'
     );
   });
 
@@ -3080,7 +3094,7 @@ describe('installed skill content: test seams, and no paths in specs', () => {
     expect(template).toContain('- Test seams:');
   });
 
-  test('SPEC-11: a feature spec holds no file path and no code', async () => {
+  test('SPEC-11: a feature spec holds no path to a source or test file and no code', async () => {
     const { read } = await installFor('codex');
 
     expect(pathsAndCodeOf(read('metacoding-spec/SKILL.md'))).toContain(
@@ -3106,7 +3120,7 @@ describe('installed skill content: test seams, and no paths in specs', () => {
     );
   });
 
-  test('SPEC-11: a task spec holds file paths only under In scope', async () => {
+  test('SPEC-11: a task spec holds such paths only under In scope', async () => {
     const { read } = await installFor('codex');
 
     expect(pathsAndCodeOf(read('metacoding-spec/SKILL.md'))).toContain(
@@ -3131,6 +3145,77 @@ describe('installed skill content: test seams, and no paths in specs', () => {
     );
     expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
       'When none was agreed and the right interface is unclear or does not exist yet, settle it with the user before writing tests.'
+    );
+  });
+});
+
+describe('installed skill content: ticket rules', () => {
+  const ticketsOf = (spec: string) =>
+    sectionOf(spec, '## Solution and tickets', '## The scope summary');
+
+  test('SPEC-12: each ticket names the scenarios it delivers and the tickets that block it', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+
+    expect(ticketsOf(spec)).toContain(
+      '- Give each ticket the scenarios it delivers. A scenario the task changes or removes belongs to the ticket that changes or removes it. A ticket that delivers no scenario, such as one stage of a wide refactor, gets success criteria and test intent of its own.'
+    );
+    expect(ticketsOf(spec)).toContain(
+      '- Say what blocks each ticket: the tickets that must be done before it can start, or none. Do not name a ticket only because it comes earlier.'
+    );
+    expect(
+      sectionOf(spec, '## The scope summary', '## Records written on confirmation')
+    ).toContain(
+      'give each a title, the IDs of the scenarios it delivers, and the tickets that block it, or "none"'
+    );
+    expect(
+      codeBlock(sectionOf(spec, '## The task spec', '## Feature specs'), '```text\n# Task spec:')
+    ).toContain('- [ ] 1. <title>\n  - Delivers:\n  - Blocked by:');
+  });
+
+  test('SPEC-12: the tickets are listed so that each comes after the tickets that block it', async () => {
+    const { read } = await installFor('codex');
+
+    expect(ticketsOf(read('metacoding-spec/SKILL.md'))).toContain(
+      '- Order the tickets so that each comes after the tickets that block it.'
+    );
+  });
+
+  test('SPEC-13: a ticket with more than five scenarios is split', async () => {
+    const { read } = await installFor('codex');
+
+    expect(ticketsOf(read('metacoding-spec/SKILL.md'))).toContain(
+      '- Split a ticket that would deliver more than five scenarios, unless a piece could not be finished and checked by itself.'
+    );
+  });
+
+  test('SPEC-14: a wide refactor is sliced as add, move in batches, remove', async () => {
+    const { read } = await installFor('codex');
+    const tickets = ticketsOf(read('metacoding-spec/SKILL.md'));
+
+    expect(tickets).toContain(
+      "A wide refactor is the exception to vertical slices. It is one mechanical change, such as renaming a shared symbol, that breaks many callers at once. No part of it can be committed alone with the repo's tests and build still passing."
+    );
+    expect(tickets).toContain(
+      '1. In one ticket, add the new form beside the old one, so that nothing breaks.\n2. Move the callers over in batches, one ticket for each batch, each blocked by the ticket of stage 1. Size a batch by where the callers live, such as one package or one folder, so that it can be reviewed in one sitting. The tests and the build keep passing because the old form is still there.\n3. Remove the old form in a ticket of its own, blocked by every batch.'
+    );
+  });
+
+  test('FLOW-5: the workflow does not start a ticket while a ticket that blocks it is open', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+
+    expect(sectionOf(rules, '## Tickets', '### Resuming a task')).toContain(
+      '- The next ticket is the first one in that list that is not marked done and that no unfinished ticket blocks. A ticket can be blocked when tickets were done out of order, for example after a pause.'
+    );
+    expect(sectionOf(rules, '### Resuming a task', '## Scope Control')).toContain(
+      'take the next ticket as the rules above say'
+    );
+    expect(sectionOf(rules, '## Tickets', '### Resuming a task')).toContain(
+      'When every unfinished ticket is blocked, tell the user and ask how to go on.'
+    );
+    expect(sectionOf(rules, '## Tickets', '### Resuming a task')).toContain(
+      '- The last ticket is the one that leaves no ticket unfinished, whatever its place in the list.'
     );
   });
 });

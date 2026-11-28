@@ -6,7 +6,7 @@
 
 ## Solution
 
-The skill starts from decisions that are already settled. It writes behavior a role can observe as stories grouped by role, each with Given/When/Then scenarios that carry an ID; a task without such behavior gets success criteria and test intent instead. It names a test seam for each story: the public interface its scenarios are tested through, preferring an interface that already exists and the highest one that works. It then describes the solution and slices it into tickets, each naming the scenarios it delivers. It sends a scope summary and waits for the user to confirm it. A decision that is still open goes back to the shape skill.
+The skill starts from decisions that are already settled. It writes behavior a role can observe as stories grouped by role, each with Given/When/Then scenarios that carry an ID; a task without such behavior gets success criteria and test intent instead. It names a test seam for each story: the public interface its scenarios are tested through, preferring an interface that already exists and the highest one that works. It then describes the solution and slices it into tickets. Each ticket is a vertical slice that names the scenarios it delivers and the tickets that block it; a ticket that delivers no scenario has success criteria and test intent of its own. A ticket with more than five scenarios is split. A wide refactor is the exception to vertical slices: it is sliced as add the new form beside the old, move the callers in batches, remove the old form. It sends a scope summary and waits for the user to confirm it. A decision that is still open goes back to the shape skill.
 
 On confirmation it writes the settled terms to the glossary, the decisions the summary marked to the decision records, and a task spec when the task has more than one ticket or a marked decision. A task spec is the record of one task, kept under `/_meta/specs/tasks/` and frozen once the task is done.
 
@@ -91,4 +91,23 @@ Scenario: SPEC-11 keeps paths to code, and code, out
   Then a feature spec holds no path to a source or test file and no code
   And a task spec holds such paths only under In scope
   And either may hold a short snippet that states an interface
+```
+
+#### Get tickets I can check one at a time
+
+As a developer, I want small tickets that say what blocks them, so that each is quick to review and I can see which are independent.
+
+```gherkin
+Scenario: SPEC-12 states what each ticket delivers and what blocks it
+  Given a solution sliced into tickets
+  Then each ticket lists the scenario IDs it delivers
+  And it names the tickets that must be done first, or none
+
+Scenario: SPEC-13 splits a ticket with more than five scenarios
+  Given a ticket that would deliver six scenarios
+  Then it is split, unless a piece could not be checked on its own
+
+Scenario: SPEC-14 slices a wide refactor in three stages
+  Given one mechanical change that breaks many callers at once
+  Then the tickets add the new form beside the old, move callers in batches, and remove the old form last
 ```

@@ -147,7 +147,7 @@ The workflow skill runs these steps in order:
 6. Update the feature spec of each area the ticket changed, then the other docs that materially changed, and amend a decision record the build proved wrong.
 7. Close with a commit or a handoff, and say explicitly that the work is complete.
 
-Steps 3 to 7 run once per ticket. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next. When the workflow commits, the records that shaping writes are committed on their own before the first ticket, so a ticket's commit holds only that ticket's work. When a new session is asked to continue a task with a task spec still in progress, it starts at the first ticket not yet done, without shaping the task again.
+Steps 3 to 7 run once per ticket, and a ticket is not started while a ticket that blocks it is open. Each ticket is ticked off and closed on its own, and the workflow reports and waits for your go before the next. When the workflow commits, the records that `metacoding-spec` writes are committed on their own before the first ticket, so a ticket's commit holds only that ticket's work. When a new session is asked to continue a task with a task spec still in progress, it starts at the first ticket not yet done, without shaping the task again.
 
 ## Enforced Workflow
 
@@ -170,14 +170,15 @@ Before any file changes, `metacoding-shape` interviews you about the task:
 - It looks up facts itself (code, config, tests, docs, git history) and asks you only for decisions.
 - It asks in rounds of numbered questions, each with a recommended answer, so you can reply with "1 yes, 2 yes, 3 the second option".
 - Each round's answers decide which questions come next.
-- It closes with a summary of the decisions, terms and assumptions, and writes no file. Run on its own, it stops there.
+- A role, the kind of user a behavior is for, is settled like any other term and goes into the glossary.
+- It closes with a summary of the decisions, terms and assumptions, and writes no file. When you only asked to be questioned, it stops there.
 
 Then `metacoding-spec` turns the settled decisions into the agreed scope:
 
 - It starts from what is already settled and does not ask it again.
 - It writes the behavior as user stories, grouped by role: one "As a …, I want …, so that …" sentence per story, with Given/When/Then scenarios. Each scenario has an ID made of its feature area's prefix and a number, such as `UPDATE-4`. A task that changes nothing a role can observe, such as a refactor, gets success criteria and test intent instead.
 - It names a test seam for each story, so you agree to it before any test exists: the public interface the story's scenarios are tested through. It takes an interface that already exists before a new one, and the highest one that works.
-- It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, and names the scenarios it delivers. A small task stays one ticket.
+- It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own. It names the scenarios it delivers and the tickets that block it. A ticket with more than five scenarios is split, and a small task stays one ticket. The one exception to vertical slices is a wide refactor, a mechanical change that breaks many callers at once. It is sliced in three stages: add the new form beside the old, move the callers in batches, remove the old form.
 - It closes with a scope summary (goal, in and out of scope, solution, stories, test seams, decisions, terms, assumptions, tickets) and waits for your confirmation.
 - Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a task spec; a smaller task gets none.
 - While a task spec is in progress, a change to what it agreed is put to you as a decision and written into the task spec, with its date, before it is built.
@@ -271,7 +272,7 @@ It keeps five kinds of document that make the next session better informed:
 - **Glossary** (`/_meta/glossary.md`): the project's own terms, one line each. The agent reads it while grounding. A term settled during shaping is listed in the scope summary and written once you confirm it.
 - **Decision records** (`/_meta/architecture-decisions.md`): written only for a decision that is hard to reverse, surprising without context, and a real trade-off. The scope summary marks them with `[record]`, and they are written once you confirm it, before the build. If the build proves one wrong, the entry is amended.
 - **Task specs** (`/_meta/specs/tasks/<date>-<slug>.md`): the confirmed scope summary of a task with more than one ticket or a decision marked `[record]`. The tickets are a checklist in the task spec unless the repo has a tracker, and a finished task spec stays as the record of what was agreed.
-- **Feature specs** (`/_meta/specs/<area>.md`): the living document of one feature area: how it works today, and its user stories by role with their scenarios. When a ticket is done, its scenarios are written into the feature spec of their area, so it says only what is built and has a test. A feature spec starts with the first task that delivers a scenario in its area; older behavior is not backfilled.
+- **Feature specs** (`/_meta/specs/<area>.md`): the living document of one feature area: how it works today, and its user stories by role with their scenarios. When a ticket is done, its scenarios are written into the feature spec of their area, so it says only what is built and has a test. A changed scenario keeps its ID and replaces the old text; a removed one leaves the feature spec together with its tests. A feature spec starts with the first task that delivers a scenario in its area; older behavior is not backfilled.
 - **Coding standards** (`/_meta/coding-standards.md`): the repo's rules that no automated check enforces. A rule is added when you approve a lesson from a retro.
 
 A retro can also propose a glossary term or a decision record, which is written once you approve it.
@@ -348,9 +349,9 @@ After installation, ask your coding agent to run the `metacoding-onboard` skill 
 The workflow skill will:
 
 - inspect the repo, then interview you on the open decisions with a recommended answer for each
-- wait for you to confirm the scope summary before changing files
+- write the scope as user stories with Given/When/Then scenarios, name a test seam for each story, and wait for you to confirm the scope summary before changing files
 - keep work scoped to one bounded task
-- build test-first, one behavior at a time
+- build test-first, one behavior at a time, with each scenario's ID in the name of the test that proves it
 - build a task with several tickets one ticket at a time, and wait for your go between tickets
 - review the diff against the agreed scope before closing
 - look back at the task after its last ticket, and propose lasting changes for its mistakes

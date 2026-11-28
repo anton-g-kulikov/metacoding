@@ -1,6 +1,6 @@
 # Backlog
 
-Candidate tasks for the metacoding skills and CLI, in the order agreed on 2026-11-27. Each one is shaped as its own task before it is built; the detail belongs in that task's scope summary or spec, not here. Remove an item when its task is shaped.
+Candidate tasks for the metacoding skills and CLI, in the order agreed on 2026-11-27. Each one is shaped as its own task before it is built; the detail belongs in that task's scope summary or task spec, not here. Remove an item when its task is shaped.
 
 Most items come from a comparison of these skills with Matt Pocock's skills, made on 2026-11-27.
 

@@ -6,9 +6,9 @@
 
 ## Solution
 
-The workflow skill runs seven steps in a fixed order: ground, shape, build, verify, review, update artifacts, close. It owns the order and the rules that hold between steps, and calls a companion skill for the method of the shape, build, debug and review steps. Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets.
+The workflow skill runs seven steps in a fixed order: ground, shape, build, verify, review, update artifacts, close. It owns the order and the rules that hold between steps, and calls a companion skill for the method of the shape, build, debug and review steps. Steps 3 to 7 run once per ticket, with a pause for the user's go between tickets. The next ticket is the first one in the list that is not marked done and that no unfinished ticket blocks.
 
-While grounding, the workflow reads the feature specs of the areas the task touches. In its artifact step it updates the feature spec of each area the ticket changed: it writes the ticket's scenarios into it and corrects the Solution section when the ticket changed how the area works. It does this before the ticket is marked done, so that the feature spec is part of the ticket's commit. A task is not complete until the scenarios it delivered are in the feature specs. The layout reference says where both kinds of spec go, and the workflow creates no separate test document.
+While grounding, the workflow reads the feature specs of the areas the task touches. In its artifact step it updates the feature spec of each area the ticket changed: it writes the ticket's scenarios into it and corrects the Solution section when the ticket changed how the area works. It does this before the ticket is marked done, so that the feature spec is part of the ticket's commit, and then checks that every scenario the ticket delivered is there with the agreed text. A task is not complete until the scenarios it delivered are in the feature specs. The layout reference says where both kinds of spec go, and the workflow creates no separate test document.
 
 ## Stories
 
@@ -38,4 +38,9 @@ Scenario: FLOW-4 says where both specs go
   Given a repo with no place for specs
   Then the layout reference names /_meta/specs/<area>.md and /_meta/specs/tasks/
   And it still creates no separate test document
+
+Scenario: FLOW-5 does not start a blocked ticket
+  Given a ticket whose blocking ticket is not done
+  When the workflow picks the next ticket
+  Then it takes the first ticket in the list whose blockers are all done
 ```

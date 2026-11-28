@@ -6,7 +6,7 @@
 
 ## Solution
 
-The skill reviews the diff on two separate axes: against the agreed scope, and against the repo's standards. For one ticket of a larger task, the agreed scope is the scenarios the ticket delivers, read with the task's in-scope and out-of-scope lists. It finds an unproven scenario by searching the tests for the scenario's ID, and reads the test it finds to see that it checks what the scenario's "Then" says. For a removed scenario it checks that no test carries the ID any more. After the last ticket it checks the whole change against the task spec and searches for every scenario of the task once more.
+The skill reviews the diff on two separate axes: against the agreed scope, and against the repo's standards. For one ticket of a larger task, the agreed scope is the scenarios the ticket delivers, read with the task's in-scope and out-of-scope lists. It finds an unproven scenario by searching the tests for the scenario's ID, and reads the test it finds to see that it checks what the scenario's "Then" says. For a removed scenario it checks that no test carries the ID any more. After the last ticket it checks the whole change against the task spec, searches for every scenario of the task once more, and checks that the scenarios of the tickets already closed are in the feature specs.
 
 ## Stories
 

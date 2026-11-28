@@ -11,7 +11,7 @@ Build the change as a series of small loops. Each loop proves one behavior with 
 
 1. List the behaviors the change must prove, including error and edge cases. Take the list from what was agreed for the change:
    - **Scenarios.** A scenario is one agreed case of a behavior, written as Given/When/Then, with an ID such as `UPDATE-4`. Start from the scenarios of the ticket you are building, or of the confirmed scope summary when the task is one ticket: each scenario is a behavior on the list.
-   - **Test intent.** A task without stories has test intent where the scenarios are: a plain list of the behaviors to prove. Start from that.
+   - **Test intent.** A ticket or a task without scenarios has test intent in their place: a plain list of the behaviors to prove. Start from that.
    - **Nothing agreed.** Write the list yourself.
 
    Record the list where the repo keeps such notes, or in your plan when it keeps none.

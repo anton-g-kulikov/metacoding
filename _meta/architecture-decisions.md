@@ -11,6 +11,8 @@
 
 **Why.** A scope that lives only in a conversation is gone when the session ends. A later session, or a review running in a fresh context, then has nothing to check the work against, which happened during the review of the companion-skills change. A spec for every one-line fix would be clutter, so the threshold is a count the agent cannot argue away: more than one ticket, or any recorded decision. A separate test document is still not created; test intent lives in the spec and the tests.
 
+**Amended 2026-11-28.** The record is now called a task spec, the `metacoding-spec` skill writes it, and its default place is `/_meta/specs/tasks/`. For a task with stories, scenarios took the place of test intent. The threshold and the reason for it stand. See the entries of 2026-11-28.
+
 ## 2026-11-27: Decision records are written at the end of shape
 
 **Decision.** A decision marked `[record]` is written to this file when the user confirms the scope summary, before the build starts. The artifact step amends an entry the build proved wrong.
@@ -104,6 +106,8 @@
 - Make the scenarios executable feature files, run by a Gherkin runner.
 
 **Why.** An ID survives renamed and moved files, and a text search finds it in any language. A path in a document goes stale on the first rename, and nothing fails when it does. Executable feature files are the stronger link, but they need a runner and step definitions per language, which most repos do not have and the skills cannot install; a repo that already runs feature files keeps them. The cost is that the link is only as good as the discipline of naming tests, so the TDD and review skills both carry the rule.
+
+**Amended 2026-11-28.** "No spec lists a test's path" was too wide. A task spec names the files a task changes under In scope, test files among them. What no spec holds is a link from a scenario to the path of its test. The same day, the rule on unproven scenarios gained a second half: a scenario is also unproven when the test that carries its ID does not check what its "Then" says.
 
 ## 2026-11-28: The interview and the spec writing are two skills
 

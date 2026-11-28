@@ -1,6 +1,6 @@
 # Task spec: Durable specs with user stories
 
-- Status: in progress
+- Status: done
 
 This task spec is written in the format the task introduces: stories with scenarios in place of success criteria and test intent, a Test seams section, and tickets that name what they deliver and what blocks them.
 
@@ -253,6 +253,7 @@ Scenario: INSTALL-1 installs the spec skill
 
 - **All Developer stories:** the installed text of the skills, as `SkillManager.generateInstallationFiles` returns it for an agent. This is the seam the content tests already use. It proves the rule is in the installed skill, not that an agent obeys it.
 - **The CLI user story:** the same call, checking which skill folders it installs.
+  - Changed on 2026-11-28, in ticket 1: the "update" half of INSTALL-1 is tested through the update command, because the call above only produces a fresh install.
 
 ## Decisions made
 
@@ -308,6 +309,6 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - [x] **6. Test seams, and no paths in specs**
   - Delivers: SPEC-10, SPEC-11, TDD-3
   - Blocked by: 2
-- [ ] **7. Ticket rules**
+- [x] **7. Ticket rules**
   - Delivers: SPEC-12, SPEC-13, SPEC-14, FLOW-5
   - Blocked by: 2
