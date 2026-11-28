@@ -77,6 +77,12 @@ Changed on 2026-11-28, found in the review of ticket 3:
 - The two smells are worded so that a reviewer can point at them in a diff and a thin wrapper that exists for a reason is not flagged: a function or module that only passes calls on, where its callers could call the target directly and nothing would get harder; and an interface or abstract type with one implementation, which nothing swaps for another, not even a test.
 - The sentence that introduces the companion skills in the workflow skill says they own the method of single steps "or of one part of a step", because the design skill owns no whole step.
 
+Changed on 2026-11-28, on rebasing onto `main` after the prompt-upkeep and onboarding tasks merged:
+
+- The workflow skill's own file is now an index of the steps, so it lists `metacoding-design` in its table of companion skills and says nothing about when to use it. The two sentences that say when live only in the workflow rules, in step 2 and step 3.
+- The standing fact in the system documentation reads: the workflow skill says at which step each companion is used, no companion calls another, and none points at a file that only the workflow skill ships. "Only the workflow skill names other skills" stopped being true when `metacoding-onboard` and `metacoding-shape` began to name each other.
+- `metacoding-design` sits before `metacoding-onboard` in every list of skills, because the onboard skill is run once per repo and is listed last.
+
 ## Decisions made
 
 - The guidance is a new companion skill, `metacoding-design`. A reference file of the workflow skill is out of reach when a companion runs alone, and paragraphs in three skills would state the same rules three times.
