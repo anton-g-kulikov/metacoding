@@ -31,7 +31,7 @@ The tracker line says where the repo tracks work: the tickets of a task spec go 
 Find out what the repo already has before asking anything.
 
 - Tracker: the git remote and whether its issues are in use, or a task list or TODO file
-- Specs: a folder of specs, proposals, or design documents
+- Specs: a folder of specs, user stories, proposals, or design documents
 - Glossary: a glossary file, or a section of terms in the docs
 - Decision records: a decisions file, or a folder with one file per decision
 - Instruction file: the file your agent loads at the start of every session, such as `CLAUDE.md` or `AGENTS.md`, which the pointer in step 2 needs

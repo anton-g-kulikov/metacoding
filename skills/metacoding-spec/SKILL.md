@@ -17,7 +17,7 @@ When a decision that would change what gets built or how it is tested is still o
 
 When the repo has a project map, `.metacoding/project.md`, read it before writing the scope summary. The `metacoding-onboard` skill writes it, and it names where this repo keeps its tracker, its specs, its glossary, and its decision records.
 
-Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a task spec, or a ticket, and create it there when it does not exist yet. The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the task spec is the tracker.
+Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a task spec, a feature spec, or a ticket, and create it there when it does not exist yet. The specs line names one folder: feature specs go in it, and task specs go in its `tasks/` folder. The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the checklist in the task spec is the tracker.
 
 The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map.
 

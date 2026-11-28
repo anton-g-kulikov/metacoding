@@ -1682,21 +1682,24 @@ describe('installed skill content: using the project map', () => {
   test('the spec skill reads and writes its records where the project map says', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = sectionOf(spec, '## The project map', '## Solution and tickets');
+    const section = sectionOf(spec, '## The project map', '## Stories');
 
     expect(section).toContain(
       'When the repo has a project map, `.metacoding/project.md`, read it before writing the scope summary.'
     );
 
     expect(section).toContain(
-      'Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a task spec, or a ticket, and create it there when it does not exist yet.'
+      'Where the project map names a place, use that place wherever this skill reads or writes the glossary, a decision record, a task spec, a feature spec, or a ticket, and create it there when it does not exist yet.'
+    );
+    expect(section).toContain(
+      'The specs line names one folder: feature specs go in it, and task specs go in its `tasks/` folder.'
     );
   });
 
   test('the spec skill falls back to its defaults for a missing line or a missing project map', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = sectionOf(spec, '## The project map', '## Solution and tickets');
+    const section = sectionOf(spec, '## The project map', '## Stories');
 
     expect(section).toContain(
       "The default places and the rules for a repo's own place, below, apply only to a place the project map has no line for, and to a repo with no project map."
@@ -1706,7 +1709,7 @@ describe('installed skill content: using the project map', () => {
   test('the spec skill on its own treats a tracker line that says none as an answer', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const section = sectionOf(spec, '## The project map', '## Solution and tickets');
+    const section = sectionOf(spec, '## The project map', '## Stories');
 
     expect(section).toContain('The tracker line says where this repo tracks work.');
     expect(section).toContain(

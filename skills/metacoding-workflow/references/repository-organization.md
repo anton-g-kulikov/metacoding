@@ -64,6 +64,7 @@ Rules:
 
 - Read it while grounding, when the repo has one.
 - Where the project map names a place, use that place, and create it there when it does not exist yet.
+- The specs line names one folder: feature specs go in it, and task specs go in its `tasks/` folder.
 - The tracker line says where this repo tracks work. A line that says none is an answer too: the repo tracks work nowhere, and the tickets are a checklist in the task spec.
 - The places this reference names for those four records, and its rules for a repo's own place, apply only to a place the project map has no line for, and to a repo with no project map.
 
