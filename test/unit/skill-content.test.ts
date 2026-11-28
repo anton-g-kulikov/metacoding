@@ -2145,6 +2145,16 @@ describe('installed skill content: the retro', () => {
     );
   });
 
+  test('the retro uses the places the project map names', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## Where a rule goes', '## Installed metacoding skills');
+
+    expect(section).toContain(
+      'When the repo has a project map, `.metacoding/project.md`, use the places it names for the glossary, the decision records, and the tracker.'
+    );
+  });
+
   test('the retro never edits an installed metacoding skill', async () => {
     const { read } = await installFor('codex');
     const retro = read('metacoding-retro/SKILL.md');

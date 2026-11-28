@@ -33,6 +33,13 @@ Give metacoding a way to turn a task's mistakes into lasting changes, so the sam
   - CHANGELOG: the retro in the line on what the orchestrator calls.
 - Added on 2026-11-28, confirmed by the user before ticket 2: the layout reference says a glossary term and a decision record reach their files only through a confirmed scope summary. Ticket 2 adds the retro as a second route to both rules, so the layout reference and the retro skill agree. The README's list of the documents the workflow keeps is updated to match.
 
+Changed on 2026-11-28, on rebasing onto `main` after the prompt-upkeep, onboarding and code-design tasks merged:
+
+- `metacoding-retro` sits after `metacoding-design` and before `metacoding-onboard` in every list of skills, because the onboard skill is run once per repo and is listed last. The docs no longer count the skills, so "sixth skill" and "fifth companion" appear only in this spec.
+- The workflow skill's own file is now an index of the steps. It lists the retro in its table of companion skills, and its opening sentence names the retro that follows the last ticket; when the retro runs is said only in the Tickets section and the Completion Standard of the workflow rules.
+- The retro skill gained one sentence: where the repo has a project map, it uses the places the map names for the glossary, the decision records and the tracker. The map has no line for coding standards, so the rule for where a new rule goes is unchanged.
+- The layout reference's list of document homes now ends at its Project Map section, and the content tests use the `sectionOf` helper that `main` already had.
+
 ## Out of scope
 
 - Any edit to `metacoding-review`, `metacoding-shape`, `metacoding-tdd` or `metacoding-debug`.

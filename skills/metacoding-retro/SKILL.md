@@ -57,6 +57,8 @@ Write a rule as one or two sentences: what to do, and why. Leave out the date an
 
 A glossary term or a decision record goes where the repo keeps its glossary and its decision records, in the format of the entries already there. When the repo keeps none, name the file you would create in the proposal.
 
+When the repo has a project map, `.metacoding/project.md`, use the places it names for the glossary, the decision records, and the tracker.
+
 ## Installed metacoding skills
 
 Never edit an installed metacoding skill: a folder named `metacoding-*` inside an agent's skills folder, such as `.claude/skills/`. Git ignores those folders by default, and the next `metacoding update` reports a local edit as a conflict, so a change made there is neither shared nor safe. This holds even when the repo commits those folders.
