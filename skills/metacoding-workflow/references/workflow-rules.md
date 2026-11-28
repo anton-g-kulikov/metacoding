@@ -50,8 +50,9 @@ A task with more than one ticket repeats steps 3 to 7 for each ticket, in the or
 - In step 6, mark the ticket done where the tickets are tracked, so that a tick in the spec's checklist is part of the ticket's commit. With the last ticket, mark the spec done, as the `metacoding-shape` skill describes.
 - Close each ticket on its own in step 7: commit it or hand it off, and report what was done.
 - After every ticket but the last, wait for the user's go before starting the next one.
+- After the last ticket is closed, use the `metacoding-retro` skill once for the task. It proposes lasting changes for the task's mistakes, and the user decides which are made. Those changes come after the last ticket and are not part of the task's spec, which stays done.
 
-A one-ticket task runs the sequence once, against the scope summary. When it has a spec, step 6 marks its ticket and the spec done in the same way.
+A one-ticket task runs the sequence once, against the scope summary. When it has a spec, step 6 marks its ticket and the spec done in the same way. Its retro follows the close of that one ticket.
 
 ### Resuming a task
 
@@ -90,3 +91,4 @@ The task is not complete until:
 - changed artifacts are updated or consciously deferred according to MECE ownership
 - every ticket is closed and, when the task has a spec, the spec is marked done
 - the user receives a clean summary of outcome, verification, and remaining risks
+- after the last ticket is closed, the retro has run and its lessons, if any, have been put to the user

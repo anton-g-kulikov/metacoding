@@ -279,12 +279,12 @@ describe('installed skill content: durable artifacts', () => {
     );
     const glossary = layout.slice(
       layout.indexOf('## Glossary'),
-      layout.indexOf('## Temporary File Management')
+      layout.indexOf('## Coding Standards')
     );
 
     expect(layout).toContain('## Decision Records');
     expect(layout).toContain('## Glossary');
-    expect(layout).toContain('## Temporary File Management');
+    expect(layout).toContain('## Coding Standards');
     expect(decisions).toContain('writes the entry once the user confirms the summary');
     expect(decisions).toContain('holds the entry format and how to amend an entry');
     expect(decisions).not.toContain('once the work is done');
@@ -298,11 +298,11 @@ describe('installed skill content: durable artifacts', () => {
     const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
     const section = adaptation.slice(
       adaptation.indexOf('## Missing Glossary or Decision Records'),
-      adaptation.indexOf('## Missing Git Context')
+      adaptation.indexOf('## Missing Coding Standards')
     );
 
     expect(adaptation).toContain('## Missing Glossary or Decision Records');
-    expect(adaptation).toContain('## Missing Git Context');
+    expect(adaptation).toContain('## Missing Coding Standards');
     expect(section).toContain('propose `/_meta/glossary.md` in the scope summary');
     expect(section).toContain('once the summary is confirmed');
   });
@@ -1920,7 +1920,7 @@ describe('installed skill content: the design skill', () => {
     expect(skill).toContain('## Steps');
     expect(skill).toContain('## Rules Between Steps');
     expect(skill).toContain(
-      'Companion skills own the method of single steps, or of one part of a step, and each also works on its own:'
+      'Companion skills own the method of single steps, of one part of a step, or of the retro that follows the last ticket, and each also works on its own:'
     );
     expect(skill).toContain(
       '| `metacoding-design` | Decides the shape of code: module depth, interfaces, and seams |'
@@ -2056,5 +2056,269 @@ describe('installed skill content: design smells in the review', () => {
       // Stated once, in the list: the follow-up rule for every smell covers it.
       expect(review.indexOf(smell)).toBe(review.lastIndexOf(smell));
     }
+  });
+});
+
+describe('installed skill content: the retro', () => {
+  const expectInOrder = (content: string, markers: string[]) => {
+    const positions = markers.map((marker) => content.indexOf(marker));
+    expect(positions.every((position) => position >= 0)).toBe(true);
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  };
+
+  test('the retro changes no file until the user has answered its proposals', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const intro = sectionOf(retro, '# Retro', '## What to read');
+
+    expect(intro).toContain('It ends in a list of proposals for the user.');
+    expect(intro).toContain('It changes no file until the user has answered them.');
+    expect(intro).toContain('Run it earlier when the user asks.');
+  });
+
+  test('the retro collects the mistakes from what is on record', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## What to read', '## The bar');
+
+    expect(section).toContain('- Review findings that had to be fixed.');
+    expect(section).toContain('- Corrections from the user:');
+    expect(section).toContain('- Changes to the agreed scope made during the build');
+    expect(section).toContain('- Decision records amended because the build proved them wrong.');
+    expect(section).toContain('- Checks that failed for a reason that could have been foreseen');
+    expect(section).toContain(
+      "When the conversation that did the work is gone, read the spec and the task's commits, then ask the user what went wrong."
+    );
+    expect(section).toContain(
+      'A retro is about mistakes. How fast the work went and what it cost to run are not its subject.'
+    );
+  });
+
+  test('a mistake becomes a lesson only when it passes a three-part bar', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## The bar', '## From cause to change');
+
+    expect(section).toContain('A mistake becomes a lesson only when all three are true:');
+    expectInOrder(section, [
+      '1. **It cost something.**',
+      '2. **It would happen again.**',
+      '3. **A change would stop it.**',
+    ]);
+    expect(section).toContain(
+      'When no mistake passes the bar, say "Nothing worth keeping" in one line and stop.'
+    );
+  });
+
+  test('the retro names the cause and prefers a check to a rule', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## From cause to change', '## Where a rule goes');
+
+    expect(section).toContain('first say why nothing stopped the mistake');
+    expect(section).toContain('Then propose one change, the first in this list that fits:');
+    expectInOrder(section, [
+      '1. **An automated check**',
+      '2. **A fix to an existing rule or doc**',
+      '3. **A new rule**',
+      '4. **A glossary term or a decision record**',
+      '5. **A step in a checklist**',
+    ]);
+    expect(section).toContain(
+      'A check comes first because it cannot be forgotten, and a rule can.'
+    );
+    expect(section).toContain(
+      'A fix comes before a new rule because each fact should have one home.'
+    );
+  });
+
+  test('a rule goes where the repo keeps its standards, or to /_meta/coding-standards.md', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## Where a rule goes', '## Installed metacoding skills');
+
+    expect(section).toContain(
+      'Find where the repo already keeps its standards: a contributor or style doc, a coding standards file, or an agent instruction file.'
+    );
+    expect(section).toContain(
+      'When the repo has no such file, propose creating `/_meta/coding-standards.md`, and create it with the first rule the user approves.'
+    );
+  });
+
+  test('the retro uses the places the project map names', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## Where a rule goes', '## Installed metacoding skills');
+
+    expect(section).toContain(
+      'When the repo has a project map, `.metacoding/project.md`, use the places it names for the glossary, the decision records, and the tracker.'
+    );
+  });
+
+  test('the retro never edits an installed metacoding skill', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## Installed metacoding skills', '## The proposals');
+
+    expect(section).toContain(
+      "Never edit an installed metacoding skill: a folder named `metacoding-*` inside an agent's skills folder, such as `.claude/skills/`."
+    );
+    expect(section).toContain('propose a rule in the repo\'s standards');
+    expect(section).toContain('draft a short issue for the metacoding project');
+    expect(section).toContain('This holds even when the repo commits those folders.');
+    expect(section).toContain(
+      'Any other skill that the repo tracks in git, such as its own skills or the source of a skill package, is edited like any other file.'
+    );
+  });
+
+  test('the lessons go to the user as one numbered list with a recommendation each', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = sectionOf(retro, '## The proposals', '## After the answer');
+
+    expect(section).toContain(
+      'Send the lessons as one numbered list, the most costly mistake first.'
+    );
+    expect(section).toContain('A "yes" to a lesson accepts your recommendation for it.');
+    expectInOrder(section, [
+      'L1. <short title>',
+      'What happened:',
+      'Why nothing stopped it:',
+      'Change:',
+      'Where:',
+      'Recommended: do | skip, because <one-line reason>',
+    ]);
+    expect(section).toContain(
+      'When you cannot reach the user directly, for example when running as a subagent, return the list as your result and stop there. Continue when the answers are sent back.'
+    );
+  });
+
+  test('approved lessons are applied by size, and a check is seen failing first', async () => {
+    const { read } = await installFor('codex');
+    const retro = read('metacoding-retro/SKILL.md');
+    const section = retro.slice(retro.indexOf('## After the answer'));
+
+    expect(retro).toContain('## After the answer');
+    expect(section).toContain("Apply only the lessons the user's answer says to do.");
+    expect(section).toContain(
+      "When commits are in scope, commit each lesson you applied on its own, apart from the task's commits"
+    );
+    expect(section).toContain('Watch it fail on the original mistake');
+    expect(section).toContain(
+      'Queue it as its own task where the repo tracks work. Where it tracks work nowhere, name it in your report.'
+    );
+    expect(section).toContain(
+      'Keep no log of the retro: the changes, with their commit messages where there are commits, are the record.'
+    );
+  });
+
+  test('Codex gets a display name and a default prompt for the retro', async () => {
+    const { read } = await installFor('codex');
+    const metadata = YAML.parse(read('metacoding-retro/agents/openai.yaml'));
+
+    expect(metadata.interface.display_name).toBe('Metacoding Retro');
+    expect(metadata.interface.default_prompt).toContain('Use $metacoding-retro to');
+  });
+
+  test('the workflow skill lists the retro among its companions', async () => {
+    const { read } = await installFor('codex');
+    const skill = read('metacoding-workflow/SKILL.md');
+    const intro = sectionOf(skill, '# Metacoding Workflow', '## Start Here');
+
+    expect(intro).toContain(
+      '| `metacoding-retro` | Looks back at the finished task and proposes lasting changes for its mistakes |'
+    );
+  });
+
+  test('the workflow runs the retro once per task, after the last ticket is closed', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const tickets = sectionOf(rules, '## Tickets', '### Resuming a task');
+
+    expect(tickets).toContain(
+      'After the last ticket is closed, use the `metacoding-retro` skill once for the task.'
+    );
+    expect(tickets).toContain(
+      "Those changes come after the last ticket and are not part of the task's spec, which stays done."
+    );
+    expect(tickets).toContain('Its retro follows the close of that one ticket.');
+  });
+
+  test('the completion standard names the retro', async () => {
+    const { read } = await installFor('codex');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const standard = rules.slice(rules.indexOf('## Completion Standard'));
+
+    expect(rules).toContain('## Completion Standard');
+    expect(standard).toContain(
+      '- after the last ticket is closed, the retro has run and its lessons, if any, have been put to the user'
+    );
+  });
+});
+
+describe('installed skill content: a home for standards', () => {
+
+  test('the layout reference lists the coding standards among the document homes', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const homes = sectionOf(layout, '## MECE Documentation Architecture', '## Project Map');
+
+    expect(homes).toContain(
+      "- `/_meta/coding-standards.md`\n  - the repo's rules for writing code, tests, and docs that no automated check enforces"
+    );
+  });
+
+  test('the layout reference says how a rule reaches the coding standards', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const section = sectionOf(layout, '## Coding Standards', '## Temporary File Management');
+
+    expect(layout.indexOf('## Coding Standards')).toBeGreaterThan(layout.indexOf('## Glossary'));
+    expect(section).toContain(
+      "`/_meta/coding-standards.md` holds the repo's rules for writing code, tests, and docs that no automated check enforces."
+    );
+    expect(section).toContain(
+      'A rule reaches this file through a retro: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves.'
+    );
+    expect(section).toContain(
+      'The skill holds the method, and prefers an automated check to a rule.'
+    );
+    expect(section).toContain(
+      'If the repo already keeps its standards somewhere else, use that place.'
+    );
+    expect(section).toContain(
+      'If the repo has no such file, follow `references/platform-adaptation.md`.'
+    );
+  });
+
+  test('a retro is a second route for a decision record and a glossary term', async () => {
+    const { read } = await installFor('codex');
+    const layout = read('metacoding-workflow/references/repository-organization.md');
+    const decisions = sectionOf(layout, '## Decision Records', '## Glossary');
+    const glossary = sectionOf(layout, '## Glossary', '## Coding Standards');
+
+    expect(decisions).toContain(
+      'A retro can add an entry too: the `metacoding-retro` skill proposes it in a lesson and writes it once the user approves.'
+    );
+    expect(glossary).toContain(
+      'Add or correct a term once the scope summary that lists it is confirmed, or once the user approves a lesson from a retro that proposes it.'
+    );
+  });
+
+  test('a repo with no standards file gets one proposed with the first rule', async () => {
+    const { read } = await installFor('codex');
+    const adaptation = read('metacoding-workflow/references/platform-adaptation.md');
+    const section = sectionOf(adaptation, '## Missing Coding Standards', '## Missing Git Context');
+
+    expect(adaptation.indexOf('## Missing Coding Standards')).toBeGreaterThan(
+      adaptation.indexOf('## Missing Glossary or Decision Records')
+    );
+    expect(section).toContain(
+      'If the repo has no file that holds its standards, such as a contributor doc, a style doc, or an agent instruction file:'
+    );
+    expect(section).toContain(
+      '- propose `/_meta/coding-standards.md` with the first new rule a retro puts to the user, and create it with the first rule the user approves'
+    );
+    expect(section).toContain('- leave it uncreated until there is a rule to put in it');
   });
 });

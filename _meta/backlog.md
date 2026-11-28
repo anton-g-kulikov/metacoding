@@ -13,5 +13,4 @@ Most items come from a comparison of these skills with Matt Pocock's skills, mad
 
 ## Later
 
-- **Retro.** Nothing turns a session's mistakes into a rule, a check or a skill edit.
 - **Codebase scan.** `metacoding-design` assesses a module or area the user names. Nothing scans a whole codebase for candidates, such as by picking the files that change most from the git history, and reports them ranked.

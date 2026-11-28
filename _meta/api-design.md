@@ -74,6 +74,8 @@ The CLI considers the install valid when the vendor-specific required files exis
 .codex/skills/metacoding-debug/agents/openai.yaml
 .codex/skills/metacoding-design/SKILL.md
 .codex/skills/metacoding-design/agents/openai.yaml
+.codex/skills/metacoding-retro/SKILL.md
+.codex/skills/metacoding-retro/agents/openai.yaml
 .codex/skills/metacoding-onboard/SKILL.md
 .codex/skills/metacoding-onboard/agents/openai.yaml
 ```
@@ -93,6 +95,7 @@ For Codex, each skill's `agents/openai.yaml` must also define `interface.display
 .claude/skills/metacoding-review/SKILL.md
 .claude/skills/metacoding-debug/SKILL.md
 .claude/skills/metacoding-design/SKILL.md
+.claude/skills/metacoding-retro/SKILL.md
 .claude/skills/metacoding-onboard/SKILL.md
 ```
 
@@ -109,6 +112,7 @@ For Codex, each skill's `agents/openai.yaml` must also define `interface.display
 .agents/skills/metacoding-review/SKILL.md
 .agents/skills/metacoding-debug/SKILL.md
 .agents/skills/metacoding-design/SKILL.md
+.agents/skills/metacoding-retro/SKILL.md
 .agents/skills/metacoding-onboard/SKILL.md
 ```
 
