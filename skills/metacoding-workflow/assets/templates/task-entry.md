@@ -10,6 +10,7 @@ Give the stories, or the success criteria and test intent when the task has no s
 - Stories:
 - Success criteria:
 - Test intent:
+- Test seams:
 - Decisions made:
 - Terms:
 - Assumptions:

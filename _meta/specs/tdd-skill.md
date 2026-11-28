@@ -6,7 +6,7 @@
 
 ## Solution
 
-The skill lists the behaviors the change must prove, then takes them one at a time: a test that fails first, the least code that makes it pass, the next behavior. The list starts from the scenarios of the ticket being built, or from its test intent in a task without stories. The test that proves a scenario carries the scenario's ID in its name, or in a comment or tag where a name cannot hold it. Tests for lower-level cases carry no ID. When a ticket changes a scenario its tests change with it, and when it removes one they are deleted.
+The skill lists the behaviors the change must prove, then takes them one at a time: a test that fails first, the least code that makes it pass, the next behavior. The list starts from the scenarios of the ticket being built, or from its test intent in a task without stories. The test that proves a scenario carries the scenario's ID in its name, or in a comment or tag where a name cannot hold it. Tests for lower-level cases carry no ID. A behavior is tested through the test seam agreed for it, when one was. When a ticket changes a scenario its tests change with it, and when it removes one they are deleted.
 
 ## Stories
 
@@ -27,4 +27,9 @@ Scenario: TDD-2 names the test after the scenario
   When its test is written
   Then the test carries the ID in its name, or in a comment or tag where a name cannot
   And lower-level tests may be added without an ID
+
+Scenario: TDD-3 tests through the agreed seam
+  Given a scope summary that names a test seam for the story
+  When a scenario's test is written
+  Then it goes through that interface
 ```

@@ -5,7 +5,7 @@ description: Turn a task's settled decisions into a scope summary with the solut
 
 # Spec
 
-Turn a task's settled decisions into an agreed scope before changing any code, test, or doc: write the behavior as stories, describe the solution, slice it into tickets, and get the user to confirm the scope summary. Then write the records.
+Turn a task's settled decisions into an agreed scope before changing any code, test, or doc: write the behavior as stories, name their test seams, describe the solution, slice it into tickets, and get the user to confirm the scope summary. Then write the records.
 
 ## Start from settled decisions
 
@@ -47,9 +47,23 @@ Scenario: <ID> <title>
 
 A task that changes no behavior a role can observe, such as a refactor, tooling, or docs, has no stories. Give it success criteria and test intent instead.
 
+## Test seams
+
+A test seam is the public interface a story's scenarios are tested through: a function, a CLI command, an HTTP route, a rendered component. Name one for each story, so that the user agrees to it before any test exists.
+
+Choose the seam in this order:
+
+1. Take an interface that already exists before proposing a new one.
+2. Among those, take the highest one that works for the story: the one closest to what the role does. A story about a command is tested through the command, not through a function the command calls.
+3. Between two that are equally high, take the one the repo's tests already use.
+
+Give stories that can share a seam the same one. When a story needs a seam that does not exist yet, say so, and describe it in the solution.
+
+A task without stories has no story to name a seam for. Name one for each behavior in its test intent, in the same order.
+
 ## Solution and tickets
 
-Describe the solution: the approach, and each public interface, data shape, or file layout that changes. Say what a builder needs to start, and leave the code out.
+Describe the solution: the approach, and each public interface or data shape that changes. Say what a builder needs to start. Keep code and paths to files out of it, as the Paths and code section describes.
 
 Then slice the solution into tickets. A ticket is one piece that can be built, verified, reviewed, and committed on its own.
 
@@ -74,6 +88,7 @@ In scope:
 Out of scope:
 Solution:
 Stories:
+Test seams:
 Decisions made:
 Terms:
 Assumptions:
@@ -81,6 +96,8 @@ Tickets:
 ```
 
 Under "Stories", give the stories as the Stories section describes. A task without stories has "Success criteria:" and "Test intent:" where "Stories:" is.
+
+Under "Test seams", name the seam for each story, as the Test seams section describes.
 
 Under "Tickets", number the tickets in build order and give each a title and the IDs of the scenarios it delivers. In a task without stories, give each its success criteria and its test intent. For a one-ticket task, give the title alone: the fields above already describe it.
 
@@ -127,6 +144,8 @@ Put the task spec where the repo already keeps task specs or documents of that k
 ## Solution
 
 ## Stories
+
+## Test seams
 
 ## Decisions made
 
@@ -196,3 +215,13 @@ Write a ticket's scenarios into the feature spec of their area when the ticket i
 When the area has no feature spec yet, create it with the stories of this ticket only; later tickets add theirs. Do not write stories for behavior that was there before. Say so after the sentence on what the area is for: the file holds the stories settled since the day it was created.
 
 When the repo already keeps its scenarios somewhere else, such as feature files that a test runner executes, those are its feature specs. Keep them there, follow their own conventions for names and IDs, and write no second copy.
+
+## Paths and code
+
+Paths to source and test files, and code, go stale as the code changes, so keep them out of task specs and feature specs:
+
+- A feature spec holds no path to a source or test file and no code. It has to stay true when files move.
+- A task spec holds such paths only under In scope, where the review checks the change against them. It holds no code.
+- Name a module or an interface by its name, not by the file it lives in.
+- A path that is part of the behavior, such as a file the product reads or a folder it writes to, is not meant here. Name it wherever the behavior is described.
+- The exception is a snippet of a few lines that states an interface a user or a caller sees, such as a command line or a data shape, where prose would be less exact. Task specs and feature specs may both hold such snippets.

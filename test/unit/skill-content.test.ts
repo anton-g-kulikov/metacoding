@@ -188,6 +188,7 @@ describe('installed skill content: durable artifacts', () => {
       'Out of scope:',
       'Solution:',
       'Stories:',
+      'Test seams:',
       'Decisions made:',
       'Terms:',
       'Assumptions:',
@@ -428,7 +429,11 @@ describe('installed skill content: solution and tickets', () => {
   test('the scope summary lists tickets in build order with what each delivers', async () => {
     const { read } = await installFor('codex');
     const spec = read('metacoding-spec/SKILL.md');
-    const summarySection = spec.slice(spec.indexOf('## The scope summary'));
+    const summarySection = sectionOf(
+      spec,
+      '## The scope summary',
+      '## Records written on confirmation'
+    );
 
     expect(spec).toContain('## The scope summary');
     expect(summarySection).toContain('number the tickets in build order');
@@ -501,6 +506,7 @@ describe('installed skill content: the task spec', () => {
       '## Out of scope',
       '## Solution',
       '## Stories',
+      '## Test seams',
       '## Decisions made',
       '## Terms',
       '## Assumptions',
@@ -2497,7 +2503,7 @@ describe('installed skill content: shape and spec are two skills', () => {
 
 describe('installed skill content: stories in the scope summary', () => {
   const storiesOf = (spec: string) =>
-    sectionOf(spec, '## Stories', '## Solution and tickets');
+    sectionOf(spec, '## Stories', '## Test seams');
   const summarySectionOf = (spec: string) =>
     sectionOf(spec, '## The scope summary', '## Records written on confirmation');
   const specFormatOf = (spec: string) =>
@@ -2591,7 +2597,7 @@ describe('installed skill content: stories in the scope summary', () => {
     const shaping = sectionOf(rules, '2. Shape the task', '3. Build test-first.');
 
     expect(shaping).toContain(
-      'Close with the scope summary: goal, in and out of scope, solution, stories, decisions, terms, assumptions, and the tickets the solution is sliced into.'
+      'Close with the scope summary: goal, in and out of scope, solution, stories, test seams, decisions, terms, assumptions, and the tickets the solution is sliced into.'
     );
     expect(shaping).toContain('write the behavior as stories');
     expect(template).toContain('- Stories:');
@@ -2660,7 +2666,8 @@ describe('installed skill content: stories in the scope summary', () => {
 describe('installed skill content: task specs and feature specs', () => {
   const taskSpecOf = (spec: string) =>
     sectionOf(spec, '## The task spec', '## Feature specs');
-  const featureSpecsOf = (spec: string) => sectionOf(spec, '## Feature specs');
+  const featureSpecsOf = (spec: string) =>
+    sectionOf(spec, '## Feature specs', '## Paths and code');
 
   test('SPEC-5: the task spec goes under tasks/', async () => {
     const { read, files } = await installFor('codex');
@@ -2791,7 +2798,7 @@ describe('installed skill content: task specs and feature specs', () => {
     expect(sectionOf(spec, '## Solution and tickets', '## The scope summary')).toContain(
       'A scenario the task changes or removes belongs to the ticket that changes or removes it.'
     );
-    expect(sectionOf(spec, '## Stories', '## Solution and tickets')).toContain(
+    expect(sectionOf(spec, '## Stories', '## Test seams')).toContain(
       'For a scenario the task removes, give its ID and title with "(removed)" after the title.'
     );
   });
@@ -3012,6 +3019,118 @@ describe('installed skill content: tests carry scenario IDs', () => {
 
     expect(fix).toContain(
       "A scenario is an agreed case of a behavior with an ID, found in the task's agreed scope or in the repo's feature spec for that area. When the broken behavior is one, give the test that scenario's ID: in its name, or in a comment or tag where a name cannot hold it."
+    );
+  });
+});
+
+describe('installed skill content: test seams, and no paths in specs', () => {
+  const seamsOf = (spec: string) => sectionOf(spec, '## Test seams', '## Solution and tickets');
+  const pathsAndCodeOf = (spec: string) => sectionOf(spec, '## Paths and code');
+
+  test('SPEC-10: the scope summary names a test seam for each story', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const summarySection = sectionOf(
+      spec,
+      '## The scope summary',
+      '## Records written on confirmation'
+    );
+
+    expect(seamsOf(spec)).toContain(
+      "A test seam is the public interface a story's scenarios are tested through: a function, a CLI command, an HTTP route, a rendered component."
+    );
+    expect(seamsOf(spec)).toContain(
+      'Name one for each story, so that the user agrees to it before any test exists.'
+    );
+    expect(codeBlock(summarySection, '```text\nScope summary\n')).toContain(
+      '\nStories:\nTest seams:\n'
+    );
+    expect(summarySection).toContain(
+      'Under "Test seams", name the seam for each story, as the Test seams section describes.'
+    );
+  });
+
+  test('SPEC-10: an existing seam and the highest one that works are preferred', async () => {
+    const { read } = await installFor('codex');
+    const seams = seamsOf(read('metacoding-spec/SKILL.md'));
+
+    expect(seams).toContain(
+      '1. Take an interface that already exists before proposing a new one.\n2. Among those, take the highest one that works for the story: the one closest to what the role does. A story about a command is tested through the command, not through a function the command calls.\n3. Between two that are equally high, take the one the repo\'s tests already use.'
+    );
+    expect(seams).toContain(
+      'Give stories that can share a seam the same one. When a story needs a seam that does not exist yet, say so, and describe it in the solution.'
+    );
+    expect(seams).toContain(
+      'A task without stories has no story to name a seam for. Name one for each behavior in its test intent, in the same order.'
+    );
+  });
+
+  test('SPEC-10: the task spec, the workflow rules and the task entry template carry the test seams', async () => {
+    const { read } = await installFor('codex');
+    const spec = read('metacoding-spec/SKILL.md');
+    const rules = read('metacoding-workflow/references/workflow-rules.md');
+    const template = read('metacoding-workflow/assets/templates/task-entry.md');
+
+    expect(
+      codeBlock(sectionOf(spec, '## The task spec', '## Feature specs'), '```text\n# Task spec:')
+    ).toContain('\n## Stories\n\n## Test seams\n');
+    expect(sectionOf(rules, '2. Shape the task', '3. Build test-first.')).toContain(
+      'solution, stories, test seams, decisions, terms, assumptions, and the tickets the solution is sliced into'
+    );
+    expect(template).toContain('- Test seams:');
+  });
+
+  test('SPEC-11: a feature spec holds no file path and no code', async () => {
+    const { read } = await installFor('codex');
+
+    expect(pathsAndCodeOf(read('metacoding-spec/SKILL.md'))).toContain(
+      '- A feature spec holds no path to a source or test file and no code. It has to stay true when files move.'
+    );
+  });
+
+  test('SPEC-11: a path that is part of the behavior may be named, and a module is named by its name', async () => {
+    const { read } = await installFor('codex');
+    const section = pathsAndCodeOf(read('metacoding-spec/SKILL.md'));
+
+    expect(section).toContain(
+      'Paths to source and test files, and code, go stale as the code changes, so keep them out of task specs and feature specs:'
+    );
+    expect(section).toContain(
+      '- Name a module or an interface by its name, not by the file it lives in.'
+    );
+    expect(sectionOf(read('metacoding-spec/SKILL.md'), '## Solution and tickets', '## The scope summary')).toContain(
+      'Keep code and paths to files out of it, as the Paths and code section describes.'
+    );
+    expect(section).toContain(
+      '- A path that is part of the behavior, such as a file the product reads or a folder it writes to, is not meant here. Name it wherever the behavior is described.'
+    );
+  });
+
+  test('SPEC-11: a task spec holds file paths only under In scope', async () => {
+    const { read } = await installFor('codex');
+
+    expect(pathsAndCodeOf(read('metacoding-spec/SKILL.md'))).toContain(
+      '- A task spec holds such paths only under In scope, where the review checks the change against them. It holds no code.'
+    );
+  });
+
+  test('SPEC-11: either kind may hold a short snippet that states an interface', async () => {
+    const { read } = await installFor('codex');
+
+    expect(pathsAndCodeOf(read('metacoding-spec/SKILL.md'))).toContain(
+      '- The exception is a snippet of a few lines that states an interface a user or a caller sees, such as a command line or a data shape, where prose would be less exact. Task specs and feature specs may both hold such snippets.'
+    );
+  });
+
+  test('TDD-3: tests go through the test seam the scope summary names', async () => {
+    const { read } = await installFor('codex');
+    const tdd = read('metacoding-tdd/SKILL.md');
+
+    expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
+      'When the scope summary or the task spec names the interface to test a behavior through, which they call its test seam, use that one.'
+    );
+    expect(sectionOf(tdd, '## Before the first loop', '## The loop')).toContain(
+      'When none was agreed and the right interface is unclear or does not exist yet, settle it with the user before writing tests.'
     );
   });
 });

@@ -176,8 +176,9 @@ Then `metacoding-spec` turns the settled decisions into the agreed scope:
 
 - It starts from what is already settled and does not ask it again.
 - It writes the behavior as user stories, grouped by role: one "As a …, I want …, so that …" sentence per story, with Given/When/Then scenarios. Each scenario has an ID made of its feature area's prefix and a number, such as `UPDATE-4`. A task that changes nothing a role can observe, such as a refactor, gets success criteria and test intent instead.
+- It names a test seam for each story, so you agree to it before any test exists: the public interface the story's scenarios are tested through. It takes an interface that already exists before a new one, and the highest one that works.
 - It describes the solution and slices it into tickets. Each ticket is a vertical slice that can be built, verified, reviewed, and committed on its own, and names the scenarios it delivers. A small task stays one ticket.
-- It closes with a scope summary (goal, in and out of scope, solution, stories, decisions, terms, assumptions, tickets) and waits for your confirmation.
+- It closes with a scope summary (goal, in and out of scope, solution, stories, test seams, decisions, terms, assumptions, tickets) and waits for your confirmation.
 - Nothing is written before you confirm. Once you do, it writes the settled terms to the glossary and the marked decisions to the decision records. A task with more than one ticket, or with a decision worth recording, is also written up as a task spec; a smaller task gets none.
 - While a task spec is in progress, a change to what it agreed is put to you as a decision and written into the task spec, with its date, before it is built.
 
@@ -194,7 +195,7 @@ For testable changes, `metacoding-tdd` enforces this order:
 
 The test that proves a scenario carries the scenario's ID in its name, such as "UPDATE-4: keeps the saved settings", or in a comment or tag where a name cannot hold it. A search for the ID then finds the proof. Lower-level tests that no scenario names carry no ID.
 
-Tests go through public interfaces, and expected values come from a source other than the code under test. Test doubles replace only what is outside your control, such as the network or the clock; the skill prefers a real or in-memory stand-in to a mock that checks calls, and shows a good and a bad example.
+Tests go through public interfaces: the test seam agreed for the behavior, when one was. Expected values come from a source other than the code under test. Test doubles replace only what is outside your control, such as the network or the clock; the skill prefers a real or in-memory stand-in to a mock that checks calls, and shows a good and a bad example.
 
 ### Review
 
@@ -274,6 +275,8 @@ It keeps five kinds of document that make the next session better informed:
 - **Coding standards** (`/_meta/coding-standards.md`): the repo's rules that no automated check enforces. A rule is added when you approve a lesson from a retro.
 
 A retro can also propose a glossary term or a decision record, which is written once you approve it.
+
+Paths to source and test files, and code, stay out of task specs and feature specs: a feature spec holds none, and a task spec holds such paths only under "In scope". A short snippet that states an interface, such as a command line or a data shape, is the exception.
 
 These are the default places. Where the project map names a place, that place is used instead. For a place it has no line for, and in a repo with no project map, a repo that already keeps documents of either kind keeps its own place for them, and one that keeps a tracker current gets the tickets there. The workflow does not create a test documentation file: scenarios live in the scope summary, the task spec, and the feature spec, and the tests that prove them carry their IDs. For a task without stories, test intent lives in the scope summary, the task spec, and the tests. A repo that already keeps a test documentation file gets it updated as before.
 

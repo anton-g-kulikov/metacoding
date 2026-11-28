@@ -16,7 +16,7 @@ Build the change as a series of small loops. Each loop proves one behavior with 
 
    Record the list where the repo keeps such notes, or in your plan when it keeps none.
 2. Find how this repo tests similar code: the framework, the file layout, the helpers, and the command that runs one test file. Follow that.
-3. Name the public interface each behavior will be tested through: a function, a CLI command, an HTTP route, a rendered component. When the right interface is unclear or does not exist yet, settle it with the user before writing tests.
+3. Name the public interface each behavior will be tested through: a function, a CLI command, an HTTP route, a rendered component. When the scope summary or the task spec names the interface to test a behavior through, which they call its test seam, use that one. When none was agreed and the right interface is unclear or does not exist yet, settle it with the user before writing tests.
 
 ## The loop
 

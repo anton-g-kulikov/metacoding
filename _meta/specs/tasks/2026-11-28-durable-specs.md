@@ -129,10 +129,11 @@ Scenario: SPEC-9 changes and removes scenarios in place
   Then the changed scenario keeps its ID with the new text
   And the removed one leaves the feature spec together with its test
 
-Scenario: SPEC-11 keeps file paths and code out
-  Given a spec being written
-  Then a feature spec holds no file path and no code
-  And a task spec holds paths only under In scope
+Scenario: SPEC-11 keeps paths to code, and code, out
+  Given a task spec or a feature spec
+  When it is written
+  Then a feature spec holds no path to a source or test file and no code
+  And a task spec holds such paths only under In scope
   And either may hold a short snippet that states an interface
 ```
 
@@ -285,6 +286,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
   - Changed on 2026-11-28, in ticket 3: done task specs count too. A removed scenario leaves the feature spec, so counting only the feature spec could hand its number out again.
 - The onboarding branch says to take the default places from `metacoding-shape`. After this branch they live in `metacoding-spec`, so whichever merges second re-points them.
 - The main checkout's installed `.claude/skills` is not refreshed by this task, because other sessions work there.
+- Changed on 2026-11-28, in ticket 6: SPEC-11 said "no file path". It now says "no path to a source or test file", because a path that is part of the behavior, such as the default place of a task spec, has to be named in scenarios and in a Solution section. The scenario also gained its "When" line.
 
 ## Tickets
 
@@ -303,7 +305,7 @@ Task spec, feature spec, feature area, role, story, scenario, test seam, and the
 - [x] **5. Tests carry scenario IDs**
   - Delivers: TDD-1, TDD-2, REVIEW-1, REVIEW-2, DEBUG-1
   - Blocked by: 2
-- [ ] **6. Test seams, and no paths in specs**
+- [x] **6. Test seams, and no paths in specs**
   - Delivers: SPEC-10, SPEC-11, TDD-3
   - Blocked by: 2
 - [ ] **7. Ticket rules**
