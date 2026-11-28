@@ -39,6 +39,8 @@ Code smells, looked for in the diff:
 
 - Logic duplicated that an existing helper already covers.
 - A function or module that does more than one job.
+- A function or module that only passes calls on, where its callers could call the target directly and nothing would get harder.
+- An interface or abstract type with one implementation, which nothing swaps for another, not even a test.
 - A name that does not say what the thing is or does.
 - An error swallowed, or silently replaced by a default.
 - Dead code: an unused parameter, branch, or export.

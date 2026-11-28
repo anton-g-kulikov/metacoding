@@ -223,6 +223,7 @@ describe('UpdateCommand', () => {
     'metacoding-tdd',
     'metacoding-review',
     'metacoding-debug',
+    'metacoding-design',
     'metacoding-onboard',
   ];
 
